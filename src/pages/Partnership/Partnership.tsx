@@ -10,24 +10,40 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import Button from '../../components/Button/Button';
 import InputPhone from '../../components/InputPhone/InputPhone';
 import Textarea from '../../components/Textarea/Textarea';
+import { usePartnership } from '../../utils/hooks/usePartnership/usePartnership';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import Preloader from '../../components/Preloader/Preloader';
 
 const Partnership: FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { mutateAsync, isPending, error } = usePartnership();
+
     const onClose = () => {
         navigate('/');
     };
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data);
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        await mutateAsync({
+            address: data.address,
+            email: data.email,
+            phone: data.phoneNumber,
+            message: data.message,
+            user_name: data.nameContact,
+            restaurant_name: data.nameCompany,
+        });
+        navigate('/');
     };
+
     return (
         <Popup title={t('pages.partnership.title')} onClose={onClose}>
+            {isPending && <Preloader />}
             <Form name="form-partnership" onSubmit={handleSubmit(onSubmit)}>
                 <FormInputs>
                     <Input type="text" name="nameCompany" placeholder={t('pages.partnership.placeholderNameCompany')} nameLabel={t('pages.partnership.nameLabelNameCompany')} register={register} errors={errors} pattern={regexClientName}></Input>
@@ -39,6 +55,7 @@ const Partnership: FC = () => {
                 </FormInputs>
                 <Button type="submit">{t('pages.partnership.buttonSendRequest')}</Button>
             </Form>
+            {error && <ErrorMessage message={error.message} />}
         </Popup>
     );
 };
