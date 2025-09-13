@@ -26,20 +26,22 @@ function MealPage() {
     const { data, isSuccess } = useMeals(restaurantId);
     const meal = isSuccess && data.data.filter((meal) => meal.id == mealId)[0];
     const featuresData = useFeatures(restaurantId, mealId);
-    const price = sumBy(features, (feature) => {
-        const isChosen = feature.choices.some((choice) => choice.chosen);
-        if (isChosen) {
-            return feature.choices.filter((choice) => choice.chosen)[0].price;
-        } else {
-            return feature.choices.filter((choice) => choice.default)[0].price;
-        }
-    });
+    const price =
+        features.length > 0
+            ? sumBy(features, (feature) => {
+                  const isChosen = feature.choices.some((choice) => choice.chosen);
+                  if (isChosen) {
+                      return feature.choices.filter((choice) => choice.chosen)[0].price;
+                  } else {
+                      return feature.choices.filter((choice) => choice.default)[0].price;
+                  }
+              })
+            : meal
+              ? meal.price
+              : 0;
     const percentage = parseInt(((price * 7) / 100).toFixed(0));
     const goBack = () => {
         navigate(`/restaurants/${restaurantId}`);
-    };
-    const close = () => {
-        navigate('/restaurants');
     };
     useEffect(() => {
         const formValues = watch((value, { name }) => {
@@ -70,17 +72,20 @@ function MealPage() {
         }
     }, [featuresData.isSuccess, featuresData.data]);
 
-    if (meal && features.length > 0) {
+    if (meal) {
         const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-            const newFeatures = features.map((feature: Feature) => {
-                const { id, name } = feature.choices.filter((choice) => choice.name === data[feature.name])[0];
-                return {
-                    featureId: feature.id,
-                    featureName: feature.name,
-                    choiceId: id,
-                    choiceName: name,
-                };
-            });
+            const newFeatures =
+                features.length > 0
+                    ? features.map((feature: Feature) => {
+                          const { id, name } = feature.choices.filter((choice) => choice.name === data[feature.name])[0];
+                          return {
+                              featureId: feature.id,
+                              featureName: feature.name,
+                              choiceId: id,
+                              choiceName: name,
+                          };
+                      })
+                    : [];
             await addMeal.mutateAsync({ restaurantId, mealId: meal.id, features: newFeatures });
             refetchBasket();
             goBack();
@@ -88,10 +93,10 @@ function MealPage() {
         return (
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <MealPopup goBack={goBack} close={close}>
+                    <MealPopup goBack={goBack} close={goBack}>
                         <MealImage image={meal.photo} />
                         <MealDescription name={meal.name} description={meal.description} />
-                        <MealFeatureList features={features} />
+                        {features.length > 0 ? <MealFeatureList features={features} /> : <div style={{ flexGrow: '1' }}></div>}
                         <MealTotal price={price} percentage={percentage} buttonDisabled={addMeal.isPending} />
                         {addMeal.isPending && <Preloader />}
                     </MealPopup>
