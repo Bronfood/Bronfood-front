@@ -45,7 +45,7 @@ function Restaurant() {
     };
     const handleReviewsClick = () => setIsReviewsVisible((prev) => !prev);
     const close = () => {
-        navigate('/restaurants');
+        navigate('/');
     };
 
     const addMealType = (mealType: MealType) => {
