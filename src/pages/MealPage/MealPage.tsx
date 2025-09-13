@@ -43,9 +43,6 @@ function MealPage() {
     const goBack = () => {
         navigate(`/restaurants/${restaurantId}`);
     };
-    const close = () => {
-        navigate('/restaurants');
-    };
     useEffect(() => {
         const formValues = watch((value, { name }) => {
             const nextFeatures = features.map((feature: Feature) => {
@@ -96,7 +93,7 @@ function MealPage() {
         return (
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <MealPopup goBack={goBack} close={close}>
+                    <MealPopup goBack={goBack} close={goBack}>
                         <MealImage image={meal.photo} />
                         <MealDescription name={meal.name} description={meal.description} />
                         {features.length > 0 ? <MealFeatureList features={features} /> : <div style={{ flexGrow: '1' }}></div>}
