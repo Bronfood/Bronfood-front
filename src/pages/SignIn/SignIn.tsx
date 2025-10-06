@@ -29,7 +29,7 @@ const SignIn = () => {
 
     useEffect(() => {
         if (isLogin) {
-            navigate('/restaurants');
+            navigate('/');
         }
     }, [isLogin, navigate]);
 

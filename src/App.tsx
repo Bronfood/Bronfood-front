@@ -7,7 +7,6 @@ import YandexMap from './components/YandexMap/YandexMap';
 import './index.scss';
 import Basket from './pages/Basket/Basket';
 import Logout from './pages/Logout/Logout';
-import Main from './pages/Main/Main';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import Profile from './pages/Profile/Profile';
 import Restaurants from './pages/Restaurants/Restaurants';
@@ -42,14 +41,13 @@ function App() {
             <Routes>
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
-                <Route path="/" element={<Main />} />
                 <Route path="/partnership" element={<Partnership />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />
                 <Route path="/logout" element={<ProtectedRoute component={<Logout />} />} />
-                <Route path="/restaurants" element={<Restaurants />}>
-                    <Route path=":restaurantId" element={<Restaurant />}>
+                <Route path="/" element={<Restaurants />}>
+                    <Route path="restaurants/:restaurantId" element={<Restaurant />}>
                         <Route path="meal/:mealId" element={<MealPage />} />
                     </Route>
                 </Route>
