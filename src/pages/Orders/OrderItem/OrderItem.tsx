@@ -18,12 +18,28 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
     const { t } = useTranslation();
 
     const isDetailInfo = (order.canceled_at || order.cancellation_reason || order.paid_at || order.issued_at || (order.paid_at && order.currency)) && order.status !== 'created';
+    const canShowRepeatButton = order.is_order_repeatable;
+    const canShowCancelButton = order.status === 'created' || order.status === 'paid';
 
     const getStatusColor = (status: string) => {
         if (['ready', 'completed'].includes(status)) return 'green';
         if (['unclaimed', 'cancelled_by_user', 'cancelled_by_admin', 'cancelled_by_timeout'].includes(status)) return 'red';
         return 'orange';
     };
+
+    const cancelRepeatButtons = (
+        <>
+            <div className={styles['detail-info__container']}>
+                {canShowRepeatButton ? <button className={styles['detail-info__repeat']}>{t('pages.order.buttonRepeatOrder')}</button> : <div className={styles['detail-info__not-repeat']}>{t('pages.order.notRepeatOrder')}</div>}
+                {canShowCancelButton && (
+                    <button className={styles['detail-info__repeat']} onClick={() => onClickCancel(order.id)}>
+                        {t('pages.order.cancelOrder')}
+                    </button>
+                )}
+            </div>
+            {canShowCancelButton && <p className={styles['detail-info__not-repeat']}>{t('pages.order.canCancelOrderBeforeStartCooking')}</p>}
+        </>
+    );
 
     return (
         <li className={styles['card']}>
@@ -125,6 +141,8 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
                 )}
             </div>
 
+            {!isShow && canShowCancelButton && cancelRepeatButtons}
+
             <div className={styles['detail-info']}>
                 {isShow && isDetailInfo && (
                     <>
@@ -160,32 +178,11 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
                                     <p className={styles['detail-info__text']}>{order.currency}</p>
                                 </div>
                             ) : null}
-                            {order.status === 'created' || order.status === 'paid' ? <p className={`${styles['detail-info__not-repeat']}`}>*** Вы можете отменить заказ, пока его не начали готовить</p> : null}
-                            <div className={styles['detail-info__container']}>
-                                {!order.is_order_repeatable ? <div className={styles['detail-info__not-repeat']}>{t('pages.order.notRepeatOrder')}</div> : <button className={styles['detail-info__repeat']}>{t('pages.order.buttonRepeatOrder')}</button>}
-                                {order.status === 'created' || order.status === 'paid' ? (
-                                    <button className={`${styles['detail-info__repeat']}`} onClick={() => onClickCancel(order.id)}>
-                                        Отменить заказ
-                                    </button>
-                                ) : null}
-                            </div>
                         </div>
                     </>
                 )}
 
-                {!isDetailInfo && (
-                    <>
-                        <div className={styles['detail-info__container']}>
-                            {!order.is_order_repeatable ? <div className={styles['detail-info__not-repeat']}>{t('pages.order.notRepeatOrder')}</div> : <button className={styles['detail-info__repeat']}>{t('pages.order.buttonRepeatOrder')}</button>}
-                            {order.status === 'created' || order.status === 'paid' ? (
-                                <button className={`${styles['detail-info__repeat']}`} onClick={() => onClickCancel(order.id)}>
-                                    Отменить заказ
-                                </button>
-                            ) : null}
-                        </div>
-                        {order.status === 'created' || order.status === 'paid' ? <p className={`${styles['detail-info__not-repeat']}`}>*** Вы можете отменить заказ, пока его не начали готовить</p> : null}
-                    </>
-                )}
+                {isShow && (canShowRepeatButton || canShowCancelButton) && cancelRepeatButtons}
             </div>
         </li>
     );

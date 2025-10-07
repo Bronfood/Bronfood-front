@@ -1,0 +1,10 @@
+.confirmation-popup-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(135 133 133 / 75%);
+    backdrop-filter: blur(2.5px);
+    width: 100%;
+    position: fixed;
+}

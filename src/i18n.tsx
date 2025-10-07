@@ -259,6 +259,8 @@ i18n
                             cancelled_by_admin: 'отменен',
                             cancelled_by_timeout: 'отменен',
                             proceedToPayment: 'Перейти к оплате',
+                            cancelOrder: 'Отменить заказ',
+                            canCancelOrderBeforeStartCooking: '*** Вы можете отменить заказ, пока его не начали готовить',
                         },
                         error: {
                             server: 'Сервер не отвечает. Попробуйте позже',
