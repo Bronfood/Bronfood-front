@@ -25,6 +25,12 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
                 </Link>
             </li>
             <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_catering}`}></div>
+                <Link to="/partnership" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.guestNavigation.partnership')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
                 <Link to="/signin" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.guestNavigation.signIn')}
