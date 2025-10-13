@@ -1,0 +1,84 @@
+@use '../../styles/variables';
+
+.photo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__input {
+        display: none;
+    }
+
+    &__image {
+        position: relative;
+        height: 108px;
+        width: 100%;
+        background-position: center;
+        background-size: cover;
+        border-radius: 10px;
+
+        &_edit {
+            position: absolute;
+            top: 10px;
+            right: 60px;
+            height: 41px;
+            width: 43px;
+        }
+
+        &_delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            height: 41px;
+            width: 43px;
+        }
+    }
+
+    &__upload {
+        display: flex;
+        justify-content: center;
+        border: 1px solid variables.$grey-line;
+        background-color: variables.$button-grey;
+        padding: 34px 0;
+        border-radius: 10px;
+        width: 100%;
+
+        &_wrapper {
+            height: 40px;
+            width: 40px;
+            border: 1px solid variables.$grey-line;
+            background-color: variables.$grey-light-line;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &_add {
+            height: 25px;
+            width: 25px;
+            border: none;
+            padding: 0;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url('../../vendor/images/icons/add-icon-white.svg');
+        }
+    }
+
+    &__error {
+        color: variables.$red;
+        font-family: 'SF Pro Display', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 24px;
+        margin-top: 3px;
+        margin-left: 18px;
+    }
+}

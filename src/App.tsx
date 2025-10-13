@@ -30,6 +30,7 @@ import Catering from './pages/Catering/Catering';
 import AddAdministrator from './pages/Catering/Administrators/AddAdministrator/AddAdministrator';
 import EditAdministrator from './pages/Catering/Administrators/EditAdministrator/EditAdministrator';
 import Partnership from './pages/Partnership/Partnership';
+import GeneralSupport from './pages/GeneralSupport/GeneralSupport';
 
 function App() {
     const [city, setCity] = useState('');
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
                 <Route path="/partnership" element={<Partnership />} />
+                <Route path="/support" element={<GeneralSupport />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />

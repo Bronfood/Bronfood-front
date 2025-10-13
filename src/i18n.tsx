@@ -26,6 +26,7 @@ i18n
                             signInAsAdmin: 'Войти как админ заведения',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
+                            generalFormSupport: 'Помощь',
                         },
                         header: {
                             burgerTitleHover: 'Меню',
@@ -49,6 +50,9 @@ i18n
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',
+                            errorImageFileType: 'Выберите файл изображения',
+                            errorImageFileRead: 'Ошибка при загрузке файла',
+                            errorMaxFiles: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
                         passwordRecovery: {
                             title: 'Восстановить пароль',
@@ -200,6 +204,11 @@ i18n
                         popupPartnershipThanks: {
                             title: 'Спасибо за обращение!',
                             description: 'Мы уже обрабатываем вашу заявку и скоро свяжемся с вами для обсуждения деталей.',
+                        },
+
+                        popupGeneralSupportThanks: {
+                            title: 'Обращение принято!',
+                            description: 'Мы оперативно разберемся в ситуации. Ожидайте ответа на указанные контакты в ближайшее время.',
                         },
 
                         popupSignupSuccess: {
@@ -359,6 +368,18 @@ i18n
                             placeholderEmail: 'email@example.com',
                             nameLabelMessage: 'Сообщение',
                             placeholderMessage: 'Расскажите о вашем предложении',
+                        },
+
+                        generalSupport: {
+                            title: 'Помощь',
+                            placeholderNameClient: 'Введите ваше имя',
+                            placeholderEmailClient: 'email@example.com',
+                            placeholderMessageClient: 'Опишите вашу проблему или вопрос подробнее ...',
+                            buttonSendRequest: 'Отправить',
+                            nameLabelNameClient: 'Как к вам обращаться?',
+                            nameLabelEmailClient: 'Email',
+                            nameLabelMessageClient: 'Обращение',
+                            nameLabelPhoto: 'Прикрепите скриншоты',
                         },
                     },
                     errors: {

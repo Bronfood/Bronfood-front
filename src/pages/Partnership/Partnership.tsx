@@ -13,7 +13,8 @@ import Textarea from '../../components/Textarea/Textarea';
 import { usePartnership } from '../../utils/hooks/usePartnership/usePartnership';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import Preloader from '../../components/Preloader/Preloader';
-import PopupPartnershipThanks from './PopupPartnershipThanks/PopupPartnershipThanks';
+import InfoImage from '../../components/InfoImage/InfoImage';
+import PopupThanks from '../../components/Popups/PopupThanks/PopupThanks';
 
 const Partnership: FC = () => {
     const { t } = useTranslation();
@@ -44,7 +45,7 @@ const Partnership: FC = () => {
     };
 
     if (showPopup) {
-        return <PopupPartnershipThanks />;
+        return <PopupThanks title={t('pages.popupPartnershipThanks.title')} description={t('pages.popupPartnershipThanks.description')} image={<InfoImage mode="without_tube" />} />;
     }
 
     return (
