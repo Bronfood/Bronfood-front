@@ -19,4 +19,41 @@
             aspect-ratio: 0.78;
         }
     }
+
+    &__cluster {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        color: var(--interact-action);
+        border-radius: 50%;
+        background-color: rgb(255 255 255 / 70%);
+        box-shadow: 2px 2px 5px rgb(0 0 0 / 20%);
+        transform: translate(-50%, -50%);
+    }
+
+    &__cluster :hover {
+        color: #2e4ce5;
+        cursor: pointer;
+    }
+
+    &__cluster_content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 90%;
+        height: 90%;
+        border-radius: 50%;
+        background-color: currentcolor;
+        transform: translate3d(-50%, -50%, 0);
+    }
+
+    &__cluster_text {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #b30a0a;
+    }
 }

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback } from 'react';
-import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener } from '../../lib/ymaps';
+import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener, YMapClusterer, clusterByGrid } from '../../lib/ymaps';
 import { type MapEventUpdateHandler, type BehaviorMapEventHandler, LngLat } from '@yandex/ymaps3-types';
 import styles from './YandexMap.module.scss';
 import { useRestaurantsContext } from '../../utils/hooks/useRestaurants/useRestaurantsContext';
@@ -17,6 +17,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
+    const gridSizedMethod = useMemo(() => clusterByGrid({ gridSize: 64 }), []);
 
     const handleMapUpdate: MapEventUpdateHandler = useCallback(
         (object) => {
@@ -29,19 +30,53 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     const createBehaviorEventHandler = useCallback((): BehaviorMapEventHandler => {
         return debounce(function (object) {
+            console.log(object);
             if (object.type === 'dblClick') return;
-            const boundsCoords = object.location.bounds;
-            setCenter(object.location.center);
             setZoom(object.location.zoom);
+            setCenter(object.location.center);
+            const boundsCoords = object.location.bounds;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
     }, [setBounds]);
 
-    const handlePlacemarkClick = (placeId: number, longitude: number, latitude: number) => {
-        setLastClickedRestaurantId(placeId);
-        setCenter([longitude, latitude]);
-        navigate(`/restaurants/${placeId}`);
-    };
+    const handlePlacemarkClick = useCallback(
+        (placeId: number, longitude: number, latitude: number) => {
+            setLastClickedRestaurantId(placeId);
+            setCenter([longitude, latitude]);
+            navigate(`/restaurants/${placeId}`);
+        },
+        [navigate, setLastClickedRestaurantId]
+    );
+
+    const points = restaurantsFiltered.map((restaurant) => ({
+        type: 'Feature',
+        id: restaurant.id,
+        geometry: { coordinates: [restaurant.coordinates.longitude, restaurant.coordinates.latitude], type: 'Point' },
+    }));
+
+    const mapMarker = useCallback(
+        (place) => {
+            const active = activePlaceId === place.id;
+            return (
+                <YMapMarker key={place.id} coordinates={place.geometry.coordinates} draggable={false} onClick={() => handlePlacemarkClick(place.id, place.geometry.coordinates[0], place.geometry.coordinates[1])} zIndex={active ? 10 : 0}>
+                    <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
+                </YMapMarker>
+            );
+        },
+        [activePlaceId, handlePlacemarkClick]
+    );
+
+    const cluster = useCallback((coordinates, features) => {
+        return (
+            <YMapMarker coordinates={coordinates}>
+                <div className={styles.yamap__cluster}>
+                    <div className={styles.yamap__cluster_content}>
+                        <span className={styles.yamap__cluster_text}>{features.length}</span>
+                    </div>
+                </div>
+            </YMapMarker>
+        );
+    }, []);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -50,7 +85,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
                 setCenter([position.coords.longitude, position.coords.latitude]);
             });
         }
-    }, [setUserLocation]);
+    }, [setUserLocation, setCenter]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
@@ -58,6 +93,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
                 setCenter([place.coordinates.longitude, place.coordinates.latitude]);
+
                 if (zoom < 12) {
                     setZoom(12);
                 }
@@ -88,18 +124,11 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     return (
         <div className={styles.yamap}>
-            <YMap location={{ center: center, zoom: zoom }} margin={[100, 10, 40, 10]}>
+            <YMap location={{ center: center, zoom: zoom }} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
-                {restaurantsFiltered.map((place) => {
-                    const active = activePlaceId === place.id;
-                    return (
-                        <YMapMarker key={place.id} coordinates={[place.coordinates.longitude, place.coordinates.latitude]} draggable={false} onClick={() => handlePlacemarkClick(place.id, place.coordinates.longitude, place.coordinates.latitude)} zIndex={active ? 10 : 0}>
-                            <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
-                        </YMapMarker>
-                    );
-                })}
+                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} on />
+                <YMapClusterer marker={mapMarker} cluster={cluster} method={gridSizedMethod} features={points} />
                 {userLocation && (
                     <YMapMarker key={userLocation[0]} coordinates={userLocation} draggable={false}>
                         <img className={styles.yamap__marker} src={userMarker} />
