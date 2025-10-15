@@ -131,7 +131,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
                 <YMapClusterer
                     marker={mapMarker}
                     cluster={cluster}
-                    // @ts-expect-error clusterByGrid typed as Context<unknown> instead of type declared in clusterByGrid.d.ts which results in "Type 'Context<unknown>' has no call signatures" error
+                    // @ts-expect-error clusterByGrid typed as Context<unknown> instead of type declared in clusterByGrid.d.ts which results in "Type 'Context<unknown>' has no call signatures" error. Possibly a bug in @yandex/ymaps3-clusterer@0.0.1
                     method={useMemo(() => clusterByGrid({ gridSize: CLUSTER_GRIDSIZE }), [])}
                     features={points}
                 />
