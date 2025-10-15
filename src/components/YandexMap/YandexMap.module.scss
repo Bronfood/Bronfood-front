@@ -24,7 +24,8 @@
         position: absolute;
         width: 40px;
         height: 40px;
-        color: var(--interact-action);
+        color: variables.$orange;
+        border: 2px solid rgb(255 255 255 / 70%);
         border-radius: 50%;
         background-color: rgb(255 255 255 / 70%);
         box-shadow: 2px 2px 5px rgb(0 0 0 / 20%);
@@ -32,7 +33,6 @@
     }
 
     &__cluster :hover {
-        color: #2e4ce5;
         cursor: pointer;
     }
 
@@ -54,6 +54,6 @@
         font-size: 16px;
         font-weight: 500;
         line-height: 20px;
-        color: #b30a0a;
+        color: variables.$white;
     }
 }
