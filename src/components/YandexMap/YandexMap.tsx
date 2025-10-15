@@ -86,7 +86,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
                 location.current = { ...location.current, center: [position.coords.longitude, position.coords.latitude] };
             });
         }
-    }, [setUserLocation, location]);
+    }, [setUserLocation]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
@@ -99,7 +99,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
                 }
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, location]);
+    }, [inView, restaurantsFiltered, activePlaceId]);
 
     useEffect(() => {
         async function fetchLocality() {
