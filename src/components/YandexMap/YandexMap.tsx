@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener, YMapClusterer, clusterByGrid } from '../../lib/ymaps';
 import { type MapEventUpdateHandler, type BehaviorMapEventHandler, LngLat } from '@yandex/ymaps3-types';
 import styles from './YandexMap.module.scss';
@@ -12,8 +12,10 @@ import { DEBOUNCE_VALUE } from '../../utils/consts';
 
 export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateAction<string>> }) {
     const [initialRender, setInitialRender] = useState(true);
-    const [center, setCenter] = useState<LngLat>([76.921552, 43.246345]);
-    const [zoom, setZoom] = useState(12);
+    const location = useRef<{ center: LngLat; zoom: number }>({
+        center: [76.921552, 43.246345],
+        zoom: 12,
+    });
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
@@ -32,8 +34,6 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         return debounce(function (object) {
             console.log(object);
             if (object.type === 'dblClick') return;
-            setZoom(object.location.zoom);
-            setCenter(object.location.center);
             const boundsCoords = object.location.bounds;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
@@ -42,10 +42,10 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
             setLastClickedRestaurantId(placeId);
-            setCenter([longitude, latitude]);
+            location.current = { ...location.current, center: [longitude, latitude] };
             navigate(`/restaurants/${placeId}`);
         },
-        [navigate, setLastClickedRestaurantId]
+        [navigate, setLastClickedRestaurantId, location]
     );
 
     const points = restaurantsFiltered.map((restaurant) => ({
@@ -82,24 +82,23 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setUserLocation([position.coords.longitude, position.coords.latitude]);
-                setCenter([position.coords.longitude, position.coords.latitude]);
+                location.current = { ...location.current, center: [position.coords.longitude, position.coords.latitude] };
             });
         }
-    }, [setUserLocation, setCenter]);
+    }, [setUserLocation, location]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
-                setCenter([place.coordinates.longitude, place.coordinates.latitude]);
-
-                if (zoom < 12) {
-                    setZoom(12);
+                location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude] };
+                if (location.zoom < 12) {
+                    location.current = { ...location.current, zoom: 12 };
                 }
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
+    }, [inView, restaurantsFiltered, activePlaceId, location]);
 
     useEffect(() => {
         async function fetchLocality() {
@@ -124,7 +123,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     return (
         <div className={styles.yamap}>
-            <YMap location={{ center: center, zoom: zoom }} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
+            <YMap location={location.current} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
                 <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} on />
