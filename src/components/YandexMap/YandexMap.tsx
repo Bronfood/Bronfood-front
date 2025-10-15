@@ -14,6 +14,7 @@ import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateAction<string>> }) {
     type ExpandedFeature = Feature & { id: string };
     const [initialRender, setInitialRender] = useState(true);
+    const [zoom, setZoom] = useState<number>(12);
     const location = useRef<{ center: LngLat; zoom: number }>({
         center: [76.921552, 43.246345],
         zoom: 12,
@@ -33,7 +34,11 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     const createBehaviorEventHandler = useCallback((): BehaviorMapEventHandler => {
         return debounce(function (object) {
-            if (object.type === 'dblClick') return;
+            if (object.type === 'dblClick') {
+                setZoom(object.location.zoom);
+                return;
+            }
+            setZoom(object.location.zoom);
             const boundsCoords = object.location.bounds;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
@@ -93,13 +98,10 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
-                location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude] };
-                if (location.current.zoom < 12) {
-                    location.current = { ...location.current, zoom: 12 };
-                }
+                location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId]);
+    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
 
     useEffect(() => {
         async function fetchLocality() {
