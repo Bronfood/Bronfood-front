@@ -19,3 +19,4 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
 });
 
 export const DEBOUNCE_VALUE = 1000;
+export const CLUSTER_GRIDSIZE = 64;

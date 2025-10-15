@@ -8,9 +8,11 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { DEBOUNCE_VALUE } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE } from '../../utils/consts';
+import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateAction<string>> }) {
+    type ExpandedFeature = Feature & { id: string };
     const [initialRender, setInitialRender] = useState(true);
     const location = useRef<{ center: LngLat; zoom: number }>({
         center: [76.921552, 43.246345],
@@ -19,7 +21,6 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
-    const gridSizedMethod = useMemo(() => clusterByGrid({ gridSize: 64 }), []);
 
     const handleMapUpdate: MapEventUpdateHandler = useCallback(
         (object) => {
@@ -32,7 +33,6 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     const createBehaviorEventHandler = useCallback((): BehaviorMapEventHandler => {
         return debounce(function (object) {
-            console.log(object);
             if (object.type === 'dblClick') return;
             const boundsCoords = object.location.bounds;
             setBounds(boundsCoords);
@@ -48,17 +48,18 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         [navigate, setLastClickedRestaurantId, location]
     );
 
-    const points = restaurantsFiltered.map((restaurant) => ({
+    const points: ExpandedFeature[] = restaurantsFiltered.map((restaurant) => ({
         type: 'Feature',
-        id: restaurant.id,
+        id: restaurant.id.toString(),
         geometry: { coordinates: [restaurant.coordinates.longitude, restaurant.coordinates.latitude], type: 'Point' },
     }));
 
     const mapMarker = useCallback(
-        (place) => {
-            const active = activePlaceId === place.id;
+        (place: ExpandedFeature) => {
+            const id = parseInt(place.id);
+            const active = activePlaceId === id;
             return (
-                <YMapMarker key={place.id} coordinates={place.geometry.coordinates} draggable={false} onClick={() => handlePlacemarkClick(place.id, place.geometry.coordinates[0], place.geometry.coordinates[1])} zIndex={active ? 10 : 0}>
+                <YMapMarker key={place.id} coordinates={place.geometry.coordinates} draggable={false} onClick={() => handlePlacemarkClick(id, place.geometry.coordinates[0], place.geometry.coordinates[1])} zIndex={active ? 10 : 0}>
                     <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
                 </YMapMarker>
             );
@@ -66,7 +67,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         [activePlaceId, handlePlacemarkClick]
     );
 
-    const cluster = useCallback((coordinates, features) => {
+    const cluster = useCallback((coordinates: LngLat, features: ExpandedFeature[]) => {
         return (
             <YMapMarker coordinates={coordinates}>
                 <div className={styles.yamap__cluster}>
@@ -93,7 +94,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
                 location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude] };
-                if (location.zoom < 12) {
+                if (location.current.zoom < 12) {
                     location.current = { ...location.current, zoom: 12 };
                 }
             }
@@ -126,8 +127,14 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             <YMap location={location.current} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} on />
-                <YMapClusterer marker={mapMarker} cluster={cluster} method={gridSizedMethod} features={points} />
+                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
+                <YMapClusterer
+                    marker={mapMarker}
+                    cluster={cluster}
+                    // @ts-expect-error clusterByGrid typed as Context<unknown> instead of type declared in clusterByGrid.d.ts which results in "Type 'Context<unknown>' has no call signatures" error
+                    method={useMemo(() => clusterByGrid({ gridSize: CLUSTER_GRIDSIZE }), [])}
+                    features={points}
+                />
                 {userLocation && (
                     <YMapMarker key={userLocation[0]} coordinates={userLocation} draggable={false}>
                         <img className={styles.yamap__marker} src={userMarker} />
