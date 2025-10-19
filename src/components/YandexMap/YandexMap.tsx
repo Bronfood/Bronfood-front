@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback } from 'react';
 import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener, YMapClusterer, clusterByGrid } from '../../lib/ymaps';
 import { type MapEventUpdateHandler, type BehaviorMapEventHandler, LngLat } from '@yandex/ymaps3-types';
 import styles from './YandexMap.module.scss';
@@ -8,16 +8,17 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateAction<string>> }) {
     type ExpandedFeature = Feature & { id: string };
     const [initialRender, setInitialRender] = useState(true);
     const [zoom, setZoom] = useState<number>(12);
-    const location = useRef<{ center: LngLat; zoom: number }>({
+    const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
         center: [76.921552, 43.246345],
         zoom: 12,
+        ...COMMON_LOCATION_PARAMS,
     });
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
             setLastClickedRestaurantId(placeId);
-            location.current = { ...location.current, center: [longitude, latitude] };
+            setLocation({ ...location, center: [longitude, latitude] });
             navigate(`/restaurants/${placeId}`);
         },
         [navigate, setLastClickedRestaurantId, location]
@@ -72,36 +73,47 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         [activePlaceId, handlePlacemarkClick]
     );
 
-    const cluster = useCallback((coordinates: LngLat, features: ExpandedFeature[]) => {
-        return (
-            <YMapMarker coordinates={coordinates}>
-                <div className={styles.yamap__cluster}>
-                    <div className={styles.yamap__cluster_content}>
-                        <span className={styles.yamap__cluster_text}>{features.length}</span>
+    const onClusterClick = useCallback(
+        (coordinates: LngLat) => {
+            setLocation({ ...location, center: coordinates, zoom: zoom + 1 });
+            setZoom((zoom) => zoom + 1);
+        },
+        [location, zoom]
+    );
+
+    const cluster = useCallback(
+        (coordinates: LngLat, features: ExpandedFeature[]) => {
+            return (
+                <YMapMarker coordinates={coordinates}>
+                    <div className={styles.yamap__cluster} onClick={() => onClusterClick(coordinates)}>
+                        <div className={styles.yamap__cluster_content}>
+                            <span className={styles.yamap__cluster_text}>{features.length}</span>
+                        </div>
                     </div>
-                </div>
-            </YMapMarker>
-        );
-    }, []);
+                </YMapMarker>
+            );
+        },
+        [onClusterClick]
+    );
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setUserLocation([position.coords.longitude, position.coords.latitude]);
-                location.current = { ...location.current, center: [position.coords.longitude, position.coords.latitude] };
+                setLocation({ ...location, center: [position.coords.longitude, position.coords.latitude] });
             });
         }
-    }, [setUserLocation]);
+    }, [setUserLocation, location]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
-                location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
+                setLocation({ ...location, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom });
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
+    }, [inView, restaurantsFiltered, activePlaceId, location, zoom]);
 
     useEffect(() => {
         async function fetchLocality() {
@@ -126,7 +138,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     return (
         <div className={styles.yamap}>
-            <YMap location={location.current} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
                 <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
