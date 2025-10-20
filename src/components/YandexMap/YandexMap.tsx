@@ -58,6 +58,7 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
         type: 'Feature',
         id: restaurant.id.toString(),
         geometry: { coordinates: [restaurant.coordinates.longitude, restaurant.coordinates.latitude], type: 'Point' },
+        name: restaurant.name,
     }));
 
     const mapMarker = useCallback(
@@ -66,7 +67,10 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             const active = activePlaceId === id;
             return (
                 <YMapMarker key={place.id} coordinates={place.geometry.coordinates} draggable={false} onClick={() => handlePlacemarkClick(id, place.geometry.coordinates[0], place.geometry.coordinates[1])} zIndex={active ? 10 : 0}>
-                    <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
+                    <div className={styles.yamap__marker_container}>
+                        <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
+                        <span className={styles.yamap__marker_name}>{place.name}</span>
+                    </div>
                 </YMapMarker>
             );
         },
