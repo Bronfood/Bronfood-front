@@ -8,7 +8,7 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, YMAP_MARGINS_DRAWER_CLOSED, YMAP_MARGINS_DRAWER_OPEN } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
@@ -20,7 +20,6 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
         zoom: 12,
         ...COMMON_LOCATION_PARAMS,
     });
-    const [margin, setMargin] = useState(YMAP_MARGINS_DRAWER_OPEN);
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
@@ -141,15 +140,9 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
         };
     }, [userLocation, setCity]);
 
-    useEffect(() => {
-        if (isDrawerOpen) {
-            setMargin(YMAP_MARGINS_DRAWER_OPEN);
-        } else setMargin(YMAP_MARGINS_DRAWER_CLOSED);
-    }, [isDrawerOpen]);
-
     return (
         <div className={styles.yamap}>
-            <YMap location={location} margin={[margin.top, margin.right, margin.bottom, margin.left]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[100, 10, isDrawerOpen ? 460 : 40, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
                 <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />

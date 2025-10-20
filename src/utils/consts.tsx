@@ -21,15 +21,3 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;
 export const COMMON_LOCATION_PARAMS = { easing: 'ease-in-out', duration: 1000 };
-export const YMAP_MARGINS_DRAWER_OPEN = {
-    top: 100,
-    right: 10,
-    bottom: 460,
-    left: 10,
-};
-export const YMAP_MARGINS_DRAWER_CLOSED = {
-    top: 100,
-    right: 10,
-    bottom: 40,
-    left: 10,
-};
