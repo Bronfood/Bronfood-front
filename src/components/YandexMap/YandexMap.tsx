@@ -11,7 +11,7 @@ import { debounce } from 'lodash';
 import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, YMAP_MARGINS_DRAWER_CLOSED, YMAP_MARGINS_DRAWER_OPEN } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
-export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>> }) {
+export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
     const [initialRender, setInitialRender] = useState(true);
     const [zoom, setZoom] = useState<number>(12);
