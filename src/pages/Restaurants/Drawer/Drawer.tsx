@@ -8,8 +8,7 @@ import Preloader from '../../../components/Preloader/Preloader';
 import { useNavigate } from 'react-router-dom';
 import PageNotFound from '../../PageNotFound/PageNotFound';
 
-const Drawer = () => {
-    const [isOpen, setIsOpen] = useState(true);
+const Drawer = ({ isOpen, setIsOpen }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const { restaurantsFiltered, isLoading, isError, lastClickedRestaurantId, setLastClickedRestaurantId, setActiveRestaurant } = useRestaurantsContext();
     const { t } = useTranslation();

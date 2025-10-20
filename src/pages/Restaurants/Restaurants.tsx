@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom';
 import Drawer from './Drawer/Drawer';
 
-function Restaurants() {
+function Restaurants({ isDrawerOpen, setIsDrawerOpen }) {
     return (
         <>
-            <Drawer />
+            <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
             <Outlet />
         </>
     );
