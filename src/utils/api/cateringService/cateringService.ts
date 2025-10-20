@@ -63,6 +63,21 @@ export type Catering = {
     cancellationTime?: number;
 };
 
+export type MealSize = {
+    /**
+     * Size name (e.g., "Small", "Large", "500ml")
+     */
+    name: string;
+    /**
+     * Size or volume (e.g., "100г", "500мл")
+     */
+    size: string;
+    /**
+     * Price for this size
+     */
+    price: number;
+};
+
 export type CateringMeal = {
     /**
      * Meal's id
@@ -84,6 +99,18 @@ export type CateringMeal = {
      * Meal's price
      */
     price: number;
+    /**
+     * Meal's disposable tableware
+     */
+    disposableTableware: boolean;
+    /**
+     * Meal's multiple meal sizes
+     */
+    multipleMealSizes: boolean;
+    /**
+     * Array of meal sizes (if multipleMealSizes is true)
+     */
+    mealSizes?: MealSize[];
     /**
      * Meal's type
      */

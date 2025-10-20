@@ -1,3 +1,5 @@
+@use '../../../../../styles/variables';
+
 .fieldset {
     border: none;
     padding: 0;
@@ -5,4 +7,134 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+
+    &__button {
+        border: none;
+        background-color: transparent;
+        border-bottom: 1px solid variables.$orange;
+        padding: 0;
+        width: max-content;
+        color: variables.$orange;
+        font-weight: 500;
+    }
+
+    &__checkbox {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        &_input {
+            background-color: variables.$button-grey;
+            appearance: none;
+            border-radius: 8px;
+            width: 25px;
+            height: 25px;
+
+            &:checked {
+                background-color: variables.$orange;
+                background-image: url('../../../../../vendor/images/icons/radioButton/check.svg');
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+        }
+
+        &_label {
+            font-weight: 400;
+        }
+    }
+}
+
+.size:not(:last-child) {
+    margin-bottom: 25px;
+}
+
+.sizes {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 10px;
+    position: relative;
+
+    &__info {
+        position: absolute;
+        left: 0;
+        bottom: 58px;
+        border-radius: 20px;
+        background-color: variables.$black;
+        padding: 12px;
+        width: 100%;
+        line-height: 140%;
+    }
+
+    &__text {
+        color: variables.$white;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 140%;
+    }
+
+    &__list {
+        display: flex;
+        gap: 37px;
+        flex: 1;
+        padding: 5px 0;
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+
+        &_first {
+            border-bottom: 1px solid variables.$orange;
+        }
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+        margin-left: 5px;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            margin-right: 13px;
+        }
+
+        &_wrapper {
+            border: none;
+            background-color: variables.$button-grey;
+            border-radius: 25px;
+            height: 26px;
+            width: 26px;
+        }
+
+        &_add {
+            width: 14px;
+            height: 14px;
+            background-image: url('/src/vendor/images/icons/add-icon-black.svg');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        &_info {
+            background-image: url('../../../../../vendor/images/icons/info-icon.svg');
+            background-size: cover;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            position: absolute;
+            right: -12px;
+            bottom: 0;
+        }
+    }
 }
