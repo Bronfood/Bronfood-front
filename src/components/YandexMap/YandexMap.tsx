@@ -26,7 +26,6 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     const handleMapUpdate: MapEventUpdateHandler = useCallback(
         (object) => {
-            console.log(object);
             const boundsCoords = object.location.bounds;
             setInitialRender(false);
             setBounds(boundsCoords);
