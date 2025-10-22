@@ -8,7 +8,7 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
@@ -16,8 +16,8 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
     const [initialRender, setInitialRender] = useState(true);
     const [zoom, setZoom] = useState<number>(12);
     const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
-        center: [76.921552, 43.246345],
-        zoom: 12,
+        center: INITIAL_CENTER,
+        zoom: INITIAL_ZOOM,
         ...COMMON_LOCATION_PARAMS,
     });
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
@@ -26,6 +26,7 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     const handleMapUpdate: MapEventUpdateHandler = useCallback(
         (object) => {
+            console.log(object);
             const boundsCoords = object.location.bounds;
             setInitialRender(false);
             setBounds(boundsCoords);

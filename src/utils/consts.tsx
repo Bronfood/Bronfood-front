@@ -18,6 +18,12 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
     return { id: increment(), name: type, selected: false };
 });
 
+export const INITIAL_CENTER = [76.921552, 43.246345];
+export const INITIAL_ZOOM = 12;
+export const INITIAL_BOUNDS = [
+    [76.86061221118163, 43.27795965849576],
+    [76.98249178881836, 43.214713808139024],
+];
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;
 export const COMMON_LOCATION_PARAMS = { easing: 'ease-in-out', duration: 1000 };
