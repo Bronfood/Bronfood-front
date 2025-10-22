@@ -104,20 +104,24 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setUserLocation([position.coords.longitude, position.coords.latitude]);
-                setLocation({ ...location, center: [position.coords.longitude, position.coords.latitude] });
+                setLocation((location) => {
+                    return { ...location, center: [position.coords.longitude, position.coords.latitude] };
+                });
             });
         }
-    }, [setUserLocation, location]);
+    }, [setUserLocation]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
-                setLocation({ ...location, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom });
+                setLocation((location) => {
+                    return { ...location, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
+                });
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, location, zoom]);
+    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
 
     useEffect(() => {
         async function fetchLocality() {
