@@ -79,8 +79,8 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     const onClusterClick = useCallback(
         (coordinates: LngLat) => {
-            setLocation({ ...location, center: coordinates, zoom: zoom + 1 });
-            setZoom((zoom) => zoom + 1);
+            setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
+            setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
         },
         [location, zoom]
     );
