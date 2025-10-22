@@ -157,7 +157,7 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     return (
         <div className={styles.yamap}>
-            <YMap location={location} margin={[100, 10, /* isDrawerOpen ? 460 : */ mapBottomMargin, 10]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[100, 10, mapBottomMargin, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
                 <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
