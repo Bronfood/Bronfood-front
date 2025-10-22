@@ -1,3 +1,4 @@
+import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { MealType } from './api/restaurantsService/restaurantsService';
 import { increment } from './serviceFuncs/increment';
 /**
@@ -18,9 +19,9 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
     return { id: increment(), name: type, selected: false };
 });
 
-export const INITIAL_CENTER = [76.921552, 43.246345];
+export const INITIAL_CENTER: LngLat = [76.921552, 43.246345];
 export const INITIAL_ZOOM = 12;
-export const INITIAL_BOUNDS = [
+export const INITIAL_BOUNDS: LngLatBounds = [
     [76.86061221118163, 43.27795965849576],
     [76.98249178881836, 43.214713808139024],
 ];
