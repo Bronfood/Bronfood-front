@@ -13,6 +13,7 @@ import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
+    const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
     const [initialRender, setInitialRender] = useState(true);
     const [zoom, setZoom] = useState<number>(12);
     const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
@@ -45,13 +46,21 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
         }, DEBOUNCE_VALUE);
     }, [setBounds]);
 
+    const onActionStartHandler = useCallback((): BehaviorMapEventHandler => {
+        return function (object) {
+            if (object.type === 'dblClick') return;
+            setMapBottomMargin(40);
+        };
+    }, []);
+
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
+            setMapBottomMargin(isDrawerOpen ? 460 : 40);
             setLastClickedRestaurantId(placeId);
             setLocation({ ...location, center: [longitude, latitude] });
             navigate(`/restaurants/${placeId}`);
         },
-        [navigate, setLastClickedRestaurantId, location]
+        [navigate, setLastClickedRestaurantId, location, isDrawerOpen]
     );
 
     const points: ExpandedFeature[] = restaurantsFiltered.map((restaurant) => ({
@@ -79,10 +88,11 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     const onClusterClick = useCallback(
         (coordinates: LngLat) => {
+            setMapBottomMargin(isDrawerOpen ? 460 : 40);
             setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
             setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
         },
-        [location, zoom]
+        [location, zoom, isDrawerOpen]
     );
 
     const cluster = useCallback(
@@ -116,6 +126,7 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
+                setMapBottomMargin(460);
                 setLocation((location) => {
                     return { ...location, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
                 });
@@ -146,10 +157,10 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
 
     return (
         <div className={styles.yamap}>
-            <YMap location={location} margin={[100, 10, isDrawerOpen ? 460 : 40, 10]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[100, 10, /* isDrawerOpen ? 460 : */ mapBottomMargin, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
+                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
                 <YMapClusterer
                     marker={mapMarker}
                     cluster={cluster}
