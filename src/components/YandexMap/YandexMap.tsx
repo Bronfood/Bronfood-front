@@ -8,13 +8,13 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_BOUNDS, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
 export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
     const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
-    const [initialRender, setInitialRender] = useState(true);
+    const [mapActionStarted, setMapActionStarted] = useState(false);
     const [zoom, setZoom] = useState<number>(12);
     const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
         center: INITIAL_CENTER,
@@ -25,31 +25,20 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
 
-    const handleMapUpdate: MapEventUpdateHandler = useCallback(
-        (object) => {
-            const boundsCoords = object.location.bounds;
-            setInitialRender(false);
-            setBounds(boundsCoords);
-        },
-        [setBounds]
-    );
-
-    const createBehaviorEventHandler = useCallback((): BehaviorMapEventHandler => {
+    const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
-            if (object.type === 'dblClick') {
-                setZoom(object.location.zoom);
-                return;
-            }
+            if (object.mapInAction) return;
             setZoom(object.location.zoom);
-            const boundsCoords = object.location.bounds;
+            const boundsCoords = mapActionStarted ? object.location.bounds : INITIAL_BOUNDS;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
-    }, [setBounds]);
+    }, [setBounds, mapActionStarted]);
 
     const onActionStartHandler = useCallback((): BehaviorMapEventHandler => {
         return function (object) {
             if (object.type === 'dblClick') return;
             setMapBottomMargin(40);
+            setMapActionStarted(true);
         };
     }, []);
 
@@ -160,7 +149,7 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
             <YMap location={location} margin={[100, 10, mapBottomMargin, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
+                <YMapListener onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={useMemo(() => handleMapUpdate(), [handleMapUpdate])} />
                 <YMapClusterer
                     marker={mapMarker}
                     cluster={cluster}
