@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback } from 'react';
 import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener, YMapClusterer, clusterByGrid } from '../../lib/ymaps';
 import { type MapEventUpdateHandler, type BehaviorMapEventHandler, LngLat } from '@yandex/ymaps3-types';
 import styles from './YandexMap.module.scss';
@@ -8,55 +8,55 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_BOUNDS, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 
-export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateAction<string>> }) {
+export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
-    const [initialRender, setInitialRender] = useState(true);
+    const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
+    const [mapActionStarted, setMapActionStarted] = useState(false);
     const [zoom, setZoom] = useState<number>(12);
-    const location = useRef<{ center: LngLat; zoom: number }>({
-        center: [76.921552, 43.246345],
-        zoom: 12,
+    const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
+        center: INITIAL_CENTER,
+        zoom: INITIAL_ZOOM,
+        ...COMMON_LOCATION_PARAMS,
     });
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
 
-    const handleMapUpdate: MapEventUpdateHandler = useCallback(
-        (object) => {
-            const boundsCoords = object.location.bounds;
-            setInitialRender(false);
-            setBounds(boundsCoords);
-        },
-        [setBounds]
-    );
-
-    const createBehaviorEventHandler = useCallback((): BehaviorMapEventHandler => {
+    const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
-            if (object.type === 'dblClick') {
-                setZoom(object.location.zoom);
-                return;
-            }
+            if (object.mapInAction) return;
             setZoom(object.location.zoom);
-            const boundsCoords = object.location.bounds;
+            const boundsCoords = mapActionStarted ? object.location.bounds : INITIAL_BOUNDS;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
-    }, [setBounds]);
+    }, [setBounds, mapActionStarted]);
+
+    const onActionStartHandler = useCallback((): BehaviorMapEventHandler => {
+        return function (object) {
+            if (object.type === 'dblClick') return;
+            setMapBottomMargin(40);
+            setMapActionStarted(true);
+        };
+    }, []);
 
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
+            setMapBottomMargin(isDrawerOpen ? 460 : 40);
             setLastClickedRestaurantId(placeId);
-            location.current = { ...location.current, center: [longitude, latitude] };
+            setLocation({ ...location, center: [longitude, latitude] });
             navigate(`/restaurants/${placeId}`);
         },
-        [navigate, setLastClickedRestaurantId, location]
+        [navigate, setLastClickedRestaurantId, location, isDrawerOpen]
     );
 
     const points: ExpandedFeature[] = restaurantsFiltered.map((restaurant) => ({
         type: 'Feature',
         id: restaurant.id.toString(),
         geometry: { coordinates: [restaurant.coordinates.longitude, restaurant.coordinates.latitude], type: 'Point' },
+        properties: { name: restaurant.name },
     }));
 
     const mapMarker = useCallback(
@@ -65,30 +65,47 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             const active = activePlaceId === id;
             return (
                 <YMapMarker key={place.id} coordinates={place.geometry.coordinates} draggable={false} onClick={() => handlePlacemarkClick(id, place.geometry.coordinates[0], place.geometry.coordinates[1])} zIndex={active ? 10 : 0}>
-                    <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
+                    <div className={styles.yamap__marker_container}>
+                        <img className={`${styles.yamap__marker} ${active ? styles.yamap__marker_active : ''}`} src={active ? markerActive : marker}></img>
+                        <span className={styles.yamap__marker_name}>{place.properties?.name as string}</span>
+                    </div>
                 </YMapMarker>
             );
         },
         [activePlaceId, handlePlacemarkClick]
     );
 
-    const cluster = useCallback((coordinates: LngLat, features: ExpandedFeature[]) => {
-        return (
-            <YMapMarker coordinates={coordinates}>
-                <div className={styles.yamap__cluster}>
-                    <div className={styles.yamap__cluster_content}>
-                        <span className={styles.yamap__cluster_text}>{features.length}</span>
+    const onClusterClick = useCallback(
+        (coordinates: LngLat) => {
+            setMapBottomMargin(isDrawerOpen ? 460 : 40);
+            setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
+            setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
+        },
+        [location, zoom, isDrawerOpen]
+    );
+
+    const cluster = useCallback(
+        (coordinates: LngLat, features: ExpandedFeature[]) => {
+            return (
+                <YMapMarker coordinates={coordinates}>
+                    <div className={styles.yamap__cluster} onClick={() => onClusterClick(coordinates)}>
+                        <div className={styles.yamap__cluster_content}>
+                            <span className={styles.yamap__cluster_text}>{features.length}</span>
+                        </div>
                     </div>
-                </div>
-            </YMapMarker>
-        );
-    }, []);
+                </YMapMarker>
+            );
+        },
+        [onClusterClick]
+    );
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setUserLocation([position.coords.longitude, position.coords.latitude]);
-                location.current = { ...location.current, center: [position.coords.longitude, position.coords.latitude] };
+                setLocation((location) => {
+                    return { ...location, center: [position.coords.longitude, position.coords.latitude] };
+                });
             });
         }
     }, [setUserLocation]);
@@ -98,7 +115,10 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
             setActivePlaceId(inView);
             const place = restaurantsFiltered.find((place) => place.id === inView);
             if (place) {
-                location.current = { ...location.current, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
+                setMapBottomMargin(460);
+                setLocation((location) => {
+                    return { ...location, center: [place.coordinates.longitude, place.coordinates.latitude], zoom: zoom };
+                });
             }
         }
     }, [inView, restaurantsFiltered, activePlaceId, zoom]);
@@ -126,10 +146,10 @@ export default function YandexMap({ setCity }: { setCity: Dispatch<SetStateActio
 
     return (
         <div className={styles.yamap}>
-            <YMap location={location.current} margin={[100, 10, 40, 10]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[100, 10, mapBottomMargin, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapListener onActionEnd={useMemo(() => createBehaviorEventHandler(), [createBehaviorEventHandler])} onUpdate={initialRender ? handleMapUpdate : null} />
+                <YMapListener onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={useMemo(() => handleMapUpdate(), [handleMapUpdate])} />
                 <YMapClusterer
                     marker={mapMarker}
                     cluster={cluster}
