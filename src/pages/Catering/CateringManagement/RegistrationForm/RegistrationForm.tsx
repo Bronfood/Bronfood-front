@@ -13,9 +13,10 @@ type RegistrationFormProps = {
     defaultValues?: FieldValues;
     isLoading?: boolean;
     children: ReactNode;
+    additionalPopup?: ReactNode;
 };
 
-const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children }: RegistrationFormProps) => {
+const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup }: RegistrationFormProps) => {
     const [currentStep, setCurrentStep] = useState(1);
     const navigate = useNavigate();
 
@@ -70,6 +71,7 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children }: Reg
                     )}
                 </Form>
             </RegistrationPopup>
+            {additionalPopup}
         </FormProvider>
     );
 };

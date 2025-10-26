@@ -8,7 +8,11 @@ import { useState } from 'react';
 import Input from '../../../../../components/Input/Input';
 import { MealSize } from '../../../../../utils/api/cateringService/cateringService';
 
-const DetailsStep = () => {
+type DetailsStepProps = {
+    onOpenAddAdditive: () => void;
+};
+
+const DetailsStep = ({ onOpenAddAdditive }: DetailsStepProps) => {
     const { t } = useTranslation();
     const [currentTag, setCurrentTag] = useState('');
     const [isInfo, setIsInfo] = useState(false);
@@ -113,7 +117,7 @@ const DetailsStep = () => {
                     </button>
                 </>
             )}
-            <button className={styles.fieldset__button} type="button">
+            <button className={styles.fieldset__button} type="button" onClick={onOpenAddAdditive}>
                 {t('pages.cateringManagement.additionsToMeal')}
             </button>
         </fieldset>
