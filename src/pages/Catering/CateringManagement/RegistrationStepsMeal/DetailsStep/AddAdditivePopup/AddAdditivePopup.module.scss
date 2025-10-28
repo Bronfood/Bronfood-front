@@ -8,6 +8,12 @@
     padding: 50px 0;
     margin: 130px 15px 20px;
 
+    &__component {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
     &__content {
         padding: 0 21.5px;
     }
@@ -33,6 +39,41 @@
         min-height: 100vh;
         background-color: rgb(135 133 133 / 75%);
         backdrop-filter: blur(2.5px);
+    }
+}
+
+.sauce {
+    &__component {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        align-items: center;
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+        max-width: 55%;
     }
 }
 
@@ -77,12 +118,12 @@
         }
 
         &_wrapper {
-            margin-top: 10px;
             border: none;
             background-color: variables.$button-grey;
             border-radius: 25px;
             height: 26px;
             width: 26px;
+            margin-top: 16px;
         }
 
         &_add {

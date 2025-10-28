@@ -8,16 +8,6 @@
     flex-direction: column;
     gap: 30px;
 
-    &__button {
-        border: none;
-        background-color: transparent;
-        border-bottom: 1px solid variables.$orange;
-        padding: 0;
-        width: max-content;
-        color: variables.$orange;
-        font-weight: 500;
-    }
-
     &__checkbox {
         display: flex;
         gap: 10px;
@@ -41,6 +31,47 @@
         &_label {
             font-weight: 400;
         }
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &__additive {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 15px;
+    }
+
+    &__edit {
+        background-image: url('../../../../../vendor/images/icons/buttonIconRound/edit.svg');
+        border: none;
+        background-color: transparent;
+        width: 24px;
+        height: 24px;
+    }
+
+    &__name {
+        color: variables.$light-gray;
+        font-weight: 400;
+    }
+
+    &__price {
+        color: variables.$grey;
+        font-weight: 400;
     }
 }
 

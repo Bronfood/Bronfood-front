@@ -16,6 +16,11 @@ const AddMeal = () => {
             photo: data.photo,
             name: data.name,
             price: data.price,
+            disposableTableware: data.disposableTableware,
+            mealSizes: data.mealSizes,
+            type: data.type,
+            waitingTime: data.waitingTime,
+            tags: data.tags,
         };
         const response = await mutateAsync(mealData);
         const createCateringMeal = response.data;

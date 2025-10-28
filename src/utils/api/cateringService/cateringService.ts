@@ -78,6 +78,32 @@ export type MealSize = {
     price: number;
 };
 
+export type MealSauce = {
+    /**
+     * Sauce name
+     */
+    name: string;
+    /**
+     * Price for this sauce
+     */
+    price: number;
+};
+
+export type MealAdditive = {
+    /**
+     * Additive name (e.g., "Milk")
+     */
+    nameAdditive: string;
+    /**
+     * Additive name (e.g., "Cow's")
+     */
+    nameUnit: string;
+    /**
+     * Price for this additive
+     */
+    price: number;
+};
+
 export type CateringMeal = {
     /**
      * Meal's id
@@ -104,13 +130,17 @@ export type CateringMeal = {
      */
     disposableTableware: boolean;
     /**
-     * Meal's multiple meal sizes
-     */
-    multipleMealSizes: boolean;
-    /**
-     * Array of meal sizes (if multipleMealSizes is true)
+     * Array of meal sizes
      */
     mealSizes?: MealSize[];
+    /**
+     * Array of meal sauce
+     */
+    mealSauce?: MealSauce[];
+    /**
+     * Array of meal sauce
+     */
+    mealAdditive?: MealAdditive[];
     /**
      * Meal's type
      */

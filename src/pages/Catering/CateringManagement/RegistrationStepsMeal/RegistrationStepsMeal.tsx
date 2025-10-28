@@ -12,19 +12,16 @@ type RegistrationStepsMealProps = {
 };
 
 const RegistrationStepsMeal = ({ title, onSubmit, defaultValues }: RegistrationStepsMealProps) => {
-    const [isOpenAddAdditive, setIsOpenAddAdditive] = useState(false);
+    const [popupType, setPopupType] = useState<null | 'additive' | 'sauce' | 'size'>(null);
 
-    const handleOpenAddAdditive = () => {
-        setIsOpenAddAdditive(true);
-    };
+    const handleOpenPopup = (type: 'additive' | 'sauce' | 'size') => setPopupType(type);
 
-    const handleCloseAddAdditive = () => {
-        setIsOpenAddAdditive(false);
-    };
+    const handleClosePopup = () => setPopupType(null);
+
     return (
-        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} additionalPopup={isOpenAddAdditive && <AddAdditivePopup onClose={handleCloseAddAdditive} />}>
+        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} additionalPopup={popupType && <AddAdditivePopup type={popupType} onClose={handleClosePopup} />}>
             <MediaStep />
-            <DetailsStep onOpenAddAdditive={handleOpenAddAdditive} />
+            <DetailsStep onOpenAddAdditive={handleOpenPopup} />
         </RegistrationForm>
     );
 };
