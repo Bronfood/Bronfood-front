@@ -1,0 +1,207 @@
+@use '../../../../../../styles/variables';
+
+.meal {
+    position: relative;
+    border: 1px solid variables.$grey-line;
+    border-radius: 20px;
+
+    &__image {
+        height: 101px;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px 20px 0 0;
+    }
+
+    &__buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        gap: 13px;
+    }
+
+    &__button {
+        cursor: pointer;
+        height: 43px;
+        width: 43px;
+    }
+
+    &__component {
+        display: flex;
+        padding: 15px 10px 5px;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 17px;
+        line-height: 140%;
+
+        &_price {
+            color: variables.$grey;
+        }
+    }
+
+    &__description {
+        font-size: 14px;
+        color: variables.$light-gray;
+        font-weight: 400;
+        line-height: 140%;
+    }
+
+    &__toggle {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+
+        &_container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        &_image {
+            background-image: url('/src/vendor/images/icons/arrow-back.svg');
+            width: 24px;
+            background-size: cover;
+            height: 24px;
+        }
+
+        &_text {
+            color: variables.$grey;
+            font-weight: 500;
+        }
+
+        &_hide {
+            rotate: 90deg;
+        }
+
+        &_show {
+            rotate: -90deg;
+        }
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 15px;
+    gap: 15px;
+
+    &__buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        color: variables.$grey;
+    }
+
+    &__unit {
+        display: flex;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    &__button {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        background-size: cover;
+    }
+
+    &__edit {
+        background-image: url('/src/vendor/images/icons/buttonIconRound/edit.svg');
+    }
+
+    &__delete {
+        background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+    }
+
+    &__sizes {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__size {
+        display: flex;
+        justify-content: space-between;
+        line-height: 20px;
+    }
+
+    &__additive {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__additives {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+            line-height: 20px;
+        }
+    }
+
+    &__sauces {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__sauce {
+        display: flex;
+        justify-content: space-between;
+        line-height: 20px;
+    }
+
+    &__item {
+        &_size,
+        &_name {
+            color: variables.$light-gray;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &_price {
+            color: variables.$grey;
+            font-weight: 400;
+            font-size: 14px;
+        }
+    }
+}

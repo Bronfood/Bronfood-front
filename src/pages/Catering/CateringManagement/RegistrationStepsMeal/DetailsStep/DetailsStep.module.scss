@@ -39,7 +39,41 @@
     flex-direction: column;
     gap: 24px;
 
+    &__title {
+        color: variables.$grey;
+    }
+
+    &__items {
+        display: flex;
+        flex-direction: column;
+
+        &_sauce {
+            gap: 8px;
+        }
+
+        &_additive {
+            gap: 12px;
+        }
+
+        &_size {
+            gap: 8px;
+        }
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__additive {
+        gap: 4px;
+
+        &_name {
+            color: variables.$black;
+        }
+    }
+
+    &__additives {
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -48,12 +82,49 @@
             display: flex;
             justify-content: space-between;
         }
+
+        &_name {
+            color: variables.$light-gray;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &_price {
+            color: variables.$grey;
+            font-weight: 400;
+            font-size: 14px;
+        }
+    }
+
+    &__size {
+        gap: 4px;
+
+        &_name {
+            color: variables.$black;
+        }
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &_size {
+            color: variables.$light-gray;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &_price {
+            color: variables.$grey;
+            font-weight: 400;
+            font-size: 14px;
+        }
     }
 
     &__header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 15px;
+        padding-bottom: 16px;
     }
 
     &__edit {
@@ -64,108 +135,20 @@
         height: 24px;
     }
 
-    &__name {
-        color: variables.$light-gray;
-        font-weight: 400;
-    }
+    &__sauce {
+        justify-content: space-between;
+        flex-direction: row;
 
-    &__price {
-        color: variables.$grey;
-        font-weight: 400;
-    }
-}
-
-.size:not(:last-child) {
-    margin-bottom: 25px;
-}
-
-.sizes {
-    display: flex;
-    align-items: flex-end;
-    margin-top: 10px;
-    position: relative;
-
-    &__info {
-        position: absolute;
-        left: 0;
-        bottom: 58px;
-        border-radius: 20px;
-        background-color: variables.$black;
-        padding: 12px;
-        width: 100%;
-        line-height: 140%;
-    }
-
-    &__text {
-        color: variables.$white;
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 140%;
-    }
-
-    &__list {
-        display: flex;
-        gap: 37px;
-        flex: 1;
-        padding: 5px 0;
-    }
-
-    &__input {
-        border: none;
-        padding: 0;
-        width: 111px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid variables.$grey-line;
-        flex: 1;
-        font-size: 14px;
-        line-height: 140%;
-
-        &_first {
-            border-bottom: 1px solid variables.$orange;
-        }
-    }
-
-    &__button {
-        border: none;
-        height: 25px;
-        width: 25px;
-        background-size: cover;
-        background-color: transparent;
-        margin-left: 5px;
-
-        &_delete {
-            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
-            cursor: pointer;
-            margin-right: 13px;
+        &_name {
+            color: variables.$light-gray;
+            font-weight: 400;
+            font-size: 14px;
         }
 
-        &_wrapper {
-            border: none;
-            background-color: variables.$button-grey;
-            border-radius: 25px;
-            height: 26px;
-            width: 26px;
-        }
-
-        &_add {
-            width: 14px;
-            height: 14px;
-            background-image: url('/src/vendor/images/icons/add-icon-black.svg');
-            background-size: cover;
-            cursor: pointer;
-        }
-
-        &_info {
-            background-image: url('../../../../../vendor/images/icons/info-icon.svg');
-            background-size: cover;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            border: none;
-            background-color: transparent;
-            position: absolute;
-            right: -12px;
-            bottom: 0;
+        &_price {
+            color: variables.$grey;
+            font-weight: 400;
+            font-size: 14px;
         }
     }
 }

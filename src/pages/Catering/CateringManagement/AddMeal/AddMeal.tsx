@@ -18,6 +18,8 @@ const AddMeal = () => {
             price: data.price,
             disposableTableware: data.disposableTableware,
             mealSizes: data.mealSizes,
+            mealSauces: data.mealSauces,
+            mealAdditives: data.mealAdditives,
             type: data.type,
             waitingTime: data.waitingTime,
             tags: data.tags,
@@ -41,6 +43,13 @@ const AddMeal = () => {
                     photo: '',
                     name: '',
                     price: undefined,
+                    disposableTableware: false,
+                    mealSizes: [],
+                    mealSauces: [],
+                    mealAdditives: [],
+                    type: '',
+                    waitingTime: undefined,
+                    tags: [],
                 }}
             />
         </>

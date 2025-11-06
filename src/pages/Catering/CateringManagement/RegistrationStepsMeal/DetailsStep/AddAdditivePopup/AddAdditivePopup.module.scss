@@ -8,7 +8,7 @@
     padding: 50px 0;
     margin: 130px 15px 20px;
 
-    &__component {
+    &__list {
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -22,7 +22,8 @@
         font-size: 17px;
         font-weight: 500;
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
+        line-height: 140%;
     }
 
     &__close {
@@ -46,8 +47,9 @@
     &__component {
         display: flex;
         justify-content: space-between;
-        padding-top: 10px;
+        margin-top: 10px;
         align-items: center;
+        padding: 3px 0;
     }
 
     &__button {
@@ -74,21 +76,28 @@
         font-size: 14px;
         line-height: 140%;
         max-width: 55%;
+        outline: none;
     }
 }
 
 .additive {
     display: flex;
-    margin-top: 10px;
-    position: relative;
-    align-items: center;
-    padding: 0 6.5px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+
+    &__component {
+        display: flex;
+        align-items: center;
+        gap: 39px;
+        justify-content: space-between;
+    }
 
     &__inputs {
         display: flex;
-        gap: 37px;
+        gap: 16px;
         flex: 1;
-        padding: 5px 0;
+        padding: 3px 0;
     }
 
     &__input {
@@ -108,12 +117,10 @@
         width: 25px;
         background-size: cover;
         background-color: transparent;
-        margin-left: 5px;
 
         &_delete {
             background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
             cursor: pointer;
-            margin-right: 13px;
             flex-shrink: 0;
         }
 
@@ -136,17 +143,92 @@
     }
 }
 
-.info {
-    position: relative;
-    background-image: url('../../../../../../vendor/images/icons/info-icon.svg');
-    background-size: cover;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
+.unit {
+    display: flex;
+    flex-direction: column;
 
-    &__wrapper {
-        position: absolute;
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 39px;
+        justify-content: space-between;
+    }
+
+    &__inputs {
+        display: flex;
+        gap: 16px;
+        flex: 1;
+        padding: 3px 0;
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.size {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__component {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 39px;
+    }
+
+    &__imputs {
+        display: flex;
+        gap: 16px;
+        flex: 1;
+        padding: 3px 0;
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            flex-shrink: 0;
+        }
     }
 }

@@ -1,25 +1,20 @@
 import { useFormContext } from 'react-hook-form';
-import Input from '../../../../../../components/Input/Input';
-import { regexClientName } from '../../../../../../utils/consts';
 import styles from './AddAdditivePopup.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../../../../../components/ButtonIconSquare/ButtonIconSquare';
 import ButtonSubmit from '../../../../../../components/Button/Button';
 import { MealAdditive, MealSauce, MealSize } from '../../../../../../utils/api/cateringService/cateringService';
+import LocalInput from './LocalInput/LocalInput';
+import ButtonIconAdd from '../../../../../../components/ButtonIconAdd/ButtonIconAdd';
 
 function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'additive' | 'sauce' | 'size' }) {
     const { t } = useTranslation();
-    const {
-        register,
-        watch,
-        setValue,
-        formState: { errors },
-    } = useFormContext();
+    const { setValue } = useFormContext();
 
-    const mealSizes: MealSize[] = watch('mealSizes') || [];
-    const mealSauces: MealSauce[] = watch('mealSauce') || [];
-    const mealAdditives: MealAdditive[] = watch('mealAdditive') || [];
+    const [localSauces, setLocalSauces] = useState<MealSauce[]>([{ name: '', price: 0 }]);
+    const [localAdditives, setLocalAdditives] = useState<MealAdditive[]>([{ nameAdditive: '', additiveUnit: [{ name: '', price: 0 }] }]);
+    const [localSizes, setLocalSizes] = useState<MealSize[]>([{ name: '', size: '', price: 0 }]);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -28,44 +23,113 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
         };
     }, []);
 
-    const handleAddMealSize = () => {
-        const newMealSizes = [
-            ...mealSizes,
-            {
-                name: '',
-                size: '',
-                price: null,
-            },
-        ];
-        setValue('mealSizes', newMealSizes, { shouldValidate: true });
+    const handleAddMealSauce = () => {
+        setLocalSauces((prev) => [...prev, { name: '', price: 0 }]);
     };
 
-    const handleAddMealSauce = () => {
-        const newMealSauces = [
-            ...mealSauces,
-            {
-                name: '',
-                price: null,
-            },
-        ];
-        setValue('mealSauce', newMealSauces, { shouldValidate: true });
+    const handleAddMealAdditive = () => {
+        setLocalAdditives((prev) => [...prev, { nameAdditive: '', additiveUnit: [{ name: '', price: 0 }] }]);
+    };
+
+    const handleAddMealAdditiveUnit = (additiveIndex: number) => {
+        const updated = [...localAdditives];
+        updated[additiveIndex].additiveUnit.push({ name: '', price: 0 });
+        setLocalAdditives(updated);
+    };
+
+    const handleAddMealSize = () => {
+        setLocalSizes((prev) => [...prev, { name: '', size: '', price: 0 }]);
     };
 
     const handleDeleteMealSauce = (index: number) => {
-        const newMealSauces = mealSauces.filter((_, i) => i !== index);
-        setValue('mealSauce', newMealSauces, { shouldValidate: true });
+        setLocalSauces(localSauces.filter((_, i) => i !== index));
+    };
+
+    const handleDeleteMealSize = (index: number) => {
+        setLocalSizes(localSizes.filter((_, i) => i !== index));
+    };
+
+    const handleDeleteMealAdditiveUnit = (additiveIndex: number, unitIndex: number) => {
+        const updated = [...localAdditives];
+        updated[additiveIndex].additiveUnit = updated[additiveIndex].additiveUnit.filter((_, i) => i !== unitIndex);
+        setLocalAdditives(updated);
+    };
+
+    const onChangePrice = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedSauces = [...localSauces];
+        updatedSauces[index] = {
+            ...updatedSauces[index],
+            price: Number(e.target.value),
+        };
+        setLocalSauces(updatedSauces);
+    };
+
+    const onChangeMealSizePrice = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedSizes = [...localSizes];
+        updatedSizes[index] = {
+            ...updatedSizes[index],
+            price: Number(e.target.value),
+        };
+        setLocalSizes(updatedSizes);
+    };
+
+    const onChangeAdditivePrice = (additiveIndex: number, unitIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const updated = [...localAdditives];
+        updated[additiveIndex].additiveUnit[unitIndex] = {
+            ...updated[additiveIndex].additiveUnit[unitIndex],
+            price: Number(e.target.value),
+        };
+        setLocalAdditives(updated);
+    };
+
+    const onChangeMealSizeSize = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedSizes = [...localSizes];
+        updatedSizes[index] = {
+            ...updatedSizes[index],
+            size: e.target.value,
+        };
+        setLocalSizes(updatedSizes);
+    };
+
+    const onChangeSauceName = (index: number, value: string) => {
+        const updatedSauces = [...localSauces];
+        updatedSauces[index] = { ...updatedSauces[index], name: value };
+        setLocalSauces(updatedSauces);
+    };
+
+    const onChangeAdditiveName = (index: number, value: string) => {
+        const updatedAdditives = [...localAdditives];
+        updatedAdditives[index] = { ...updatedAdditives[index], nameAdditive: value };
+        setLocalAdditives(updatedAdditives);
+    };
+
+    const onChangeAdditiveNameUnit = (additiveIndex: number, unitIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const updated = [...localAdditives];
+        updated[additiveIndex].additiveUnit[unitIndex] = {
+            ...updated[additiveIndex].additiveUnit[unitIndex],
+            name: e.target.value,
+        };
+        setLocalAdditives(updated);
+    };
+
+    const onChangeMealSizeName = (index: number, value: string) => {
+        const updatedSizes = [...localSizes];
+        updatedSizes[index] = { ...updatedSizes[index], name: value };
+        setLocalSizes(updatedSizes);
     };
 
     const handleSave = () => {
+        const nonEmptySauces = localSauces.filter((sauce) => sauce.name.trim() !== '' && sauce.price !== 0);
+
         switch (type) {
             case 'sauce':
-                setValue('mealSauce', mealSauces, { shouldValidate: true });
+                setValue('mealSauces', nonEmptySauces, { shouldValidate: true });
                 break;
             case 'additive':
-                setValue('mealAdditive', mealAdditives, { shouldValidate: true });
+                setValue('mealAdditives', localAdditives, { shouldValidate: true });
                 break;
             case 'size':
-                setValue('mealSizes', mealSizes, { shouldValidate: true });
+                setValue('mealSizes', localSizes, { shouldValidate: true });
                 break;
         }
         onClose();
@@ -82,12 +146,12 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
             case 'sauce':
                 return (
                     <>
-                        <ul className={styles.popup__component}>
-                            {(mealSauces.length > 0 ? mealSauces : [{ name: '', price: 0 }]).map((sauce, index) => (
+                        <ul className={styles.popup__list}>
+                            {localSauces.map((sauce, index) => (
                                 <li key={index} className={styles.sauce}>
-                                    <Input type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderMealSauce')} register={register} errors={errors} pattern={regexClientName} name={`mealSauce.${index}.name`} value={sauce.name || ''} />
+                                    <LocalInput type="text" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderMealSauce')} name={`sauceName-${index}`} value={sauce.name} onChange={(value) => onChangeSauceName(index, value)} />
                                     <div className={styles.sauce__component}>
-                                        <input name="additivePrice" type="number" className={`${styles.sauce__input}`} placeholder="Цена" value={sauce.price || ''} onChange={(e) => setValue(`mealSauce.${index}.price`, Number(e.target.value))} />
+                                        <input name={`saucePrice-${index}`} type="number" className={`${styles.sauce__input}`} placeholder="Цена" value={sauce.price || ''} onChange={(e) => onChangePrice(index, e)} />
                                         <button type="button" className={`${styles.sauce__button} ${styles.sauce__button_delete}`} onClick={() => handleDeleteMealSauce(index)}></button>
                                     </div>
                                 </li>
@@ -99,71 +163,56 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
                     </>
                 );
 
-            case 'size':
-                return (
-                    <div>
-                        <div className={styles.sizes}>
-                            <Input type="string" nameLabel={t('pages.cateringManagement.nameLabelMealSize')} placeholder={t('pages.cateringManagement.placeholderMealSize')} register={register} errors={errors} pattern={regexClientName} name="mealSize" />
-                            <div>
-                                <div className={styles.sizes__list}>
-                                    <input type="string" className={`${styles.sizes__input} `} placeholder="100мл или гр" />
-                                    <input type="number" className={`${styles.sizes__input} `} placeholder="Цена" />
-                                </div>
-                                <button type="button" className={`${styles.sizes__button} ${styles.sizes__button_delete}`}></button>
-                            </div>
-                        </div>
-                        {mealSizes.length > 0 && (
-                            <ul>
-                                {mealSizes.map((size, index) => (
-                                    <li key={index} className={styles.size}>
-                                        <Input type="string" nameLabel={t('pages.cateringManagement.nameLabelMealSize')} placeholder={t('pages.cateringManagement.placeholderMealSize')} register={register} errors={errors} pattern={regexClientName} name="mealSize" value={size.name} />
-                                        <div className={styles.sizes}>
-                                            <div className={styles.sizes__list}>
-                                                <input type="string" className={`${styles.sizes__input} ${index === 0 ? styles.sizes__input_first : ''}`} placeholder="100мл или гр" value={size.size} />
-                                                <input type="number" className={`${styles.sizes__input} ${index === 0 ? styles.sizes__input_first : ''}`} placeholder="Цена" value={size.price} />
-                                            </div>
-                                            <button type="button" className={`${styles.sizes__button} ${styles.sizes__button_delete}`}></button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                        <button className={styles.sizes__button_wrapper}>
-                            <div className={styles.sizes__button_add} onClick={handleAddMealSize}></div>
-                        </button>
-                    </div>
-                );
-
             case 'additive':
                 return (
-                    <div>
-                        <div className={styles.additive}>
-                            <Input type="string" nameLabel={t('pages.cateringManagement.nameLabelAddAdditive')} placeholder={t('pages.cateringManagement.placeholderAddAdditive')} register={register} errors={errors} pattern={regexClientName} name="addAdditive" />
-                            <div>
-                                <div className={styles.additive__inputs}>
-                                    <input name="additiveName" type="string" className={`${styles.additive__input}`} placeholder="Название" />
-                                    <input name="additivePrice" type="number" className={`${styles.additive__input}`} placeholder="Цена" />
-                                </div>
-                                <button type="button" className={`${styles.additive__button} ${styles.additive__button_delete}`}></button>
-                            </div>
-                        </div>
-                        {mealAdditives.length > 0 && (
-                            <ul>
-                                {mealAdditives.map((additive, index) => (
-                                    <li key={index}>
-                                        <Input type="string" nameLabel={t('pages.cateringManagement.nameLabelAddAdditive')} placeholder={t('pages.cateringManagement.placeholderAddAdditive')} register={register} errors={errors} pattern={regexClientName} name="addAdditive" value={additive.nameAdditive} />
-                                        <div className={styles.additive__inputs}>
-                                            <input name="additiveName" type="string" className={`${styles.additive__input}`} placeholder="Название" value={additive.nameUnit} />
-                                            <input name="additivePrice" type="number" className={`${styles.additive__input}`} placeholder="Цена" value={additive.price} />
+                    <>
+                        <ul className={styles.popup__list}>
+                            {localAdditives.map((additive, additiveIndex) => (
+                                <li key={additiveIndex} className={styles.additive}>
+                                    <LocalInput type="string" nameLabel={t('pages.cateringManagement.nameLabelAddAdditive')} placeholder={t('pages.cateringManagement.placeholderAddAdditive')} value={additive.nameAdditive} name={`additiveName-${additiveIndex}`} onChange={(value) => onChangeAdditiveName(additiveIndex, value)} />
+                                    {additive.additiveUnit.map((unit, unitIndex) => (
+                                        <ul className={styles.unit}>
+                                            <li className={styles.unit__item} key={unitIndex}>
+                                                <div className={styles.unit__inputs}>
+                                                    <input name={`additiveNameUnit-${unitIndex}`} type="string" className={`${styles.unit__input}`} placeholder="Название" value={unit.name || ''} onChange={(e) => onChangeAdditiveNameUnit(additiveIndex, unitIndex, e)} />
+                                                    <input name={`additivePrice-${unitIndex}`} type="number" className={`${styles.unit__input}`} placeholder="Цена" value={unit.price || ''} onChange={(e) => onChangeAdditivePrice(additiveIndex, unitIndex, e)} />
+                                                </div>
+                                                <button type="button" className={`${styles.unit__button} ${styles.unit__button_delete}`} onClick={() => handleDeleteMealAdditiveUnit(additiveIndex, unitIndex)}></button>
+                                            </li>
+                                        </ul>
+                                    ))}
+
+                                    <button type="button" className={styles.additive__button_wrapper} onClick={() => handleAddMealAdditiveUnit(additiveIndex)}>
+                                        <div className={styles.additive__button_add}></div>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <ButtonIconAdd onClick={handleAddMealAdditive}>{t('pages.cateringManagement.addAdditionsToMealPopup')}</ButtonIconAdd>
+                    </>
+                );
+
+            case 'size':
+                return (
+                    <>
+                        <ul className={styles.popup__list}>
+                            {localSizes.map((size, index) => (
+                                <li key={index} className={styles.size}>
+                                    <LocalInput type="string" nameLabel={t('pages.cateringManagement.nameLabelMealSize')} placeholder={t('pages.cateringManagement.placeholderMealSize')} name={`mealSizeName-${index}`} value={size.name || ''} onChange={(value) => onChangeMealSizeName(index, value)} />
+                                    <div className={styles.size__component}>
+                                        <div className={styles.size__imputs}>
+                                            <input name={`mealSizeSize-${index}`} type="string" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder="100мл или гр" value={size.size || ''} onChange={(e) => onChangeMealSizeSize(index, e)} />
+                                            <input name={`mealSizePrice-${index}`} type="number" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder="Цена" value={size.price || ''} onChange={(e) => onChangeMealSizePrice(index, e)} />
                                         </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                        <button type="button" className={styles.additive__button_wrapper}>
+                                        <button type="button" className={`${styles.size__button} ${styles.size__button_delete}`} onClick={() => handleDeleteMealSize(index)}></button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <button type="button" className={styles.additive__button_wrapper} onClick={handleAddMealSize}>
                             <div className={styles.additive__button_add}></div>
                         </button>
-                    </div>
+                    </>
                 );
         }
     };

@@ -14,10 +14,17 @@ type RegistrationFormProps = {
     isLoading?: boolean;
     children: ReactNode;
     additionalPopup?: ReactNode;
+    onNextStep?: (data: FieldValues, currentStep: number) => void;
+    onPrevStep?: (currentStep: number) => boolean;
+
+    currentStep?: number;
+    onStepChange?: (step: number) => void;
 };
 
-const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup }: RegistrationFormProps) => {
-    const [currentStep, setCurrentStep] = useState(1);
+const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup, onNextStep, onPrevStep, currentStep: externalStep, onStepChange }: RegistrationFormProps) => {
+    const [internalStep, setInternalStep] = useState(1);
+    const currentStep = externalStep ?? internalStep;
+    const setCurrentStep = onStepChange ?? setInternalStep;
     const navigate = useNavigate();
 
     const { t } = useTranslation();
@@ -36,12 +43,16 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, addit
     const handleNextClick = async () => {
         const isStepValid = await trigger(undefined, { shouldFocus: true });
         if (isStepValid) {
-            setCurrentStep((prev) => prev + 1);
+            const data = methods.getValues();
+            if (onNextStep) {
+                onNextStep(data, currentStep);
+            }
+            setCurrentStep(currentStep + 1);
         }
     };
 
     const handlePrevClick = () => {
-        setCurrentStep((prev) => prev - 1);
+        setCurrentStep(currentStep - 1);
     };
 
     const handleFormSubmit = async (data: FieldValues) => {
@@ -56,7 +67,7 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, addit
 
     return (
         <FormProvider {...methods}>
-            <RegistrationPopup title={title} close={onClose} {...(currentStep !== 1 && { prevStep: handlePrevClick })}>
+            <RegistrationPopup title={title} close={onClose} {...(currentStep !== 1 && (!onPrevStep || onPrevStep(currentStep)) && { prevStep: handlePrevClick })}>
                 <ProgressSteps currentStep={currentStep} totalSteps={totalSteps}></ProgressSteps>
                 <Form name="form-registration" onSubmit={(e) => e.preventDefault()}>
                     {steps[currentStep - 1]}
