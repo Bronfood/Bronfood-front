@@ -38,8 +38,8 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
                         <button onClick={() => setIsFilterOpen(true)} type="button" className={styles.drawer__icon} title={t('pages.restaurants.filters')} />
                     </div>
                     {isLoading && <Preloader />}
-                    {restaurantsFiltered && restaurantsFiltered.length === 0 ? <p className={styles.drawer__message}>{t('pages.restaurants.noRestaurantsInYourCityYet')}</p> : null}
                     <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>
+                        {!isLoading && restaurantsFiltered.length === 0 ? <p className={styles.drawer__message}>{t('pages.restaurants.noRestaurantsInYourCityYet')}</p> : null}
                         {restaurantsFiltered.map((card) => (
                             <li key={card.id} className={styles.drawer__list_item} onClick={() => handleClick(card.id)}>
                                 <RestaurantCard card={card} isTheOnlyOne={restaurantsFiltered.length === 1} lastClickedRestaurantId={lastClickedRestaurantId} />
