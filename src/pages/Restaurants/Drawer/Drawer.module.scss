@@ -78,6 +78,14 @@
     &__list_item {
         scroll-snap-align: start;
     }
+
+    &__message {
+        text-align: center;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+    }
 }
 
 .drawer.up {
