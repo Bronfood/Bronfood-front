@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useGetBasket } from '../../utils/hooks/useBasket/useBasket';
 
-const Header = ({ city }: { city: string }) => {
+const Header = () => {
     const menuRef = useRef<HTMLDivElement>(null);
     const { isLogin } = useCurrentUser();
     const [isMenuActive, setIsMenuActive] = useState(false);
@@ -21,6 +21,7 @@ const Header = ({ city }: { city: string }) => {
     };
     const [isPageFavorites, setIsPageFavorites] = useState(false);
     const location = useLocation();
+    const { city } = useCurrentUser();
 
     useEffect(() => {
         if (location.pathname === '/favorites') {

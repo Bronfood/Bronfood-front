@@ -1,4 +1,4 @@
-import { createContext, FC, PropsWithChildren, useState } from 'react';
+import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useState } from 'react';
 import { authService, CaptchaResponse, LoginData, RegisterPayload, RegisterPromise, RestorePasswordPayload, UpdateUserPayload, User } from '../utils/api/authService';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult, useQueryClient } from '@tanstack/react-query';
 
@@ -15,6 +15,8 @@ type CurrentUserContext = {
     restorePassword: UseMutationResult<void, Error, RestorePasswordPayload, unknown> | Record<string, never>;
     confirmRestorePassword: UseMutationResult<void, Error, { newPassword: string; reNewPassword: string; code: string }, unknown> | Record<string, never>;
     getCaptcha: UseQueryResult<CaptchaResponse, Error> | Record<string, never>;
+    city: string;
+    setCity: Dispatch<SetStateAction<string>>;
 };
 
 export const CurrentUserContext = createContext<CurrentUserContext>({
@@ -30,11 +32,14 @@ export const CurrentUserContext = createContext<CurrentUserContext>({
     restorePassword: {},
     confirmRestorePassword: {},
     getCaptcha: {},
+    city: '',
+    setCity: () => {},
 });
 
 export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
     const token = localStorage.getItem('token');
     const [phone, setPhone] = useState<string>('');
+    const [city, setCity] = useState<string>('');
     const client = useQueryClient();
 
     useQuery({
@@ -111,6 +116,8 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
                 restorePassword,
                 confirmRestorePassword,
                 getCaptcha: captcha,
+                city,
+                setCity,
             }}
         >
             {children}

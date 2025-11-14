@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker, YMapListener, YMapClusterer, clusterByGrid } from '../../lib/ymaps';
 import { type MapEventUpdateHandler, type BehaviorMapEventHandler, LngLat } from '@yandex/ymaps3-types';
 import styles from './YandexMap.module.scss';
@@ -10,8 +10,9 @@ import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
 import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_BOUNDS, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
+import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 
-export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch<SetStateAction<string>>; isDrawerOpen: boolean }) {
+export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
     const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
     const [mapActionStarted, setMapActionStarted] = useState(false);
@@ -24,6 +25,7 @@ export default function YandexMap({ setCity, isDrawerOpen }: { setCity: Dispatch
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
+    const { setCity } = useCurrentUser();
 
     const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
