@@ -1,6 +1,6 @@
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useMemo, useState } from 'react';
 import { YMapLocationRequest } from '@yandex/ymaps3-types';
-import { COMMON_LOCATION_PARAMS, INITIAL_CENTER, INITIAL_ZOOM } from '../utils/consts';
+import { COMMON_LOCATION_PARAMS, INITIAL_CENTER, ZOOM } from '../utils/consts';
 
 type MapContext = {
     city: string;
@@ -28,7 +28,7 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
     const [city, setCity] = useState<string>('');
     const [location, setLocation] = useState<YMapLocationRequest>({
         center: INITIAL_CENTER,
-        zoom: INITIAL_ZOOM,
+        zoom: ZOOM,
         ...COMMON_LOCATION_PARAMS,
     });
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);

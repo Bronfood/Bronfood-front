@@ -20,7 +20,7 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
 });
 
 export const INITIAL_CENTER: LngLat = [76.921552, 43.246345];
-export const INITIAL_ZOOM = 12;
+export const ZOOM = 12;
 
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;

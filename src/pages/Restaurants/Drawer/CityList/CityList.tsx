@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styles from './CityList.module.scss';
 import { useMapContext } from '../../../../utils/hooks/useMap/useMap';
+import { ZOOM } from '../../../../utils/consts';
 
 const CityList = () => {
     const { t } = useTranslation();
@@ -25,7 +26,7 @@ const CityList = () => {
     const { setLocation, setMapBottomMargin } = useMapContext();
     const handleClick = (city) => {
         setLocation((location) => {
-            return { ...location, center: [city.coordinates.longitude, city.coordinates.latitude], zoom: 12 };
+            return { ...location, center: [city.coordinates.longitude, city.coordinates.latitude], zoom: ZOOM };
         });
         setMapBottomMargin(460);
     };

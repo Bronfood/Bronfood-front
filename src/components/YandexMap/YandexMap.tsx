@@ -8,13 +8,13 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE, ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
 import { useMapContext } from '../../utils/hooks/useMap/useMap';
 
 export default function YandexMap() {
     type ExpandedFeature = Feature & { id: string };
-    const [zoom, setZoom] = useState<number>(12);
+    const [zoom, setZoom] = useState<number>(ZOOM);
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
@@ -34,7 +34,7 @@ export default function YandexMap() {
             if (object.type === 'dblClick') return;
             setMapBottomMargin(40);
         };
-    }, []);
+    }, [setMapBottomMargin]);
 
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
@@ -72,8 +72,8 @@ export default function YandexMap() {
     const onClusterClick = useCallback(
         (coordinates: LngLat) => {
             setMapBottomMargin(isDrawerOpen ? 460 : 40);
-            setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
-            setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
+            setLocation({ ...location, center: coordinates, zoom: zoom < ZOOM ? ZOOM : zoom + 1 });
+            setZoom((zoom) => (zoom < ZOOM ? ZOOM : zoom + 1));
         },
         [location, zoom, isDrawerOpen, setLocation, setMapBottomMargin]
     );
