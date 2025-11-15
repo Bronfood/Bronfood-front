@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useState } from 'react';
+import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useMemo, useState } from 'react';
 import { YMapLocationRequest } from '@yandex/ymaps3-types';
 import { COMMON_LOCATION_PARAMS, INITIAL_CENTER, INITIAL_ZOOM } from '../utils/consts';
 
@@ -7,6 +7,10 @@ type MapContext = {
     setCity: Dispatch<SetStateAction<string>>;
     location: YMapLocationRequest;
     setLocation: Dispatch<SetStateAction<YMapLocationRequest>>;
+    isDrawerOpen: boolean;
+    setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
+    mapBottomMargin: number;
+    setMapBottomMargin: Dispatch<SetStateAction<number>>;
 };
 
 export const MapContext = createContext<MapContext>({
@@ -14,6 +18,10 @@ export const MapContext = createContext<MapContext>({
     setCity: () => {},
     location: {},
     setLocation: () => {},
+    isDrawerOpen: true,
+    setIsDrawerOpen: () => {},
+    mapBottomMargin: 460,
+    setMapBottomMargin: () => {},
 });
 
 export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -23,17 +31,21 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
         zoom: INITIAL_ZOOM,
         ...COMMON_LOCATION_PARAMS,
     });
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
+    const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
 
-    return (
-        <MapContext.Provider
-            value={{
-                city,
-                setCity,
-                location,
-                setLocation,
-            }}
-        >
-            {children}
-        </MapContext.Provider>
+    const contextValue = useMemo(
+        () => ({
+            city,
+            setCity,
+            location,
+            setLocation,
+            isDrawerOpen,
+            setIsDrawerOpen,
+            mapBottomMargin,
+            setMapBottomMargin,
+        }),
+        [city, setCity, location, setLocation, isDrawerOpen, setIsDrawerOpen, mapBottomMargin, setMapBottomMargin]
     );
+    return <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>;
 };

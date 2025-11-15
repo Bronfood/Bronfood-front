@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
 import { Outlet } from 'react-router-dom';
 import Drawer from './Drawer/Drawer';
+import { useMapContext } from '../../utils/hooks/useMap/useMap';
 
-function Restaurants({ isDrawerOpen, setIsDrawerOpen }: { isDrawerOpen: boolean; setIsDrawerOpen: Dispatch<SetStateAction<boolean>> }) {
+function Restaurants() {
+    const { isDrawerOpen, setIsDrawerOpen } = useMapContext();
     return (
         <>
             <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />

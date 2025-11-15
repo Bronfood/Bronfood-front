@@ -10,17 +10,16 @@ import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
 import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE, INITIAL_BOUNDS } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
-import { useMap } from '../../utils/hooks/useMap/useMap';
+import { useMapContext } from '../../utils/hooks/useMap/useMap';
 
-export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
+export default function YandexMap() {
     type ExpandedFeature = Feature & { id: string };
-    const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
     const [mapActionStarted, setMapActionStarted] = useState(false);
     const [zoom, setZoom] = useState<number>(12);
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
-    const { setCity, location, setLocation } = useMap();
+    const { setCity, location, setLocation, isDrawerOpen, mapBottomMargin, setMapBottomMargin } = useMapContext();
 
     const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
