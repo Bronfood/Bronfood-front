@@ -16,7 +16,11 @@ module.exports = {
             'warn',
             {
                 allowConstantExport: true,
-                allowExportNames: ['CurrentUserContext', 'RestaurantsContext'],
+                allowExportNames: [
+                    'CurrentUserContext',
+                    'RestaurantsContext',
+                    'MapContext',
+                ],
             },
         ],
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
