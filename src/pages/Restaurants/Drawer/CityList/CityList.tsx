@@ -5,7 +5,15 @@ import { ZOOM } from '../../../../utils/consts';
 
 const CityList = () => {
     const { t } = useTranslation();
-    const cities = [
+    type City = {
+        id: number;
+        name: string;
+        coordinates: {
+            latitude: number;
+            longitude: number;
+        };
+    };
+    const cities: City[] = [
         {
             id: 1,
             name: 'Алматы',
@@ -24,7 +32,7 @@ const CityList = () => {
         },
     ];
     const { setLocation, setMapBottomMargin } = useMapContext();
-    const handleClick = (city) => {
+    const handleClick = (city: City) => {
         setLocation((location) => {
             return { ...location, center: [city.coordinates.longitude, city.coordinates.latitude], zoom: ZOOM };
         });

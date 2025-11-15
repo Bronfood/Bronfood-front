@@ -1,4 +1,4 @@
-import { LngLat } from '@yandex/ymaps3-types';
+import { EasingFunctionDescription, LngLat } from '@yandex/ymaps3-types';
 import { MealType } from './api/restaurantsService/restaurantsService';
 import { increment } from './serviceFuncs/increment';
 /**
@@ -24,4 +24,4 @@ export const ZOOM = 12;
 
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;
-export const COMMON_LOCATION_PARAMS = { easing: 'ease-in-out', duration: 1000 };
+export const COMMON_LOCATION_PARAMS: { easing: EasingFunctionDescription; duration: number } = { easing: 'ease-in-out', duration: 1000 };
