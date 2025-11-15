@@ -8,24 +8,19 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_BOUNDS, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE, INITIAL_BOUNDS } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
-import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
+import { useMap } from '../../utils/hooks/useMap/useMap';
 
 export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
     type ExpandedFeature = Feature & { id: string };
     const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
     const [mapActionStarted, setMapActionStarted] = useState(false);
     const [zoom, setZoom] = useState<number>(12);
-    const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
-        center: INITIAL_CENTER,
-        zoom: INITIAL_ZOOM,
-        ...COMMON_LOCATION_PARAMS,
-    });
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
-    const { setCity } = useCurrentUser();
+    const { setCity, location, setLocation } = useMap();
 
     const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
@@ -51,7 +46,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
             setLocation({ ...location, center: [longitude, latitude] });
             navigate(`/restaurants/${placeId}`);
         },
-        [navigate, setLastClickedRestaurantId, location, isDrawerOpen]
+        [navigate, setLastClickedRestaurantId, location, isDrawerOpen, setLocation]
     );
 
     const points: ExpandedFeature[] = restaurantsFiltered.map((restaurant) => ({
@@ -83,7 +78,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
             setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
             setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
         },
-        [location, zoom, isDrawerOpen]
+        [location, zoom, isDrawerOpen, setLocation]
     );
 
     const cluster = useCallback(
@@ -110,7 +105,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
                 });
             });
         }
-    }, [setUserLocation]);
+    }, [setUserLocation, setLocation]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
@@ -123,7 +118,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
                 });
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
+    }, [inView, restaurantsFiltered, activePlaceId, zoom, setLocation]);
 
     useEffect(() => {
         async function fetchLocality() {

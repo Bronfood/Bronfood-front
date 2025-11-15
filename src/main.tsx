@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { CurrentUserProvider } from './contexts/CurrentUserContext.tsx';
 import { RestaurantsProvider } from './contexts/RestaurantsContext.tsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { MapProvider } from './contexts/MapContext.tsx';
 
 const queryClient = new QueryClient();
 
@@ -15,9 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
             <CurrentUserProvider>
                 <RestaurantsProvider>
-                    <BrowserRouter>
-                        <App />
-                    </BrowserRouter>
+                    <MapProvider>
+                        <BrowserRouter>
+                            <App />
+                        </BrowserRouter>
+                    </MapProvider>
                 </RestaurantsProvider>
             </CurrentUserProvider>
         </QueryClientProvider>

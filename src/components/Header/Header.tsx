@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useGetBasket } from '../../utils/hooks/useBasket/useBasket';
+import { useMap } from '../../utils/hooks/useMap/useMap';
 
 const Header = () => {
     const menuRef = useRef<HTMLDivElement>(null);
@@ -21,7 +22,7 @@ const Header = () => {
     };
     const [isPageFavorites, setIsPageFavorites] = useState(false);
     const location = useLocation();
-    const { city } = useCurrentUser();
+    const { city } = useMap();
 
     useEffect(() => {
         if (location.pathname === '/favorites') {

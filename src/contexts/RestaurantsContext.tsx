@@ -187,7 +187,6 @@ export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
         },
         [selectedVenueTypes]
     );
-
     const contextValue = useMemo(
         () => ({
             isLoading,

@@ -7,6 +7,7 @@ import { useRestaurantsContext } from '../../../utils/hooks/useRestaurants/useRe
 import Preloader from '../../../components/Preloader/Preloader';
 import { useNavigate } from 'react-router-dom';
 import PageNotFound from '../../PageNotFound/PageNotFound';
+import CityList from './CityList/CityList';
 
 const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -39,7 +40,7 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
                     </div>
                     {isLoading && <Preloader />}
                     <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>
-                        {!isLoading && restaurantsFiltered.length === 0 ? <p className={styles.drawer__message}>{t('pages.restaurants.noRestaurantsInYourCityYet')}</p> : null}
+                        {!isLoading && restaurantsFiltered.length === 0 ? <CityList /> : null}
                         {restaurantsFiltered.map((card) => (
                             <li key={card.id} className={styles.drawer__list_item} onClick={() => handleClick(card.id)}>
                                 <RestaurantCard card={card} isTheOnlyOne={restaurantsFiltered.length === 1} lastClickedRestaurantId={lastClickedRestaurantId} />
