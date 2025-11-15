@@ -26,8 +26,8 @@ const CityList = () => {
             id: 2,
             name: 'Астана',
             coordinates: {
-                latitude: 51.227483,
-                longitude: 71.328093,
+                latitude: 51.129947,
+                longitude: 71.430053,
             },
         },
     ];
