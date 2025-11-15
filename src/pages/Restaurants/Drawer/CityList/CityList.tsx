@@ -22,11 +22,12 @@ const CityList = () => {
             },
         },
     ];
-    const { setLocation } = useMapContext();
+    const { setLocation, setMapBottomMargin } = useMapContext();
     const handleClick = (city) => {
         setLocation((location) => {
             return { ...location, center: [city.coordinates.longitude, city.coordinates.latitude], zoom: 12 };
         });
+        setMapBottomMargin(460);
     };
     return (
         <div className={styles['city-list']}>
