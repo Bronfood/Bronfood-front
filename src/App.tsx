@@ -34,6 +34,8 @@ import AddCatering from './pages/Catering/CateringManagement/AddCatering/AddCate
 import CateringDetails from './pages/Catering/CateringManagement/CateringDetails/CateringDetails';
 import EditCatering from './pages/Catering/CateringManagement/EditCatering/EditCatering';
 import AddMeal from './pages/Catering/CateringManagement/AddMeal/AddMeal';
+import MealList from './pages/Catering/CateringManagement/MealList/MealList';
+import EditMeal from './pages/Catering/CateringManagement/EditMeal/EditMeal';
 
 function App() {
     const [city, setCity] = useState('');
@@ -68,12 +70,13 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
 
                 <Route path="/catering" element={<Catering />}>
-                    <Route path="registration">
-                        <Route path="catering" element={<AddCatering />} />
-                        <Route path="meal" element={<AddMeal />} />
-                    </Route>
+                    <Route path="registration" element={<AddCatering />} />
                     <Route path=":cateringId" element={<CateringDetails />} />
                     <Route path=":cateringId/edit" element={<EditCatering />} />
+
+                    <Route path=":cateringId/menu" element={<MealList />} />
+                    <Route path=":cateringId/menu/add" element={<AddMeal />} />
+                    <Route path=":cateringId/menu/edit/:mealId" element={<EditMeal />} />
 
                     <Route path="administrators">
                         <Route index element={<Administrators />} />

@@ -12,7 +12,7 @@ const EditCatering = () => {
     const navigate = useNavigate();
     const { cateringId } = useParams();
 
-    const { data: catering, isLoading: isFetching } = useGetCateringById(Number(cateringId));
+    const { data: catering, isLoading: isLoadingCatering } = useGetCateringById(Number(cateringId));
     const { mutateAsync: updateCatering, isPending, error } = useUpdateCatering();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -42,7 +42,7 @@ const EditCatering = () => {
 
     return (
         <>
-            {isPending || (isFetching && <Preloader />)}
+            {isPending || (isLoadingCatering && <Preloader />)}
             {error && <ErrorMessage message={error.message} />}
             {catering && (
                 <RegistrationStepsCatering

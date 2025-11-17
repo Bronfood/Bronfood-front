@@ -193,7 +193,10 @@ export interface CateringService {
     updateCatering: (data: Partial<Catering> & { id: number }) => Promise<{ data: Catering }>;
 
     getMeals: () => Promise<{ data: CateringMeal[] }>;
+    getMealById: (id: number) => Promise<{ data: CateringMeal }>;
     createMeal: (data: Omit<CateringMeal, 'id'>) => Promise<{ data: CateringMeal }>;
+    deleteMeal: (id: number) => Promise<{ success: boolean }>;
+    updateMeal: (data: Partial<CateringMeal> & { id: number }) => Promise<{ data: CateringMeal }>;
 }
 
 export const cateringService = new CateringServiceMock();

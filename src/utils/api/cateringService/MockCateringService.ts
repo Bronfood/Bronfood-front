@@ -3,6 +3,8 @@ import restaurant1 from './MockImages/restaurant1.png';
 import restaurant2 from './MockImages/restaurant2.png';
 import restaurant3 from './MockImages/restaurant3.png';
 import meal1 from './MockImages/meal1.png';
+import meal2 from './MockImages/meal2.jpg';
+import meal3 from './MockImages/meal3.jpg';
 
 export const emptyCaterings: Catering[] = [
     {
@@ -132,7 +134,90 @@ export const emptyMeals: CateringMeal[] = [
         description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
         photo: meal1,
         price: 1050,
+        disposableTableware: true,
+        mealSizes: [
+            { name: 'Средний', size: '300 грамм', price: 2100 },
+            { name: 'Большой', size: '500 грамм', price: 4100 },
+        ],
+        mealSauces: [
+            { name: 'Сырный', price: 100 },
+            { name: 'Кетчуп', price: 100 },
+        ],
+        mealAdditives: [
+            {
+                nameAdditive: 'Молоко',
+                additiveUnit: [
+                    { name: 'Коровье', price: 4100 },
+                    { name: 'Птичье', price: 4100 },
+                ],
+            },
+            {
+                nameAdditive: 'Печенье',
+                additiveUnit: [
+                    { name: 'Черный', price: 4100 },
+                    { name: 'Белый', price: 4100 },
+                ],
+            },
+        ],
         type: 'food',
         waitingTime: 15,
+        tags: [{ name: 'вега' }, { name: 'овощи' }],
+    },
+    {
+        id: 2,
+        name: 'Зеленый чай',
+        description: 'Вкусный зеленый чай из Японии. Подается с медом.',
+        photo: meal2,
+        price: 200,
+        disposableTableware: false,
+        mealSizes: [
+            { name: 'Средний', size: '300 мл', price: 200 },
+            { name: 'Большой', size: '500 мл', price: 300 },
+        ],
+        mealSauces: [],
+        mealAdditives: [
+            {
+                nameAdditive: 'Молоко',
+                additiveUnit: [
+                    { name: 'Коровье', price: 40 },
+                    { name: 'Птичье', price: 70 },
+                ],
+            },
+            {
+                nameAdditive: 'Печенье',
+                additiveUnit: [
+                    { name: 'Песочное', price: 100 },
+                    { name: 'Шоколадное', price: 120 },
+                ],
+            },
+        ],
+        type: 'drink',
+        waitingTime: 10,
+        tags: [{ name: 'чай' }, { name: 'зеленый' }],
+    },
+    {
+        id: 3,
+        name: 'Чизкейк',
+        description: 'Слоеное пироженое с клубникой и конфитюром.',
+        photo: meal3,
+        price: 500,
+        disposableTableware: false,
+        mealSizes: [
+            { name: 'Средний', size: '300 грамм', price: 500 },
+            { name: 'Большой', size: '500 грамм', price: 600 },
+        ],
+        mealSauces: [],
+        mealAdditives: [
+            {
+                nameAdditive: 'Сироп',
+                additiveUnit: [
+                    { name: 'Клубничный', price: 50 },
+                    { name: 'Мятный', price: 70 },
+                ],
+            },
+        ],
+        type: 'dessert',
+        waitingTime: 7,
+        tags: [{ name: 'сладкое' }, { name: 'десерт' }],
     },
 ];

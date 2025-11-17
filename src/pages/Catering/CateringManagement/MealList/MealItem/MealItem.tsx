@@ -1,16 +1,16 @@
-import ButtonIconRound from '../../../../../../components/ButtonIconRound/ButtonIconRound';
-import { CateringMeal } from '../../../../../../utils/api/cateringService/cateringService';
-import styles from './ListMealItem.module.scss';
+import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
+import { CateringMeal } from '../../../../../utils/api/cateringService/cateringService';
+import styles from './MealItem.module.scss';
 
-type ListMealItemProps = {
-    meal: Omit<CateringMeal, 'id'>;
-    onClick: () => void;
+type MealItemProps = {
+    meal: CateringMeal;
+    onClickInfo: () => void;
     onDelete: () => void;
     onEdit: () => void;
     isOpen: boolean;
 };
 
-const ListMealItem = ({ meal, onClick, onDelete, onEdit, isOpen }: ListMealItemProps) => {
+const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen }: MealItemProps) => {
     return (
         <li className={styles.meal}>
             <div className={styles.meal__image} style={{ backgroundImage: `url(${meal.photo})` }} />
@@ -30,7 +30,7 @@ const ListMealItem = ({ meal, onClick, onDelete, onEdit, isOpen }: ListMealItemP
                     </div>
                     {meal.description && <p className={styles.meal__description}>{meal.description}</p>}
                 </div>
-                <button className={styles.meal__toggle} onClick={onClick}>
+                <button className={styles.meal__toggle} onClick={onClickInfo}>
                     {isOpen ? (
                         <div className={styles.meal__toggle_container}>
                             <p className={styles.meal__toggle_text}>Свернуть</p>
@@ -121,4 +121,4 @@ const ListMealItem = ({ meal, onClick, onDelete, onEdit, isOpen }: ListMealItemP
     );
 };
 
-export default ListMealItem;
+export default MealItem;

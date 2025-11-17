@@ -125,4 +125,36 @@ export class CateringServiceMock implements CateringService {
         this.meals.push(newMeal);
         return { data: newMeal };
     }
+
+    async deleteMeal(id: number): Promise<{ success: boolean }> {
+        const index = this.meals.findIndex((m) => m.id === id);
+
+        if (index !== -1) {
+            this.meals.splice(index, 1);
+            return await Promise.resolve({ success: true });
+        } else {
+            return await Promise.reject(new Error('Error: meal not found'));
+        }
+    }
+
+    async getMealById(id: number): Promise<{ data: CateringMeal }> {
+        const numericId = Number(id);
+        const meal = this.meals.find((m) => m.id === numericId);
+        if (meal) {
+            return await Promise.resolve({ data: meal });
+        }
+        return await Promise.reject(new Error('Error: meal not found'));
+    }
+
+    async updateMeal(data: Partial<CateringMeal> & { id: number }): Promise<{ data: CateringMeal }> {
+        const numericId = Number(data.id);
+        const index = this.meals.findIndex((m) => m.id === numericId);
+
+        if (index !== -1) {
+            this.meals[index] = { ...this.meals[index], ...data };
+            return await Promise.resolve({ data: this.meals[index] });
+        } else {
+            return await Promise.reject(new Error('Error server'));
+        }
+    }
 }

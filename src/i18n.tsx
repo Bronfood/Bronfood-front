@@ -327,6 +327,8 @@ i18n
                         cateringManagement: {
                             titleRegistrationCatering: 'Регистрация заведения',
                             titleEditCatering: 'Редактирование  заведения',
+                            titleMealMenu: 'Меню',
+                            titleEditMeal: 'Редактирование  блюда',
                             titleRegistrationMeal: 'Регистрация блюда',
                             titleAddAdditivePopup: 'Укажите категорию дополнения и название добавок',
                             titleAddSaucePopup: 'Укажите название соуса и цену',
@@ -387,6 +389,7 @@ i18n
                             addSauceToMeal: 'Добавить соус',
                             addSizeToMeal: 'Добавить размер',
                             addMealToList: 'Добавить блюдо',
+                            addCategoriesMenu: 'Добавить категории меню',
                         },
                     },
                     errors: {
