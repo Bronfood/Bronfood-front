@@ -39,7 +39,7 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
                         <button onClick={() => setIsFilterOpen(true)} type="button" className={styles.drawer__icon} title={t('pages.restaurants.filters')} />
                     </div>
                     {isLoading && <Preloader />}
-                    {restaurantsFiltered.length === 0 ? (
+                    {!isLoading && restaurantsFiltered.length === 0 ? (
                         <CityList />
                     ) : (
                         <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>

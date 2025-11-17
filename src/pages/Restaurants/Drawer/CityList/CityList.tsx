@@ -2,35 +2,13 @@ import { useTranslation } from 'react-i18next';
 import styles from './CityList.module.scss';
 import { useMapContext } from '../../../../utils/hooks/useMap/useMap';
 import { ZOOM } from '../../../../utils/consts';
+import { City } from '../../../../utils/api/mapService/mapService';
+import { useCities } from '../../../../utils/hooks/useCities/useCities';
 
 const CityList = () => {
     const { t } = useTranslation();
-    type City = {
-        id: number;
-        name: string;
-        coordinates: {
-            latitude: number;
-            longitude: number;
-        };
-    };
-    const cities: City[] = [
-        {
-            id: 1,
-            name: 'Алматы',
-            coordinates: {
-                latitude: 43.239491,
-                longitude: 76.945435,
-            },
-        },
-        {
-            id: 2,
-            name: 'Астана',
-            coordinates: {
-                latitude: 51.129947,
-                longitude: 71.430053,
-            },
-        },
-    ];
+    const { data, isSuccess } = useCities();
+    const cities = isSuccess ? data.data : [];
     const { setLocation, setMapBottomMargin } = useMapContext();
     const handleClick = (city: City) => {
         setLocation((location) => {
