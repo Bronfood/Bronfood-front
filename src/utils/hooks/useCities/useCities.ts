@@ -5,5 +5,6 @@ export const useCities = () => {
     return useQuery({
         queryKey: ['cities'],
         queryFn: () => mapService.getCities(),
+        staleTime: Infinity,
     });
 };

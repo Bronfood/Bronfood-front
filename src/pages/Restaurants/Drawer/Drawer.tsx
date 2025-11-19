@@ -1,4 +1,4 @@
-import { useRef, useState, Dispatch, SetStateAction } from 'react';
+import { useRef, useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import RestaurantCard from '../../../components/Cards/RestaurantCard/RestaurantCard';
 import styles from './Drawer.module.scss';
@@ -11,6 +11,7 @@ import CityList from './CityList/CityList';
 
 const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isFirstRender, setIsFirstRender] = useState(true);
     const { restaurantsFiltered, isLoading, isError, lastClickedRestaurantId, setLastClickedRestaurantId, setActiveRestaurant } = useRestaurantsContext();
     const { t } = useTranslation();
     const container = useRef(null);
@@ -24,7 +25,9 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
             setLastClickedRestaurantId(id);
         }
     };
-
+    useEffect(() => {
+        if (restaurantsFiltered.length > 0) setIsFirstRender(false);
+    }, [restaurantsFiltered.length]);
     if (isError) {
         return <PageNotFound />;
     } else {
@@ -39,7 +42,7 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
                         <button onClick={() => setIsFilterOpen(true)} type="button" className={styles.drawer__icon} title={t('pages.restaurants.filters')} />
                     </div>
                     {isLoading && <Preloader />}
-                    {!isLoading && restaurantsFiltered.length === 0 ? (
+                    {!isLoading && restaurantsFiltered.length === 0 && !isFirstRender ? (
                         <CityList />
                     ) : (
                         <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>
