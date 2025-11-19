@@ -247,7 +247,7 @@ i18n
                         restaurants: {
                             selectPlace: 'Выберите заведение',
                             filters: 'Фильтры',
-                            noRestaurantsInYourCityYet: 'Бронфуд в вашем городе ПОКА ещё нет, но мы есть в следующих городах:',
+                            noRestaurantsInYourCityYet: 'Бронфуд здесь ПОКА ещё нет, но мы есть в этих городах:',
                         },
                         filter: {
                             filters: 'Фильтры',
