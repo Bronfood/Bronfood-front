@@ -1,6 +1,8 @@
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useMemo, useState } from 'react';
 import { EasingFunctionDescription, LngLat } from '@yandex/ymaps3-types';
 import { COMMON_LOCATION_PARAMS, INITIAL_CENTER, ZOOM } from '../utils/consts';
+import { useCities } from '../utils/hooks/useCities/useCities';
+import { City } from '../utils/api/mapService/mapService';
 
 type Location = {
     center: LngLat;
@@ -18,6 +20,7 @@ type MapContext = {
     setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
     mapBottomMargin: number;
     setMapBottomMargin: Dispatch<SetStateAction<number>>;
+    cities: City[];
 };
 
 export const MapContext = createContext<MapContext>({
@@ -29,6 +32,7 @@ export const MapContext = createContext<MapContext>({
     setIsDrawerOpen: () => {},
     mapBottomMargin: 460,
     setMapBottomMargin: () => {},
+    cities: [],
 });
 
 export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -40,6 +44,8 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
     });
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
     const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
+    const { data, isSuccess } = useCities();
+    const cities = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
 
     const contextValue = useMemo(
         () => ({
@@ -51,8 +57,9 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
             setIsDrawerOpen,
             mapBottomMargin,
             setMapBottomMargin,
+            cities,
         }),
-        [city, setCity, location, setLocation, isDrawerOpen, setIsDrawerOpen, mapBottomMargin, setMapBottomMargin]
+        [city, setCity, location, setLocation, isDrawerOpen, setIsDrawerOpen, mapBottomMargin, setMapBottomMargin, cities]
     );
     return <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>;
 };

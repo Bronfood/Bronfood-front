@@ -3,13 +3,10 @@ import styles from './CityList.module.scss';
 import { useMapContext } from '../../../../utils/hooks/useMap/useMap';
 import { ZOOM } from '../../../../utils/consts';
 import { City } from '../../../../utils/api/mapService/mapService';
-import { useCities } from '../../../../utils/hooks/useCities/useCities';
 
 const CityList = () => {
     const { t } = useTranslation();
-    const { data, isSuccess } = useCities();
-    const cities = isSuccess ? data.data : [];
-    const { setLocation, setMapBottomMargin } = useMapContext();
+    const { setLocation, setMapBottomMargin, cities } = useMapContext();
     const handleClick = (city: City) => {
         setLocation((location) => {
             return { ...location, center: [city.coordinates.longitude, city.coordinates.latitude], zoom: ZOOM };
