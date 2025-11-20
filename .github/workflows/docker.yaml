@@ -1,55 +1,56 @@
 name: Bronfood Frontend Workflow
 
 on:
-    push:
-        branches:
-            - future/dockerfile
+  push:
+    branches:
+      - future/dockerfile
 
 jobs:
-    build-and-push:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-            - name: Log in to GitHub Container Registry
-              uses: docker/login-action@v3
-              with:
-                  registry: ghcr.io
-                  username: ${{ secrets.USERNAME }}
-                  password: ${{ secrets.USER_PASSWORD_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.USER_PASSWORD_TOKEN }}
 
-            - name: Build and push frontend image
-              uses: docker/build-push-action@v5
-              with:
-                  context: .
-                  file: Dockerfile
-                  push: true
-                  tags: ghcr.io/bronfood/bronfood:frontend
-                  build-args: |
-                    VITE_YNDX_API_KEY=${{ secrets.YNDX_API_KEY }}
-                    VITE_API_URL=${{ secrets.API_URL }}
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ghcr.io/bronfood/bronfood:frontend
+          build-args: |
+            VITE_YNDX_API_KEY=${{ secrets.YNDX_API_KEY }}
+            VITE_API_URL=${{ secrets.API_URL }}
 
-    deploy:
-        runs-on: ubuntu-latest
-        needs: build-and-push
-        permissions:
-            contents: read
-            packages: read
 
-        steps:
-            - name: Executing remote ssh commands to deploy
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USER }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  script: |
-                      cd bronfood
-                      docker compose -f infra/docker-compose.image.dev.yaml down
-                      docker compose -f infra/docker-compose.image.dev.yaml pull
-                      docker compose -f infra/docker-compose.image.dev.yaml up -d
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd bronfood
+            docker compose -f infra/docker-compose.image.dev.yaml down
+            docker compose -f infra/docker-compose.image.dev.yaml pull
+            docker compose -f infra/docker-compose.image.dev.yaml up -d
