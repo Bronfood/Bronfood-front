@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetMealById, useUpdateMeal } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
+import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 
 const EditMeal = () => {
     const { t } = useTranslation();
@@ -13,6 +15,7 @@ const EditMeal = () => {
 
     const { data: meal, isLoading: isFetching } = useGetMealById(Number(mealId));
     const { mutateAsync: updateMeal, isPending, error } = useUpdateMeal();
+    const [showThanksPopup, setShowThanksPopup] = useState(false);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const mealData = {
@@ -28,17 +31,20 @@ const EditMeal = () => {
             type: data.type,
             waitingTime: data.waitingTime,
             tags: data.tags,
+            is_visible: data.is_visible,
         };
 
-        const response = await updateMeal(mealData);
-        const updatedMeal = response.data;
-
-        if (updatedMeal?.id) {
-            navigate(`/catering/${cateringId}/menu`);
-        } else {
-            navigate('/');
-        }
+        await updateMeal(mealData);
+        setShowThanksPopup(true);
     };
+
+    const handleNavigate = () => {
+        navigate(`/catering/${cateringId}/menu`);
+    };
+
+    if (showThanksPopup) {
+        return <PopupAddMealThanks onNavigate={handleNavigate} />;
+    }
 
     return (
         <>
@@ -60,6 +66,7 @@ const EditMeal = () => {
                         type: meal.data.type,
                         waitingTime: meal.data.waitingTime,
                         tags: meal.data.tags,
+                        is_visible: meal.data.is_visible,
                     }}
                 />
             )}

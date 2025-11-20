@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ButtonIconAdd from '../../../../../components/ButtonIconAdd/ButtonIconAdd';
 
 type AdditivesStepProps = {
-    onOpenAddAdditive: (type: 'additive' | 'sauce' | 'size') => void;
+    onOpenAddAdditive: (type: string, data?: MealAdditive[] | MealSauce[] | MealSize[]) => void;
 };
 
 const AdditivesStep = ({ onOpenAddAdditive }: AdditivesStepProps) => {
@@ -21,11 +21,11 @@ const AdditivesStep = ({ onOpenAddAdditive }: AdditivesStepProps) => {
             <ul className={styles.list}>
                 <li className={styles.list__item}>
                     <div className={styles.list__header}>
-                        <p className={styles.list__title}>Соусы</p>
-                        {mealSauces.length > 0 && <button className={styles.list__edit}></button>}
+                        <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealSauces')}</p>
+                        {mealSauces.length > 0 && <button className={styles.list__edit} onClick={() => onOpenAddAdditive('sauce', mealSauces)}></button>}
                     </div>
                     {mealSauces.length === 0 ? (
-                        <ButtonIconAdd onClick={() => onOpenAddAdditive('sauce')}>{t('pages.cateringManagement.addSauceToMeal')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={() => onOpenAddAdditive('sauce', mealSauces)}>{t('pages.cateringManagement.addSauceToMeal')}</ButtonIconAdd>
                     ) : (
                         <ul className={`${styles.list__items} ${styles.list__items_sauce}`}>
                             {mealSauces.map((sauce, index) => (
@@ -40,11 +40,11 @@ const AdditivesStep = ({ onOpenAddAdditive }: AdditivesStepProps) => {
 
                 <li className={styles.list__item}>
                     <div className={styles.list__header}>
-                        <p className={styles.list__title}>Добавки</p>
-                        {mealAdditives.length > 0 && <button className={styles.list__edit}></button>}
+                        <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealAdditives')}</p>
+                        {mealAdditives.length > 0 && <button className={styles.list__edit} onClick={() => onOpenAddAdditive('additive', mealAdditives)}></button>}
                     </div>
                     {mealAdditives.length === 0 ? (
-                        <ButtonIconAdd onClick={() => onOpenAddAdditive('additive')}>{t('pages.cateringManagement.addAdditionsToMeal')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={() => onOpenAddAdditive('additive', mealAdditives)}>{t('pages.cateringManagement.addAdditionsToMeal')}</ButtonIconAdd>
                     ) : (
                         <ul className={`${styles.list__items} ${styles.list__items_additive}`}>
                             {mealAdditives.map((additive, index) => (
@@ -66,11 +66,11 @@ const AdditivesStep = ({ onOpenAddAdditive }: AdditivesStepProps) => {
 
                 <li className={styles.list__item}>
                     <div className={styles.list__header}>
-                        <p className={styles.list__title}>Размеры</p>
-                        {mealSizes.length > 0 && <button className={styles.list__edit}></button>}
+                        <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealSizes')}</p>
+                        {mealSizes.length > 0 && <button className={styles.list__edit} onClick={() => onOpenAddAdditive('size', mealSizes)}></button>}
                     </div>
                     {mealSizes.length === 0 ? (
-                        <ButtonIconAdd onClick={() => onOpenAddAdditive('size')}>{t('pages.cateringManagement.addSizeToMeal')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={() => onOpenAddAdditive('size', mealSizes)}>{t('pages.cateringManagement.addSizeToMeal')}</ButtonIconAdd>
                     ) : (
                         <ul className={`${styles.list__items} ${styles.list__items_size}`}>
                             {mealSizes.map((size, index) => (

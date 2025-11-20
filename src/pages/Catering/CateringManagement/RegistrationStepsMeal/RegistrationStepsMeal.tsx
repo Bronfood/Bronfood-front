@@ -5,6 +5,7 @@ import DetailsStep from './DetailsStep/DetailsStep';
 import { useState } from 'react';
 import AdditivesStep from './AdditivesStep/AdditivesStep';
 import AddAdditivePopup from './AdditivesStep/AddAdditivePopup/AddAdditivePopup';
+import { MealAdditive, MealSauce, MealSize } from '../../../../utils/api/cateringService/cateringService';
 
 type RegistrationStepsMealProps = {
     title: string;
@@ -13,14 +14,19 @@ type RegistrationStepsMealProps = {
 };
 
 const RegistrationStepsMeal = ({ title, onSubmit, defaultValues }: RegistrationStepsMealProps) => {
-    const [popupType, setPopupType] = useState<null | 'additive' | 'sauce' | 'size'>(null);
+    const [popupType, setPopupType] = useState<{
+        type: string;
+        data?: MealAdditive[] | MealSauce[] | MealSize[];
+    } | null>(null);
 
-    const handleOpenPopup = (type: 'additive' | 'sauce' | 'size') => setPopupType(type);
+    const handleOpenPopup = (type: string, data?: MealAdditive[] | MealSauce[] | MealSize[]) => {
+        setPopupType({ type, data });
+    };
 
     const handleClosePopup = () => setPopupType(null);
 
     return (
-        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} additionalPopup={popupType && <AddAdditivePopup type={popupType} onClose={handleClosePopup} />}>
+        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} additionalPopup={popupType && <AddAdditivePopup type={popupType.type as 'additive' | 'sauce' | 'size'} data={popupType.data} onClose={handleClosePopup} />}>
             <MediaStep />
             <DetailsStep />
             <AdditivesStep onOpenAddAdditive={handleOpenPopup} />

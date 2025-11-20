@@ -160,6 +160,10 @@ export type CateringMeal = {
      * Venue's tags
      */
     tags?: { name: string }[];
+    /**
+     * Meal's visible
+     */
+    is_visible: boolean;
 };
 
 export type Administrator = {

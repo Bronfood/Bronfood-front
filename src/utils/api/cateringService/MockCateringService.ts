@@ -162,6 +162,7 @@ export const emptyMeals: CateringMeal[] = [
         type: 'food',
         waitingTime: 15,
         tags: [{ name: 'вега' }, { name: 'овощи' }],
+        is_visible: true,
     },
     {
         id: 2,
@@ -194,6 +195,7 @@ export const emptyMeals: CateringMeal[] = [
         type: 'drink',
         waitingTime: 10,
         tags: [{ name: 'чай' }, { name: 'зеленый' }],
+        is_visible: false,
     },
     {
         id: 3,
@@ -219,5 +221,6 @@ export const emptyMeals: CateringMeal[] = [
         type: 'dessert',
         waitingTime: 7,
         tags: [{ name: 'сладкое' }, { name: 'десерт' }],
+        is_visible: true,
     },
 ];

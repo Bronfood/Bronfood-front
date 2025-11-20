@@ -1,27 +1,20 @@
 import { useFormContext } from 'react-hook-form';
 import styles from './AddAdditivePopup.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '../../../../../../components/ButtonIconSquare/ButtonIconSquare';
 import ButtonSubmit from '../../../../../../components/Button/Button';
 import { MealAdditive, MealSauce, MealSize } from '../../../../../../utils/api/cateringService/cateringService';
 import LocalInput from './LocalInput/LocalInput';
 import ButtonIconAdd from '../../../../../../components/ButtonIconAdd/ButtonIconAdd';
 
-function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'additive' | 'sauce' | 'size' }) {
+function AddAdditivePopup({ type, data, onClose }: { type: string; data?: MealAdditive[] | MealSauce[] | MealSize[]; onClose: () => void }) {
     const { t } = useTranslation();
     const { setValue } = useFormContext();
 
-    const [localSauces, setLocalSauces] = useState<MealSauce[]>([{ name: '', price: 0 }]);
-    const [localAdditives, setLocalAdditives] = useState<MealAdditive[]>([{ nameAdditive: '', additiveUnit: [{ name: '', price: 0 }] }]);
-    const [localSizes, setLocalSizes] = useState<MealSize[]>([{ name: '', size: '', price: 0 }]);
-
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, []);
+    const [localSauces, setLocalSauces] = useState<MealSauce[]>(() => (type === 'sauce' ? (data && data.length > 0 ? (data as MealSauce[]) : [{ name: '', price: 0 }]) : []));
+    const [localAdditives, setLocalAdditives] = useState<MealAdditive[]>(() => (type === 'additive' ? (data && data.length > 0 ? (data as MealAdditive[]) : [{ nameAdditive: '', additiveUnit: [{ name: '', price: 0 }] }]) : []));
+    const [localSizes, setLocalSizes] = useState<MealSize[]>(() => (type === 'size' ? (data && data.length > 0 ? (data as MealSize[]) : [{ name: '', size: '', price: 0 }]) : []));
 
     const handleAddMealSauce = () => {
         setLocalSauces((prev) => [...prev, { name: '', price: 0 }]);
@@ -42,11 +35,33 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
     };
 
     const handleDeleteMealSauce = (index: number) => {
-        setLocalSauces(localSauces.filter((_, i) => i !== index));
+        setLocalSauces((prev) => {
+            if (prev.length > 1) {
+                return prev.filter((_, i) => i !== index);
+            }
+
+            return [{ name: '', price: 0 }];
+        });
     };
 
     const handleDeleteMealSize = (index: number) => {
-        setLocalSizes(localSizes.filter((_, i) => i !== index));
+        setLocalSizes((prev) => {
+            if (prev.length > 1) {
+                return prev.filter((_, i) => i !== index);
+            }
+
+            return [{ name: '', size: '', price: 0 }];
+        });
+    };
+
+    const handleDeleteMealAdditive = (index: number) => {
+        setLocalAdditives((prev) => {
+            if (prev.length > 1) {
+                return prev.filter((_, i) => i !== index);
+            }
+
+            return [{ nameAdditive: '', additiveUnit: [{ name: '', price: 0 }] }];
+        });
     };
 
     const handleDeleteMealAdditiveUnit = (additiveIndex: number, unitIndex: number) => {
@@ -135,12 +150,6 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
         onClose();
     };
 
-    const titles = {
-        additive: t('pages.cateringManagement.titleAddAdditivePopup'),
-        sauce: t('pages.cateringManagement.titleAddSaucePopup'),
-        size: t('pages.cateringManagement.titleAddSizePopup'),
-    };
-
     const renderFormFields = () => {
         switch (type) {
             case 'sauce':
@@ -151,7 +160,7 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
                                 <li key={index} className={styles.sauce}>
                                     <LocalInput type="text" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderMealSauce')} name={`sauceName-${index}`} value={sauce.name} onChange={(value) => onChangeSauceName(index, value)} />
                                     <div className={styles.sauce__component}>
-                                        <input name={`saucePrice-${index}`} type="number" className={`${styles.sauce__input}`} placeholder="Цена" value={sauce.price || ''} onChange={(e) => onChangePrice(index, e)} />
+                                        <input name={`saucePrice-${index}`} type="number" className={`${styles.sauce__input}`} placeholder={t('pages.cateringManagement.placeholderDefaultPrice')} value={sauce.price || ''} onChange={(e) => onChangePrice(index, e)} />
                                         <button type="button" className={`${styles.sauce__button} ${styles.sauce__button_delete}`} onClick={() => handleDeleteMealSauce(index)}></button>
                                     </div>
                                 </li>
@@ -169,18 +178,18 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
                         <ul className={styles.popup__list}>
                             {localAdditives.map((additive, additiveIndex) => (
                                 <li key={additiveIndex} className={styles.additive}>
-                                    <LocalInput type="string" nameLabel={t('pages.cateringManagement.nameLabelAddAdditive')} placeholder={t('pages.cateringManagement.placeholderAddAdditive')} value={additive.nameAdditive} name={`additiveName-${additiveIndex}`} onChange={(value) => onChangeAdditiveName(additiveIndex, value)} />
-                                    {additive.additiveUnit.map((unit, unitIndex) => (
-                                        <ul className={styles.unit}>
+                                    <LocalInput type="string" nameLabel={t('pages.cateringManagement.nameLabelAddAdditive')} placeholder={t('pages.cateringManagement.placeholderAddAdditive')} value={additive.nameAdditive} name={`additiveName-${additiveIndex}`} onChange={(value) => onChangeAdditiveName(additiveIndex, value)} delete={true} onClick={() => handleDeleteMealAdditive(additiveIndex)} />
+                                    <ul className={styles.unit}>
+                                        {additive.additiveUnit.map((unit, unitIndex) => (
                                             <li className={styles.unit__item} key={unitIndex}>
                                                 <div className={styles.unit__inputs}>
-                                                    <input name={`additiveNameUnit-${unitIndex}`} type="string" className={`${styles.unit__input}`} placeholder="Название" value={unit.name || ''} onChange={(e) => onChangeAdditiveNameUnit(additiveIndex, unitIndex, e)} />
-                                                    <input name={`additivePrice-${unitIndex}`} type="number" className={`${styles.unit__input}`} placeholder="Цена" value={unit.price || ''} onChange={(e) => onChangeAdditivePrice(additiveIndex, unitIndex, e)} />
+                                                    <input name={`additiveNameUnit-${unitIndex}`} type="string" className={`${styles.unit__input}`} placeholder={t('pages.cateringManagement.placeholderDefaultName')} value={unit.name || ''} onChange={(e) => onChangeAdditiveNameUnit(additiveIndex, unitIndex, e)} />
+                                                    <input name={`additivePrice-${unitIndex}`} type="number" className={`${styles.unit__input}`} placeholder={t('pages.cateringManagement.placeholderDefaultPrice')} value={unit.price || ''} onChange={(e) => onChangeAdditivePrice(additiveIndex, unitIndex, e)} />
                                                 </div>
                                                 <button type="button" className={`${styles.unit__button} ${styles.unit__button_delete}`} onClick={() => handleDeleteMealAdditiveUnit(additiveIndex, unitIndex)}></button>
                                             </li>
-                                        </ul>
-                                    ))}
+                                        ))}
+                                    </ul>
 
                                     <button type="button" className={styles.additive__button_wrapper} onClick={() => handleAddMealAdditiveUnit(additiveIndex)}>
                                         <div className={styles.additive__button_add}></div>
@@ -201,8 +210,8 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
                                     <LocalInput type="string" nameLabel={t('pages.cateringManagement.nameLabelMealSize')} placeholder={t('pages.cateringManagement.placeholderMealSize')} name={`mealSizeName-${index}`} value={size.name || ''} onChange={(value) => onChangeMealSizeName(index, value)} />
                                     <div className={styles.size__component}>
                                         <div className={styles.size__imputs}>
-                                            <input name={`mealSizeSize-${index}`} type="string" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder="100мл или гр" value={size.size || ''} onChange={(e) => onChangeMealSizeSize(index, e)} />
-                                            <input name={`mealSizePrice-${index}`} type="number" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder="Цена" value={size.price || ''} onChange={(e) => onChangeMealSizePrice(index, e)} />
+                                            <input name={`mealSizeSize-${index}`} type="string" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder={t('pages.cateringManagement.placeholderDefaultSize')} value={size.size || ''} onChange={(e) => onChangeMealSizeSize(index, e)} />
+                                            <input name={`mealSizePrice-${index}`} type="number" className={`${styles.size__input} ${index === 0 ? styles.size__input_first : ''}`} placeholder={t('pages.cateringManagement.placeholderDefaultPrice')} value={size.price || ''} onChange={(e) => onChangeMealSizePrice(index, e)} />
                                         </div>
                                         <button type="button" className={`${styles.size__button} ${styles.size__button_delete}`} onClick={() => handleDeleteMealSize(index)}></button>
                                     </div>
@@ -217,6 +226,17 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
         }
     };
 
+    const getTitle = (type: string) => {
+        switch (type) {
+            case 'additive':
+                return t('pages.cateringManagement.titleAddAdditivePopup');
+            case 'sauce':
+                return t('pages.cateringManagement.titleAddSaucePopup');
+            case 'size':
+                return t('pages.cateringManagement.titleAddSizePopup');
+        }
+    };
+
     return (
         <div className={styles.popup__overlay}>
             <div className={styles.popup}>
@@ -224,7 +244,7 @@ function AddAdditivePopup({ onClose, type }: { onClose: () => void; type: 'addit
                     <div onClick={onClose} className={styles.popup__close}>
                         <Button type="button" icon="close" />
                     </div>
-                    <h1 className={styles.popup__title}>{titles[type]}</h1>
+                    <h1 className={styles.popup__title}>{getTitle(type)}</h1>
 
                     {renderFormFields()}
 

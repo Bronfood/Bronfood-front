@@ -1,6 +1,7 @@
 import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
 import { CateringMeal } from '../../../../../utils/api/cateringService/cateringService';
 import styles from './MealItem.module.scss';
+import { useTranslation } from 'react-i18next';
 
 type MealItemProps = {
     meal: CateringMeal;
@@ -8,12 +9,25 @@ type MealItemProps = {
     onDelete: () => void;
     onEdit: () => void;
     isOpen: boolean;
+    isVisible: boolean;
+    onVisible: () => void;
+    onDeleteAdditive: (type: string) => void;
 };
 
-const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen }: MealItemProps) => {
+const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVisible, onDeleteAdditive }: MealItemProps) => {
+    const { t } = useTranslation();
+
+    const isInfo = (meal.mealSizes && meal.mealSizes?.length > 0) || (meal.mealAdditives && meal.mealAdditives?.length > 0) || (meal.mealAdditives && meal.mealAdditives?.length > 0);
+
     return (
         <li className={styles.meal}>
+            {!isVisible && <div className={styles.meal__overlay}></div>}
             <div className={styles.meal__image} style={{ backgroundImage: `url(${meal.photo})` }} />
+            <div className={`${styles.meal__visible} ${!isVisible ? styles.meal__visible_active : ''}`}>
+                <button onClick={onVisible} className={styles.meal__visible_button}>
+                    {isVisible ? t('pages.cateringManagement.hideMealButton') : t('pages.cateringManagement.returnMealButton')}
+                </button>
+            </div>
             <div className={styles.meal__buttons}>
                 <div className={styles.meal__button}>
                     <ButtonIconRound icon="edit" onClick={onEdit} />
@@ -30,29 +44,31 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen }: MealItemProps
                     </div>
                     {meal.description && <p className={styles.meal__description}>{meal.description}</p>}
                 </div>
-                <button className={styles.meal__toggle} onClick={onClickInfo}>
-                    {isOpen ? (
-                        <div className={styles.meal__toggle_container}>
-                            <p className={styles.meal__toggle_text}>Свернуть</p>
-                            <div className={`${styles.meal__toggle_image} ${styles.meal__toggle_hide}`}></div>
-                        </div>
-                    ) : (
-                        <div className={styles.meal__toggle_container}>
-                            <p className={styles.meal__toggle_text}>Показать все</p>
-                            <div className={`${styles.meal__toggle_image} ${styles.meal__toggle_show}`}></div>
-                        </div>
-                    )}
-                </button>
+                {isInfo && (
+                    <button className={styles.meal__toggle} onClick={onClickInfo}>
+                        {isOpen ? (
+                            <div className={styles.meal__toggle_container}>
+                                <p className={`${styles.meal__toggle_text} ${styles.meal__toggle_text_hide}`}>{t('pages.cateringManagement.collapseInfoMealButton')}</p>
+                                <div className={`${styles.meal__toggle_image} ${styles.meal__toggle_hide}`}></div>
+                            </div>
+                        ) : (
+                            <div className={styles.meal__toggle_container}>
+                                <p className={styles.meal__toggle_text}>{t('pages.cateringManagement.showAllInfoMealButton')}</p>
+                                <div className={`${styles.meal__toggle_image} ${styles.meal__toggle_show}`}></div>
+                            </div>
+                        )}
+                    </button>
+                )}
             </div>
-            {isOpen && (
+            {isInfo && isOpen && (
                 <ul className={styles.list}>
                     {meal.mealSizes && meal.mealSizes?.length > 0 && (
                         <li className={styles.list__unit}>
                             <div className={styles.list__header}>
-                                <p className={styles.list__title}>Размеры</p>
+                                <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealSizes')}</p>
                                 <div className={styles.list__buttons}>
                                     <button className={`${styles.list__button} ${styles.list__edit}`}></button>
-                                    <button className={`${styles.list__button} ${styles.list__delete}`}></button>
+                                    <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => onDeleteAdditive('sizes')}></button>
                                 </div>
                             </div>
 
@@ -70,10 +86,10 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen }: MealItemProps
                     {meal.mealAdditives && meal.mealAdditives?.length > 0 && (
                         <li className={styles.list__unit}>
                             <div className={styles.list__header}>
-                                <p className={styles.list__title}>Добавки</p>
+                                <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealAdditives')}</p>
                                 <div className={styles.list__buttons}>
                                     <button className={`${styles.list__button} ${styles.list__edit}`}></button>
-                                    <button className={`${styles.list__button} ${styles.list__delete}`}></button>
+                                    <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => onDeleteAdditive('additives')}></button>
                                 </div>
                             </div>
 
@@ -98,10 +114,10 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen }: MealItemProps
                     {meal.mealSauces && meal.mealSauces?.length > 0 && (
                         <li className={styles.list__unit}>
                             <div className={styles.list__header}>
-                                <p className={styles.list__title}>Соусы</p>
+                                <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealSauces')}</p>
                                 <div className={styles.list__buttons}>
                                     <button className={`${styles.list__button} ${styles.list__edit}`}></button>
-                                    <button className={`${styles.list__button} ${styles.list__delete}`}></button>
+                                    <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => onDeleteAdditive('sauces')}></button>
                                 </div>
                             </div>
 

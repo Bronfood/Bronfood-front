@@ -5,11 +5,14 @@ import Preloader from '../../../../components/Preloader/Preloader';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { useCreateCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
+import { useState } from 'react';
+import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 
 const AddMeal = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { mutateAsync, isPending, error } = useCreateCateringMeals();
+    const [showThanksPopup, setShowThanksPopup] = useState(false);
     const { cateringId } = useParams();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -25,14 +28,19 @@ const AddMeal = () => {
             type: data.type,
             waitingTime: data.waitingTime,
             tags: data.tags,
+            is_visible: data.is_visible,
         };
-        const response = await mutateAsync(mealData);
-        const createCateringMeal = response.data;
-
-        navigate(`/catering/${cateringId}/menu`, {
-            state: { cateringMeal: createCateringMeal },
-        });
+        await mutateAsync(mealData);
+        setShowThanksPopup(true);
     };
+
+    const handleNavigate = () => {
+        navigate(`/catering/${cateringId}/menu`);
+    };
+
+    if (showThanksPopup) {
+        return <PopupAddMealThanks onNavigate={handleNavigate} />;
+    }
 
     return (
         <>
@@ -53,6 +61,7 @@ const AddMeal = () => {
                     type: '',
                     waitingTime: undefined,
                     tags: [],
+                    is_visible: true,
                 }}
             />
         </>

@@ -31,6 +31,14 @@ interface LocalInputProps {
      * Optional error message
      */
     error?: string;
+    /**
+     * Optional delete button
+     */
+    delete?: boolean;
+    /**
+     * Optional onClick delete button
+     */
+    onClick?: () => void;
 }
 
 const LocalInput: FC<LocalInputProps> = (props) => {
@@ -46,6 +54,7 @@ const LocalInput: FC<LocalInputProps> = (props) => {
                 {props.nameLabel}
             </label>
             <input id={id} name={props.name} className={styles.input__place} type={props.type} placeholder={props.placeholder} onChange={handleInputChange} value={props.value} />
+            {props.delete && <button className={styles.input__delete} onClick={props.onClick}></button>}
             {props.error && <p className={styles.input__error}>{props.error}</p>}
         </div>
     );

@@ -44,4 +44,16 @@
         margin-top: 3px;
         margin-left: 18px;
     }
+
+    &__delete {
+        border: none;
+        background-color: transparent;
+        position: absolute;
+        background-image: url('/src/vendor/images/icons/close-icon.svg');
+        height: 24px;
+        width: 24px;
+        background-size: cover;
+        top: 13px;
+        right: 15px;
+    }
 }

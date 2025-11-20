@@ -5,7 +5,7 @@ import ButtonUnderline from '../../../../components/ButtonUnderline/ButtonUnderl
 import styles from './CateringDetails.module.scss';
 import CategoriesList from './CategoriesList/CategoriesList';
 import CateringCard from './CateringCard/CateringCard';
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useEffect } from 'react';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import Preloader from '../../../../components/Preloader/Preloader';
 import { useDeleteCatering, useGetCateringById } from '../../../../utils/hooks/useCatering/useCatering';
@@ -18,6 +18,10 @@ const CateringDetails = () => {
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
     const { data: сatering, isLoading: isFetching } = useGetCateringById(Number(cateringId));
     const { mutateAsync: deleteCatering, isPending: isDeleting } = useDeleteCatering();
+
+    useEffect(() => {
+        document.body.style.overflow = showConfirmationPopup ? 'hidden' : '';
+    }, [showConfirmationPopup]);
 
     const handleDeleteClick = () => {
         setShowConfirmationPopup(true);
