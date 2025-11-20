@@ -32,7 +32,6 @@ jobs:
           tags: ghcr.io/bronfood/bronfood:frontend
           build-args: |
             VITE_YNDX_API_KEY=${{ secrets.YNDX_API_KEY }}
-            VITE_API_URL=${{ secrets.API_URL }}
 
 
   deploy:
