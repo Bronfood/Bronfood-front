@@ -241,6 +241,7 @@ i18n
                             buttonHide: 'скрыть',
                             buttonShow: 'подробнее',
                             buttonRepeatOrder: 'Повторить заказ',
+                            orderList: 'Состав заказа',
                             paidFor: 'Оплачен',
                             notRepeatOrder: '*** Заказ недоступен для повтора — некоторые позиции отсутствуют',
                             currency: 'Валюта',

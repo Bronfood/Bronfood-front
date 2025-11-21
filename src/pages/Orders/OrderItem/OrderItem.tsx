@@ -30,7 +30,6 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
     const cancelRepeatButtons = (
         <>
             <div className={styles['detail-info__container']}>
-                {canShowRepeatButton ? <button className={styles['detail-info__repeat']}>{t('pages.order.buttonRepeatOrder')}</button> : <div className={styles['detail-info__not-repeat']}>{t('pages.order.notRepeatOrder')}</div>}
                 {canShowCancelButton && (
                     <button className={styles['detail-info__repeat']} onClick={() => onClickCancel(order.id)}>
                         {t('pages.order.cancelOrder')}
@@ -107,7 +106,7 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
                 </div>
             ) : null}
 
-            <p className={styles['card__title']}>Состав заказа</p>
+            <p className={styles['card__title']}>{t('pages.order.orderList')}</p>
 
             <article className={styles['order-item']}>
                 <ul className={styles['order-item__list']}>

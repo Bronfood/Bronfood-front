@@ -37,7 +37,7 @@ const LeaveOrderFeedback: FC = () => {
     const handleSkipOrClose = () => {
         resetFeedback();
         triggerFilledStars();
-        setTimeout(() => navigate('/'), 2000);
+        setTimeout(() => navigate('/my-orders'), 2000);
     };
 
     if (showThanksPopup) {
