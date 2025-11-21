@@ -5,6 +5,16 @@
     flex-direction: column;
     gap: 10px;
 
+    &__label {
+        color: variables.$grey;
+    }
+
+    &__list {
+        border-radius: 20px;
+        border: 1px solid #e9e9e9;
+        padding: 10px;
+    }
+
     &__content {
         display: flex;
         flex-direction: column;

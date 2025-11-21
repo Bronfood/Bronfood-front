@@ -134,10 +134,12 @@ const InputImage: FC<InputImage> = (props) => {
 
     return (
         <div className={styles.photo}>
-            <label htmlFor={id}>{props.nameLabel}</label>
+            <label className={styles.photo__label} htmlFor={id}>
+                {props.nameLabel}
+            </label>
             <input id={id} multiple={props.multiple} ref={fileInputRef} className={styles.photo__input} type="file" accept="image/*" onChange={handleChange} />
 
-            <div className={styles.photo__content}>
+            <div className={`${styles.photo__content} ${props.multiple ? styles.photo__list : ''}`}>
                 {currentImages.length > 0 && (
                     <>
                         {currentImages.map((image, index) => (

@@ -39,8 +39,7 @@ const GeneralSupport: FC = () => {
         setValue('imageFormSupport', images || '', { shouldValidate: true });
     };
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data);
+    const onSubmit: SubmitHandler<FieldValues> = () => {
         setShopPopup(true);
     };
 
