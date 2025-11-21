@@ -63,7 +63,7 @@ const OrderTimer: FC<OrderTimerProps> = ({ startTime, waitingTime }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeLeft(getRemaining());
-        }, 1000);
+        }, 60000);
         return () => clearInterval(interval);
     }, [getRemaining]);
 
