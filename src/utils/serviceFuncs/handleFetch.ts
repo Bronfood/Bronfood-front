@@ -1,5 +1,4 @@
-// const API_URL = import.meta.env.VITE_API_URL || ''; // empty for production
-const API_URL = 'https://bronfood.kz'; // empty for production
+const API_URL = import.meta.env.VITE_API_URL || ''; // empty for production
 interface FetchOptions extends RequestInit {
     data?: object;
 }
