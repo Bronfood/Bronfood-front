@@ -8,7 +8,7 @@ import Preloader from '../../../components/Preloader/Preloader';
 import { useNavigate } from 'react-router-dom';
 import PageNotFound from '../../PageNotFound/PageNotFound';
 
-const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
+const Drawer = ({ isOpen, setIsOpen, city }: { isOpen: boolean; setIsOpen: Dispatch<SetStateAction<boolean>>; city: string }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const { restaurantsFiltered, isLoading, isError, lastClickedRestaurantId, setLastClickedRestaurantId, setActiveRestaurant } = useRestaurantsContext();
     const { t } = useTranslation();
@@ -29,6 +29,12 @@ const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<Se
     } else {
         return (
             <div className={`${styles.drawer} ${styles.up} ${isOpen ? styles.open : ''}`}>
+                {city ? (
+                    <div className={styles.drawer__place}>
+                        <div className={styles.drawer__place_point}></div>
+                        <p className={styles.drawer__place_name}>{city}</p>
+                    </div>
+                ) : null}
                 <div className={styles.drawer__container}>
                     <button onClick={() => setIsOpen(!isOpen)} type="button" className={styles.drawer__tab_container}>
                         <div className={`${styles.drawer__tab} ${isOpen ? styles.drawer__tab_active : styles.drawer__tab_disabled}`} />

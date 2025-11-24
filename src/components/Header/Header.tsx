@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useGetBasket } from '../../utils/hooks/useBasket/useBasket';
 
-const Header = ({ city }: { city: string }) => {
+const Header = () => {
     const menuRef = useRef<HTMLDivElement>(null);
     const { isLogin } = useCurrentUser();
     const [isMenuActive, setIsMenuActive] = useState(false);
@@ -59,10 +59,6 @@ const Header = ({ city }: { city: string }) => {
         <header className={styles.header}>
             <div className={`${styles.header__container} ${!isContentVisible ? styles.header__container_hidden : ''}`}>
                 <button title={t('components.header.burgerTitleHover')} className={`${styles.header__burger} ${styles.header__icon}`} onClick={handleMenuActive}></button>
-                <div className={styles.header__place}>
-                    <div className={styles.header__place_point}></div>
-                    <p className={styles.header__place_name}>{city}</p>
-                </div>
                 <div className={styles.header__buttons}>
                     {isLogin ? (
                         <>

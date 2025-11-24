@@ -36,7 +36,7 @@ function App() {
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
     return (
         <div>
-            <Header city={city} />
+            <Header />
             <YandexMap setCity={setCity} isDrawerOpen={isDrawerOpen}></YandexMap>
             <Routes>
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
@@ -46,7 +46,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />
                 <Route path="/logout" element={<ProtectedRoute component={<Logout />} />} />
-                <Route path="/" element={<Restaurants isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />}>
+                <Route path="/" element={<Restaurants isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} city={city} />}>
                     <Route path="restaurants/:restaurantId" element={<Restaurant />}>
                         <Route path="meal/:mealId" element={<MealPage />} />
                     </Route>

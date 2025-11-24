@@ -88,26 +88,6 @@
         background-image: url('../../vendor/images/icons/close-icon.svg');
     }
 
-    &__place {
-        display: flex;
-        align-items: center;
-
-        &_point {
-            width: 30px;
-            height: 30px;
-            background-image: url('../../vendor/images/icons/navigation.svg');
-            background-position: center;
-            margin: 6px 0 0 4px;
-        }
-
-        &_name {
-            font-size: 17px;
-            font-weight: 400;
-            line-height: normal;
-            padding: 7px 0 0;
-        }
-    }
-
     &__menu {
         width: 100%;
         position: fixed;
