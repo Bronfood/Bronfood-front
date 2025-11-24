@@ -70,8 +70,8 @@ const Header = ({ city }: { city: string }) => {
                                 <button title={t('components.header.favouritesTitleHover')} className={`${styles.header__favorite} ${styles.header__icon} ${isPageFavorites ? styles.header__favorite_active : ''}`}></button>
                             </Link>
                             <Link to="/basket">
-                                <div className={styles.header__basket}>
-                                    <button title={t('components.header.basketTitleHover')} className={styles.header__icon} />
+                                <div className={styles.header__basket_container}>
+                                    <button title={t('components.header.basketTitleHover')} className={`${styles.header__basket} ${styles.header__icon}`} />
                                     {mealsCount && <span className={styles.header__chip}>{mealsCount}</span>}
                                 </div>
                             </Link>
