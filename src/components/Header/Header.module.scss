@@ -101,6 +101,7 @@
         border-radius: 0 0 15px 15px;
         box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
         transition: top 0.6s ease-out;
+        pointer-events: auto;
 
         &_active {
             top: 0;
