@@ -9,6 +9,7 @@
     padding: 34px 15px 22px;
     border-radius: 0 0 15px 15px;
     z-index: map.get(variables.$z-indexes, 'header');
+    pointer-events: none;
 
     &__container {
         display: flex;
@@ -136,5 +137,9 @@
         width: 192.79px;
         height: 49px;
         background-image: url('../../vendor/images/icons/logo.svg');
+    }
+
+    button {
+        pointer-events: auto;
     }
 }
