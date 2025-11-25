@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import styles from './OrderItem.module.scss';
+import styles from './MyOrderItem.module.scss';
 import { useTranslation } from 'react-i18next';
 import { UserOrder } from '../../../utils/api/orderService/orderService';
 import { formatDateTime } from '../../../utils/serviceFuncs/formatDateTime';
-import OrderMeal from './OrderMeal/OrderMeal';
-import OrderTimer from './OrderTimer/OrderTimer';
+import MyOrderMeal from './MyOrderMeal/MyOrderMeal';
+import MyOrderTimer from './MyOrderTimer/MyOrderTimer';
 
-type OrderItemProps = {
+type MyOrderItemProps = {
     order: UserOrder;
     onClickFeedback: () => void;
     showDetails: () => void;
@@ -14,7 +14,7 @@ type OrderItemProps = {
     onClickCancel: (orderId: number) => void;
 };
 
-const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, isShow, onClickCancel }) => {
+const MyOrderItem: FC<MyOrderItemProps> = ({ order, onClickFeedback, showDetails, isShow, onClickCancel }) => {
     const { t } = useTranslation();
 
     const isDetailInfo = (order.canceled_at || order.cancellation_reason || order.paid_at || order.issued_at || (order.paid_at && order.currency)) && order.status !== 'created';
@@ -70,7 +70,7 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
                     <p className={`${styles['waiting-time__title']}`}>{t('pages.order.waitingTime')}</p>
                     <div className={`${styles['waiting-time__container']}`}>
                         <div className={`${styles['waiting-time__image']}`}></div>
-                        <OrderTimer startTime={order.accepted_at} waitingTime={order.waiting_time} />{' '}
+                        <MyOrderTimer startTime={order.accepted_at} waitingTime={order.waiting_time} />{' '}
                     </div>
                 </div>
             ) : null}
@@ -111,7 +111,7 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
             <article className={styles['order-item']}>
                 <ul className={styles['order-item__list']}>
                     {order.meals.map((meal, index) => (
-                        <OrderMeal meal={meal} key={index} />
+                        <MyOrderMeal meal={meal} key={index} />
                     ))}
                 </ul>
             </article>
@@ -187,4 +187,4 @@ const OrderItem: FC<OrderItemProps> = ({ order, onClickFeedback, showDetails, is
     );
 };
 
-export default OrderItem;
+export default MyOrderItem;

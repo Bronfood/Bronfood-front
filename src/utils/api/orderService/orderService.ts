@@ -1,4 +1,5 @@
 import { Meal } from '../restaurantsService/restaurantsService';
+import { OrderServiceReal } from './orderServiceReal';
 
 export interface OrderedMeal {
     /**
@@ -195,3 +196,14 @@ export interface UserOrdersListPagination {
      */
     results: UserOrder[];
 }
+
+export interface OrderService {
+    fetchOrderIdByUserId: (userId: number) => Promise<{ status: 'success'; data: { id: string }[] } | { status: 'error'; error_message: string }>;
+    fetchOrderedMealByOrderId: (id: string) => Promise<{ status: 'success'; data: OrderState[] } | { status: 'error'; error_message: string }>;
+    getUserOrders: (limit: number, offset: number) => Promise<{ data: UserOrdersListPagination }>;
+    cancelOrder: (id: string) => Promise<{ status: 'success'; data: void } | { status: 'error'; error_message: string }>;
+    checkPreparationStatus: (orderId: string) => Promise<{ status: 'success'; data: { preparationStatus: 'confirmed' | 'waiting' | 'notConfirmed' }[] } | { status: 'error'; error_message: string }>;
+    submitOrderFeedback: (restaurantId: number, orderId: number, rating: number, comment: string) => Promise<{ status: 'success'; data: void } | { status: 'error'; error_message: string }>;
+}
+
+export const orderService = new OrderServiceReal();

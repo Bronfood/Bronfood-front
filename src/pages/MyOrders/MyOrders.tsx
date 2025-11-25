@@ -1,43 +1,46 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useOrderData, useUserOrders } from '../../utils/hooks/useOrderData/useOrderData';
 import Preloader from '../../components/Preloader/Preloader';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { useTranslation } from 'react-i18next';
 import Popup from '../../components/Popups/Popup/Popup';
-import { OrderList, OrderListEmpty } from './OrderList/OrderList';
-import { UserOrder } from '../../utils/api/orderService/orderService';
-import SpinerPreloader from '../../components/SpinerPreloader/SpinerPreloader';
+import { MyOrdersList, MyOrdersListEmpty } from './MyOrdersList/MyOrdersList';
 import ConfirmationPopup from '../../components/Popups/ConfirmationPopup/ConfirmationPopup';
-import styles from './Orders.module.scss';
+import styles from './MyOrders.module.scss';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import PopupOrderCancelled from '../PopupOrderCancelled/PopupOrderCancelled';
+import { ORDERS_COUNT } from '../../utils/consts';
+import { useOrderData, useUserOrders } from '../../utils/hooks/useOrderService/useOrderService';
+import { UserOrder } from '../../utils/api/orderService/orderService';
 
 const MyOrders: FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { currentUser } = useCurrentUser();
-    const ORDERS_COUNT = 5;
     const triggerRef = useRef<HTMLDivElement>(null);
-    const [allOrders, setAllOrders] = useState<UserOrder[]>([]);
+
     const [nextUrl, setNextUrl] = useState<string | null>(null);
-    const [currentOffset, setCurrentOffset] = useState(0);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [allOrders, setAllOrders] = useState<UserOrder[]>([]);
+    const [currentOffset, setCurrentOffset] = useState(0);
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
     const [showOrderCancelledPopup, setShowOrderCancelledPopup] = useState(false);
     const [orderToCancel, setOrderToCancel] = useState<number | null>(null);
+
     const { data: userOrders, isLoading, error } = useUserOrders(ORDERS_COUNT, currentOffset);
     const { setPreparationTime, setCancellationTime, cancelOrder } = useOrderData(currentUser?.id ?? null, null);
 
     useEffect(() => {
-        if (!userOrders) return;
+        if (!userOrders?.results) return;
+
         setAllOrders((prev) => {
             const newOrders = userOrders.results.filter((newOrder) => !prev.some((existingOrder) => existingOrder.id === newOrder.id));
             return currentOffset === 0 ? userOrders.results : [...prev, ...newOrders];
         });
+
         setNextUrl(userOrders.next);
         if (currentOffset > 0) setIsLoadingMore(false);
-    }, [userOrders, currentOffset]);
+    }, [userOrders?.results, currentOffset, userOrders?.next]);
 
     const loadMore = useCallback(() => {
         if (nextUrl && !isLoading && !isLoadingMore) {
@@ -98,12 +101,16 @@ const MyOrders: FC = () => {
                 {!isLoading && !error ? (
                     allOrders.length > 0 ? (
                         <>
-                            <OrderList orders={allOrders} onClickCancel={handleCancelOrder} />
-                            {isLoadingMore && <SpinerPreloader />}
+                            <MyOrdersList orders={allOrders} onClickCancel={handleCancelOrder} />
+                            {isLoadingMore && (
+                                <div className={styles['preloader-conteiner']}>
+                                    <Preloader className={styles['preloader-component']} />
+                                </div>
+                            )}
                             {nextUrl && <div ref={triggerRef}></div>}
                         </>
                     ) : (
-                        <OrderListEmpty />
+                        <MyOrdersListEmpty />
                     )
                 ) : null}
             </Popup>

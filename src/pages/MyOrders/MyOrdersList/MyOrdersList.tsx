@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
-import OrderItem from '../OrderItem/OrderItem';
-import styles from './OrderList.module.scss';
+import OrderItem from '../MyOrderItem/MyOrderItem';
+import styles from './MyOrdersList.module.scss';
 import { UserOrder } from '../../../utils/api/orderService/orderService';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ type OrderListProps = {
     onClickCancel: (orderId: number) => void;
 };
 
-export const OrderList: FC<OrderListProps> = ({ orders, onClickCancel }) => {
+export const MyOrdersList: FC<OrderListProps> = ({ orders, onClickCancel }) => {
     const navigate = useNavigate();
     const [showDetails, setShowDetails] = useState<number | null>(null);
 
@@ -25,7 +25,7 @@ export const OrderList: FC<OrderListProps> = ({ orders, onClickCancel }) => {
     return <ul className={styles['order-list']}>{orders?.map((order) => <OrderItem order={order} key={order.id} onClickFeedback={() => handleFeedback(order)} showDetails={() => toggleShowDetails(order.id)} isShow={showDetails === order.id} onClickCancel={onClickCancel} />)}</ul>;
 };
 
-export function OrderListEmpty() {
+export function MyOrdersListEmpty() {
     const { t } = useTranslation();
 
     return <p className={styles['empty-title']}>{t('pages.order.titleMyOrdersEmpty')}</p>;

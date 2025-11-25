@@ -44,7 +44,7 @@ function formatApproximateTime(totalSeconds: number): string {
     }
 }
 
-const OrderTimer: FC<OrderTimerProps> = ({ startTime, waitingTime }) => {
+const MyOrderTimer: FC<OrderTimerProps> = ({ startTime, waitingTime }) => {
     const deadline = new Date(startTime).getTime() + parseWaitingTime(waitingTime);
 
     const getRemaining = useCallback(() => {
@@ -72,4 +72,4 @@ const OrderTimer: FC<OrderTimerProps> = ({ startTime, waitingTime }) => {
     return <p>~ {formatApproximateTime(timeLeft.timeInSeconds)}</p>;
 };
 
-export default OrderTimer;
+export default MyOrderTimer;

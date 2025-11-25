@@ -1,7 +1,7 @@
-import { OrderState, UserOrdersListPagination } from './orderService';
+import { OrderService, OrderState, UserOrdersListPagination } from './orderService';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
 
-export class OrderServiceReal {
+export class OrderServiceReal implements OrderService {
     async fetchOrderIdByUserId(userId: number): Promise<{ status: 'success'; data: { id: string }[] } | { status: 'error'; error_message: string }> {
         return handleFetch(`api/restaurants/orders/?clientId=${userId}`);
     }
@@ -10,12 +10,8 @@ export class OrderServiceReal {
         return handleFetch(`api/restaurants/orders/?id=${id}`);
     }
 
-    async getUserOrders(limit: number, offset: number): Promise<{ status: 'success'; data: UserOrdersListPagination } | { status: 'error'; error_message: string }> {
-        const response = await handleFetch(`api/restaurants/orders/?limit=${limit}&offset=${offset}`);
-        return {
-            status: 'success',
-            data: response.data,
-        };
+    async getUserOrders(limit: number, offset: number): Promise<{ data: UserOrdersListPagination }> {
+        return handleFetch(`api/restaurants/orders/?limit=${limit}&offset=${offset}`);
     }
 
     async cancelOrder(id: string): Promise<{ status: 'success'; data: void } | { status: 'error'; error_message: string }> {
@@ -43,5 +39,3 @@ export class OrderServiceReal {
         return handleFetch(`api/restaurants/${restaurantId}/reviews/`, options);
     }
 }
-
-export default OrderServiceReal;

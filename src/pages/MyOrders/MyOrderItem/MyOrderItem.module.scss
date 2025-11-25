@@ -21,6 +21,7 @@
         border: none;
         background-color: transparent;
         color: variables.$black;
+        cursor: pointer;
     }
 
     &__button-text {
@@ -271,6 +272,7 @@
         padding: 7px;
         border-radius: 15px;
         font-size: 13px;
+        cursor: pointer;
     }
 
     &__not-repeat {

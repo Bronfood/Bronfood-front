@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import OrderServiceReal from '../../api/orderService/orderSeviceReal';
 import { useNavigate } from 'react-router-dom';
+import { orderService } from '../../api/orderService/orderService';
 
 interface UseOrderFeedbackProps {
     orderId: number;
@@ -15,7 +15,6 @@ interface ReviewData {
 }
 
 export const useOrderFeedback = ({ restaurantId, orderId, onFeedbackSubmitted }: UseOrderFeedbackProps) => {
-    const orderService = new OrderServiceReal();
     const queryClient = useQueryClient();
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');

@@ -29,7 +29,7 @@ import Administrators from './pages/Catering/Administrators/Administrators';
 import Catering from './pages/Catering/Catering';
 import AddAdministrator from './pages/Catering/Administrators/AddAdministrator/AddAdministrator';
 import EditAdministrator from './pages/Catering/Administrators/EditAdministrator/EditAdministrator';
-import MyOrders from './pages/Orders/Orders';
+import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 
 function App() {

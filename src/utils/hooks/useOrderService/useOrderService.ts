@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { UseQueryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { OrderState, UserOrdersListPagination } from '../../api/orderService/orderService';
-import OrderServiceReal from '../../api/orderService/orderSeviceReal';
+import { UseQueryOptions, keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { orderService, OrderState, UserOrdersListPagination } from '../../api/orderService/orderService';
 import i18n from 'i18next';
 
 export const useOrderData = (userId: number | null, placedOrder: OrderState | null) => {
     const queryClient = useQueryClient();
-    const orderService = new OrderServiceReal();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [preparationTime, setPreparationTime] = useState<number | null>(null);
     const [cancellationTime, setCancellationTime] = useState<number | null>(null);
@@ -76,19 +74,9 @@ export const useOrderData = (userId: number | null, placedOrder: OrderState | nu
 };
 
 export const useUserOrders = (limit: number, offset: number) => {
-    const orderService = new OrderServiceReal();
-
     return useQuery<UserOrdersListPagination, Error>({
         queryKey: ['userOrders', limit, offset],
-        queryFn: async () => {
-            const response = await orderService.getUserOrders(limit, offset);
-            if (response.status === 'success') {
-                return response.data;
-            }
-            throw new Error(response.error_message || 'Failed to fetch orders');
-        },
-        staleTime: 0,
-        gcTime: 0,
-        placeholderData: (prevData) => prevData,
+        queryFn: () => orderService.getUserOrders(limit, offset).then((response) => response.data),
+        placeholderData: keepPreviousData,
     });
 };

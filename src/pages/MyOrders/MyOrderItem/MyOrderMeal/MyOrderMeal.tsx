@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { MealChoice, UserOrderMeal } from '../../../../utils/api/orderService/orderService';
-import styles from './OrderMeal.module.scss';
+import styles from './MyOrderMeal.module.scss';
 import { useTranslation } from 'react-i18next';
 
 const Choices: FC<{ choices: MealChoice[] }> = ({ choices }) => {
@@ -15,7 +15,7 @@ const Choices: FC<{ choices: MealChoice[] }> = ({ choices }) => {
     );
 };
 
-const OrderMeal: FC<{ meal: UserOrderMeal }> = ({ meal }) => {
+const MyOrderMeal: FC<{ meal: UserOrderMeal }> = ({ meal }) => {
     const { t } = useTranslation();
     return (
         <li className={`${meal.is_available ? styles['meal'] : styles['meal-unavailable']}`}>
@@ -41,4 +41,4 @@ const OrderMeal: FC<{ meal: UserOrderMeal }> = ({ meal }) => {
     );
 };
 
-export default OrderMeal;
+export default MyOrderMeal;
