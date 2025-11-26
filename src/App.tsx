@@ -32,12 +32,11 @@ import EditAdministrator from './pages/Catering/Administrators/EditAdministrator
 import Partnership from './pages/Partnership/Partnership';
 
 function App() {
-    const [city, setCity] = useState('');
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
     return (
         <div>
             <Header />
-            <YandexMap setCity={setCity} isDrawerOpen={isDrawerOpen}></YandexMap>
+            <YandexMap isDrawerOpen={isDrawerOpen}></YandexMap>
             <Routes>
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
@@ -46,7 +45,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />
                 <Route path="/logout" element={<ProtectedRoute component={<Logout />} />} />
-                <Route path="/" element={<Restaurants isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} city={city} />}>
+                <Route path="/" element={<Restaurants isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />}>
                     <Route path="restaurants/:restaurantId" element={<Restaurant />}>
                         <Route path="meal/:mealId" element={<MealPage />} />
                     </Route>
