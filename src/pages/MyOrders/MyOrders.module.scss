@@ -9,12 +9,12 @@
     position: fixed;
 }
 
-.preloader-conteiner {
+.preloader-wrapper {
     position: relative;
     width: 100%;
-    margin: 20px 0;
-}
+    padding-top: 20px;
 
-.preloader-component {
-    top: 0;
+    div {
+        top: 0;
+    }
 }

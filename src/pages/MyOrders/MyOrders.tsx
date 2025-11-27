@@ -10,7 +10,7 @@ import styles from './MyOrders.module.scss';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import PopupOrderCancelled from '../PopupOrderCancelled/PopupOrderCancelled';
 import { ORDERS_COUNT } from '../../utils/consts';
-import { useOrderData, useUserOrders } from '../../utils/hooks/useOrderService/useOrderService';
+import { useOrderData, useUserOrders } from '../../utils/hooks/useOrder/useOrder';
 import { UserOrder } from '../../utils/api/orderService/orderService';
 
 const MyOrders: FC = () => {
@@ -103,8 +103,8 @@ const MyOrders: FC = () => {
                         <>
                             <MyOrdersList orders={allOrders} onClickCancel={handleCancelOrder} />
                             {isLoadingMore && (
-                                <div className={styles['preloader-conteiner']}>
-                                    <Preloader className={styles['preloader-component']} />
+                                <div className={styles['preloader-wrapper']}>
+                                    <Preloader />
                                 </div>
                             )}
                             {nextUrl && <div ref={triggerRef}></div>}
