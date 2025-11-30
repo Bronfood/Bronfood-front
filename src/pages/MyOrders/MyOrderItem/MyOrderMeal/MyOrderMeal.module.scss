@@ -1,0 +1,86 @@
+@use '../../../../styles/variables';
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+
+    &__name {
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 1.22;
+        color: variables.$grey;
+        text-transform: lowercase;
+    }
+}
+
+.meal-unavailable {
+    padding: 5px;
+    position: relative;
+}
+
+.meal {
+    display: flex;
+    flex-direction: column;
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__name {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        color: variables.$black;
+        font-size: 14px;
+        line-height: 21px;
+        font-weight: 400;
+        max-width: 200px;
+    }
+
+    &__price {
+        display: flex;
+        color: variables.$black;
+        font-size: 14px;
+        line-height: 21px;
+        font-weight: 500;
+        justify-content: space-between;
+    }
+
+    &__price span {
+        padding-left: 3px;
+        color: variables.$light-gray;
+        font-size: 12px;
+    }
+
+    &__count {
+        display: flex;
+        color: variables.$light-gray;
+        font-size: 15px;
+        font-weight: 400;
+        padding-left: 7px;
+    }
+
+    &__unavailable {
+        display: flex;
+        justify-content: flex-end;
+
+        &_text {
+            font-size: 11px;
+            line-height: 12px;
+        }
+    }
+
+    &__unavailable-wrapper {
+        position: absolute;
+        background-image: repeating-linear-gradient(45deg, rgb(231 76 60 / 10%), rgb(231 76 60 / 10%) 10px, rgb(231 76 60 / 5%) 10px, rgb(231 76 60 / 5%) 20px);
+        width: 100%;
+        height: 100%;
+        filter: blur(1px);
+        top: 0;
+        border-radius: 10px;
+        left: 0;
+    }
+}

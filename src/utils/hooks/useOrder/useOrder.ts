@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { UseQueryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { OrderState } from '../../api/orderService/orderService';
-import OrderServiceReal from '../../api/orderService/orderSeviceReal';
+import { UseQueryOptions, useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { orderService, OrderState, UserOrdersListPagination } from '../../api/orderService/orderService';
 import i18n from 'i18next';
 
 export const useOrderData = (userId: number | null, placedOrder: OrderState | null) => {
     const queryClient = useQueryClient();
-    const orderService = new OrderServiceReal();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [preparationTime, setPreparationTime] = useState<number | null>(null);
     const [cancellationTime, setCancellationTime] = useState<number | null>(null);
@@ -73,4 +71,16 @@ export const useOrderData = (userId: number | null, placedOrder: OrderState | nu
         preparationStatus,
         placedOrder,
     };
+};
+
+export const useUserOrders = (limit: number) => {
+    return useInfiniteQuery<UserOrdersListPagination, Error>({
+        queryKey: ['userOrders', limit],
+        queryFn: ({ pageParam = 0 }) => orderService.getUserOrders(limit, pageParam as number).then((response) => response.data),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage.next) return;
+            return parseInt(new URL(lastPage.next).searchParams.get('offset') ?? '0');
+        },
+    });
 };
