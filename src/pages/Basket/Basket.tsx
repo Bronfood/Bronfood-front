@@ -35,7 +35,7 @@ function Basket() {
     const restaurantId = restaurant.id;
     const close = () => {
         reset();
-        navigate(-1);
+        navigate('/');
     };
     useEffect(() => {
         if (placeOrder.data) {
