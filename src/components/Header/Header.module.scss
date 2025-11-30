@@ -8,9 +8,8 @@
     width: 100%;
     padding: 34px 15px 22px;
     border-radius: 0 0 15px 15px;
-    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
-    background-color: variables.$background;
     z-index: map.get(variables.$z-indexes, 'header');
+    pointer-events: none;
 
     &__container {
         display: flex;
@@ -29,24 +28,24 @@
     }
 
     &__icon {
-        width: 35px;
-        height: 35px;
-        background-image: url('../../vendor/images/icons/basket.svg');
+        width: 48px;
+        height: 48px;
+        padding: 8px;
+        border: 1px solid variables.$line;
+        border-radius: 50%;
+        box-shadow: 2px 2px 4px variables.$grey;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: variables.$background;
         cursor: pointer;
     }
 
     &__search {
-        width: 35px;
-        height: 35px;
         background-image: url('../../vendor/images/icons/search-icon.svg');
-        cursor: pointer;
     }
 
     &__favorite {
-        width: 35px;
-        height: 35px;
         background-image: url('../../vendor/images/icons/favorite-icon.svg');
-        cursor: pointer;
 
         &_active {
             background-image: url('../../vendor/images/icons/favorite-icon-active.svg');
@@ -57,8 +56,12 @@
         background-image: url('../../vendor/images/icons/burger-menu-icon.svg');
     }
 
-    &__basket {
+    &__basket_container {
         position: relative;
+    }
+
+    &__basket {
+        background-image: url('../../vendor/images/icons/basket.svg');
     }
 
     &__chip {
@@ -79,27 +82,10 @@
     }
 
     &__close {
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
         background-image: url('../../vendor/images/icons/close-icon.svg');
-    }
-
-    &__place {
-        display: flex;
-        align-items: center;
-
-        &_point {
-            width: 30px;
-            height: 30px;
-            background-image: url('../../vendor/images/icons/navigation.svg');
-            background-position: center;
-            margin: 6px 0 0 4px;
-        }
-
-        &_name {
-            font-size: 17px;
-            font-weight: 400;
-            line-height: normal;
-            padding: 7px 0 0;
-        }
     }
 
     &__menu {
@@ -115,6 +101,7 @@
         border-radius: 0 0 15px 15px;
         box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
         transition: top 0.6s ease-out;
+        pointer-events: auto;
 
         &_active {
             top: 0;
@@ -134,8 +121,6 @@
     }
 
     button {
-        border: none;
-        background-color: transparent;
-        padding: 0;
+        pointer-events: auto;
     }
 }

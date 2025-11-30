@@ -33,12 +33,11 @@ import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 
 function App() {
-    const [city, setCity] = useState('');
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
     return (
         <div>
-            <Header city={city} />
-            <YandexMap setCity={setCity} isDrawerOpen={isDrawerOpen}></YandexMap>
+            <Header />
+            <YandexMap isDrawerOpen={isDrawerOpen}></YandexMap>
             <Routes>
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />

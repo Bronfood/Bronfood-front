@@ -11,6 +11,7 @@
     border-radius: 35px 35px 0 0;
 
     &__container {
+        position: relative;
         display: flex;
         flex-direction: column;
         padding-left: 15px;
@@ -77,6 +78,35 @@
 
     &__list_item {
         scroll-snap-align: start;
+    }
+
+    &__place {
+        position: absolute;
+        top: -45px;
+        left: 16px;
+        padding: 4px 8px;
+        display: flex;
+        align-items: center;
+        background-color: variables.$background;
+        border: 1px solid variables.$line;
+        border-radius: 24px;
+        gap: 4px;
+
+        &_point {
+            width: 30px;
+            height: 30px;
+            background-image: url('../../../vendor/images/icons/navigation.svg');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        &_name {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: variables.$grey;
+        }
     }
 }
 
