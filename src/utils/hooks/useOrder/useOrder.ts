@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { UseQueryOptions, keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { UseQueryOptions, useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { orderService, OrderState, UserOrdersListPagination } from '../../api/orderService/orderService';
 import i18n from 'i18next';
 
@@ -73,10 +73,14 @@ export const useOrderData = (userId: number | null, placedOrder: OrderState | nu
     };
 };
 
-export const useUserOrders = (limit: number, offset: number) => {
-    return useQuery<UserOrdersListPagination, Error>({
-        queryKey: ['userOrders', limit, offset],
-        queryFn: () => orderService.getUserOrders(limit, offset).then((response) => response.data),
-        placeholderData: keepPreviousData,
+export const useUserOrders = (limit: number) => {
+    return useInfiniteQuery<UserOrdersListPagination, Error>({
+        queryKey: ['userOrders', limit],
+        queryFn: ({ pageParam = 0 }) => orderService.getUserOrders(limit, pageParam as number).then((response) => response.data),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage.next) return;
+            return parseInt(new URL(lastPage.next).searchParams.get('offset') ?? '0');
+        },
     });
 };
