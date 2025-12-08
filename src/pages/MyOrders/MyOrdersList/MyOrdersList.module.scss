@@ -1,0 +1,19 @@
+@use '../../../styles/variables';
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 15px;
+    gap: 10px;
+}
+
+.empty-title {
+    display: block;
+    width: 100%;
+    margin: 100px auto;
+    text-align: center;
+    font-size: 14px;
+    color: variables.$orange;
+}

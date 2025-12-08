@@ -1,4 +1,5 @@
 import { Meal } from '../restaurantsService/restaurantsService';
+import { OrderServiceReal } from './orderServiceReal';
 
 export interface OrderedMeal {
     /**
@@ -61,3 +62,148 @@ export interface OrderState {
      */
     restaurantId: number;
 }
+
+export interface MealChoice {
+    /**
+     * Choice's id
+     */
+    id: number;
+    /**
+     * Choice's name
+     */
+    name: string;
+}
+
+export interface UserOrderMeal {
+    /**
+     * Meal's id
+     */
+    id: number;
+    /**
+     * Meal's name
+     */
+    name: string;
+    /**
+     * Meal's count
+     */
+    count: number;
+    /**
+     * Meal's price
+     */
+    price: number;
+    /**
+     * Meal's choices arrey
+     */
+    choices: MealChoice[];
+    /**
+     * Meal's available
+     */
+    is_available: boolean;
+}
+
+export interface UserOrder {
+    /**
+     * Order's id
+     */
+    id: number;
+    /**
+     * Order's code
+     */
+    order_code: string | null;
+    /**
+     * Order's amount
+     */
+    amount: number;
+    /**
+     * Order's currency
+     */
+    currency: string;
+    /**
+     * Order's status
+     */
+    status: string;
+    /**
+     * Order's restaurant
+     */
+    restaurant: {
+        id: number;
+        photo: string;
+        name: string;
+        rating: number;
+        address: string;
+    };
+    /**
+     * Order's meals arrey
+     */
+    meals: UserOrderMeal[];
+    /**
+     * Order's created date
+     */
+    created_at: string;
+    /**
+     * Order's paid date
+     */
+    paid_at?: string | null;
+    /**
+     * Order's waiting time
+     */
+    waiting_time: string;
+    /**
+     * Order's canceled date
+     */
+    canceled_at?: string | null;
+    /**
+     * Order's canceled reason
+     */
+    cancellation_reason?: string | null;
+    /**
+     * Order's issued date
+     */
+    issued_at?: string | null;
+    /**
+     * Order's accepted
+     */
+    accepted_at: string | null;
+    /**
+     * Order's rating
+     */
+    rating?: number | null;
+    /**
+     * Order's payment link
+     */
+    payment_url?: string | null;
+    /**
+     * Order's repeatable
+     */
+    is_order_repeatable: boolean;
+}
+
+export interface UserOrdersListPagination {
+    /**
+     * Count order's
+     */
+    count: number;
+    /**
+     * Next page link
+     */
+    next: string | null;
+    /**
+     * Previous page link
+     */
+    previous: string | null;
+    /**
+     * Results order's arrey
+     */
+    results: UserOrder[];
+}
+
+export interface OrderService {
+    fetchOrderIdByUserId: (userId: number) => Promise<{ status: 'success'; data: { id: string }[] } | { status: 'error'; error_message: string }>;
+    fetchOrderedMealByOrderId: (id: string) => Promise<{ status: 'success'; data: OrderState[] } | { status: 'error'; error_message: string }>;
+    getUserOrders: (limit: number, offset: number) => Promise<{ data: UserOrdersListPagination }>;
+    cancelOrder: (id: string) => Promise<{ status: 'success'; data: void } | { status: 'error'; error_message: string }>;
+    checkPreparationStatus: (orderId: string) => Promise<{ status: 'success'; data: { preparationStatus: 'confirmed' | 'waiting' | 'notConfirmed' }[] } | { status: 'error'; error_message: string }>;
+    submitOrderFeedback: (restaurantId: number, orderId: number, rating: number, comment: string) => Promise<{ status: 'success'; data: void } | { status: 'error'; error_message: string }>;
+}
+
+export const orderService = new OrderServiceReal();

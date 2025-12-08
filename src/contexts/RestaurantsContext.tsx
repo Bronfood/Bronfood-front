@@ -3,7 +3,7 @@ import { Restaurant, SearchSuggestion } from '../utils/api/restaurantsService/re
 import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { useRestaurants } from '../utils/hooks/useRestaurants/useRestaurants';
 import { useSearchSuggestions } from '../utils/hooks/useSearchSuggestions/useSearchSuggestions';
-import { types } from '../utils/consts';
+import { INITIAL_BOUNDS, types } from '../utils/consts';
 
 export type VenueType = {
     /**
@@ -148,7 +148,7 @@ export const RestaurantsContext = createContext<RestaurantsContext>({
 export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [inView, setInView] = useState<number | undefined>(undefined);
     const [lastClickedRestaurantId, setLastClickedRestaurantId] = useState<number | null>(null);
-    const [bounds, setBounds] = useState<LngLatBounds | never[]>([]);
+    const [bounds, setBounds] = useState<LngLatBounds | never[]>(INITIAL_BOUNDS);
     const [userLocation, setUserLocation] = useState<LngLat | undefined>(undefined);
     const [searchQuery, setSearchQuery] = useState('');
     const { isSuccess: isSearchSuggestionsSuccess, data: searchSuggestionsData } = useSearchSuggestions(searchQuery);

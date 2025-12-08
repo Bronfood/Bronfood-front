@@ -1,10 +1,11 @@
+import { Dispatch, SetStateAction } from 'react';
 import { Outlet } from 'react-router-dom';
 import Drawer from './Drawer/Drawer';
 
-function Restaurants() {
+function Restaurants({ isDrawerOpen, setIsDrawerOpen }: { isDrawerOpen: boolean; setIsDrawerOpen: Dispatch<SetStateAction<boolean>> }) {
     return (
         <>
-            <Drawer />
+            <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
             <Outlet />
         </>
     );
