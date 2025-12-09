@@ -50,9 +50,9 @@ i18n
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',
-                            errorImageFileType: 'Выберите файл изображения',
-                            errorImageFileRead: 'Ошибка при загрузке файла',
-                            errorMaxFiles: 'Вы можете прикрепить максимум {{max}} изоображений',
+                            selectImageFile: 'Выберите файл изображения',
+                            errorUploadingFile: 'Ошибка при загрузке файла',
+                            youCanAttachMaximumImages: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
                         passwordRecovery: {
                             title: 'Восстановить пароль',

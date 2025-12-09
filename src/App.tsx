@@ -43,7 +43,7 @@ function App() {
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
                 <Route path="/partnership" element={<Partnership />} />
-                <Route path="/support" element={<GeneralSupport />} />
+                <Route path="/general-support" element={<GeneralSupport />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />

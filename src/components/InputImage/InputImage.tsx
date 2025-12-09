@@ -83,7 +83,7 @@ const InputImage: FC<InputImage> = (props) => {
 
         for (let i = 0; i < files.length; i++) {
             if (!files[i].type.startsWith('image/')) {
-                setCustomError(t('components.input.errorImageFileType'));
+                setCustomError(t('components.input.selectImageFile'));
                 setEditingIndex(null);
                 return;
             }
@@ -91,7 +91,7 @@ const InputImage: FC<InputImage> = (props) => {
 
         const totalFiles = editingIndex !== null ? currentImages.length : currentImages.length + files.length;
         if (totalFiles > maxFiles) {
-            setCustomError(t('components.input.errorMaxFiles', { max: maxFiles }));
+            setCustomError(t('components.input.youCanAttachMaximumImages', { max: maxFiles }));
             setEditingIndex(null);
             return;
         }
@@ -112,7 +112,7 @@ const InputImage: FC<InputImage> = (props) => {
             };
 
             reader.onerror = () => {
-                setCustomError(t('components.input.errorImageFileRead'));
+                setCustomError(t('components.input.errorUploadingFile'));
                 setEditingIndex(null);
             };
 
@@ -146,12 +146,12 @@ const InputImage: FC<InputImage> = (props) => {
                             <div key={index} style={{ backgroundImage: `url(${image})` }} className={styles.photo__image}>
                                 {props.editing && (
                                     <div className={styles.photo__image_edit}>
-                                        <ButtonIconRound icon="edit" onClick={() => triggerFileInput(index)} />
+                                        <ButtonIconRound type="button" icon="edit" onClick={() => triggerFileInput(index)} />
                                     </div>
                                 )}
                                 {props.deleting && (
                                     <div className={styles.photo__image_delete}>
-                                        <ButtonIconRound icon="delete" onClick={() => removeImage(index)} />
+                                        <ButtonIconRound type="button" icon="delete" onClick={() => removeImage(index)} />
                                     </div>
                                 )}
                             </div>

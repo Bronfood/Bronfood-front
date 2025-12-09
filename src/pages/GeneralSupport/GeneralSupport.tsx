@@ -13,16 +13,16 @@ import Button from '../../components/Button/Button';
 import InputImage from '../../components/InputImage/InputImage';
 import PopupThanks from '../../components/Popups/PopupThanks/PopupThanks';
 import InfoImage from '../../components/InfoImage/InfoImage';
+import { useGeneralSupport } from '../../utils/hooks/useGeneralSupport/useGeneralSupport';
+import Preloader from '../../components/Preloader/Preloader';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import styles from './GeneralSupport.module.scss';
 
 const GeneralSupport: FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [showPopup, setShopPopup] = useState(false);
-
-    const onClose = () => {
-        navigate('/');
-    };
-
+    const { mutateAsync, isPending, error } = useGeneralSupport();
+    const [showPopup, setShowPopup] = useState(false);
     const {
         register,
         handleSubmit,
@@ -30,17 +30,30 @@ const GeneralSupport: FC = () => {
         setValue,
         formState: { errors },
     } = useForm();
-
     const values = watch();
     const [previewImages, setPreviewImages] = useState<string[] | null>(values.imageFormSupport ? (Array.isArray(values.imageFormSupport) ? values.imageFormSupport : [values.imageFormSupport]) : null);
+
+    const onClose = () => {
+        navigate('/');
+    };
 
     const handleImageUpload = (images: string[] | null) => {
         setPreviewImages(images);
         setValue('imageFormSupport', images || '', { shouldValidate: true });
     };
 
-    const onSubmit: SubmitHandler<FieldValues> = () => {
-        setShopPopup(true);
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        const supportData = {
+            created_at: data.created_at,
+            user_name: data.user_name,
+            phone: data.phone,
+            email: data.email,
+            message: data.message,
+            images: data.images || [],
+            status: data.status,
+        };
+        await mutateAsync(supportData);
+        setShowPopup(true);
     };
 
     if (showPopup) {
@@ -49,6 +62,7 @@ const GeneralSupport: FC = () => {
 
     return (
         <Popup title={t('pages.generalSupport.title')} onClose={onClose}>
+            {isPending && <Preloader />}
             <Form name="general-form-help" onSubmit={handleSubmit(onSubmit)}>
                 <FormInputs>
                     <Input type="text" name="nameClient" placeholder={t('pages.generalSupport.placeholderNameClient')} nameLabel={t('pages.generalSupport.nameLabelNameClient')} register={register} errors={errors} pattern={regexClientName} />
@@ -59,6 +73,11 @@ const GeneralSupport: FC = () => {
                 </FormInputs>
                 <Button type="submit">{t('pages.generalSupport.buttonSendRequest')}</Button>
             </Form>
+            {error && (
+                <div className={styles.error}>
+                    <ErrorMessage message={error.message} />
+                </div>
+            )}
         </Popup>
     );
 };

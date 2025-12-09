@@ -15,22 +15,22 @@ import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import Preloader from '../../components/Preloader/Preloader';
 import InfoImage from '../../components/InfoImage/InfoImage';
 import PopupThanks from '../../components/Popups/PopupThanks/PopupThanks';
+import styles from './Partnership.module.scss';
 
 const Partnership: FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { mutateAsync, isPending, error } = usePartnership();
     const [showPopup, setShopPopup] = useState(false);
-
-    const onClose = () => {
-        navigate('/');
-    };
-
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const onClose = () => {
+        navigate('/');
+    };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         await mutateAsync({
@@ -62,7 +62,11 @@ const Partnership: FC = () => {
                 </FormInputs>
                 <Button type="submit">{t('pages.partnership.buttonSendRequest')}</Button>
             </Form>
-            {error && <ErrorMessage message={error.message} />}
+            {error && (
+                <div className={styles.error}>
+                    <ErrorMessage message={error.message} />
+                </div>
+            )}
         </Popup>
     );
 };
