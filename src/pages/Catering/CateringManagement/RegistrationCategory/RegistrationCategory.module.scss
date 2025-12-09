@@ -1,0 +1,26 @@
+@use '../../../../styles/variables';
+
+.form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 17px;
+
+    &__conteiner {
+        padding: 0 4.5px;
+    }
+
+    &__subtitle {
+        color: variables.$grey;
+        padding: 25px 0;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 11px;
+    }
+
+    &__add {
+        padding: 25px 0;
+    }
+}

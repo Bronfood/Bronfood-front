@@ -9,6 +9,7 @@ export const regexPhoneNumberKazakhstan: RegExp = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d
 export const regexAddress: RegExp = /^[a-zA-Zа-яА-ЯёЁӘәҒғҚқҢңӨөҰұҮүІі0-9\s.,/\-–—()"']{1,256}$/;
 export const regexNumber: RegExp = /^[0-9]{1,256}$/;
 export const regexTime: RegExp = /^([01]\d|2[0-3]):([0-5]\d)$/;
+export const regexTextBasic: RegExp = /^[a-zA-Zа-яА-ЯёЁ\s\d.,!?;:«»"“”‘’'()[\]{}<>\-–—]+/;
 
 export const API_URL = 'http://localhost:8000';
 export const mealTypes: MealType[] = ['food', 'drink', 'dessert'];

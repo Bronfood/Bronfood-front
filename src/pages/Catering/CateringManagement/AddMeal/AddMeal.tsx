@@ -17,6 +17,7 @@ const AddMeal = () => {
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const mealData = {
+            category: data.category,
             photo: data.photo,
             name: data.name,
             description: data.description,
@@ -25,7 +26,6 @@ const AddMeal = () => {
             mealSizes: data.mealSizes,
             mealSauces: data.mealSauces,
             mealAdditives: data.mealAdditives,
-            type: data.type,
             waitingTime: data.waitingTime,
             tags: data.tags,
             is_visible: data.is_visible,
@@ -50,6 +50,7 @@ const AddMeal = () => {
                 title={t('pages.cateringManagement.titleRegistrationMeal')}
                 onSubmit={onSubmit}
                 defaultValues={{
+                    categoryId: '',
                     photo: '',
                     name: '',
                     description: '',

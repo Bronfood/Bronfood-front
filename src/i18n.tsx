@@ -327,6 +327,8 @@ i18n
 
                         cateringManagement: {
                             titleRegistrationCatering: 'Регистрация заведения',
+                            titleAddCategory: 'Добавление категории',
+                            titleEditCategory: 'Редактирование категории',
                             titleEditCatering: 'Редактирование  заведения',
                             titleMealMenu: 'Меню',
                             titleEditMeal: 'Редактирование  блюда',
@@ -337,6 +339,7 @@ i18n
                             buttonNext: 'Далее',
                             buttonPrev: 'Назад',
                             buttonSave: 'Сохранить',
+                            buttonAdd: 'Добавить',
                             buttonEditCatering: 'Редактировать заведение',
                             buttonEditMenu: 'Редактировать меню',
                             placeholderNameMeal: 'Донер',
@@ -344,6 +347,7 @@ i18n
                             placeholderCookingTime: '15 мин',
                             nameLabelName: 'Название',
                             placeholderAddress: 'ул. Светлая, д. 10',
+                            placeholderCategory: 'Первое',
                             nameLabelAddress: 'Адрес',
                             nameLabelAddAdditive: 'Название дополнения',
                             placeholderAddAdditive: 'Молоко на выбор',
@@ -401,6 +405,7 @@ i18n
                             subtitleMealSizes: 'Размеры',
                             subtitleMealAdditives: 'Добавки',
                             subtitleMealSauces: 'Соусы',
+                            subtitleAddCategory: 'Выберите блюда',
                             yourMenuSaved: 'Ваше меню сохранено',
                         },
                     },

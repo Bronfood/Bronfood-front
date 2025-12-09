@@ -10,62 +10,28 @@ export type Day = {
     close_time: TimeString | null;
 };
 
-export type Catering = {
+export type Category = {
     /**
-     * Venue's id
+     * Category's id
      */
     id: number;
     /**
-     * Link to venue's image
-     */
-    photo: string;
-    /**
-     * Venue's name
+     * Category's name
      */
     name: string;
     /**
-     * Venue's description
+     * Category's photo
      */
-    description?: string;
+    photo: string;
     /**
-     * Venue's rating
+     * Category's meals
      */
-    rating: number;
-    /**
-     * Venue's address
-     */
-    address: string;
-    /**
-     * Venue's map coordinates
-     */
-    coordinates?: {
-        latitude: number;
-        longitude: number;
-    };
-    /**
-     * Venue's tags
-     */
-    tags?: { name: string }[];
-    /**
-     * Venue's type
-     */
-    type: 'fastFood' | 'cafe' | 'cafeBar';
-    /**
-     * Venue's working hours for each day of the week
-     */
-    workingTime?: {
-        schedule: Day[];
-        is24h: boolean;
-    };
-    /**
-     * Deadline for order cancellation
-     */
-    cancellationTime?: number;
+    meals?: CateringMeal[];
 };
 
 export type MealSize = {
     /**
-     * Size name (e.g., "Small", "Large", "500ml")
+     * Size name (e.g., "Small", "500ml")
      */
     name: string;
     /**
@@ -117,6 +83,10 @@ export type CateringMeal = {
      */
     id: number;
     /**
+     * Meal's category
+     */
+    category?: Category;
+    /**
      * Meal's name
      */
     name: string;
@@ -149,10 +119,6 @@ export type CateringMeal = {
      */
     mealAdditives?: MealAdditive[];
     /**
-     * Meal's type
-     */
-    type?: 'food' | 'drink' | 'dessert';
-    /**
      * Time taken for meal to be prepared in minutes
      */
     waitingTime?: number;
@@ -167,10 +133,87 @@ export type CateringMeal = {
 };
 
 export type Administrator = {
+    /**
+     * Administrator's id
+     */
     id: string;
+    /**
+     * Administrator's login
+     */
     login: string;
+    /**
+     * Administrator's password
+     */
     password: string;
+    /**
+     * Administrator's catering
+     */
     catering: Catering;
+};
+
+export type Catering = {
+    /**
+     * Catering's id
+     */
+    id: number;
+    /**
+     * Link to Catering's image
+     */
+    photo: string;
+    /**
+     * Catering's name
+     */
+    name: string;
+    /**
+     * Catering's description
+     */
+    description?: string;
+    /**
+     * Catering's rating
+     */
+    rating: number;
+    /**
+     * Catering's address
+     */
+    address: string;
+    /**
+     * Catering's map coordinates
+     */
+    coordinates?: {
+        latitude: number;
+        longitude: number;
+    };
+    /**
+     * Catering's tags
+     */
+    tags?: { name: string }[];
+    /**
+     * Catering's type
+     */
+    type: 'fastFood' | 'cafe' | 'cafeBar';
+    /**
+     * Catering's working hours for each day of the week
+     */
+    workingTime?: {
+        schedule: Day[];
+        is24h: boolean;
+    };
+    /**
+     * Deadline for order cancellation
+     */
+    cancellationTime?: number;
+    /**
+     * Catering's categories
+     */
+    categories?: Category[];
+    /**
+     * Catering's meals
+     */
+    meals?: CateringMeal[];
+    /**
+     * Catering's administrators
+     */
+    administrators?: Administrator[];
 };
 
 export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
@@ -201,6 +244,10 @@ export interface CateringService {
     createMeal: (data: Omit<CateringMeal, 'id'>) => Promise<{ data: CateringMeal }>;
     deleteMeal: (id: number) => Promise<{ success: boolean }>;
     updateMeal: (data: Partial<CateringMeal> & { id: number }) => Promise<{ data: CateringMeal }>;
+
+    getCategories: () => Promise<{ data: Category[] }>;
+    getCategoryById: (id: number) => Promise<{ data: Category }>;
+    createCategory: (data: Omit<Category, 'id'>) => Promise<{ data: Category }>;
 }
 
 export const cateringService = new CateringServiceMock();

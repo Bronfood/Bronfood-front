@@ -20,6 +20,7 @@ const EditMeal = () => {
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const mealData = {
             id: Number(mealId),
+            category: data.category,
             photo: data.photo,
             name: data.name,
             description: data.description,
@@ -28,7 +29,6 @@ const EditMeal = () => {
             mealSizes: data.mealSizes,
             mealSauces: data.mealSauces,
             mealAdditives: data.mealAdditives,
-            type: data.type,
             waitingTime: data.waitingTime,
             tags: data.tags,
             is_visible: data.is_visible,
@@ -56,6 +56,7 @@ const EditMeal = () => {
                     onSubmit={onSubmit}
                     defaultValues={{
                         photo: meal.data.photo,
+                        category: meal.data.category,
                         name: meal.data.name,
                         description: meal.data.description,
                         price: meal.data.price,
@@ -63,7 +64,6 @@ const EditMeal = () => {
                         mealSizes: meal.data.mealSizes,
                         mealSauces: meal.data.mealSauces,
                         mealAdditives: meal.data.mealAdditives,
-                        type: meal.data.type,
                         waitingTime: meal.data.waitingTime,
                         tags: meal.data.tags,
                         is_visible: meal.data.is_visible,

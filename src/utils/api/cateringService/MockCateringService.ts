@@ -1,10 +1,12 @@
-import { Administrator, Catering, CateringMeal } from './cateringService';
+import { Administrator, Category, Catering, CateringMeal } from './cateringService';
 import restaurant1 from './MockImages/restaurant1.png';
 import restaurant2 from './MockImages/restaurant2.png';
 import restaurant3 from './MockImages/restaurant3.png';
 import meal1 from './MockImages/meal1.png';
 import meal2 from './MockImages/meal2.jpg';
 import meal3 from './MockImages/meal3.jpg';
+import drink1 from './MockImages/drink1.png';
+import dessert1 from './MockImages/dessert1.png';
 
 export const emptyCaterings: Catering[] = [
     {
@@ -30,6 +32,23 @@ export const emptyCaterings: Catering[] = [
         },
         type: 'cafe',
         cancellationTime: 7,
+        categories: [
+            {
+                id: 1,
+                name: 'Еда',
+                photo: meal1,
+            },
+            {
+                id: 2,
+                name: 'Напиток',
+                photo: drink1,
+            },
+            {
+                id: 3,
+                name: 'Десерт',
+                photo: dessert1,
+            },
+        ],
     },
     {
         id: 2,
@@ -159,7 +178,6 @@ export const emptyMeals: CateringMeal[] = [
                 ],
             },
         ],
-        type: 'food',
         waitingTime: 15,
         tags: [{ name: 'вега' }, { name: 'овощи' }],
         is_visible: true,
@@ -192,7 +210,6 @@ export const emptyMeals: CateringMeal[] = [
                 ],
             },
         ],
-        type: 'drink',
         waitingTime: 10,
         tags: [{ name: 'чай' }, { name: 'зеленый' }],
         is_visible: false,
@@ -218,9 +235,124 @@ export const emptyMeals: CateringMeal[] = [
                 ],
             },
         ],
-        type: 'dessert',
         waitingTime: 7,
         tags: [{ name: 'сладкое' }, { name: 'десерт' }],
         is_visible: true,
     },
+];
+
+export const emptyCategories: Category[] = [
+    {
+        id: 1,
+        name: 'Еда',
+        photo: meal1,
+        meals: [
+            {
+                id: 1,
+                name: 'Куриный донер',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 1050,
+                disposableTableware: true,
+                mealSizes: [
+                    { name: 'Средний', size: '300 грамм', price: 2100 },
+                    { name: 'Большой', size: '500 грамм', price: 4100 },
+                ],
+                mealSauces: [
+                    { name: 'Сырный', price: 100 },
+                    { name: 'Кетчуп', price: 100 },
+                ],
+                mealAdditives: [
+                    {
+                        nameAdditive: 'Молоко',
+                        additiveUnit: [
+                            { name: 'Коровье', price: 4100 },
+                            { name: 'Птичье', price: 4100 },
+                        ],
+                    },
+                    {
+                        nameAdditive: 'Печенье',
+                        additiveUnit: [
+                            { name: 'Черный', price: 4100 },
+                            { name: 'Белый', price: 4100 },
+                        ],
+                    },
+                ],
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+        ],
+    },
+    {
+        id: 2,
+        name: 'Напиток',
+        photo: drink1,
+        meals: [
+            {
+                id: 2,
+                name: 'Зеленый чай',
+                description: 'Вкусный зеленый чай из Японии. Подается с медом.',
+                photo: meal2,
+                price: 200,
+                disposableTableware: false,
+                mealSizes: [
+                    { name: 'Средний', size: '300 мл', price: 200 },
+                    { name: 'Большой', size: '500 мл', price: 300 },
+                ],
+                mealSauces: [],
+                mealAdditives: [
+                    {
+                        nameAdditive: 'Молоко',
+                        additiveUnit: [
+                            { name: 'Коровье', price: 40 },
+                            { name: 'Птичье', price: 70 },
+                        ],
+                    },
+                    {
+                        nameAdditive: 'Печенье',
+                        additiveUnit: [
+                            { name: 'Песочное', price: 100 },
+                            { name: 'Шоколадное', price: 120 },
+                        ],
+                    },
+                ],
+                waitingTime: 10,
+                tags: [{ name: 'чай' }, { name: 'зеленый' }],
+                is_visible: false,
+            },
+        ],
+    },
+    /* {
+        id: 3,
+        name: 'Десерт',
+        photo: dessert1,
+        meals: [
+            {
+                id: 3,
+                name: 'Чизкейк',
+                description: 'Слоеное пироженое с клубникой и конфитюром.',
+                photo: meal3,
+                price: 500,
+                disposableTableware: false,
+                mealSizes: [
+                    { name: 'Средний', size: '300 грамм', price: 500 },
+                    { name: 'Большой', size: '500 грамм', price: 600 },
+                ],
+                mealSauces: [],
+                mealAdditives: [
+                    {
+                        nameAdditive: 'Сироп',
+                        additiveUnit: [
+                            { name: 'Клубничный', price: 50 },
+                            { name: 'Мятный', price: 70 },
+                        ],
+                    },
+                ],
+                waitingTime: 7,
+                tags: [{ name: 'сладкое' }, { name: 'десерт' }],
+                is_visible: true,
+            },
+        ],
+    }, */
 ];

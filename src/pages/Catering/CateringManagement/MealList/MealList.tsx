@@ -9,16 +9,19 @@ import Popup from '../../../../components/Popups/Popup/Popup';
 import { CateringMeal } from '../../../../utils/api/cateringService/cateringService';
 import MealItem from './MealItem/MealItem';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
+import CategoriesList from '../CategoriesList/CategoriesList';
+import { useGetCateringById } from '../../../../utils/hooks/useCatering/useCatering';
 
 const MealList = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
-    const { data, isSuccess, isPending } = useGetCateringMeals();
+    const { data: meal, isSuccess, isPending } = useGetCateringMeals();
+    const { data: сatering } = useGetCateringById(Number(cateringId));
     const { mutateAsync: deleteMeal, isPending: isDeleting } = useDeleteCateringMeal();
     const [showConfirmationPopup, setShowConfirmationPopup] = useState<number | null>(null);
     const { mutateAsync: updateMeal } = useUpdateMeal();
-    const meals = isSuccess ? data.data : [];
+    const meals = isSuccess ? meal.data : [];
     const [isOpen, setIsOpen] = useState<number | null>(null);
 
     useEffect(() => {
@@ -33,6 +36,14 @@ const MealList = () => {
 
     const onCloseClick = () => {
         navigate('/catering');
+    };
+
+    const categoryClick = (categoryId: number) => {
+        navigate(`/catering/${cateringId}/menu/category/${categoryId}`);
+    };
+
+    const addCategoryClick = () => {
+        navigate(`/catering/${cateringId}/menu/category`);
     };
 
     const toggleClick = (id: number) => {
@@ -86,7 +97,8 @@ const MealList = () => {
         <>
             <Popup title={t('pages.cateringManagement.titleMealMenu')} arrowBack={true} onClose={onCloseClick}>
                 <div className={styles.buttons}>
-                    <ButtonIconAdd>{t('pages.cateringManagement.addCategoriesMenu')}</ButtonIconAdd>
+                    <ButtonIconAdd onClick={addCategoryClick}>{t('pages.cateringManagement.addCategoriesMenu')}</ButtonIconAdd>
+                    {сatering?.data.categories && <CategoriesList categories={сatering?.data.categories} onClick={categoryClick} />}
                     <ButtonIconAdd onClick={addMealClick}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
                 </div>
 

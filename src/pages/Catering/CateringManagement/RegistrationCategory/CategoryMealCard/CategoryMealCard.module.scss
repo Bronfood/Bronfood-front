@@ -1,0 +1,78 @@
+@use '../../../../../styles/variables';
+
+.card {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    border: 1px solid variables.$grey-line;
+    border-radius: 20px;
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        z-index: 2;
+        opacity: 0.29;
+        background-color: variables.$dark-grey-overlay;
+    }
+
+    &__content {
+        position: relative;
+        width: 148px;
+        height: 101px;
+    }
+
+    &__photo {
+        width: inherit;
+        height: inherit;
+        border-radius: 20px 20px 0 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &__checkbox {
+        display: flex;
+        position: absolute;
+        top: 10px;
+        left: 11px;
+        z-index: 5;
+
+        &_include {
+            background-color: variables.$white;
+            border: 1px solid variables.$line;
+            border-radius: 5px;
+            appearance: none;
+            width: 35px;
+            height: 35px;
+
+            &:checked {
+                background-color: variables.$orange;
+                background-image: url('../../../../../vendor/images/icons/radioButton/check.svg');
+                background-position: center;
+                background-repeat: no-repeat;
+                border: 1px solid variables.$orange;
+            }
+        }
+    }
+
+    &__info {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__price {
+        font-weight: 400;
+    }
+
+    &__exclude {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 43px;
+    }
+}

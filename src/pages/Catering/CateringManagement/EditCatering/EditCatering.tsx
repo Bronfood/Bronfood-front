@@ -28,6 +28,7 @@ const EditCatering = () => {
             rating: data.rating,
             tags: data.tags,
             workingTime: data.workingTime,
+            categories: data.categories,
         };
 
         const response = await updateCatering(cateringData);
@@ -59,6 +60,7 @@ const EditCatering = () => {
                         rating: catering.data.rating,
                         photo: catering.data.photo,
                         workingTime: catering.data.workingTime,
+                        categories: catering.data.categories,
                     }}
                 />
             )}

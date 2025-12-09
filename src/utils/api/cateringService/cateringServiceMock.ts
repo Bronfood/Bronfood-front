@@ -1,10 +1,11 @@
-import { emptyCaterings, emptyMeals, mockCateringService } from './MockCateringService';
-import { CateringService, Administrator, Catering, CateringMeal } from './cateringService';
+import { emptyCategories, emptyCaterings, emptyMeals, mockCateringService } from './MockCateringService';
+import { CateringService, Administrator, Catering, CateringMeal, Category } from './cateringService';
 
 export class CateringServiceMock implements CateringService {
     private administrators: Administrator[] = mockCateringService;
     private caterings: Catering[] = emptyCaterings;
     private meals: CateringMeal[] = emptyMeals;
+    private categories: Category[] = emptyCategories;
 
     async getAdministrators(): Promise<{ data: Administrator[] }> {
         const success = true;
@@ -156,5 +157,29 @@ export class CateringServiceMock implements CateringService {
         } else {
             return await Promise.reject(new Error('Error server'));
         }
+    }
+
+    async getCategories(): Promise<{ data: Category[] }> {
+        return await Promise.resolve({ data: this.categories });
+    }
+
+    async getCategoryById(id: number): Promise<{ data: Category }> {
+        const numericId = Number(id);
+        const category = this.categories.find((c) => c.id === numericId);
+
+        if (category) {
+            return await Promise.resolve({ data: category });
+        }
+        return await Promise.reject(new Error('Error: category not found'));
+    }
+
+    async createCategory(data: Omit<Category, 'id'>): Promise<{ data: Category }> {
+        const newCategory = {
+            ...data,
+            id: Date.now(),
+        };
+
+        this.categories.push(newCategory);
+        return { data: newCategory };
     }
 }

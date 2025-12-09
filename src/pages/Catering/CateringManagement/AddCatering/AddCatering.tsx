@@ -25,6 +25,7 @@ const AddCatering = () => {
             rating: data.rating,
             tags: data.tags,
             workingTime: data.workingTime,
+            categories: data.categories,
         };
         const response = await mutateAsync(cateringData);
         const createdCatering = response.data;
@@ -58,6 +59,7 @@ const AddCatering = () => {
                         schedule: [...DAYS],
                         is24h: false,
                     },
+                    categories: [],
                 }}
             />
         </>

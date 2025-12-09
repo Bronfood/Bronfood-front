@@ -3,7 +3,7 @@ import Popup from '../../../../components/Popups/Popup/Popup';
 import { useTranslation } from 'react-i18next';
 import ButtonUnderline from '../../../../components/ButtonUnderline/ButtonUnderline';
 import styles from './CateringDetails.module.scss';
-import CategoriesList from './CategoriesList/CategoriesList';
+import CategoriesList from '../CategoriesList/CategoriesList';
 import CateringCard from './CateringCard/CateringCard';
 import { useState, MouseEvent, useEffect } from 'react';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
@@ -61,7 +61,7 @@ const CateringDetails = () => {
                 </div>
                 <div className={`${styles['container']} ${styles['container__menu']}`}>
                     <ButtonUnderline onClick={onEditMenu}>{t('pages.cateringManagement.buttonEditMenu')}</ButtonUnderline>
-                    <CategoriesList />
+                    {сatering?.data.categories && <CategoriesList categories={сatering?.data.categories} />}
                 </div>
             </Popup>
             {showConfirmationPopup && (
