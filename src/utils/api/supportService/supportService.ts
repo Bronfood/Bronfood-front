@@ -10,6 +10,10 @@ export type Support = {
      */
     created_at: string;
     /**
+     * support's status
+     */
+    status: string;
+    /**
      * user's name
      */
     user_name: string;
@@ -29,14 +33,10 @@ export type Support = {
      * user's images
      */
     images?: string[];
-    /**
-     * support's status
-     */
-    status: string;
 };
 
 export interface SupportService {
-    addSupportRequest: (data: Omit<Support, 'id'>) => Promise<{ data: Support }>;
+    addSupportRequest: (data: Omit<Support, 'id' | 'created_at' | 'status'>) => Promise<{ data: Support }>;
 }
 
 export const supportService = new SupportServiceMock();

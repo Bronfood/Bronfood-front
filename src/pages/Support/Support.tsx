@@ -44,13 +44,11 @@ const Support: FC = () => {
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const supportData = {
-            created_at: data.created_at,
-            user_name: data.user_name,
-            phone: data.phone,
-            email: data.email,
-            message: data.message,
-            images: data.images || [],
-            status: data.status,
+            user_name: data.nameClient,
+            phone: data.phoneNumber,
+            email: data.emailClient,
+            message: data.messageClient,
+            images: data.imageFormSupport || [],
         };
         await mutateAsync(supportData);
         setShowPopup(true);

@@ -5,7 +5,7 @@ export class SupportServiceMock implements SupportService {
         return new Promise((res) => setTimeout(res, ms));
     }
 
-    async addSupportRequest(supportData: Omit<Support, 'id'>): Promise<{ data: Support }> {
+    async addSupportRequest(supportData: Omit<Support, 'id' | 'created_at' | 'status'>): Promise<{ data: Support }> {
         await this._wait(1000);
 
         const success = Math.random() > 0.2;
