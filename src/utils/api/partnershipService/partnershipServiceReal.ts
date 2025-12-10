@@ -1,7 +1,7 @@
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { Partnership, SupportService } from './supportService';
+import { Partnership, PartnershipService } from './partnershipService';
 
-export class SupportServiceReal implements SupportService {
+export class PartnershipServiceReal implements PartnershipService {
     async addPartnership(partnershipData: Partnership): Promise<{ data: Partnership }> {
         return handleFetch(`api/support/partnership/`, { method: 'POST', data: partnershipData });
     }

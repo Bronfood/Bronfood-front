@@ -26,7 +26,7 @@ i18n
                             signInAsAdmin: 'Войти как админ заведения',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
-                            generalFormSupport: 'Помощь',
+                            support: 'Помощь',
                         },
                         header: {
                             burgerTitleHover: 'Меню',
@@ -207,7 +207,7 @@ i18n
                             description: 'Мы уже обрабатываем вашу заявку и скоро свяжемся с вами для обсуждения деталей.',
                         },
 
-                        popupGeneralSupportThanks: {
+                        popupSupportThanks: {
                             title: 'Обращение принято!',
                             description: 'Мы оперативно разберемся в ситуации. Ожидайте ответа на указанные контакты в ближайшее время.',
                         },
@@ -404,7 +404,7 @@ i18n
                             placeholderMessage: 'Расскажите о вашем предложении',
                         },
 
-                        generalSupport: {
+                        support: {
                             title: 'Помощь',
                             placeholderNameClient: 'Введите ваше имя',
                             placeholderEmailClient: 'email@example.com',

@@ -13,15 +13,15 @@ import Button from '../../components/Button/Button';
 import InputImage from '../../components/InputImage/InputImage';
 import PopupThanks from '../../components/Popups/PopupThanks/PopupThanks';
 import InfoImage from '../../components/InfoImage/InfoImage';
-import { useGeneralSupport } from '../../utils/hooks/useGeneralSupport/useGeneralSupport';
 import Preloader from '../../components/Preloader/Preloader';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import styles from './GeneralSupport.module.scss';
+import styles from './Support.module.scss';
+import { useSupport } from '../../utils/hooks/useSupport/useSupport';
 
-const GeneralSupport: FC = () => {
+const Support: FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { mutateAsync, isPending, error } = useGeneralSupport();
+    const { mutateAsync, isPending, error } = useSupport();
     const [showPopup, setShowPopup] = useState(false);
     const {
         register,
@@ -57,21 +57,21 @@ const GeneralSupport: FC = () => {
     };
 
     if (showPopup) {
-        return <PopupThanks title={t('pages.popupGeneralSupportThanks.title')} description={t('pages.popupGeneralSupportThanks.description')} image={<InfoImage mode="without_tube" />} />;
+        return <PopupThanks title={t('pages.popupSupportThanks.title')} description={t('pages.popupSupportThanks.description')} image={<InfoImage mode="without_tube" />} />;
     }
 
     return (
-        <Popup title={t('pages.generalSupport.title')} onClose={onClose}>
+        <Popup title={t('pages.support.title')} onClose={onClose}>
             {isPending && <Preloader />}
-            <Form name="general-form-help" onSubmit={handleSubmit(onSubmit)}>
+            <Form name="form-support" onSubmit={handleSubmit(onSubmit)}>
                 <FormInputs>
-                    <Input type="text" name="nameClient" placeholder={t('pages.generalSupport.placeholderNameClient')} nameLabel={t('pages.generalSupport.nameLabelNameClient')} register={register} errors={errors} pattern={regexClientName} />
+                    <Input type="text" name="nameClient" placeholder={t('pages.support.placeholderNameClient')} nameLabel={t('pages.support.nameLabelNameClient')} register={register} errors={errors} pattern={regexClientName} />
                     <InputPhone register={register} errors={errors} />
-                    <Input type="text" name="emailClient" placeholder={t('pages.generalSupport.placeholderEmailClient')} nameLabel={t('pages.generalSupport.nameLabelEmailClient')} register={register} errors={errors} pattern={regexEmail} />
-                    <Textarea name="messageClient" placeholder={t('pages.generalSupport.placeholderMessageClient')} nameLabel={t('pages.generalSupport.nameLabelMessageClient')} register={register} errors={errors} pattern={regexMessage} />
-                    <InputImage nameLabel={t('pages.generalSupport.nameLabelPhoto')} name="imageFormSupport" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImages} multiple={true} maxFiles={5} editing={true} deleting={true} />
+                    <Input type="text" name="emailClient" placeholder={t('pages.support.placeholderEmailClient')} nameLabel={t('pages.support.nameLabelEmailClient')} register={register} errors={errors} pattern={regexEmail} />
+                    <Textarea name="messageClient" placeholder={t('pages.support.placeholderMessageClient')} nameLabel={t('pages.support.nameLabelMessageClient')} register={register} errors={errors} pattern={regexMessage} />
+                    <InputImage nameLabel={t('pages.support.nameLabelPhoto')} name="imageFormSupport" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImages} multiple={true} maxFiles={5} editing={true} deleting={true} />
                 </FormInputs>
-                <Button type="submit">{t('pages.generalSupport.buttonSendRequest')}</Button>
+                <Button type="submit">{t('pages.support.buttonSendRequest')}</Button>
             </Form>
             {error && (
                 <div className={styles.error}>
@@ -82,4 +82,4 @@ const GeneralSupport: FC = () => {
     );
 };
 
-export default GeneralSupport;
+export default Support;
