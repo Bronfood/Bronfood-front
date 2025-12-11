@@ -31,6 +31,7 @@ import AddAdministrator from './pages/Catering/Administrators/AddAdministrator/A
 import EditAdministrator from './pages/Catering/Administrators/EditAdministrator/EditAdministrator';
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
+import Support from './pages/Support/Support';
 
 function App() {
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
                 <Route path="/partnership" element={<Partnership />} />
+                <Route path="/support" element={<Support />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/profile" element={<ProtectedRoute component={<Profile />} />} />

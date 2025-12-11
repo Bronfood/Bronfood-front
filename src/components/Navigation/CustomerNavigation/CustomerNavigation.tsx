@@ -32,6 +32,18 @@ const CustomerNavigation: FC<CustomerNavigation> = (props) => {
                 </Link>
             </li>
             <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_catering}`}></div>
+                <Link to="/partnership" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.guestNavigation.partnership')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_support}`}></div>
+                <Link to="/support" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.guestNavigation.support')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_exit}`}></div>
                 <Link
                     to="/logout"

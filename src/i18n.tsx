@@ -26,6 +26,7 @@ i18n
                             signInAsAdmin: 'Войти как админ заведения',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
+                            support: 'Помощь',
                         },
                         header: {
                             burgerTitleHover: 'Меню',
@@ -49,6 +50,9 @@ i18n
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',
+                            selectImageFile: 'Выберите файл изображения',
+                            errorUploadingFile: 'Ошибка при загрузке файла',
+                            youCanAttachMaximumImages: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
                         passwordRecovery: {
                             title: 'Восстановить пароль',
@@ -201,6 +205,11 @@ i18n
                         popupPartnershipThanks: {
                             title: 'Спасибо за обращение!',
                             description: 'Мы уже обрабатываем вашу заявку и скоро свяжемся с вами для обсуждения деталей.',
+                        },
+
+                        popupSupportThanks: {
+                            title: 'Обращение принято!',
+                            description: 'Мы оперативно разберемся в ситуации. Ожидайте ответа на указанные контакты в ближайшее время.',
                         },
 
                         popupSignupSuccess: {
@@ -393,6 +402,18 @@ i18n
                             placeholderEmail: 'email@example.com',
                             nameLabelMessage: 'Сообщение',
                             placeholderMessage: 'Расскажите о вашем предложении',
+                        },
+
+                        support: {
+                            title: 'Помощь',
+                            placeholderNameClient: 'Введите ваше имя',
+                            placeholderEmailClient: 'email@example.com',
+                            placeholderMessageClient: 'Опишите вашу проблему или вопрос подробнее ...',
+                            buttonSendRequest: 'Отправить',
+                            nameLabelNameClient: 'Как к вам обращаться?',
+                            nameLabelEmailClient: 'Email',
+                            nameLabelMessageClient: 'Обращение',
+                            nameLabelPhoto: 'Прикрепите скриншоты',
                         },
                     },
                     errors: {

@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { Partnership, supportService } from '../../api/supportService/supportService';
+import { Partnership, partnershipService } from '../../api/partnershipService/partnershipService';
 
 export const usePartnership = () => {
     return useMutation({
-        mutationFn: (data: Partnership) => supportService.addPartnership(data),
+        mutationFn: (data: Partnership) => partnershipService.addPartnership(data),
     });
 };
