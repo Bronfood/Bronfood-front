@@ -18,7 +18,7 @@ export default function YandexMap() {
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
-    const { setCity, location, setLocation, isDrawerOpen, mapBottomMargin, setMapBottomMargin } = useMapContext();
+    const { location, setLocation, isDrawerOpen, mapBottomMargin, setMapBottomMargin } = useMapContext();
 
     const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
@@ -117,30 +117,9 @@ export default function YandexMap() {
         }
     }, [inView, restaurantsFiltered, activePlaceId, zoom, setLocation, setMapBottomMargin]);
 
-    useEffect(() => {
-        async function fetchLocality() {
-            setCity('');
-            const res = await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=${import.meta.env.VITE_YNDX_API_KEY}&geocode=${userLocation}&format=json`);
-            if (res.ok) {
-                const result = await res.json();
-                if (!ignore) {
-                    const locality = result.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.Address.Components.filter((c: { kind: string; name: string }) => c.kind === 'locality')[0].name;
-                    setCity(locality);
-                }
-            }
-        }
-        let ignore = false;
-        if (userLocation) {
-            fetchLocality();
-        }
-        return () => {
-            ignore = true;
-        };
-    }, [userLocation, setCity]);
-
     return (
         <div className={styles.yamap}>
-            <YMap location={location} margin={[100, 10, mapBottomMargin, 10]} showScaleInCopyrights={true}>
+            <YMap location={location} margin={[10, 10, mapBottomMargin, 10]} showScaleInCopyrights={true}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
                 <YMapListener onActionStart={useMemo(() => onActionStartHandler(), [onActionStartHandler])} onUpdate={useMemo(() => handleMapUpdate(), [handleMapUpdate])} />

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useGetBasket } from '../../utils/hooks/useBasket/useBasket';
-import { useMapContext } from '../../utils/hooks/useMap/useMap';
 
 const Header = () => {
     const menuRef = useRef<HTMLDivElement>(null);
@@ -22,7 +21,6 @@ const Header = () => {
     };
     const [isPageFavorites, setIsPageFavorites] = useState(false);
     const location = useLocation();
-    const { city } = useMapContext();
 
     useEffect(() => {
         if (location.pathname === '/favorites') {
@@ -61,10 +59,6 @@ const Header = () => {
         <header className={styles.header}>
             <div className={`${styles.header__container} ${!isContentVisible ? styles.header__container_hidden : ''}`}>
                 <button title={t('components.header.burgerTitleHover')} className={`${styles.header__burger} ${styles.header__icon}`} onClick={handleMenuActive}></button>
-                <div className={styles.header__place}>
-                    <div className={styles.header__place_point}></div>
-                    <p className={styles.header__place_name}>{city}</p>
-                </div>
                 <div className={styles.header__buttons}>
                     {isLogin ? (
                         <>
@@ -72,8 +66,8 @@ const Header = () => {
                                 <button title={t('components.header.favouritesTitleHover')} className={`${styles.header__favorite} ${styles.header__icon} ${isPageFavorites ? styles.header__favorite_active : ''}`}></button>
                             </Link>
                             <Link to="/basket">
-                                <div className={styles.header__basket}>
-                                    <button title={t('components.header.basketTitleHover')} className={styles.header__icon} />
+                                <div className={styles.header__basket_container}>
+                                    <button title={t('components.header.basketTitleHover')} className={`${styles.header__basket} ${styles.header__icon}`} />
                                     {mealsCount && <span className={styles.header__chip}>{mealsCount}</span>}
                                 </div>
                             </Link>

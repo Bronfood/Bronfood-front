@@ -26,6 +26,7 @@ i18n
                             signInAsAdmin: 'Войти как админ заведения',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
+                            support: 'Помощь',
                         },
                         header: {
                             burgerTitleHover: 'Меню',
@@ -49,6 +50,9 @@ i18n
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',
+                            selectImageFile: 'Выберите файл изображения',
+                            errorUploadingFile: 'Ошибка при загрузке файла',
+                            youCanAttachMaximumImages: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
                         passwordRecovery: {
                             title: 'Восстановить пароль',
@@ -76,6 +80,7 @@ i18n
                             editPersonalData: 'Редактировать личные данные',
                             editBankData: 'Редактировать банковские данные',
                             aboutService: 'О сервисе',
+                            myOrders: 'Мои заказы',
                             signOut: 'Выйти',
                         },
                         confirmationPopup: {
@@ -202,6 +207,11 @@ i18n
                             description: 'Мы уже обрабатываем вашу заявку и скоро свяжемся с вами для обсуждения деталей.',
                         },
 
+                        popupSupportThanks: {
+                            title: 'Обращение принято!',
+                            description: 'Мы оперативно разберемся в ситуации. Ожидайте ответа на указанные контакты в ближайшее время.',
+                        },
+
                         popupSignupSuccess: {
                             title: 'Спасибо за регистрацию!',
                         },
@@ -234,6 +244,39 @@ i18n
                             newPasswordYouCantSetANewPasswordWithoutTheCurrentOne: 'Чтобы установить новый пароль, введите текущий пароль',
                             invalidCodeOrExpired: 'Неправильный код из СМС.',
                             authenticationCredentialsWereNotProvided: 'Вы не авторизованы',
+                        },
+                        order: {
+                            title: 'Мои заказы',
+                            titleMyOrdersEmpty: 'Ваш список заказов пуст...',
+                            titleOrderInfo: 'Информация о заказе',
+                            feedback: 'Оставить отзыв',
+                            dateOfIssue: 'Выдан',
+                            dateOfCanceled: 'Отменен',
+                            waitingTime: 'Время ожидания',
+                            buttonHide: 'скрыть',
+                            buttonShow: 'подробнее',
+                            buttonRepeatOrder: 'Повторить заказ',
+                            orderList: 'Состав заказа',
+                            paidFor: 'Оплачен',
+                            notRepeatOrder: '*** Заказ недоступен для повтора — некоторые позиции отсутствуют',
+                            currency: 'Валюта',
+                            paymentLink: 'Ссылка для оплаты',
+                            howDoYouLikeTheOrder: 'Расскажите, как вам заказ?',
+                            cancellationReason: 'Причина',
+                            mealUnavailable: 'недоступно',
+                            assignedRating: 'Ваша оценка',
+                            created: 'создан',
+                            paid: 'оплачен',
+                            accepted: 'готовится',
+                            ready: 'готов',
+                            completed: 'завершен',
+                            unclaimed: 'не актуален',
+                            cancelled_by_user: 'отменен',
+                            cancelled_by_admin: 'отменен',
+                            cancelled_by_timeout: 'отменен',
+                            proceedToPayment: 'Перейти к оплате',
+                            cancelOrder: 'Отменить заказ',
+                            canCancelOrderBeforeStartCooking: '*** Вы можете отменить заказ, пока его не начали готовить',
                         },
                         error: {
                             server: 'Сервер не отвечает. Попробуйте позже',
@@ -360,6 +403,18 @@ i18n
                             placeholderEmail: 'email@example.com',
                             nameLabelMessage: 'Сообщение',
                             placeholderMessage: 'Расскажите о вашем предложении',
+                        },
+
+                        support: {
+                            title: 'Помощь',
+                            placeholderNameClient: 'Введите ваше имя',
+                            placeholderEmailClient: 'email@example.com',
+                            placeholderMessageClient: 'Опишите вашу проблему или вопрос подробнее ...',
+                            buttonSendRequest: 'Отправить',
+                            nameLabelNameClient: 'Как к вам обращаться?',
+                            nameLabelEmailClient: 'Email',
+                            nameLabelMessageClient: 'Обращение',
+                            nameLabelPhoto: 'Прикрепите скриншоты',
                         },
                     },
                     errors: {

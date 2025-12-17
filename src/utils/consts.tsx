@@ -22,6 +22,7 @@ export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
 export const INITIAL_CENTER: LngLat = [76.921552, 43.246345];
 export const ZOOM = 12;
 
+export const ORDERS_COUNT = 2;
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;
 export const COMMON_LOCATION_PARAMS: { easing: EasingFunctionDescription; duration: number } = { easing: 'ease-in-out', duration: 1000 };

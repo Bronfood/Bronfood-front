@@ -12,8 +12,6 @@ type Location = {
 };
 
 type MapContext = {
-    city: string;
-    setCity: Dispatch<SetStateAction<string>>;
     location: Location;
     setLocation: Dispatch<SetStateAction<Location>>;
     isDrawerOpen: boolean;
@@ -24,8 +22,6 @@ type MapContext = {
 };
 
 export const MapContext = createContext<MapContext>({
-    city: '',
-    setCity: () => {},
     location: { center: INITIAL_CENTER, zoom: ZOOM, ...COMMON_LOCATION_PARAMS },
     setLocation: () => {},
     isDrawerOpen: true,
@@ -36,7 +32,6 @@ export const MapContext = createContext<MapContext>({
 });
 
 export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [city, setCity] = useState<string>('');
     const [location, setLocation] = useState<Location>({
         center: INITIAL_CENTER,
         zoom: ZOOM,
@@ -49,8 +44,6 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const contextValue = useMemo(
         () => ({
-            city,
-            setCity,
             location,
             setLocation,
             isDrawerOpen,
@@ -59,7 +52,7 @@ export const MapProvider: FC<PropsWithChildren> = ({ children }) => {
             setMapBottomMargin,
             cities,
         }),
-        [city, setCity, location, setLocation, isDrawerOpen, setIsDrawerOpen, mapBottomMargin, setMapBottomMargin, cities]
+        [location, setLocation, isDrawerOpen, setIsDrawerOpen, mapBottomMargin, setMapBottomMargin, cities]
     );
     return <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>;
 };
