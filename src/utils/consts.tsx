@@ -13,7 +13,6 @@ export const regexEmail: RegExp = /.+@.+\..+/;
 export const regexAddress: RegExp = /^[a-zA-Zа-яА-ЯёЁӘәҒғҚқҢңӨөҰұҮүІі0-9\s.,/\-–—()"']{1,256}$/;
 export const regexMessage: RegExp = /^[\s\S]{10,5000}$/;
 
-export const API_URL = 'https://80.90.183.184';
 export const mealTypes: MealType[] = ['food', 'drink', 'dessert'];
 export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
     return { id: increment(), name: type, selected: false };
