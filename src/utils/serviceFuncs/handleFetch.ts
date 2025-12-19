@@ -1,5 +1,3 @@
-import { API_URL } from '../consts';
-
 interface FetchOptions extends RequestInit {
     data?: object;
 }
@@ -32,7 +30,7 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
         options.body = JSON.stringify(data);
     }
     try {
-        const res = await fetch(`${API_URL}/${endpoint}`, options);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, options);
         if (res.status === 401) {
             localStorage.removeItem('token');
         }

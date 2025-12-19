@@ -8,39 +8,33 @@ import marker from '../../vendor/images/icons/navigation.svg';
 import markerActive from '../../vendor/images/icons/navigation_active.png';
 import userMarker from '../../vendor/images/icons/navigation_grey.svg';
 import { debounce } from 'lodash';
-import { CLUSTER_GRIDSIZE, COMMON_LOCATION_PARAMS, DEBOUNCE_VALUE, INITIAL_BOUNDS, INITIAL_CENTER, INITIAL_ZOOM } from '../../utils/consts';
+import { CLUSTER_GRIDSIZE, DEBOUNCE_VALUE, ZOOM } from '../../utils/consts';
 import { Feature } from '@yandex/ymaps3-types/packages/clusterer';
+import { useMapContext } from '../../utils/hooks/useMap/useMap';
 
-export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
+export default function YandexMap() {
     type ExpandedFeature = Feature & { id: string };
-    const [mapBottomMargin, setMapBottomMargin] = useState(isDrawerOpen ? 460 : 40);
-    const [mapActionStarted, setMapActionStarted] = useState(false);
-    const [zoom, setZoom] = useState<number>(12);
-    const [location, setLocation] = useState<{ center: LngLat; zoom: number }>({
-        center: INITIAL_CENTER,
-        zoom: INITIAL_ZOOM,
-        ...COMMON_LOCATION_PARAMS,
-    });
+    const [zoom, setZoom] = useState<number>(ZOOM);
     const [activePlaceId, setActivePlaceId] = useState<number | null>(null);
     const navigate = useNavigate();
     const { restaurantsFiltered, inView, setLastClickedRestaurantId, setBounds, userLocation, setUserLocation } = useRestaurantsContext();
+    const { location, setLocation, isDrawerOpen, mapBottomMargin, setMapBottomMargin } = useMapContext();
 
     const handleMapUpdate = useCallback((): MapEventUpdateHandler => {
         return debounce(function (object) {
             if (object.mapInAction) return;
             setZoom(object.location.zoom);
-            const boundsCoords = mapActionStarted ? object.location.bounds : INITIAL_BOUNDS;
+            const boundsCoords = object.location.bounds;
             setBounds(boundsCoords);
         }, DEBOUNCE_VALUE);
-    }, [setBounds, mapActionStarted]);
+    }, [setBounds]);
 
     const onActionStartHandler = useCallback((): BehaviorMapEventHandler => {
         return function (object) {
             if (object.type === 'dblClick') return;
             setMapBottomMargin(40);
-            setMapActionStarted(true);
         };
-    }, []);
+    }, [setMapBottomMargin]);
 
     const handlePlacemarkClick = useCallback(
         (placeId: number, longitude: number, latitude: number) => {
@@ -49,7 +43,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
             setLocation({ ...location, center: [longitude, latitude] });
             navigate(`/restaurants/${placeId}`);
         },
-        [navigate, setLastClickedRestaurantId, location, isDrawerOpen]
+        [navigate, setLastClickedRestaurantId, location, isDrawerOpen, setLocation, setMapBottomMargin]
     );
 
     const points: ExpandedFeature[] = restaurantsFiltered.map((restaurant) => ({
@@ -78,10 +72,10 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
     const onClusterClick = useCallback(
         (coordinates: LngLat) => {
             setMapBottomMargin(isDrawerOpen ? 460 : 40);
-            setLocation({ ...location, center: coordinates, zoom: zoom < 12 ? 12 : zoom + 1 });
-            setZoom((zoom) => (zoom < 12 ? 12 : zoom + 1));
+            setLocation({ ...location, center: coordinates, zoom: zoom < ZOOM ? ZOOM : zoom + 1 });
+            setZoom((zoom) => (zoom < ZOOM ? ZOOM : zoom + 1));
         },
-        [location, zoom, isDrawerOpen]
+        [location, zoom, isDrawerOpen, setLocation, setMapBottomMargin]
     );
 
     const cluster = useCallback(
@@ -108,7 +102,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
                 });
             });
         }
-    }, [setUserLocation]);
+    }, [setUserLocation, setLocation]);
 
     useEffect(() => {
         if (inView && activePlaceId !== inView) {
@@ -121,7 +115,7 @@ export default function YandexMap({ isDrawerOpen }: { isDrawerOpen: boolean }) {
                 });
             }
         }
-    }, [inView, restaurantsFiltered, activePlaceId, zoom]);
+    }, [inView, restaurantsFiltered, activePlaceId, zoom, setLocation, setMapBottomMargin]);
 
     return (
         <div className={styles.yamap}>

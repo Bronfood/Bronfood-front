@@ -3,7 +3,7 @@ import { Restaurant, SearchSuggestion } from '../utils/api/restaurantsService/re
 import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { useRestaurants } from '../utils/hooks/useRestaurants/useRestaurants';
 import { useSearchSuggestions } from '../utils/hooks/useSearchSuggestions/useSearchSuggestions';
-import { INITIAL_BOUNDS, types } from '../utils/consts';
+import { types } from '../utils/consts';
 
 export type VenueType = {
     /**
@@ -37,6 +37,10 @@ export type RestaurantsContext = {
      * Indicates whether restaurants are loading
      */
     isLoading: boolean;
+    /**
+     * Indicates whether restaurants have been fetched
+     */
+    isFetched: boolean;
     /**
      * Indicates whether query encountered an error
      */
@@ -121,6 +125,7 @@ export const RestaurantsContext = createContext<RestaurantsContext>({
     setActiveRestaurant: () => {},
     restaurantsFiltered: [],
     isLoading: false,
+    isFetched: false,
     isError: false,
     refetch: () => {},
     setInView: () => {},
@@ -148,14 +153,14 @@ export const RestaurantsContext = createContext<RestaurantsContext>({
 export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [inView, setInView] = useState<number | undefined>(undefined);
     const [lastClickedRestaurantId, setLastClickedRestaurantId] = useState<number | null>(null);
-    const [bounds, setBounds] = useState<LngLatBounds | never[]>(INITIAL_BOUNDS);
+    const [bounds, setBounds] = useState<LngLatBounds | never[]>([]);
     const [userLocation, setUserLocation] = useState<LngLat | undefined>(undefined);
     const [searchQuery, setSearchQuery] = useState('');
     const { isSuccess: isSearchSuggestionsSuccess, data: searchSuggestionsData } = useSearchSuggestions(searchQuery);
     const searchSuggestions = useMemo(() => (isSearchSuggestionsSuccess ? searchSuggestionsData.data : []), [isSearchSuggestionsSuccess, searchSuggestionsData]);
     const [selectedOptions, setSelectedOptions] = useState<SearchSuggestion[]>([]);
     const [selectedVenueTypes, setSelectedVenueTypes] = useState<VenueType[]>([]);
-    const { isLoading, isError, restaurantsOnMap: restaurantsFiltered, refetch } = useRestaurants(bounds as LngLatBounds, userLocation as LngLat, selectedOptions as SearchSuggestion[], selectedVenueTypes as VenueType[]);
+    const { isLoading, isError, restaurantsOnMap: restaurantsFiltered, refetch, isFetched } = useRestaurants(bounds as LngLatBounds, userLocation as LngLat, selectedOptions as SearchSuggestion[], selectedVenueTypes as VenueType[]);
     const setActiveRestaurant = useCallback((id: number) => {
         setInView(id);
     }, []);
@@ -187,10 +192,10 @@ export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
         },
         [selectedVenueTypes]
     );
-
     const contextValue = useMemo(
         () => ({
             isLoading,
+            isFetched,
             isError,
             setActiveRestaurant,
             restaurantsFiltered,
@@ -217,7 +222,7 @@ export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
             setSearchQuery,
             searchSuggestions,
         }),
-        [isLoading, isError, setActiveRestaurant, restaurantsFiltered, refetch, inView, setInView, lastClickedRestaurantId, setLastClickedRestaurantId, selectedOptions, addOption, deleteOption, selectedVenueTypes, addVenueType, deleteVenueType, setBounds, userLocation, setUserLocation, searchQuery, setSearchQuery, searchSuggestions]
+        [isLoading, isFetched, isError, setActiveRestaurant, restaurantsFiltered, refetch, inView, setInView, lastClickedRestaurantId, setLastClickedRestaurantId, selectedOptions, addOption, deleteOption, selectedVenueTypes, addVenueType, deleteVenueType, setBounds, userLocation, setUserLocation, searchQuery, setSearchQuery, searchSuggestions]
     );
 
     return <RestaurantsContext.Provider value={contextValue}>{children}</RestaurantsContext.Provider>;
