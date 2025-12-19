@@ -36,11 +36,11 @@
         background-position: center;
 
         &_active {
-            background-image: url('./arrow-down.svg');
+            background-image: url('../../../vendor/images/icons/arrow-down.svg');
         }
 
         &_disabled {
-            background-image: url('./arrow-up.svg');
+            background-image: url('../../../vendor/images/icons/arrow-up.svg');
         }
     }
 
@@ -63,7 +63,7 @@
         width: 35px;
         height: 35px;
         border: none;
-        background-image: url('./filter.svg');
+        background-image: url('../../../vendor/images/icons/filter.svg');
         background-color: variables.$background;
         cursor: pointer;
     }
