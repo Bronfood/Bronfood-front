@@ -61,7 +61,7 @@ const CateringDetails = () => {
                 </div>
                 <div className={`${styles['container']} ${styles['container__menu']}`}>
                     <ButtonUnderline onClick={onEditMenu}>{t('pages.cateringManagement.buttonEditMenu')}</ButtonUnderline>
-                    {сatering?.data.categories && <CategoriesList categories={сatering?.data.categories} />}
+                    {сatering?.data.categories && <CategoriesList />}
                 </div>
             </Popup>
             {showConfirmationPopup && (

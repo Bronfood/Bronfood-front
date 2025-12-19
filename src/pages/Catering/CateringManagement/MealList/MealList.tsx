@@ -10,14 +10,12 @@ import { CateringMeal } from '../../../../utils/api/cateringService/cateringServ
 import MealItem from './MealItem/MealItem';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import CategoriesList from '../CategoriesList/CategoriesList';
-import { useGetCateringById } from '../../../../utils/hooks/useCatering/useCatering';
 
 const MealList = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
     const { data: meal, isSuccess, isPending } = useGetCateringMeals();
-    const { data: сatering } = useGetCateringById(Number(cateringId));
     const { mutateAsync: deleteMeal, isPending: isDeleting } = useDeleteCateringMeal();
     const [showConfirmationPopup, setShowConfirmationPopup] = useState<number | null>(null);
     const { mutateAsync: updateMeal } = useUpdateMeal();
@@ -98,7 +96,7 @@ const MealList = () => {
             <Popup title={t('pages.cateringManagement.titleMealMenu')} arrowBack={true} onClose={onCloseClick}>
                 <div className={styles.buttons}>
                     <ButtonIconAdd onClick={addCategoryClick}>{t('pages.cateringManagement.addCategoriesMenu')}</ButtonIconAdd>
-                    {сatering?.data.categories && <CategoriesList categories={сatering?.data.categories} onClick={categoryClick} />}
+                    <CategoriesList onClick={categoryClick} />
                     <ButtonIconAdd onClick={addMealClick}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
                 </div>
 

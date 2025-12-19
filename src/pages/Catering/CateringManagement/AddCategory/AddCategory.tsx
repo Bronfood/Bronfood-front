@@ -20,12 +20,12 @@ const AddCategory = () => {
         const categoryData = {
             name: data.name,
             photo: data.photo,
-            meals: data.meals,
+            meals: data.meals || [],
         };
 
         await mutateAsync(categoryData);
         navigate(-1);
-        console.log(data);
+        console.log(data, categoryData);
     };
 
     return (

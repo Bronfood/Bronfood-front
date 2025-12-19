@@ -6,7 +6,6 @@ import meal1 from './MockImages/meal1.png';
 import meal2 from './MockImages/meal2.jpg';
 import meal3 from './MockImages/meal3.jpg';
 import drink1 from './MockImages/drink1.png';
-import dessert1 from './MockImages/dessert1.png';
 
 export const emptyCaterings: Catering[] = [
     {
@@ -42,11 +41,6 @@ export const emptyCaterings: Catering[] = [
                 id: 2,
                 name: 'Напиток',
                 photo: drink1,
-            },
-            {
-                id: 3,
-                name: 'Десерт',
-                photo: dessert1,
             },
         ],
     },
@@ -181,6 +175,11 @@ export const emptyMeals: CateringMeal[] = [
         waitingTime: 15,
         tags: [{ name: 'вега' }, { name: 'овощи' }],
         is_visible: true,
+        category: {
+            id: 1,
+            name: 'Еда',
+            photo: meal1,
+        },
     },
     {
         id: 2,
@@ -213,6 +212,11 @@ export const emptyMeals: CateringMeal[] = [
         waitingTime: 10,
         tags: [{ name: 'чай' }, { name: 'зеленый' }],
         is_visible: false,
+        category: {
+            id: 2,
+            name: 'Напиток',
+            photo: drink1,
+        },
     },
     {
         id: 3,

@@ -16,7 +16,13 @@ const EditCategory = () => {
     const { data: category, isLoading } = useGetCategoryById(Number(categoryId));
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
+        const categoryData = {
+            id: Number(categoryId),
+            name: data.name,
+            photo: data.photo || '',
+            meals: data.meals || [],
+        };
+        console.log(data, categoryData);
     };
 
     return (
@@ -26,9 +32,9 @@ const EditCategory = () => {
                 <RegistrationCategory
                     onSubmit={onSubmit}
                     defaultValues={{
-                        name: category?.data.name || '',
-                        photo: category?.data.photo || '',
-                        meals: category?.data.meals || [],
+                        name: category.data.name || '',
+                        photo: category.data.photo || '',
+                        meals: category.data.meals || [],
                     }}
                 />
             )}

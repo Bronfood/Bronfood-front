@@ -23,6 +23,7 @@ type RegistrationCategoryProps = {
 const RegistrationCategory = ({ onSubmit, defaultValues }: RegistrationCategoryProps) => {
     const { t } = useTranslation();
     const { data: meal, isSuccess, isPending } = useGetCateringMeals();
+    const [showAvailableMeals, setShowAvailableMeals] = useState(false);
     const allMeals = isSuccess ? meal.data : [];
     const [selectedMeals, setSelectedMeals] = useState<number[]>(defaultValues?.meals.map((meal) => meal.id) || []);
     const {
@@ -34,8 +35,11 @@ const RegistrationCategory = ({ onSubmit, defaultValues }: RegistrationCategoryP
     } = useForm<FieldValues>({ defaultValues });
 
     const values = watch();
+    const categoryMealIds = defaultValues?.meals.map((meal) => meal.id) || [];
 
-    const mealsToCategory = allMeals.filter((meal) => !meal.category);
+    const mealsWithoutCategory = allMeals.filter((meal) => !meal.category);
+    const availableMeals = mealsWithoutCategory.filter((meal) => !categoryMealIds.includes(meal.id));
+    const currentCategoryMeals = allMeals.filter((meal) => (defaultValues ? categoryMealIds.includes(meal.id) : selectedMeals.includes(meal.id)));
 
     const handleMealToggle = (mealId: number) => {
         setSelectedMeals((prev) => {
@@ -46,8 +50,13 @@ const RegistrationCategory = ({ onSubmit, defaultValues }: RegistrationCategoryP
         });
     };
 
+    const toggleClickAvailable = () => {
+        setShowAvailableMeals(!showAvailableMeals);
+    };
+
     const handleFormSubmit = (data: FieldValues) => {
-        onSubmit(data);
+        const mealsData = allMeals.filter((meal) => selectedMeals.includes(meal.id));
+        onSubmit({ ...data, meals: mealsData });
     };
 
     return (
@@ -55,16 +64,44 @@ const RegistrationCategory = ({ onSubmit, defaultValues }: RegistrationCategoryP
             {isPending && <Preloader />}
             <div className={styles.form__conteiner}>
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>
-                {defaultValues ? (
+                {defaultValues && !showAvailableMeals && availableMeals.length !== 0 ? (
                     <div className={styles.form__add}>
-                        <ButtonIconAdd>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={toggleClickAvailable}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
                     </div>
+                ) : availableMeals.length === 0 ? (
+                    <p className={styles.form__subtitle}>Нет доступных блюд для добавления</p>
                 ) : (
                     <p className={styles.form__subtitle}>{t('pages.cateringManagement.subtitleAddCategory')}</p>
                 )}
             </div>
-            {allMeals.length > 0 && <ul className={styles.form__list}>{defaultValues ? defaultValues.meals.map((meal) => <CategoryMealCard key={meal.id} meal={meal} isChecked={selectedMeals.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} exclude={true} />) : mealsToCategory.map((meal) => <CategoryMealCard key={meal.id} meal={meal} isChecked={selectedMeals.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} includes={true} />)}</ul>}
-            <Button type="submit">{defaultValues ? t('pages.cateringManagement.buttonSave') : t('pages.cateringManagement.buttonAdd')}</Button>
+            {!defaultValues && availableMeals.length > 0 && (
+                <ul className={styles.form__list}>
+                    {availableMeals.map((meal) => (
+                        <CategoryMealCard key={meal.id} meal={meal} isChecked={selectedMeals.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} available={true} />
+                    ))}
+                </ul>
+            )}
+            {defaultValues && currentCategoryMeals.length > 0 && (
+                <>
+                    {showAvailableMeals && availableMeals.length > 0 && (
+                        <>
+                            <ul className={styles.form__list}>
+                                {availableMeals.map((meal) => (
+                                    <CategoryMealCard key={meal.id} meal={meal} isChecked={selectedMeals.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} available={true} />
+                                ))}
+                            </ul>
+                            <Button type="submit">{t('pages.cateringManagement.buttonAdd')}</Button>
+                        </>
+                    )}
+                    <ul className={styles.form__list}>
+                        {currentCategoryMeals.map((meal) => (
+                            <CategoryMealCard key={meal.id} meal={meal} available={false} />
+                        ))}
+                    </ul>
+                </>
+            )}
+
+            {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.buttonSave') : t('pages.cateringManagement.buttonAdd')}</Button>}
         </form>
     );
 };

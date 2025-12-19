@@ -7,22 +7,21 @@ type CategoryMealCardProps = {
     onDelete?: () => void;
     onToggle?: () => void;
     isChecked?: boolean;
-    includes?: boolean;
-    exclude?: boolean;
+    available?: boolean;
 };
 
-const CategoryMealCard = ({ meal, onDelete, onToggle, isChecked = false, includes, exclude }: CategoryMealCardProps) => {
+const CategoryMealCard = ({ meal, onDelete, onToggle, isChecked = false, available }: CategoryMealCardProps) => {
     return (
         <li className={styles.card}>
-            <div className={exclude ? '' : styles.card__overlay}></div>
+            <div className={!available ? '' : styles.card__overlay}></div>
             <div className={styles.card__content}>
                 <div className={styles.card__photo} style={{ backgroundImage: `url(${meal.photo})` }}></div>
-                {includes && (
+                {available && (
                     <div className={styles.card__checkbox}>
                         <input name={`meal-${meal.id}`} type="checkbox" className={styles.card__checkbox_include} checked={isChecked} onChange={onToggle} />
                     </div>
                 )}
-                {exclude && (
+                {!available && (
                     <div className={styles.card__exclude}>
                         <ButtonIconRound icon="delete" onClick={onDelete} />
                     </div>
