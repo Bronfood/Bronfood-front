@@ -33,6 +33,19 @@ import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
 
 function App() {
+    const handleClick = () => {
+        if ('Notification' in window && 'serviceWorker' in navigator) {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    subscribeUser();
+                } else {
+                    alert('Permission denied');
+                }
+            });
+        } else {
+            alert('Push not supported');
+        }
+    };
     return (
         <div>
             <Header />
@@ -72,6 +85,9 @@ function App() {
                     </Route>
                 </Route>
             </Routes>
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <button onClick={handleClick}>Enable Notifications</button>
+            </div>
             <ReactQueryDevtools initialIsOpen={false} />
             <Analytics />
         </div>
