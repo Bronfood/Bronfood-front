@@ -31,22 +31,21 @@ import EditAdministrator from './pages/Catering/Administrators/EditAdministrator
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
-import { subscribeUser } from './utils/pushNotifications/pushNotifications';
+import { useCurrentUser } from './utils/hooks/useCurrentUser/useCurretUser';
+import { useEffect } from 'react';
+import { requestNotificationPermission } from './utils/serviceFuncs/requestNotificationPermission';
 
 function App() {
-    const handleClick = () => {
-        if ('Notification' in window && 'serviceWorker' in navigator) {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    subscribeUser();
-                } else {
-                    alert('Permission denied');
-                }
-            });
-        } else {
-            alert('Push not supported');
+    const { currentUser } = useCurrentUser();
+    useEffect(() => {
+        if (!('Notification' in window) && !('serviceWorker' in navigator)) {
+            // eslint-disable-next-line no-console
+            console.log('Push notifications not supported.');
+            return;
+        } else if (currentUser) {
+            requestNotificationPermission();
         }
-    };
+    }, [currentUser]);
     return (
         <div>
             <Header />
@@ -86,9 +85,6 @@ function App() {
                     </Route>
                 </Route>
             </Routes>
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                <button onClick={handleClick}>Enable Notifications</button>
-            </div>
             <ReactQueryDevtools initialIsOpen={false} />
             <Analytics />
         </div>

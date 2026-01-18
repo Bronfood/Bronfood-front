@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export function registerServiceWorker() {
     return navigator.serviceWorker
         .register('../../../service-worker.js')
