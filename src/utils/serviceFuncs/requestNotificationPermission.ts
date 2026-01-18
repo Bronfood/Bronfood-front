@@ -10,5 +10,8 @@ export function requestNotificationPermission() {
         if (permissionResult !== 'granted') {
             throw new Error('Notification permission was not granted.');
         }
+        // eslint-disable-next-line no-console
+        console.log('User granted notification permission.');
+        return permissionResult;
     });
 }

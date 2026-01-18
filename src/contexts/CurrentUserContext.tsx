@@ -2,6 +2,8 @@ import { createContext, FC, PropsWithChildren, useState, useEffect } from 'react
 import { authService, CaptchaResponse, LoginData, RegisterPayload, RegisterPromise, RestorePasswordPayload, UpdateUserPayload, User } from '../utils/api/authService';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { requestNotificationPermission } from '../utils/serviceFuncs/requestNotificationPermission';
+import { subscribeUserToPushNotifications } from '../utils/serviceFuncs/subscribeUserToPushNotifications';
+import { sendPushSubscriptionToServer } from '../utils/serviceFuncs/sendPushSubscriptionToServer';
 
 type CurrentUserContext = {
     currentUser: User | null;
@@ -103,7 +105,13 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
             console.log('Push notifications not supported.');
             return;
         } else if (profile.data?.data) {
-            requestNotificationPermission();
+            requestNotificationPermission().then((permission) => {
+                if (permission === 'granted') {
+                    subscribeUserToPushNotifications().then((subscription) => {
+                        sendPushSubscriptionToServer(subscription);
+                    });
+                }
+            });
         }
     }, [profile.data?.data]);
 
