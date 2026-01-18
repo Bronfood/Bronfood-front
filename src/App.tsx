@@ -31,6 +31,7 @@ import EditAdministrator from './pages/Catering/Administrators/EditAdministrator
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
+import { subscribeUser } from './utils/pushNotifications/pushNotifications';
 
 function App() {
     const handleClick = () => {

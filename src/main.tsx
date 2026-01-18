@@ -8,6 +8,7 @@ import { CurrentUserProvider } from './contexts/CurrentUserContext.tsx';
 import { RestaurantsProvider } from './contexts/RestaurantsContext.tsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { MapProvider } from './contexts/MapContext.tsx';
+import { registerServiceWorker } from './utils/serviceFuncs/registerServiceWorker.ts';
 
 const queryClient = new QueryClient();
 
@@ -27,15 +28,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </React.StrictMode>
 );
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker
-            .register('../sw.js')
-            .then((reg) => {
-                console.log('Service Worker registered', reg);
-            })
-            .catch((err) => {
-                console.error('Service Worker registration failed:', err);
-            });
-    });
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+    registerServiceWorker();
 }

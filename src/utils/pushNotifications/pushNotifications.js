@@ -1,6 +1,7 @@
-export const subscribeUser = async () => {
+export async function subscribeUser() {
     const registration = await navigator.serviceWorker.ready;
-    const publicVapidKey = 'BG134ti7dvWXp-N92uCbqb7VZ3Ic7PWbScqaSG2O7tL6LhExLO6LH3AYBJ6u1jNhFg04B3zPv935ZLEt9PvPUDE';
+    console.log(registration);
+    const publicVapidKey = 'BHl_Fh--oPYfT1WHTTH_DPKPfI6nTUWnQNeDLlSAjKZzLZloIbSY1ht9Sb0Vfd_iMyBPaoZivU-7Vkw44KYtfMU';
 
     const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
 
@@ -9,14 +10,16 @@ export const subscribeUser = async () => {
         applicationServerKey: convertedVapidKey,
     });
 
-    await fetch('https://localhost:3000/subscribe', {
+    await fetch('http://localhost:3000/subscribe', {
         method: 'POST',
         body: JSON.stringify(subscription),
         headers: {
             'Content-Type': 'application/json',
         },
     });
-};
+
+    console.log('Push subscription sent to server', subscription);
+}
 
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
