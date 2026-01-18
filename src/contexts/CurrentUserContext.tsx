@@ -1,6 +1,7 @@
-import { createContext, FC, PropsWithChildren, useState } from 'react';
+import { createContext, FC, PropsWithChildren, useState, useEffect } from 'react';
 import { authService, CaptchaResponse, LoginData, RegisterPayload, RegisterPromise, RestorePasswordPayload, UpdateUserPayload, User } from '../utils/api/authService';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult, useQueryClient } from '@tanstack/react-query';
+import { requestNotificationPermission } from '../utils/serviceFuncs/requestNotificationPermission';
 
 type CurrentUserContext = {
     currentUser: User | null;
@@ -95,6 +96,16 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
         mutationFn: (variables: { newPassword: string; reNewPassword: string; code: string }) => authService.confirmRestorePassword({ phone, newPassword: variables.newPassword, reNewPassword: variables.reNewPassword, code: variables.code }),
         onSuccess: () => profile.refetch(),
     });
+
+    useEffect(() => {
+        if (!('Notification' in window) && !('serviceWorker' in navigator)) {
+            // eslint-disable-next-line no-console
+            console.log('Push notifications not supported.');
+            return;
+        } else if (profile.data?.data) {
+            requestNotificationPermission();
+        }
+    }, [profile.data?.data]);
 
     return (
         <CurrentUserContext.Provider
