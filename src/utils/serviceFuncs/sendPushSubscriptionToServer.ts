@@ -1,4 +1,4 @@
-export function sendPushSubscriptionToServer(subscription) {
+export function sendPushSubscriptionToServer(subscription: PushSubscription) {
     return fetch('http://localhost:3000/subscribe', {
         method: 'POST',
         headers: {

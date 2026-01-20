@@ -108,7 +108,7 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
             requestNotificationPermission().then((permission) => {
                 if (permission === 'granted') {
                     subscribeUserToPushNotifications().then((subscription) => {
-                        sendPushSubscriptionToServer(subscription);
+                        if (subscription) sendPushSubscriptionToServer(subscription);
                     });
                 }
             });
