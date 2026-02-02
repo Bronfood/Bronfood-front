@@ -1,0 +1,20 @@
+@use '../../styles/variables';
+
+.about-us {
+    &__layout {
+        display: grid;
+        row-gap: 33px;
+        padding: 0 14px;
+    }
+
+    &__main {
+        background-color: #fff1e1;
+        padding: 13px 18px;
+        color: variables.$grey;
+        border-radius: 11px;
+    }
+
+    &__back {
+        background-image: url('../../vendor/images/icons/arrow-back.svg');
+    }
+}

@@ -16,6 +16,7 @@ function FeedbackPopup() {
                 <div className={styles['feedback-popup__tel']}>+7 (999) 999-99-99</div>
                 <div className={styles['feedback-popup__links']}>
                     <Link to="/about-us">{t('pages.feedback.aboutUs')}</Link>
+                    <Link to="/lisence-agreement">{t('pages.feedback.lisenceAgreement')}</Link>
                 </div>
             </div>
         </Popup>
