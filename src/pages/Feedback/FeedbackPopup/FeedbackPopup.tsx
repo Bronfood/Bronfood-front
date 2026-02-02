@@ -13,7 +13,7 @@ function FeedbackPopup() {
     return (
         <Popup title={t('pages.feedback.feedback')} arrowBack previousPageRoute="/" onClose={onClose}>
             <div className={styles['feedback-popup__layout']}>
-                <div className={styles['feedback-popup__tel']}>+7 (999) 999-99-99</div>
+                <div className={styles['feedback-popup__tel']}>+7 (702) 836 37 77</div>
                 <div className={styles['feedback-popup__links']}>
                     <Link to="/about-us">{t('pages.feedback.aboutUs')}</Link>
                     <Link to="/lisence-agreement">{t('pages.feedback.lisenceAgreement')}</Link>
