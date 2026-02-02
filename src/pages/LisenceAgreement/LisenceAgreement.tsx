@@ -15,7 +15,7 @@ function LisenceAgreement() {
                 <Paragraphs paragraphs={lisenceAgreement.introduction.paragraphs} />
                 {lisenceAgreement.main.articles.map((a: (typeof lisenceAgreement.main.articles)[0]) => {
                     return (
-                        <article>
+                        <article key={a.id}>
                             <h3 className={styles['lisence-agreement__heading']}>{`${a.id}. ${a.title}`}</h3>
                             <Paragraphs paragraphs={a.paragraphs} />
                         </article>
@@ -29,8 +29,12 @@ function LisenceAgreement() {
 function Paragraphs({ paragraphs }: { paragraphs: string[] }) {
     return (
         <div className={styles['lisence-agreement__paragraphs-container']}>
-            {paragraphs.map((p) => {
-                return <p className={styles['lisence-agreement__paragraph']}>{p}</p>;
+            {paragraphs.map((p, index) => {
+                return (
+                    <p key={index + p.length} className={styles['lisence-agreement__paragraph']}>
+                        {p}
+                    </p>
+                );
             })}
         </div>
     );
