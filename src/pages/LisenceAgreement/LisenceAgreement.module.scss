@@ -8,17 +8,22 @@
         padding: 0 14px;
     }
 
+    &__heading {
+        color: variables.$grey;
+    }
+
     &__paragraphs-container {
         display: flex;
         flex-direction: column;
         gap: 10px;
+        padding: 10px 0;
     }
 
     &__paragraph {
         font-size: 14px;
         font-weight: 400;
         line-height: 1.4;
-        color: variables.$black;
+        color: variables.$grey;
         text-align: justify;
     }
 }

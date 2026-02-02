@@ -16,7 +16,7 @@ function LisenceAgreement() {
                 {lisenceAgreement.main.articles.map((a: (typeof lisenceAgreement.main.articles)[0]) => {
                     return (
                         <article>
-                            <h3>{`${a.id}. ${a.title}`}</h3>
+                            <h3 className={styles['lisence-agreement__heading']}>{`${a.id}. ${a.title}`}</h3>
                             <Paragraphs paragraphs={a.paragraphs} />
                         </article>
                     );
