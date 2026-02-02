@@ -334,6 +334,7 @@ i18n
                             describeYourProblemOrLeaveFeedback: 'Опишите свою проблему или оставьте пожелания',
                             submit: 'Отправить',
                             aboutUs: 'О нас',
+                            lisenceAgreement: 'Публичная оферта',
                             preview: 'Превью',
                             offerAgreement: 'Договор оферты',
                             privacyPolicy: 'Политика конфиденциальности',
