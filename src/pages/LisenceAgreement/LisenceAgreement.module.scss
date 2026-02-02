@@ -1,20 +1,24 @@
 @use '../../styles/variables';
 
 .lisence-agreement {
-    &__layout {
-        display: grid;
-        row-gap: 33px;
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         padding: 0 14px;
     }
 
-    &__main {
-        background-color: #fff1e1;
-        padding: 13px 18px;
-        color: variables.$grey;
-        border-radius: 11px;
+    &__paragraphs-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    &__back {
-        background-image: url('../../vendor/images/icons/arrow-back.svg');
+    &__paragraph {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+        text-align: justify;
     }
 }

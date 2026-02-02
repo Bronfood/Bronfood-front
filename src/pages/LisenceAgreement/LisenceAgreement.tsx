@@ -1,6 +1,7 @@
 import Popup from '../../components/Popups/Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import styles from './LisenceAgreement.module.scss';
+import { lisenceAgreement } from './data';
 
 function LisenceAgreement() {
     const navigate = useNavigate();
@@ -9,12 +10,29 @@ function LisenceAgreement() {
     };
 
     return (
-        <Popup title="Публичная оферта (Лицензионное соглашение)" arrowBack previousPageRoute="/feedback" onClose={onClose}>
-            <div className={styles['lisence-agreement__layout']}>
-                <div className={styles['lisence-agreement__main']}>Бронфуд-это маркетплейс для заказа еды на вынос. Больше не нужно ждать, когда приготовят ваш заказ. Оплачивайте и приходите, когда уже всё готово!</div>
-                <div>Юридическое название: ТОО Бронфуд БИН: 240340023652 Местоположение: Казахстан, город Астана, район Алматы, улица ШамшиКалдаякова, дом 1, кв. 3, почтовый индекс Z01B9H2</div>
+        <Popup title={lisenceAgreement.title} arrowBack previousPageRoute="/feedback" onClose={onClose}>
+            <div className={styles['lisence-agreement__container']}>
+                <Paragraphs paragraphs={lisenceAgreement.introduction.paragraphs} />
+                {lisenceAgreement.main.articles.map((a: (typeof lisenceAgreement.main.articles)[0]) => {
+                    return (
+                        <article>
+                            <h3>{`${a.id} ${a.title}`}</h3>
+                            <Paragraphs paragraphs={a.paragraphs} />
+                        </article>
+                    );
+                })}
             </div>
         </Popup>
+    );
+}
+
+function Paragraphs({ paragraphs }) {
+    return (
+        <div className={styles['lisence-agreement__paragraphs-container']}>
+            {paragraphs.map((p: string) => {
+                return <p className={styles['lisence-agreement__paragraph']}>{p}</p>;
+            })}
+        </div>
     );
 }
 
