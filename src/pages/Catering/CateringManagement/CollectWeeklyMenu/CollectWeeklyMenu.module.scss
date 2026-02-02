@@ -1,0 +1,112 @@
+@use '../../../../styles/variables';
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 17px;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__name {
+        color: variables.$grey;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__button {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        background-size: cover;
+    }
+
+    &__edit {
+        background-image: url('/src/vendor/images/icons/buttonIconRound/edit.svg');
+    }
+
+    &__delete {
+        background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+    }
+
+    &__meal {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &_name {
+            font-weight: 400;
+            font-size: 14px;
+            color: variables.$light-gray;
+        }
+
+        &_price {
+            font-weight: 400;
+            font-size: 14px;
+            color: variables.$grey;
+        }
+    }
+}
+
+.content {
+    padding: 24px 38.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title {
+        font-size: 20px;
+        text-align: center;
+        font-weight: 500;
+        padding-bottom: 25px;
+    }
+
+    &__description {
+        font-weight: 400;
+        text-align: center;
+        font-size: 14px;
+        color: variables.$grey-subtitle;
+        padding-bottom: 48px;
+    }
+}
+
+.submit {
+    padding: 0 21.5px;
+}
+
+.confirmation-popup-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 122px;
+    position: fixed;
+    z-index: 2;
+    background: rgb(135 133 133 / 75%);
+    backdrop-filter: blur(2.5px);
+}
+
+.preloader-wrapper {
+    position: absolute;
+}

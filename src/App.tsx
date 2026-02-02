@@ -38,6 +38,8 @@ import MealList from './pages/Catering/CateringManagement/MealList/MealList';
 import EditMeal from './pages/Catering/CateringManagement/EditMeal/EditMeal';
 import AddCategory from './pages/Catering/CateringManagement/AddCategory/AddCategory';
 import EditCategory from './pages/Catering/CateringManagement/EditCategory/EditCategory';
+import CollectWeeklyMenu from './pages/Catering/CateringManagement/CollectWeeklyMenu/CollectWeeklyMenu';
+import AddCategoryToWeeklyMenu from './pages/Catering/CateringManagement/AddCategoryToWeeklyMenu/AddCategoryToWeeklyMenu';
 
 function App() {
     const [city, setCity] = useState('');
@@ -81,6 +83,9 @@ function App() {
                     <Route path=":cateringId/menu/category/:categoryId" element={<EditCategory />} />
                     <Route path=":cateringId/menu/add" element={<AddMeal />} />
                     <Route path=":cateringId/menu/edit/:mealId" element={<EditMeal />} />
+
+                    <Route path=":cateringId/collect-weekly-menu" element={<CollectWeeklyMenu />} />
+                    <Route path=":cateringId/collect-weekly-menu/add-category-weekly-menu" element={<AddCategoryToWeeklyMenu />} />
 
                     <Route path="administrators">
                         <Route index element={<Administrators />} />

@@ -2,6 +2,7 @@ import { CateringServiceMock } from './cateringServiceMock';
 
 export type VenueType = { type: number; name: string };
 export const weekdayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export type TimeString = `${number}:${number}`;
 
 export type Day = {
@@ -27,6 +28,26 @@ export type Category = {
      * Category's meals
      */
     meals?: CateringMeal[];
+};
+
+export type DailyCategory = {
+    /**
+     * Category's id
+     */
+    id: number;
+    /**
+     * Category's name
+     */
+    name: string;
+    /**
+     * Category's meals
+     */
+    meals?: CateringMeal[];
+};
+
+export type WeeklyMenu = {
+    daily_categories?: DailyCategory[];
+    weekday: Weekday;
 };
 
 export type MealSize = {
@@ -190,7 +211,7 @@ export type Catering = {
     /**
      * Catering's type
      */
-    type: 'fastFood' | 'cafe' | 'cafeBar';
+    type: 'fastFood' | 'cafe' | 'cafeBar' | 'businessCenter';
     /**
      * Catering's working hours for each day of the week
      */
@@ -214,6 +235,7 @@ export type Catering = {
      * Catering's administrators
      */
     administrators?: Administrator[];
+    weeklyMenu?: WeeklyMenu[];
 };
 
 export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
@@ -222,7 +244,7 @@ export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
     close_time: null,
 }));
 
-export const TYPES = ['fastFood', 'cafe', 'cafeBar'].map((type, index) => {
+export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'].map((type, index) => {
     return { type: index, name: type };
 });
 
@@ -248,6 +270,11 @@ export interface CateringService {
     getCategories: () => Promise<{ data: Category[] }>;
     getCategoryById: (id: number) => Promise<{ data: Category }>;
     createCategory: (data: Omit<Category, 'id'>) => Promise<{ data: Category }>;
+
+    getWeeklyMenu: () => Promise<{ data: WeeklyMenu[] }>;
+    getWeeklyMenuByWeekday: (weekday: string) => Promise<{ data: WeeklyMenu }>;
+    addCategoryToWeeklyMenu: (weekday: Weekday, category: Omit<DailyCategory, 'id'>) => Promise<{ data: WeeklyMenu }>;
+    deleteCategoryToWeeklyMenu: (weekday: Weekday, dailyCategoryId: number) => Promise<{ data: WeeklyMenu }>;
 }
 
 export const cateringService = new CateringServiceMock();

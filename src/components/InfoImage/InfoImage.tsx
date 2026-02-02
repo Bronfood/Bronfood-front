@@ -5,7 +5,7 @@ interface InfoImage {
     /**
      * Choose type of image
      */
-    mode: 'red_tube' | 'without_tube' | 'stars_tube' | 'default_screen';
+    mode: 'red_tube' | 'without_tube' | 'stars_tube' | 'default_screen' | 'question_tube';
 }
 
 const InfoImage: FC<InfoImage> = (props) => {

@@ -1,4 +1,4 @@
-import { Administrator, Category, Catering, CateringMeal } from './cateringService';
+import { Administrator, Category, Catering, CateringMeal, DailyCategory, WeeklyMenu } from './cateringService';
 import restaurant1 from './MockImages/restaurant1.png';
 import restaurant2 from './MockImages/restaurant2.png';
 import restaurant3 from './MockImages/restaurant3.png';
@@ -6,6 +6,7 @@ import meal1 from './MockImages/meal1.png';
 import meal2 from './MockImages/meal2.jpg';
 import meal3 from './MockImages/meal3.jpg';
 import drink1 from './MockImages/drink1.png';
+import dessert1 from './MockImages/dessert1.png';
 
 export const emptyCaterings: Catering[] = [
     {
@@ -69,7 +70,7 @@ export const emptyCaterings: Catering[] = [
         cancellationTime: 7,
     },
     {
-        id: 4,
+        id: 3,
         photo: restaurant3,
         name: 'Moon',
         description: 'Необычные цветные бургеры и сочная пицца',
@@ -91,6 +92,71 @@ export const emptyCaterings: Catering[] = [
         },
         type: 'cafeBar',
         cancellationTime: 5,
+    },
+    {
+        id: 4,
+        photo: drink1,
+        name: 'Рестик 4',
+        description: 'Не самые вкусные бургеры',
+        rating: 4.3,
+        address: 'Казахстан, Астана, ул. Акмешит, д 19А',
+        coordinates: { latitude: 51.095427, longitude: 71.415832 },
+        tags: [{ name: 'сок' }, { name: 'соус' }, { name: 'оладьи' }],
+        workingTime: {
+            schedule: [
+                { weekday: 0, open_time: '07:00', close_time: '23:00' },
+                { weekday: 1, open_time: '08:00', close_time: '11:00' },
+                { weekday: 2, open_time: '08:00', close_time: '20:00' },
+                { weekday: 3, open_time: '08:00', close_time: '20:00' },
+                { weekday: 4, open_time: '08:00', close_time: '22:00' },
+                { weekday: 5, open_time: '08:00', close_time: '22:00' },
+                { weekday: 6, open_time: null, close_time: null },
+            ],
+            is24h: false,
+        },
+        type: 'businessCenter',
+        cancellationTime: 5,
+        weeklyMenu: [
+            {
+                weekday: 'monday',
+                daily_categories: [
+                    {
+                        id: 1,
+                        name: 'Первое(суп)',
+                        meals: [
+                            {
+                                id: 1,
+                                name: 'Куриный донер',
+                                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                                photo: meal1,
+                                price: 1050,
+                                disposableTableware: true,
+                                waitingTime: 15,
+                                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                                is_visible: true,
+                            },
+                        ],
+                    },
+                    {
+                        id: 3,
+                        name: 'Второе(доннер)',
+                        meals: [
+                            {
+                                id: 1,
+                                name: 'Куриный донер',
+                                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                                photo: meal1,
+                                price: 1050,
+                                disposableTableware: true,
+                                waitingTime: 15,
+                                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                                is_visible: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
 ];
 
@@ -243,6 +309,77 @@ export const emptyMeals: CateringMeal[] = [
         tags: [{ name: 'сладкое' }, { name: 'десерт' }],
         is_visible: true,
     },
+    {
+        id: 4,
+        name: 'Куриный донер',
+        description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+        photo: meal1,
+        price: 1050,
+        disposableTableware: true,
+        mealSizes: [
+            { name: 'Средний', size: '300 грамм', price: 500 },
+            { name: 'Большой', size: '500 грамм', price: 600 },
+        ],
+        mealSauces: [],
+        mealAdditives: [],
+        tags: [{ name: 'вега' }, { name: 'овощи' }],
+        is_visible: true,
+    },
+    {
+        id: 5,
+        name: 'Зеленый чай',
+        description: 'Вкусный зеленый чай из Японии. Подается с медом.',
+        photo: meal2,
+        price: 200,
+        disposableTableware: false,
+        mealSizes: [
+            { name: 'Средний', size: '300 грамм', price: 500 },
+            { name: 'Большой', size: '500 грамм', price: 600 },
+        ],
+        mealSauces: [],
+        mealAdditives: [],
+        tags: [{ name: 'чай' }, { name: 'зеленый' }],
+        is_visible: true,
+    },
+    {
+        id: 6,
+        name: 'Смузи',
+        description: 'Из свежих фруктов.',
+        photo: dessert1,
+        price: 400,
+        disposableTableware: false,
+        mealSizes: [],
+        mealSauces: [],
+        mealAdditives: [],
+        tags: [{ name: 'смузи' }, { name: 'вега' }],
+        is_visible: true,
+    },
+    {
+        id: 7,
+        name: 'Бургер',
+        description: 'Слоеный бургер с булочкой с кунжутом',
+        photo: restaurant1,
+        price: 700,
+        disposableTableware: false,
+        mealSizes: [],
+        mealSauces: [],
+        mealAdditives: [],
+        tags: [{ name: 'бургер' }, { name: 'огурчики' }],
+        is_visible: true,
+    },
+    {
+        id: 8,
+        name: 'Картофель фри',
+        description: 'Запеченый с сыром',
+        photo: restaurant2,
+        price: 1200,
+        disposableTableware: false,
+        mealSizes: [],
+        mealSauces: [],
+        mealAdditives: [],
+        tags: [{ name: 'нагетсы' }, { name: 'фастфуд' }],
+        is_visible: true,
+    },
 ];
 
 export const emptyCategories: Category[] = [
@@ -359,4 +496,116 @@ export const emptyCategories: Category[] = [
             },
         ],
     }, */
+];
+
+export const emptyDailyCategorys: DailyCategory[] = [
+    {
+        id: 1,
+        name: 'Первое(супы)',
+        meals: [
+            {
+                id: 6,
+                name: 'Борщ',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+            {
+                id: 5,
+                name: 'Солянка',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+            {
+                id: 4,
+                name: 'Пельмени',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+        ],
+    },
+    {
+        id: 3,
+        name: 'Второе(не супы)',
+        meals: [
+            {
+                id: 1,
+                name: 'Манты',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+            {
+                id: 2,
+                name: 'Плов',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+            {
+                id: 3,
+                name: 'Лагман',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
+                photo: meal1,
+                price: 4100,
+                disposableTableware: true,
+                waitingTime: 15,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+            },
+        ],
+    },
+];
+
+export const emptyWeeklyMenu: WeeklyMenu[] = [
+    {
+        daily_categories: emptyDailyCategorys,
+        weekday: 'monday',
+    },
+    {
+        daily_categories: [],
+        weekday: 'tuesday',
+    },
+    {
+        daily_categories: [],
+        weekday: 'wednesday',
+    },
+    {
+        daily_categories: [],
+        weekday: 'thursday',
+    },
+    {
+        daily_categories: emptyDailyCategorys,
+        weekday: 'friday',
+    },
+    {
+        daily_categories: [],
+        weekday: 'saturday',
+    },
+    {
+        daily_categories: [],
+        weekday: 'sunday',
+    },
 ];

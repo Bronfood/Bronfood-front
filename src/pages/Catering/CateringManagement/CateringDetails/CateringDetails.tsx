@@ -47,6 +47,10 @@ const CateringDetails = () => {
         navigate(`/catering/${cateringId}/menu`);
     };
 
+    const onCollectWeeklyMenu = () => {
+        navigate(`/catering/${cateringId}/collect-weekly-menu`);
+    };
+
     const onEditСatering = () => {
         navigate(`/catering/${cateringId}/edit`);
     };
@@ -59,6 +63,11 @@ const CateringDetails = () => {
                     <ButtonUnderline onClick={onEditСatering}>{t('pages.cateringManagement.buttonEditCatering')}</ButtonUnderline>
                     {сatering && <CateringCard card={сatering.data} onDelete={handleDeleteClick} />}
                 </div>
+                {сatering?.data.type === 'businessCenter' && (
+                    <div className={`${styles['container']} ${styles['container__collect']}`}>
+                        <ButtonUnderline onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.buttonCollectWeeklyMenu')}</ButtonUnderline>
+                    </div>
+                )}
                 <div className={`${styles['container']} ${styles['container__menu']}`}>
                     <ButtonUnderline onClick={onEditMenu}>{t('pages.cateringManagement.buttonEditMenu')}</ButtonUnderline>
                     {сatering?.data.categories && <CategoriesList />}
