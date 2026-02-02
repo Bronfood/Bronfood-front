@@ -13,7 +13,7 @@ import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 import RestorePassword from './pages/RestorePassword/RestorePassword';
 import MealPage from './pages/MealPage/MealPage';
-import AboutUs from './components/AboutUs/AboutUs';
+import AboutUs from './pages/AboutUs/AboutUs';
 import Feedback from './pages/Feedback/Feedback';
 import Favorites from './pages/Favorites/Favorites';
 import Search from './pages/Search/Search';

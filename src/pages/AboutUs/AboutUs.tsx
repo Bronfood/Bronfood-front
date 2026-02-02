@@ -1,4 +1,4 @@
-import Popup from '../Popups/Popup/Popup';
+import Popup from '../../components/Popups/Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import styles from './AboutUs.module.scss';
 
