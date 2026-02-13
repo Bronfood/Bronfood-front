@@ -2,10 +2,9 @@ export function subscribeUserToPushNotifications() {
     return navigator.serviceWorker
         .getRegistration()
         .then(function (registration) {
-            const publicVapidKey = 'BHl_Fh--oPYfT1WHTTH_DPKPfI6nTUWnQNeDLlSAjKZzLZloIbSY1ht9Sb0Vfd_iMyBPaoZivU-7Vkw44KYtfMU';
             const subscribeOptions = {
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+                applicationServerKey: urlBase64ToUint8Array(`${import.meta.env.VITE_VAPID_PUBLIC_KEY}`),
             };
             if (registration) {
                 return registration.pushManager.subscribe(subscribeOptions);
