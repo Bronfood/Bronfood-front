@@ -104,7 +104,7 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
             // eslint-disable-next-line no-console
             console.log('Push notifications not supported.');
             return;
-        } else if (profile.data?.data) {
+        } else if (profile.data?.data && Notification.permission !== 'granted') {
             requestNotificationPermission().then((permission) => {
                 if (permission === 'granted') {
                     subscribeUserToPushNotifications().then((subscription) => {

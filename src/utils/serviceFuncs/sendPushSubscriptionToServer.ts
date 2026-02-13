@@ -1,8 +1,10 @@
 export function sendPushSubscriptionToServer(subscription: PushSubscription) {
-    return fetch('http://localhost:3000/subscribe', {
+    const token = localStorage.getItem('token');
+    return fetch(`${import.meta.env.VITE_API_URL}/api/notifications/subscribe/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(subscription),
     }).then(async function (response) {
