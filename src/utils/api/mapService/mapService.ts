@@ -1,4 +1,4 @@
-import { MapServiceMock } from './mapServiceMock';
+import { MapServiceReal } from './mapServiceReal';
 
 export type City = {
     id: number;
@@ -13,4 +13,4 @@ export interface MapService {
     getCities: () => Promise<{ data: City[] }>;
 }
 
-export const mapService = new MapServiceMock();
+export const mapService = new MapServiceReal();
