@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 export function registerServiceWorker() {
     return navigator.serviceWorker
-        .register('../../../service-worker.js')
+        .register('/service-worker.js')
         .then(function (registration) {
             console.log('Service worker successfully registered.');
             return registration;
