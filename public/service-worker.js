@@ -7,6 +7,5 @@ self.addEventListener('push', (event) => {
         icon: '/bronfood-fav.svg',
         vibrate: [200, 100, 200],
     };
-
     event.waitUntil(self.registration.showNotification(title, options));
 });
