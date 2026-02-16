@@ -59,6 +59,7 @@ export class AuthServiceReal implements AuthService {
         const { access } = result.data;
         localStorage.setItem('token', access);
         delete result.data.access;
+        return result;
     }
 
     async restorePassword({ phone }: RestorePasswordPayload): Promise<void> {
