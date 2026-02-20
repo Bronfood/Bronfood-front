@@ -1,5 +1,5 @@
 interface FetchOptions extends RequestInit {
-    data?: object;
+    data?: object | FormData;
 }
 
 /**
@@ -14,7 +14,8 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
     if (token && endpoint !== 'api/auth/jwt/refresh/') {
         headers.Authorization = `Bearer ${token}`;
     }
-    if (data) {
+    const isFormData = data instanceof FormData;
+    if (data && !isFormData) {
         headers['Content-Type'] = 'application/json;charset=utf-8';
     }
     const options: RequestInit = {
@@ -26,8 +27,13 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
         credentials: 'include',
         ...customOptions,
     };
+
     if (data) {
-        options.body = JSON.stringify(data);
+        if (isFormData) {
+            options.body = data;
+        } else {
+            options.body = JSON.stringify(data);
+        }
     }
     try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, options);
