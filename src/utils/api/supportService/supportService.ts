@@ -1,4 +1,4 @@
-import { SupportServiceMock } from './supportServiceMock';
+import { SupportServiceReal } from './supportServiceReal';
 
 export type Support = {
     /**
@@ -36,7 +36,7 @@ export type Support = {
 };
 
 export interface SupportService {
-    addSupportRequest: (data: Omit<Support, 'id' | 'created_at' | 'status'>) => Promise<{ data: Support }>;
+    addSupportRequest: (data: FormData) => Promise<{ data: Support }>;
 }
 
-export const supportService = new SupportServiceMock();
+export const supportService = new SupportServiceReal();

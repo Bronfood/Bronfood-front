@@ -17,6 +17,8 @@ import Preloader from '../../components/Preloader/Preloader';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import styles from './Support.module.scss';
 import { useSupport } from '../../utils/hooks/useSupport/useSupport';
+import { dataURLtoFile } from '../../utils/serviceFuncs/dataURLtoFile';
+import { formatPhoneNumber } from '../../utils/serviceFuncs/formatPhoneNumber';
 
 const Support: FC = () => {
     const { t } = useTranslation();
@@ -43,14 +45,20 @@ const Support: FC = () => {
     };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const supportData = {
-            user_name: data.nameClient,
-            phone: data.phoneNumber,
-            email: data.emailClient,
-            message: data.messageClient,
-            images: data.imageFormSupport || [],
-        };
-        await mutateAsync(supportData);
+        const formData = new FormData();
+        formData.append('name', data.nameClient);
+        formData.append('phone', formatPhoneNumber(data.phoneNumber));
+        formData.append('email', data.emailClient);
+        formData.append('message', data.messageClient);
+
+        if (previewImages && previewImages.length > 0) {
+            previewImages.forEach((imageStr, index) => {
+                const file = dataURLtoFile(imageStr, `image-${index}.png`);
+                formData.append('images', file);
+            });
+        }
+
+        await mutateAsync(formData);
         setShowPopup(true);
     };
 
@@ -66,7 +74,7 @@ const Support: FC = () => {
                     <Input type="text" name="nameClient" placeholder={t('pages.support.placeholderNameClient')} nameLabel={t('pages.support.nameLabelNameClient')} register={register} errors={errors} pattern={regexClientName} />
                     <InputPhone register={register} errors={errors} />
                     <Input type="text" name="emailClient" placeholder={t('pages.support.placeholderEmailClient')} nameLabel={t('pages.support.nameLabelEmailClient')} register={register} errors={errors} pattern={regexEmail} />
-                    <Textarea name="messageClient" placeholder={t('pages.support.placeholderMessageClient')} nameLabel={t('pages.support.nameLabelMessageClient')} register={register} errors={errors} pattern={regexMessage} />
+                    <Textarea name="messageClient" placeholder={t('pages.support.placeholderMessageClient')} nameLabel={t('pages.support.nameLabelMessageClient')} register={register} errors={errors} pattern={regexMessage} required />
                     <InputImage nameLabel={t('pages.support.nameLabelPhoto')} name="imageFormSupport" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImages} multiple={true} maxFiles={5} editing={true} deleting={true} />
                 </FormInputs>
                 <Button type="submit">{t('pages.support.buttonSendRequest')}</Button>
