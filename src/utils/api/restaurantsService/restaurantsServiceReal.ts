@@ -51,8 +51,8 @@ export class RestaurantsServiceReal implements RestaurantsService {
     }
     async getRestaurantById(id: number): Promise<{ data: Restaurant }> {
         const responseData = await handleFetch(`api/restaurants/${id}/`);
-        const restaurant = this.addWorkingTime([responseData.data]);
-        return { data: restaurant[0] };
+        const restaurant = this.addWorkingTime([responseData.data])[0];
+        return { data: restaurant };
     }
     async getMeals(restaurantId: number): Promise<{ data: Meal[] }> {
         return handleFetch(`api/restaurants/${restaurantId}/meals/`);
