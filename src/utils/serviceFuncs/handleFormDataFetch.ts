@@ -1,5 +1,5 @@
-interface FetchOptions extends RequestInit {
-    data?: object;
+interface HandleFormDataFetchOptions extends RequestInit {
+    data?: FormData;
 }
 
 /**
@@ -8,17 +8,14 @@ interface FetchOptions extends RequestInit {
  * @param {} endpoint API URL's endpoint
  * @param {} options request's custom options (optional)
  */
-export const handleFetch = async (endpoint: string, { data, ...customOptions }: FetchOptions | Record<string, never> = {}) => {
+export const handleFormDataFetch = async (endpoint: string, { data, ...customOptions }: HandleFormDataFetchOptions | Record<string, never> = {}) => {
     const token = localStorage.getItem('token');
     const headers: RequestInit['headers'] = {};
     if (token && endpoint !== 'api/auth/jwt/refresh/') {
         headers.Authorization = `Bearer ${token}`;
     }
-    if (data) {
-        headers['Content-Type'] = 'application/json;charset=utf-8';
-    }
     const options: RequestInit = {
-        method: customOptions.method || 'GET',
+        method: customOptions.method || 'POST',
         headers: {
             ...headers,
             ...customOptions.headers,
@@ -27,7 +24,7 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
         ...customOptions,
     };
     if (data) {
-        options.body = JSON.stringify(data);
+        options.body = data;
     }
     try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, options);
