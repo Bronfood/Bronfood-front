@@ -1,0 +1,74 @@
+@use '../../../../styles/variables';
+
+.info-popup {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 122px;
+    position: relative;
+    z-index: 2;
+    background: rgb(135 133 133 / 75%);
+    backdrop-filter: blur(2.5px);
+}
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+    width: 345px;
+    padding: 55px 26px;
+    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
+    border-radius: 25px;
+    background: variables.$background;
+
+    &__title {
+        color: variables.$black;
+        text-align: center;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    &__close {
+        position: absolute;
+        border: 0;
+        width: 35px;
+        height: 35px;
+        top: 15px;
+        right: 15px;
+        background-color: transparent;
+        margin: 0 auto;
+
+        &::before {
+            content: '';
+            width: 22px;
+            height: 2px;
+            position: absolute;
+            top: 12px;
+            left: -4px;
+            background: variables.$grey;
+            transform: rotate(-45deg);
+        }
+
+        &::after {
+            content: '';
+            width: 22px;
+            height: 2px;
+            position: absolute;
+            top: 12px;
+            left: -4px;
+            background: variables.$grey;
+            transform: rotate(45deg);
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

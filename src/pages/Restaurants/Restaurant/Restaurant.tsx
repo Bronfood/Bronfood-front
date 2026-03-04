@@ -16,8 +16,10 @@ import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUse
 import { useBasketMutations } from '../../../utils/hooks/useBasket/useBasket';
 import { useReviews } from '../../../utils/hooks/useReviews/useReviews';
 import Reviews from './Reviews/Reviews';
+import RestaurantInfoPopup from './RestaurantInfoPopup/RestaurantInfoPopup';
 
 function Restaurant() {
+    const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
     const [isMealPageOpen, setIsMealPageOpen] = useState(false);
     const [selectedMealTypes, setSelectedMealTypes] = useState<MealType[]>([]);
     const [isReviewsVisible, setIsReviewsVisible] = useState(false);
@@ -82,7 +84,7 @@ function Restaurant() {
 
     return (
         <>
-            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} restaurant={restaurant}>
+            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} isInfoPopupOpen={isInfoPopupOpen} setIsInfoPopupOpen={setIsInfoPopupOpen} restaurant={restaurant}>
                 <RestaurantImage image={restaurant.photo} />
                 <RestaurantDescription name={restaurant.name} address={restaurant.address} workingTime={restaurant.workingTime} rating={rating} reviews={reviewsCount} onReviews={handleReviewsClick} description={restaurant.description} />
                 {isReviewsVisible ? (
@@ -94,6 +96,7 @@ function Restaurant() {
                     </>
                 )}
             </RestaurantPopup>
+            {isInfoPopupOpen && <RestaurantInfoPopup close={() => setIsInfoPopupOpen(false)} />}
             <Outlet />
         </>
     );

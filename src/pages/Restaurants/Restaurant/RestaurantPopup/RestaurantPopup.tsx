@@ -11,11 +11,13 @@ type RestaurantPopupProps = {
     close: () => void;
     isMealPageOpen: boolean;
     setIsMealPageOpen: Dispatch<SetStateAction<boolean>>;
+    isInfoPopupOpen: boolean;
+    setIsInfoPopupOpen: Dispatch<SetStateAction<boolean>>;
     children?: ReactNode;
     restaurant: Restaurant;
 };
 
-const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, children, restaurant }: RestaurantPopupProps) => {
+const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, isInfoPopupOpen, setIsInfoPopupOpen, children, restaurant }: RestaurantPopupProps) => {
     const { addFavorite, deleteFavorite } = useFavoritesMutations();
     const params = useParams();
     const mealId = parseInt(params.mealId ? params.mealId : '');
@@ -25,7 +27,7 @@ const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, children, r
             close();
         }
     };
-    useEsc(() => !isMealPageOpen && close(), [isMealPageOpen, close]);
+    useEsc(() => (!isMealPageOpen || !isInfoPopupOpen) && close(), [isMealPageOpen, close]);
     useEffect(() => {
         if (!mealId) {
             setIsMealPageOpen(false);
@@ -46,7 +48,7 @@ const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, children, r
             <div className={styles['restaurant-popup']}>
                 <div className={styles['restaurant-popup_button-group']}>
                     <div className={styles['restaurant-popup_button']}>
-                        <Button type="button" onClick={close} icon="info" />
+                        <Button type="button" onClick={() => setIsInfoPopupOpen(true)} icon="info" />
                     </div>
                     {isLogin && (
                         <div className={styles['restaurant-popup_button']}>
