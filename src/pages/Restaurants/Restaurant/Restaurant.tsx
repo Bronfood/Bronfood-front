@@ -100,7 +100,7 @@ function Restaurant() {
                     </>
                 )}
             </RestaurantPopup>
-            {isInfoPopupOpen && <RestaurantInfoPopup close={handleInfoPopupClose} />}
+            {isInfoPopupOpen && <RestaurantInfoPopup close={handleInfoPopupClose} name={restaurant.legal_name} address={restaurant.legal_address} bin={restaurant.legal_bin} directorFullname={restaurant.legal_director_fullname} />}
             <Outlet />
         </>
     );
