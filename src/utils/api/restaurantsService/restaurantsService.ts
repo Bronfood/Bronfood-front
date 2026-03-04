@@ -136,6 +136,22 @@ export type Restaurant = {
      * Distance to restaurant
      */
     distance_km?: number;
+    /**
+     * Venue's legal address
+     */
+    legal_address: string;
+    /**
+     * Venue's bin (state register id)
+     */
+    legal_bin: string;
+    /**
+     * Venue director's full name
+     */
+    legal_director_fullname: string;
+    /**
+     * Venue's legal name
+     */
+    legal_name: string;
 };
 
 export type Review = {
