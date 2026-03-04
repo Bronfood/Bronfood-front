@@ -2,7 +2,15 @@ import { MouseEvent } from 'react';
 import styles from './RestaurantInfoPopup.module.scss';
 import { useEsc } from '../../../../utils/hooks/useEsc/useEsc';
 
-const RestaurantInfoPopup = ({ close }: { close: () => void }) => {
+type RestaurantInfoPopupProps = {
+    close: () => void;
+    name: string;
+    address: string;
+    bin: string;
+    directorFullname: string;
+};
+
+const RestaurantInfoPopup = ({ close, name, address, bin, directorFullname }: RestaurantInfoPopupProps) => {
     const handleOverlayClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
             close();
@@ -12,7 +20,11 @@ const RestaurantInfoPopup = ({ close }: { close: () => void }) => {
     return (
         <div className={styles['info-popup']} onClick={handleOverlayClick}>
             <div className={styles['popup']}>
-                <h2 className={styles['popup__title']}>asdfasdfasdf</h2>
+                <h2 className={styles['popup__title']}>Юридическая информация</h2>
+                <p>{name}</p>
+                <p>{address}</p>
+                <p>{bin}</p>
+                <p>{directorFullname}</p>
                 <button className={styles['popup__close']} onClick={() => close()}></button>
             </div>
         </div>
