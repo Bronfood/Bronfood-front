@@ -46,6 +46,10 @@ function Restaurant() {
         }
     };
     const handleReviewsClick = () => setIsReviewsVisible((prev) => !prev);
+    const handleInfoPopupClose = () => {
+        setIsInfoPopupOpen(false);
+        navigate(`/restaurants/${restaurantId}`);
+    };
     const close = () => {
         navigate('/');
     };
@@ -84,7 +88,7 @@ function Restaurant() {
 
     return (
         <>
-            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} isInfoPopupOpen={isInfoPopupOpen} setIsInfoPopupOpen={setIsInfoPopupOpen} restaurant={restaurant}>
+            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} setIsInfoPopupOpen={setIsInfoPopupOpen} restaurant={restaurant}>
                 <RestaurantImage image={restaurant.photo} />
                 <RestaurantDescription name={restaurant.name} address={restaurant.address} workingTime={restaurant.workingTime} rating={rating} reviews={reviewsCount} onReviews={handleReviewsClick} description={restaurant.description} />
                 {isReviewsVisible ? (
@@ -96,7 +100,7 @@ function Restaurant() {
                     </>
                 )}
             </RestaurantPopup>
-            {isInfoPopupOpen && <RestaurantInfoPopup close={() => setIsInfoPopupOpen(false)} />}
+            {isInfoPopupOpen && <RestaurantInfoPopup close={handleInfoPopupClose} />}
             <Outlet />
         </>
     );

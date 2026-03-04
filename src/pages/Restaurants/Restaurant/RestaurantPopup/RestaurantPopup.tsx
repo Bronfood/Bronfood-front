@@ -11,13 +11,12 @@ type RestaurantPopupProps = {
     close: () => void;
     isMealPageOpen: boolean;
     setIsMealPageOpen: Dispatch<SetStateAction<boolean>>;
-    isInfoPopupOpen: boolean;
     setIsInfoPopupOpen: Dispatch<SetStateAction<boolean>>;
     children?: ReactNode;
     restaurant: Restaurant;
 };
 
-const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, isInfoPopupOpen, setIsInfoPopupOpen, children, restaurant }: RestaurantPopupProps) => {
+const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, setIsInfoPopupOpen, children, restaurant }: RestaurantPopupProps) => {
     const { addFavorite, deleteFavorite } = useFavoritesMutations();
     const params = useParams();
     const mealId = parseInt(params.mealId ? params.mealId : '');
@@ -27,7 +26,7 @@ const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, isInfoPopup
             close();
         }
     };
-    useEsc(() => (!isMealPageOpen || !isInfoPopupOpen) && close(), [isMealPageOpen, close]);
+    useEsc(() => !isMealPageOpen && close(), [isMealPageOpen, close]);
     useEffect(() => {
         if (!mealId) {
             setIsMealPageOpen(false);
