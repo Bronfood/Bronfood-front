@@ -11,7 +11,7 @@ interface ButtonIconRoundProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     /**
      * Icon inside button
      */
-    icon?: 'close' | 'edit' | 'back' | 'favorite' | 'delete';
+    icon?: 'close' | 'edit' | 'back' | 'favorite' | 'delete' | 'info';
 }
 
 const ButtonIconRound: FC<ButtonIconRoundProps> = ({ isActive = false, icon = 'close', ...props }) => {
