@@ -311,6 +311,11 @@ i18n
                             yesterday: 'вчера',
                             daysyaAgo: 'дня назад',
                             daysAgo: 'дней назад',
+                            legalInfo: 'Юридическая информация',
+                            legalName: 'Юридическое лицо',
+                            legalAddress: 'Юридический адрес',
+                            bin: 'БИН',
+                            director: 'Руководитель',
                         },
                         meal: {
                             fee: 'Комиссия:',
