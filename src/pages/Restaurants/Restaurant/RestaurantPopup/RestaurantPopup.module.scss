@@ -27,28 +27,17 @@
         backdrop-filter: blur(2.5px);
     }
 
-    &_button {
+    &_button-group {
         position: absolute;
+        display: flex;
+        gap: 8px;
+        top: 15px;
+        right: 16px;
+    }
+
+    &_button {
         width: 43px;
         height: 41px;
         opacity: 0.85;
-        top: 15px;
-
-        &_favorite {
-            right: 69px;
-        }
-
-        &_close {
-            right: 16px;
-        }
-
-        &_like {
-            right: 69px;
-        }
-
-        &_feedback {
-            left: 20px;
-            cursor: pointer;
-        }
     }
 }

@@ -11,11 +11,12 @@ type RestaurantPopupProps = {
     close: () => void;
     isMealPageOpen: boolean;
     setIsMealPageOpen: Dispatch<SetStateAction<boolean>>;
+    setIsInfoPopupOpen: Dispatch<SetStateAction<boolean>>;
     children?: ReactNode;
     restaurant: Restaurant;
 };
 
-const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, children, restaurant }: RestaurantPopupProps) => {
+const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, setIsInfoPopupOpen, children, restaurant }: RestaurantPopupProps) => {
     const { addFavorite, deleteFavorite } = useFavoritesMutations();
     const params = useParams();
     const mealId = parseInt(params.mealId ? params.mealId : '');
@@ -44,13 +45,18 @@ const RestaurantPopup = ({ close, isMealPageOpen, setIsMealPageOpen, children, r
     return (
         <div className={styles['restaurant-popup_overlay']} onClick={handleOverlayClick}>
             <div className={styles['restaurant-popup']}>
-                {isLogin && (
-                    <div className={`${styles['restaurant-popup_button']} ${styles['restaurant-popup_button_like']}`}>
-                        <Button type="button" onClick={() => handleFavoriteClick()} icon="favorite" isActive={restaurant.isFavorite ? true : false} />
+                <div className={styles['restaurant-popup_button-group']}>
+                    <div className={styles['restaurant-popup_button']}>
+                        <Button type="button" onClick={() => setIsInfoPopupOpen(true)} icon="info" />
                     </div>
-                )}
-                <div className={`${styles['restaurant-popup_button']} ${styles['restaurant-popup_button_close']}`}>
-                    <Button type="button" onClick={close} icon="close" />
+                    {isLogin && (
+                        <div className={styles['restaurant-popup_button']}>
+                            <Button type="button" onClick={() => handleFavoriteClick()} icon="favorite" isActive={restaurant.isFavorite ? true : false} />
+                        </div>
+                    )}
+                    <div className={styles['restaurant-popup_button']}>
+                        <Button type="button" onClick={close} icon="close" />
+                    </div>
                 </div>
                 {children}
             </div>
