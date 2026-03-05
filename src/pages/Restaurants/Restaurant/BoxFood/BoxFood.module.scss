@@ -19,16 +19,17 @@
     }
 
     &__description {
-        position: relative;
         box-sizing: content-box;
-        height: 67px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
+        display: grid;
+        grid-template: 42px 1fr / repeat(2, 1fr);
+        grid-template-areas:
+            'name name'
+            'price button';
         padding: 10px 10px 15px;
     }
 
     &__name {
+        grid-area: name;
         font-size: 15px;
         font-weight: 400;
         line-height: 1.4;
@@ -36,6 +37,8 @@
     }
 
     &__price {
+        grid-area: price;
+        align-self: flex-end;
         font-size: 17px;
         font-weight: 500;
         line-height: 1.4;
@@ -43,10 +46,10 @@
     }
 
     &__button {
-        position: absolute;
+        grid-area: button;
+        place-self: flex-end end;
+        position: relative;
         width: 41px;
         height: 41px;
-        bottom: 15px;
-        right: 10px;
     }
 }
