@@ -11,6 +11,15 @@ type RestaurantInfoPopupProps = {
     directorFullname: string;
 };
 
+const Paragraph = ({ label, text }: { label: string; text: string }) => {
+    return (
+        <div className={styles['paragraph']}>
+            <span className={styles['paragraph__label']}>{label}</span>
+            <p className={styles['paragraph__text']}>{text}</p>
+        </div>
+    );
+};
+
 const RestaurantInfoPopup = ({ close, name, address, bin, directorFullname }: RestaurantInfoPopupProps) => {
     const { t } = useTranslation();
     const handleOverlayClick = (e: MouseEvent) => {
@@ -29,15 +38,6 @@ const RestaurantInfoPopup = ({ close, name, address, bin, directorFullname }: Re
                 <Paragraph label={t(`pages.restaurant.director`)} text={directorFullname} />
                 <button className={styles['popup__close']} onClick={() => close()}></button>
             </div>
-        </div>
-    );
-};
-
-const Paragraph = ({ label, text }: { label: string; text: string }) => {
-    return (
-        <div className={styles['paragraph']}>
-            <span className={styles['paragraph__label']}>{label}</span>
-            <p className={styles['paragraph__text']}>{text}</p>
         </div>
     );
 };
