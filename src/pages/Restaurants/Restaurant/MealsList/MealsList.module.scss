@@ -3,7 +3,8 @@
 .meals-list {
     height: 360px;
     flex-grow: 1;
-    padding: 15px;
+    padding: 0 15px 15px;
+    margin-top: 15px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
