@@ -40,7 +40,7 @@ function Reviews({ reviews }: { reviews: ReviewType[] }) {
     return (
         <div className={styles.reviews__container}>
             {reviews.length === 0 ? (
-                <p className={styles.reviews_empty}>{t('pages.restaurant.noReviewsYet')}</p>
+                <p className={styles[`reviews__no-reviews-message`]}>{t('pages.restaurant.noReviewsYet')}</p>
             ) : (
                 <div>
                     <h4 className={styles.reviews__title}>{t('pages.restaurant.reviews')}</h4>
