@@ -39,14 +39,20 @@ function Reviews({ reviews }: { reviews: ReviewType[] }) {
 
     return (
         <div className={styles.reviews__container}>
-            <h4 className={styles.reviews__title}>{t('pages.restaurant.reviews')}</h4>
-            <ul className={`${styles.reviews} bronfood-scrollbar `}>
-                {reviews.map((review, index) => (
-                    <li key={`${review.rating}-${index}`}>
-                        <Review review={review} />
-                    </li>
-                ))}
-            </ul>
+            {reviews.length === 0 ? (
+                <p className={styles.reviews_empty}>{t('pages.restaurant.noReviewsYet')}</p>
+            ) : (
+                <div>
+                    <h4 className={styles.reviews__title}>{t('pages.restaurant.reviews')}</h4>
+                    <ul className={`${styles.reviews} bronfood-scrollbar `}>
+                        {reviews.map((review, index) => (
+                            <li key={`${review.rating}-${index}`}>
+                                <Review review={review} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }
