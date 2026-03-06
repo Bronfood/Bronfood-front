@@ -307,6 +307,7 @@ i18n
                             drink: 'Напитки',
                             dessert: 'Десерты',
                             reviews: 'Отзывы',
+                            noReviewsYet: 'У заведения пока нет отзывов',
                             today: 'cегодня',
                             yesterday: 'вчера',
                             daysyaAgo: 'дня назад',

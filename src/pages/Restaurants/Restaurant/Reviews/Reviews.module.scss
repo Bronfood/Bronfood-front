@@ -19,6 +19,14 @@
         line-height: 1.4;
         color: variables.$light-gray;
     }
+
+    &__no-reviews-message {
+        margin: 4em auto;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: variables.$light-gray;
+    }
 }
 
 .review {
