@@ -275,6 +275,7 @@ export interface CateringService {
     getWeeklyMenuByWeekday: (weekday: string) => Promise<{ data: WeeklyMenu }>;
     addCategoryToWeeklyMenu: (weekday: Weekday, category: Omit<DailyCategory, 'id'>) => Promise<{ data: WeeklyMenu }>;
     deleteCategoryToWeeklyMenu: (weekday: Weekday, dailyCategoryId: number) => Promise<{ data: WeeklyMenu }>;
+    updateCategoryToWeeklyMenu: (weekday: Weekday, category: Partial<DailyCategory> & { id: number }) => Promise<{ data: WeeklyMenu }>;
 }
 
 export const cateringService = new CateringServiceMock();

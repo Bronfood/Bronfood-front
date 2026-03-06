@@ -15,16 +15,15 @@ import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/C
 const CollectWeeklyMenu = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [selectedDay, setSelectedDay] = useState<string | null>(null);
+    const { cateringId, day: selectedDay } = useParams<{ cateringId: string; day?: string }>();
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
-    const { cateringId } = useParams();
     const { data: menuWeekday, isLoading } = useGetWeeklyMenuByWeekday(selectedDay || '');
     const [categoryIdToDelete, setCategoryIdToDelete] = useState<number | null>(null);
     const { data: allMenuWeekday, isLoading: isLoadingAll } = useGetWeeklyMenu();
     const { mutateAsync: deleteCategoryToWeeklyMenu, isPending: isDeleting } = useDeleteCategoryToWeeklyMenu();
 
-    const handleDeleteClick = (categoryId: number) => {
-        setCategoryIdToDelete(categoryId);
+    const handleDeleteClick = (dailyCategoryId: number) => {
+        setCategoryIdToDelete(dailyCategoryId);
         setShowConfirmationPopup(true);
     };
 
@@ -40,11 +39,11 @@ const CollectWeeklyMenu = () => {
     };
 
     const handleDayClick = (day: string) => {
-        setSelectedDay(day);
+        navigate(`/catering/${cateringId}/collect-weekly-menu/${day}`);
     };
 
     const onCollectWeeklyMenu = () => {
-        navigate(`/catering/${cateringId}/collect-weekly-menu/add-category-weekly-menu`, {
+        navigate(`/catering/${cateringId}/collect-weekly-menu/${selectedDay}/add-category-weekly-menu`, {
             state: { weekday: selectedDay },
         });
     };
@@ -61,11 +60,17 @@ const CollectWeeklyMenu = () => {
         await deleteCategoryToWeeklyMenu({ weekday: selectedDay as Weekday, dailyCategoryId: categoryIdToDelete });
     };
 
+    const handleEditCategory = (dailyCategoryId: number) => {
+        navigate(`/catering/${cateringId}/collect-weekly-menu/${selectedDay}/edit-category-weekly-menu/${dailyCategoryId}`, {
+            state: { weekday: selectedDay },
+        });
+    };
+
     return (
         <>
             {isLoading || (isLoadingAll && <Preloader />)}
-            <Popup arrowBack onClose={onClose} title="Еженедельное меню">
-                <WeeklyButtons selectedDay={selectedDay} onDayClick={handleDayClick} hasDailyCategories={hasDailyCategories} />
+            <Popup arrowBack onClose={onClose} title={t('pages.cateringManagement.titleWeeklyMenu')}>
+                <WeeklyButtons selectedDay={selectedDay || null} onDayClick={handleDayClick} hasDailyCategories={hasDailyCategories} />
                 {selectedDay && menuWeekday?.data?.daily_categories && menuWeekday?.data.daily_categories.length > 0 ? (
                     <>
                         <ul className={styles.list}>
@@ -74,7 +79,7 @@ const CollectWeeklyMenu = () => {
                                     <div className={styles.list__header}>
                                         <p className={styles.list__name}>{category.name}</p>
                                         <div className={styles.list__buttons}>
-                                            <button className={`${styles.list__button} ${styles.list__edit}`}></button>
+                                            <button className={`${styles.list__button} ${styles.list__edit}`} onClick={() => handleEditCategory(category.id)}></button>
                                             <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => handleDeleteClick(category.id)}></button>
                                         </div>
                                     </div>
@@ -91,13 +96,13 @@ const CollectWeeklyMenu = () => {
                                 </li>
                             ))}
                         </ul>
-                        <ButtonIconAdd onClick={onCollectWeeklyMenu}>Добавить категорию</ButtonIconAdd>
+                        <ButtonIconAdd onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.buttonAddCategory')}</ButtonIconAdd>
                     </>
                 ) : selectedDay ? (
                     <>
                         <div className={styles.content}>
-                            <h2 className={styles.content__title}>У вас нет собранного меню</h2>
-                            <p className={styles.content__description}>Соберите дневное меню из ваших блюд</p>
+                            <h2 className={styles.content__title}>{t('pages.cateringManagement.youDonHaveCollectMenu')}</h2>
+                            <p className={styles.content__description}>{t('pages.cateringManagement.collectADailyMenuOfYourMeal')}</p>
                             <InfoImage mode="question_tube" />
                         </div>
                         <div className={styles.submit}>
@@ -108,8 +113,8 @@ const CollectWeeklyMenu = () => {
                     </>
                 ) : (
                     <div className={styles.content}>
-                        <h2 className={styles.content__title}>Выбор дня</h2>
-                        <p className={styles.content__description}>Выберите день, чтобы собрать меню на нужный день и спланировать категории заранее</p>
+                        <h2 className={styles.content__title}>{t('pages.cateringManagement.choosingDay')}</h2>
+                        <p className={styles.content__description}>{t('pages.cateringManagement.chooseDayToCollectMenuForTheDesiredDayAndPlanTheCategoriesInAdvance')}</p>
                         <InfoImage mode="without_tube" />
                     </div>
                 )}

@@ -23,7 +23,7 @@ const CategoryMealCard = ({ meal, onDelete, onToggle, isChecked = false, availab
                 )}
                 {!available && (
                     <div className={styles.card__exclude}>
-                        <ButtonIconRound icon="delete" onClick={onDelete} />
+                        <ButtonIconRound type="button" icon="delete" onClick={onDelete} />
                     </div>
                 )}
             </div>

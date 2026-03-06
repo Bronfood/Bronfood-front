@@ -8,201 +8,40 @@ import meal3 from './MockImages/meal3.jpg';
 import drink1 from './MockImages/drink1.png';
 import dessert1 from './MockImages/dessert1.png';
 
-export const emptyCaterings: Catering[] = [
+export const emptyCategories: Category[] = [
     {
         id: 1,
-        photo: restaurant1,
-        name: 'Jahu',
-        description: 'Самые вкусные донеры и кофе',
-        rating: 4.7,
-        address: 'Казахстан, Астана, улица Бухар Жырау, 34/2',
-        coordinates: { latitude: 51.09835783805425, longitude: 71.43399606766961 },
-        tags: [{ name: 'каппучино' }, { name: 'свежый салат' }, { name: 'бистро' }],
-        workingTime: {
-            schedule: [
-                { weekday: 0, open_time: '08:00', close_time: '23:00' },
-                { weekday: 1, open_time: '08:00', close_time: '20:00' },
-                { weekday: 2, open_time: '08:00', close_time: '20:00' },
-                { weekday: 3, open_time: '08:00', close_time: '20:00' },
-                { weekday: 4, open_time: '08:00', close_time: '22:00' },
-                { weekday: 5, open_time: '08:00', close_time: '22:00' },
-                { weekday: 6, open_time: '10:00', close_time: '18:00' },
-            ],
-            is24h: false,
-        },
-        type: 'cafe',
-        cancellationTime: 7,
-        categories: [
+        name: 'Еда',
+        photo: meal1,
+        meals: [
             {
                 id: 1,
-                name: 'Еда',
+                name: 'Куриный донер',
+                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
                 photo: meal1,
-            },
-            {
-                id: 2,
-                name: 'Напиток',
-                photo: drink1,
+                price: 1050,
+                disposableTableware: true,
+                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
             },
         ],
     },
     {
         id: 2,
-        photo: restaurant2,
-        name: 'Boom',
-        description: 'Самые вкусные донеры и кофе',
-        rating: 4.8,
-        address: 'Казахстан, Астана, ул. Сыгынак, 60/3',
-        coordinates: { latitude: 0, longitude: 0 },
-        tags: [{ name: 'вкусно' }, { name: 'дешево' }, { name: 'сердито' }],
-        workingTime: {
-            schedule: [
-                { weekday: 0, open_time: '08:00', close_time: '23:00' },
-                { weekday: 1, open_time: '08:00', close_time: '20:00' },
-                { weekday: 2, open_time: '08:00', close_time: '20:00' },
-                { weekday: 3, open_time: '08:00', close_time: '20:00' },
-                { weekday: 4, open_time: '08:00', close_time: '22:00' },
-                { weekday: 5, open_time: '08:00', close_time: '22:00' },
-                { weekday: 6, open_time: null, close_time: null },
-            ],
-            is24h: false,
-        },
-        type: 'fastFood',
-        cancellationTime: 7,
-    },
-    {
-        id: 3,
-        photo: restaurant3,
-        name: 'Moon',
-        description: 'Необычные цветные бургеры и сочная пицца',
-        rating: 4.8,
-        address: 'Казахстан, Астана, ул. Акмешит, д 19А',
-        coordinates: { latitude: 51.095427, longitude: 71.415832 },
-        tags: [{ name: 'сок' }, { name: 'соус' }, { name: 'оладьи' }],
-        workingTime: {
-            schedule: [
-                { weekday: 0, open_time: '07:00', close_time: '23:00' },
-                { weekday: 1, open_time: '08:00', close_time: '11:00' },
-                { weekday: 2, open_time: '08:00', close_time: '20:00' },
-                { weekday: 3, open_time: '08:00', close_time: '20:00' },
-                { weekday: 4, open_time: '08:00', close_time: '22:00' },
-                { weekday: 5, open_time: '08:00', close_time: '22:00' },
-                { weekday: 6, open_time: null, close_time: null },
-            ],
-            is24h: false,
-        },
-        type: 'cafeBar',
-        cancellationTime: 5,
-    },
-    {
-        id: 4,
+        name: 'Напиток',
         photo: drink1,
-        name: 'Рестик 4',
-        description: 'Не самые вкусные бургеры',
-        rating: 4.3,
-        address: 'Казахстан, Астана, ул. Акмешит, д 19А',
-        coordinates: { latitude: 51.095427, longitude: 71.415832 },
-        tags: [{ name: 'сок' }, { name: 'соус' }, { name: 'оладьи' }],
-        workingTime: {
-            schedule: [
-                { weekday: 0, open_time: '07:00', close_time: '23:00' },
-                { weekday: 1, open_time: '08:00', close_time: '11:00' },
-                { weekday: 2, open_time: '08:00', close_time: '20:00' },
-                { weekday: 3, open_time: '08:00', close_time: '20:00' },
-                { weekday: 4, open_time: '08:00', close_time: '22:00' },
-                { weekday: 5, open_time: '08:00', close_time: '22:00' },
-                { weekday: 6, open_time: null, close_time: null },
-            ],
-            is24h: false,
-        },
-        type: 'businessCenter',
-        cancellationTime: 5,
-        weeklyMenu: [
+        meals: [
             {
-                weekday: 'monday',
-                daily_categories: [
-                    {
-                        id: 1,
-                        name: 'Первое(суп)',
-                        meals: [
-                            {
-                                id: 1,
-                                name: 'Куриный донер',
-                                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                                photo: meal1,
-                                price: 1050,
-                                disposableTableware: true,
-                                waitingTime: 15,
-                                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                                is_visible: true,
-                            },
-                        ],
-                    },
-                    {
-                        id: 3,
-                        name: 'Второе(доннер)',
-                        meals: [
-                            {
-                                id: 1,
-                                name: 'Куриный донер',
-                                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                                photo: meal1,
-                                price: 1050,
-                                disposableTableware: true,
-                                waitingTime: 15,
-                                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                                is_visible: true,
-                            },
-                        ],
-                    },
-                ],
+                id: 2,
+                name: 'Зеленый чай',
+                description: 'Вкусный зеленый чай из Японии. Подается с медом.',
+                photo: meal2,
+                price: 200,
+                disposableTableware: false,
+                tags: [{ name: 'чай' }, { name: 'зеленый' }],
+                is_visible: false,
             },
         ],
-    },
-];
-
-export const emptyCatering: Catering = {
-    id: 2,
-    photo: restaurant3,
-    name: 'Boom',
-    description: 'Самые вкусные донеры и кофе',
-    rating: 4.8,
-    address: 'Казахстан, Астана, улица Бухар Жырау, 34/2',
-    coordinates: { latitude: 51.09835783805425, longitude: 71.43399606766961 },
-    tags: [{ name: 'веган' }, { name: 'органичное' }, { name: 'кофе' }],
-    workingTime: {
-        schedule: [
-            { weekday: 0, open_time: '08:00', close_time: '23:00' },
-            { weekday: 1, open_time: '08:00', close_time: '20:00' },
-            { weekday: 2, open_time: '08:00', close_time: '20:00' },
-            { weekday: 3, open_time: '08:00', close_time: '20:00' },
-            { weekday: 4, open_time: '08:00', close_time: '22:00' },
-            { weekday: 5, open_time: '08:00', close_time: '22:00' },
-            { weekday: 6, open_time: '10:00', close_time: '18:00' },
-        ],
-        is24h: false,
-    },
-    type: 'fastFood',
-    cancellationTime: 7,
-};
-
-export const mockCateringService: Administrator[] = [
-    {
-        id: '1',
-        login: 'Jahu',
-        password: '12345',
-        catering: emptyCaterings[0],
-    },
-    {
-        id: '2',
-        login: 'Boom',
-        password: '67890',
-        catering: emptyCaterings[1],
-    },
-    {
-        id: '3',
-        login: 'Moon',
-        password: '258693',
-        catering: emptyCaterings[2],
     },
 ];
 
@@ -310,38 +149,6 @@ export const emptyMeals: CateringMeal[] = [
         is_visible: true,
     },
     {
-        id: 4,
-        name: 'Куриный донер',
-        description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-        photo: meal1,
-        price: 1050,
-        disposableTableware: true,
-        mealSizes: [
-            { name: 'Средний', size: '300 грамм', price: 500 },
-            { name: 'Большой', size: '500 грамм', price: 600 },
-        ],
-        mealSauces: [],
-        mealAdditives: [],
-        tags: [{ name: 'вега' }, { name: 'овощи' }],
-        is_visible: true,
-    },
-    {
-        id: 5,
-        name: 'Зеленый чай',
-        description: 'Вкусный зеленый чай из Японии. Подается с медом.',
-        photo: meal2,
-        price: 200,
-        disposableTableware: false,
-        mealSizes: [
-            { name: 'Средний', size: '300 грамм', price: 500 },
-            { name: 'Большой', size: '500 грамм', price: 600 },
-        ],
-        mealSauces: [],
-        mealAdditives: [],
-        tags: [{ name: 'чай' }, { name: 'зеленый' }],
-        is_visible: true,
-    },
-    {
         id: 6,
         name: 'Смузи',
         description: 'Из свежих фруктов.',
@@ -382,53 +189,10 @@ export const emptyMeals: CateringMeal[] = [
     },
 ];
 
-export const emptyCategories: Category[] = [
+export const emptyDailyCategorys: DailyCategory[] = [
     {
         id: 1,
-        name: 'Еда',
-        photo: meal1,
-        meals: [
-            {
-                id: 1,
-                name: 'Куриный донер',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 1050,
-                disposableTableware: true,
-                mealSizes: [
-                    { name: 'Средний', size: '300 грамм', price: 2100 },
-                    { name: 'Большой', size: '500 грамм', price: 4100 },
-                ],
-                mealSauces: [
-                    { name: 'Сырный', price: 100 },
-                    { name: 'Кетчуп', price: 100 },
-                ],
-                mealAdditives: [
-                    {
-                        nameAdditive: 'Молоко',
-                        additiveUnit: [
-                            { name: 'Коровье', price: 4100 },
-                            { name: 'Птичье', price: 4100 },
-                        ],
-                    },
-                    {
-                        nameAdditive: 'Печенье',
-                        additiveUnit: [
-                            { name: 'Черный', price: 4100 },
-                            { name: 'Белый', price: 4100 },
-                        ],
-                    },
-                ],
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                is_visible: true,
-            },
-        ],
-    },
-    {
-        id: 2,
         name: 'Напиток',
-        photo: drink1,
         meals: [
             {
                 id: 2,
@@ -437,142 +201,66 @@ export const emptyCategories: Category[] = [
                 photo: meal2,
                 price: 200,
                 disposableTableware: false,
-                mealSizes: [
-                    { name: 'Средний', size: '300 мл', price: 200 },
-                    { name: 'Большой', size: '500 мл', price: 300 },
-                ],
-                mealSauces: [],
-                mealAdditives: [
-                    {
-                        nameAdditive: 'Молоко',
-                        additiveUnit: [
-                            { name: 'Коровье', price: 40 },
-                            { name: 'Птичье', price: 70 },
-                        ],
-                    },
-                    {
-                        nameAdditive: 'Печенье',
-                        additiveUnit: [
-                            { name: 'Песочное', price: 100 },
-                            { name: 'Шоколадное', price: 120 },
-                        ],
-                    },
-                ],
-                waitingTime: 10,
                 tags: [{ name: 'чай' }, { name: 'зеленый' }],
                 is_visible: false,
+                category: {
+                    id: 2,
+                    name: 'Напиток',
+                    photo: drink1,
+                },
             },
-        ],
-    },
-    /* {
-        id: 3,
-        name: 'Десерт',
-        photo: dessert1,
-        meals: [
-            {
-                id: 3,
-                name: 'Чизкейк',
-                description: 'Слоеное пироженое с клубникой и конфитюром.',
-                photo: meal3,
-                price: 500,
-                disposableTableware: false,
-                mealSizes: [
-                    { name: 'Средний', size: '300 грамм', price: 500 },
-                    { name: 'Большой', size: '500 грамм', price: 600 },
-                ],
-                mealSauces: [],
-                mealAdditives: [
-                    {
-                        nameAdditive: 'Сироп',
-                        additiveUnit: [
-                            { name: 'Клубничный', price: 50 },
-                            { name: 'Мятный', price: 70 },
-                        ],
-                    },
-                ],
-                waitingTime: 7,
-                tags: [{ name: 'сладкое' }, { name: 'десерт' }],
-                is_visible: true,
-            },
-        ],
-    }, */
-];
-
-export const emptyDailyCategorys: DailyCategory[] = [
-    {
-        id: 1,
-        name: 'Первое(супы)',
-        meals: [
             {
                 id: 6,
-                name: 'Борщ',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 4100,
-                disposableTableware: true,
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                is_visible: true,
-            },
-            {
-                id: 5,
-                name: 'Солянка',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 4100,
-                disposableTableware: true,
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                is_visible: true,
-            },
-            {
-                id: 4,
-                name: 'Пельмени',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 4100,
-                disposableTableware: true,
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                name: 'Смузи',
+                description: 'Из свежих фруктов.',
+                photo: dessert1,
+                price: 400,
+                disposableTableware: false,
+                mealSizes: [],
+                mealSauces: [],
+                mealAdditives: [],
+                tags: [{ name: 'смузи' }, { name: 'вега' }],
                 is_visible: true,
             },
         ],
     },
     {
         id: 3,
-        name: 'Второе(не супы)',
+        name: 'Второе',
         meals: [
             {
                 id: 1,
-                name: 'Манты',
+                name: 'Куриный донер',
                 description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
                 photo: meal1,
-                price: 4100,
+                price: 1050,
                 disposableTableware: true,
-                waitingTime: 15,
                 tags: [{ name: 'вега' }, { name: 'овощи' }],
+                is_visible: true,
+                category: {
+                    id: 1,
+                    name: 'Еда',
+                    photo: meal1,
+                },
+            },
+            {
+                id: 7,
+                name: 'Бургер',
+                description: 'Слоеный бургер с булочкой с кунжутом',
+                photo: restaurant1,
+                price: 700,
+                disposableTableware: false,
+                tags: [{ name: 'бургер' }, { name: 'огурчики' }],
                 is_visible: true,
             },
             {
-                id: 2,
-                name: 'Плов',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 4100,
-                disposableTableware: true,
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
-                is_visible: true,
-            },
-            {
-                id: 3,
-                name: 'Лагман',
-                description: 'Лаваш, курица, соленый огурец, помидор, капуста, лук, морковь, зелень.',
-                photo: meal1,
-                price: 4100,
-                disposableTableware: true,
-                waitingTime: 15,
-                tags: [{ name: 'вега' }, { name: 'овощи' }],
+                id: 8,
+                name: 'Картофель фри',
+                description: 'Запеченый с сыром',
+                photo: restaurant2,
+                price: 1200,
+                disposableTableware: false,
+                tags: [{ name: 'нагетсы' }, { name: 'фастфуд' }],
                 is_visible: true,
             },
         ],
@@ -597,7 +285,7 @@ export const emptyWeeklyMenu: WeeklyMenu[] = [
         weekday: 'thursday',
     },
     {
-        daily_categories: emptyDailyCategorys,
+        daily_categories: [],
         weekday: 'friday',
     },
     {
@@ -607,5 +295,153 @@ export const emptyWeeklyMenu: WeeklyMenu[] = [
     {
         daily_categories: [],
         weekday: 'sunday',
+    },
+];
+
+export const emptyCaterings: Catering[] = [
+    {
+        id: 1,
+        photo: restaurant1,
+        name: 'Jahu',
+        description: 'Самые вкусные донеры и кофе',
+        rating: 4.7,
+        address: 'Казахстан, Астана, улица Бухар Жырау, 34/2',
+        coordinates: { latitude: 51.09835783805425, longitude: 71.43399606766961 },
+        tags: [{ name: 'каппучино' }, { name: 'свежый салат' }, { name: 'бистро' }],
+        workingTime: {
+            schedule: [
+                { weekday: 0, open_time: '08:00', close_time: '23:00' },
+                { weekday: 1, open_time: '08:00', close_time: '20:00' },
+                { weekday: 2, open_time: '08:00', close_time: '20:00' },
+                { weekday: 3, open_time: '08:00', close_time: '20:00' },
+                { weekday: 4, open_time: '08:00', close_time: '22:00' },
+                { weekday: 5, open_time: '08:00', close_time: '22:00' },
+                { weekday: 6, open_time: '10:00', close_time: '18:00' },
+            ],
+            is24h: false,
+        },
+        type: 'cafe',
+        cancellationTime: 7,
+    },
+    {
+        id: 2,
+        photo: restaurant2,
+        name: 'Boom',
+        description: 'Самые вкусные донеры и кофе',
+        rating: 4.8,
+        address: 'Казахстан, Астана, ул. Сыгынак, 60/3',
+        coordinates: { latitude: 0, longitude: 0 },
+        tags: [{ name: 'вкусно' }, { name: 'дешево' }, { name: 'сердито' }],
+        workingTime: {
+            schedule: [
+                { weekday: 0, open_time: '08:00', close_time: '23:00' },
+                { weekday: 1, open_time: '08:00', close_time: '20:00' },
+                { weekday: 2, open_time: '08:00', close_time: '20:00' },
+                { weekday: 3, open_time: '08:00', close_time: '20:00' },
+                { weekday: 4, open_time: '08:00', close_time: '22:00' },
+                { weekday: 5, open_time: '08:00', close_time: '22:00' },
+                { weekday: 6, open_time: null, close_time: null },
+            ],
+            is24h: false,
+        },
+        type: 'fastFood',
+        cancellationTime: 7,
+    },
+    {
+        id: 3,
+        photo: restaurant3,
+        name: 'Moon',
+        description: 'Необычные цветные бургеры и сочная пицца',
+        rating: 4.8,
+        address: 'Казахстан, Астана, ул. Акмешит, д 19А',
+        coordinates: { latitude: 51.095427, longitude: 71.415832 },
+        tags: [{ name: 'сок' }, { name: 'соус' }, { name: 'оладьи' }],
+        workingTime: {
+            schedule: [
+                { weekday: 0, open_time: '07:00', close_time: '23:00' },
+                { weekday: 1, open_time: '08:00', close_time: '11:00' },
+                { weekday: 2, open_time: '08:00', close_time: '20:00' },
+                { weekday: 3, open_time: '08:00', close_time: '20:00' },
+                { weekday: 4, open_time: '08:00', close_time: '22:00' },
+                { weekday: 5, open_time: '08:00', close_time: '22:00' },
+                { weekday: 6, open_time: null, close_time: null },
+            ],
+            is24h: false,
+        },
+        type: 'cafeBar',
+        cancellationTime: 5,
+    },
+    {
+        id: 4,
+        photo: drink1,
+        name: 'Рестик 4',
+        description: 'Не самые вкусные бургеры',
+        rating: 4.3,
+        address: 'Казахстан, Астана, ул. Акмешит, д 19А',
+        coordinates: { latitude: 51.095427, longitude: 71.415832 },
+        tags: [{ name: 'сок' }, { name: 'соус' }, { name: 'оладьи' }],
+        workingTime: {
+            schedule: [
+                { weekday: 0, open_time: '07:00', close_time: '23:00' },
+                { weekday: 1, open_time: '08:00', close_time: '11:00' },
+                { weekday: 2, open_time: '08:00', close_time: '20:00' },
+                { weekday: 3, open_time: '08:00', close_time: '20:00' },
+                { weekday: 4, open_time: '08:00', close_time: '22:00' },
+                { weekday: 5, open_time: '08:00', close_time: '22:00' },
+                { weekday: 6, open_time: null, close_time: null },
+            ],
+            is24h: false,
+        },
+        meals: emptyMeals,
+        type: 'businessCenter',
+        cancellationTime: 5,
+        categories: emptyCategories,
+        weeklyMenu: emptyWeeklyMenu,
+    },
+];
+
+export const emptyCatering: Catering = {
+    id: 2,
+    photo: restaurant3,
+    name: 'Boom',
+    description: 'Самые вкусные донеры и кофе',
+    rating: 4.8,
+    address: 'Казахстан, Астана, улица Бухар Жырау, 34/2',
+    coordinates: { latitude: 51.09835783805425, longitude: 71.43399606766961 },
+    tags: [{ name: 'веган' }, { name: 'органичное' }, { name: 'кофе' }],
+    workingTime: {
+        schedule: [
+            { weekday: 0, open_time: '08:00', close_time: '23:00' },
+            { weekday: 1, open_time: '08:00', close_time: '20:00' },
+            { weekday: 2, open_time: '08:00', close_time: '20:00' },
+            { weekday: 3, open_time: '08:00', close_time: '20:00' },
+            { weekday: 4, open_time: '08:00', close_time: '22:00' },
+            { weekday: 5, open_time: '08:00', close_time: '22:00' },
+            { weekday: 6, open_time: '10:00', close_time: '18:00' },
+        ],
+        is24h: false,
+    },
+    type: 'fastFood',
+    cancellationTime: 7,
+};
+
+export const mockCateringService: Administrator[] = [
+    {
+        id: '1',
+        login: 'Jahu',
+        password: '12345',
+        catering: emptyCaterings[0],
+    },
+    {
+        id: '2',
+        login: 'Boom',
+        password: '67890',
+        catering: emptyCaterings[1],
+    },
+    {
+        id: '3',
+        login: 'Moon',
+        password: '258693',
+        catering: emptyCaterings[2],
     },
 ];

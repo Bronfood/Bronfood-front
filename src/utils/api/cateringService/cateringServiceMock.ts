@@ -201,7 +201,6 @@ export class CateringServiceMock implements CateringService {
                 daily_categories: [],
             },
         };
-        return await Promise.reject(new Error('Error: category not found'));
     }
 
     async addCategoryToWeeklyMenu(weekday: Weekday, category: Omit<DailyCategory, 'id'>): Promise<{ data: WeeklyMenu }> {
@@ -242,11 +241,33 @@ export class CateringServiceMock implements CateringService {
             return Promise.reject(new Error(`No categories found for ${weekday}`));
         }
 
-        const categoryIndex = menu.daily_categories?.findIndex((c) => c.id === dailyCategoryId);
+        const categoryIndex = menu.daily_categories.findIndex((c) => c.id === dailyCategoryId);
 
         if (categoryIndex !== -1) {
             menu.daily_categories?.splice(categoryIndex, 1);
             return await Promise.resolve({ data: menu });
+        } else {
+            return await Promise.reject(new Error('Error: category not found'));
+        }
+    }
+
+    async updateCategoryToWeeklyMenu(weekday: Weekday, category: Partial<DailyCategory> & { id: number }): Promise<{ data: WeeklyMenu }> {
+        const menuIndex = this.weeklyMenu.findIndex((w) => w.weekday === weekday);
+        if (menuIndex === -1) {
+            return Promise.reject(new Error(`Weekly menu for ${weekday} not found`));
+        }
+
+        const menu = this.weeklyMenu[menuIndex];
+        if (!menu.daily_categories || menu.daily_categories.length === 0) {
+            return Promise.reject(new Error(`No categories found for ${weekday}`));
+        }
+
+        const numericId = Number(category.id);
+        const categoryIndex = menu.daily_categories.findIndex((c) => c.id === numericId);
+
+        if (categoryIndex !== -1) {
+            menu.daily_categories[categoryIndex] = { ...menu.daily_categories[categoryIndex], ...category };
+            return await Promise.resolve({ data: this.weeklyMenu[menuIndex] });
         } else {
             return await Promise.reject(new Error('Error: category not found'));
         }

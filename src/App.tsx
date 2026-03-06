@@ -40,6 +40,7 @@ import AddCategory from './pages/Catering/CateringManagement/AddCategory/AddCate
 import EditCategory from './pages/Catering/CateringManagement/EditCategory/EditCategory';
 import CollectWeeklyMenu from './pages/Catering/CateringManagement/CollectWeeklyMenu/CollectWeeklyMenu';
 import AddCategoryToWeeklyMenu from './pages/Catering/CateringManagement/AddCategoryToWeeklyMenu/AddCategoryToWeeklyMenu';
+import EditCategoryToWeeklyMenu from './pages/Catering/CateringManagement/EditCategoryToWeeklyMenu/EditCategoryToWeeklyMenu';
 
 function App() {
     const [city, setCity] = useState('');
@@ -84,8 +85,12 @@ function App() {
                     <Route path=":cateringId/menu/add" element={<AddMeal />} />
                     <Route path=":cateringId/menu/edit/:mealId" element={<EditMeal />} />
 
-                    <Route path=":cateringId/collect-weekly-menu" element={<CollectWeeklyMenu />} />
-                    <Route path=":cateringId/collect-weekly-menu/add-category-weekly-menu" element={<AddCategoryToWeeklyMenu />} />
+                    <Route path=":cateringId/collect-weekly-menu">
+                        <Route index element={<CollectWeeklyMenu />} />
+                        <Route path=":day" element={<CollectWeeklyMenu />} />
+                        <Route path=":day/add-category-weekly-menu" element={<AddCategoryToWeeklyMenu />} />
+                        <Route path=":day/edit-category-weekly-menu/:dailyCategoryId" element={<EditCategoryToWeeklyMenu />} />
+                    </Route>
 
                     <Route path="administrators">
                         <Route index element={<Administrators />} />

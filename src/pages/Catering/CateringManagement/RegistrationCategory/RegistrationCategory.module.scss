@@ -9,18 +9,69 @@
         padding: 0 4.5px;
     }
 
+    &__component {
+        display: flex;
+        flex-direction: column;
+        padding: 25px 0 16px;
+    }
+
     &__subtitle {
         color: variables.$grey;
-        padding: 25px 0;
+        padding-bottom: 16px;
+    }
+
+    &__category {
+        display: flex;
+        gap: 16px;
+        padding: 0 5px;
+        overflow: auto;
+
+        &_item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 1px 10px 1px 1px;
+            border-radius: 35px;
+            border: 1px solid variables.$grey-line;
+            cursor: pointer;
+        }
+
+        &_select {
+            background-color: variables.$button-grey;
+        }
+
+        &_disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        &_photo {
+            width: 39px;
+            height: 39px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 35px;
+        }
     }
 
     &__list {
         display: flex;
         flex-wrap: wrap;
         gap: 11px;
+
+        &_current {
+            padding-top: 25px;
+        }
     }
 
     &__add {
-        padding: 25px 0;
+        padding: 25px 0 0;
+    }
+
+    &__error {
+        padding-top: 20px;
+        display: flex;
     }
 }

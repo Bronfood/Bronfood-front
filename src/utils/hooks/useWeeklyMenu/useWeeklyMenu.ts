@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { cateringService, DailyCategory, Weekday } from '../../api/cateringService/cateringService';
 
 export const useGetWeeklyMenu = () => {
@@ -17,18 +17,19 @@ export const useGetWeeklyMenuByWeekday = (weekday: string) => {
 };
 
 export const useAddCategoryToWeeklyMenu = () => {
-    const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: ({ weekday, category }: { weekday: Weekday; category: Omit<DailyCategory, 'id'> }) => cateringService.addCategoryToWeeklyMenu(weekday, category),
-        onSuccess: (data, { weekday }) => {
-            queryClient.setQueryData(['weeklyMenu', weekday], { data: data.data });
-        },
     });
 };
 
 export const useDeleteCategoryToWeeklyMenu = () => {
     return useMutation({
         mutationFn: ({ weekday, dailyCategoryId }: { weekday: Weekday; dailyCategoryId: number }) => cateringService.deleteCategoryToWeeklyMenu(weekday, dailyCategoryId),
+    });
+};
+
+export const useUpdateCategoryToWeeklyMenu = () => {
+    return useMutation({
+        mutationFn: ({ weekday, category }: { weekday: Weekday; category: Partial<DailyCategory> & { id: number } }) => cateringService.updateCategoryToWeeklyMenu(weekday, category),
     });
 };
