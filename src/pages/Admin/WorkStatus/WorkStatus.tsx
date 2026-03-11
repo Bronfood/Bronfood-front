@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import AdminPopup from '../AdminPopup/AdminPopup';
+import { DatePicker } from '../../../components/DatePicker/DatePicker';
 
 function WorkStatus() {
     const navigate = useNavigate();
@@ -9,7 +10,9 @@ function WorkStatus() {
 
     return (
         <>
-            <AdminPopup close={close}></AdminPopup>
+            <AdminPopup close={close}>
+                <DatePicker />
+            </AdminPopup>
         </>
     );
 }
