@@ -1,23 +1,23 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Category, cateringService } from '../../api/cateringService/cateringService';
+import { Category, cateringServiceMock } from '../../api/cateringService/cateringService';
 
 export const useGetCategories = () => {
     return useQuery({
         queryKey: ['categories'],
-        queryFn: () => cateringService.getCategories(),
+        queryFn: () => cateringServiceMock.getCategories(),
     });
 };
 
 export const useGetCategoryById = (id: number) => {
     return useQuery({
         queryKey: ['categories', id],
-        queryFn: () => cateringService.getCategoryById(id),
+        queryFn: () => cateringServiceMock.getCategoryById(id),
         enabled: !!id,
     });
 };
 
 export const useCreateCategory = () => {
     return useMutation({
-        mutationFn: (data: Omit<Category, 'id'>) => cateringService.createCategory(data),
+        mutationFn: (data: Omit<Category, 'id'>) => cateringServiceMock.createCategory(data),
     });
 };

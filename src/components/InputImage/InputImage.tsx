@@ -71,7 +71,17 @@ const InputImage: FC<InputImage> = (props) => {
     return (
         <div className={styles.photo}>
             <label htmlFor={id}>{props.nameLabel}</label>
-            <input id={id} ref={fileInputRef} className={styles.photo__input} type="file" accept="image/*" onChange={handleChange} />
+            <input
+                {...props.register(props.name, {
+                    required: t('components.input.required'),
+                })}
+                id={id}
+                ref={fileInputRef}
+                className={styles.photo__input}
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+            />
 
             {props.previewImage ? (
                 <div className={styles.photo__image} style={{ backgroundImage: `url(${props.previewImage})` }}>

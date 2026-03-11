@@ -66,6 +66,11 @@
         gap: 10px;
         margin-top: 10px;
         color: variables.$grey;
+        grid-column: 2;
+
+        &_item {
+            font-weight: 400;
+        }
     }
 
     &__addcatering {

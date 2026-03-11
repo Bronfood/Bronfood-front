@@ -45,10 +45,7 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, addit
     };
 
     const handleFormSubmit = async (data: FieldValues) => {
-        const isStepValid = await trigger(undefined, { shouldFocus: true });
-        if (isStepValid) {
-            onSubmit(data);
-        }
+        onSubmit(data);
     };
 
     const steps = React.Children.toArray(children);

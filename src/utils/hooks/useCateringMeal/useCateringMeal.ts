@@ -1,35 +1,43 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CateringMeal, cateringService } from '../../api/cateringService/cateringService';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { cateringMealService } from '../../api/cateringMealService/cateringMealService';
 
-export const useGetCateringMeals = () => {
+export const useGetCateringMeals = (cateringId: number) => {
     return useQuery({
-        queryKey: ['meals'],
-        queryFn: () => cateringService.getMeals(),
+        queryKey: ['cateringMeals', cateringId],
+        queryFn: () => cateringMealService.getCateringMeals(cateringId),
+    });
+};
+
+export const useGetCateringMealById = (cateringId: number, cateringMealId: number) => {
+    return useQuery({
+        queryKey: ['cateringMeals', cateringId, cateringMealId],
+        queryFn: () => cateringMealService.getCateringMealById(cateringId, cateringMealId),
+        enabled: !!cateringId && !!cateringMealId,
     });
 };
 
 export const useCreateCateringMeals = () => {
     return useMutation({
-        mutationFn: (data: Omit<CateringMeal, 'id'>) => cateringService.createMeal(data),
+        mutationFn: ({ cateringId, data }: { cateringId: number; data: FormData }) => cateringMealService.createCateringMeal(cateringId, data),
     });
 };
 
 export const useDeleteCateringMeal = () => {
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id: number) => cateringService.deleteMeal(id),
+        mutationFn: ({ cateringId, cateringMealId }: { cateringId: number; cateringMealId: number }) => cateringMealService.deleteCateringMeal(cateringId, cateringMealId),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['cateringMeals', variables.cateringId] });
+        },
     });
 };
 
-export const useGetMealById = (id: number) => {
-    return useQuery({
-        queryKey: ['meal', id],
-        queryFn: () => cateringService.getMealById(id),
-        enabled: !!id,
-    });
-};
-
-export const useUpdateMeal = () => {
+export const useUpdateCateringMeal = () => {
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: Partial<CateringMeal> & { id: number }) => cateringService.updateMeal(data),
+        mutationFn: ({ cateringId, cateringMealId, data }: { cateringId: number; cateringMealId: number; data: FormData }) => cateringMealService.updateCateringMeal(cateringId, cateringMealId, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['cateringMeals', variables.cateringId] });
+        },
     });
 };

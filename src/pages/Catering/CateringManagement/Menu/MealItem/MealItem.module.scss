@@ -36,6 +36,7 @@
             background-color: transparent;
             font-size: 17px;
             padding: 8px 9px;
+            cursor: pointer;
         }
     }
 
@@ -175,18 +176,6 @@
         background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
     }
 
-    &__sizes {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    &__size {
-        display: flex;
-        justify-content: space-between;
-        line-height: 20px;
-    }
-
     &__additive {
         display: flex;
         flex-direction: column;
@@ -197,11 +186,6 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
-
-        &_item {
-            display: flex;
-            justify-content: space-between;
-        }
     }
 
     &__items {
@@ -216,20 +200,7 @@
         }
     }
 
-    &__sauces {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    &__sauce {
-        display: flex;
-        justify-content: space-between;
-        line-height: 20px;
-    }
-
     &__item {
-        &_size,
         &_name {
             color: variables.$light-gray;
             font-weight: 400;

@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Catering, cateringService } from '../../api/cateringService/cateringService';
+import { cateringService } from '../../api/cateringService/cateringService';
 
 export const useGetCaterings = () => {
     return useQuery({
@@ -8,28 +8,28 @@ export const useGetCaterings = () => {
     });
 };
 
-export const useGetCateringById = (id: number) => {
+export const useGetCateringById = (cateringId: number) => {
     return useQuery({
-        queryKey: ['caterings', id],
-        queryFn: () => cateringService.getCateringById(id),
-        enabled: !!id,
+        queryKey: ['caterings', cateringId],
+        queryFn: () => cateringService.getCateringById(cateringId),
+        enabled: !!cateringId,
     });
 };
 
 export const useCreateCatering = () => {
     return useMutation({
-        mutationFn: (data: Omit<Catering, 'id'>) => cateringService.createCatering(data),
+        mutationFn: (data: FormData) => cateringService.createCatering(data),
     });
 };
 
 export const useDeleteCatering = () => {
     return useMutation({
-        mutationFn: (id: number) => cateringService.deleteCatering(id),
+        mutationFn: (cateringId: number) => cateringService.deleteCatering(cateringId),
     });
 };
 
 export const useUpdateCatering = () => {
     return useMutation({
-        mutationFn: (data: Partial<Catering> & { id: number }) => cateringService.updateCatering(data),
+        mutationFn: ({ cateringId, data }: { cateringId: number; data: FormData }) => cateringService.updateCatering(cateringId, data),
     });
 };

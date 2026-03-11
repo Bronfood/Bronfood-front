@@ -1,24 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import { useState, MouseEvent, useEffect } from 'react';
-import styles from './MealList.module.scss';
+import styles from './Menu.module.scss';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
-import { useDeleteCateringMeal, useGetCateringMeals, useUpdateMeal } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
+import { useDeleteCateringMeal, useGetCateringMeals, useUpdateCateringMeal } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import Preloader from '../../../../components/Preloader/Preloader';
 import { useNavigate, useParams } from 'react-router-dom';
 import Popup from '../../../../components/Popups/Popup/Popup';
-import { CateringMeal } from '../../../../utils/api/cateringService/cateringService';
 import MealItem from './MealItem/MealItem';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import CategoriesList from '../CategoriesList/CategoriesList';
 
-const MealList = () => {
+const Menu = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
-    const { data: meal, isSuccess, isPending } = useGetCateringMeals();
+    const { data: meal, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
     const { mutateAsync: deleteMeal, isPending: isDeleting } = useDeleteCateringMeal();
-    const [showConfirmationPopup, setShowConfirmationPopup] = useState<number | null>(null);
-    const { mutateAsync: updateMeal } = useUpdateMeal();
+    const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+    const [mealToDelete, setMealToDelete] = useState<number | null>(null);
+    const { mutateAsync: updateMeal } = useUpdateCateringMeal();
     const meals = isSuccess ? meal.data : [];
     const [isOpen, setIsOpen] = useState<number | null>(null);
 
@@ -28,7 +28,7 @@ const MealList = () => {
 
     const handleOverlayClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
-            setShowConfirmationPopup(null);
+            setShowConfirmationPopup(false);
         }
     };
 
@@ -49,46 +49,50 @@ const MealList = () => {
     };
 
     const addMealClick = () => {
-        navigate(`/catering/${cateringId}/menu/add`);
+        navigate(`/catering/${cateringId}/menu/add-meal`);
     };
 
-    const editMealClick = (mealId: number) => {
-        navigate(`/catering/${cateringId}/menu/edit/${mealId}`);
+    const editMealClick = (cateringMealId: number) => {
+        navigate(`/catering/${cateringId}/menu/${cateringMealId}`);
     };
 
-    const deleteMealClick = async (id: number) => {
-        setShowConfirmationPopup(null);
-        await deleteMeal(Number(id));
+    const handleDelete = (cateringMealId: number) => {
+        setMealToDelete(cateringMealId);
+        setShowConfirmationPopup(true);
     };
 
-    const toggleVisibleClick = async (mealId: number) => {
-        const currentMeal = meals.find((m) => m.id === mealId);
-        if (currentMeal) {
-            await updateMeal({
-                id: mealId,
-                is_visible: !currentMeal.is_visible,
+    const handleConfirmDelete = async () => {
+        if (!mealToDelete) return;
+        setShowConfirmationPopup(false);
+        await deleteMeal({ cateringId: Number(cateringId), cateringMealId: mealToDelete });
+        setMealToDelete(null);
+    };
+
+    const toggleVisibleClick = async (cateringMealId: number) => {
+        const currentMeal = meals.find((m) => m.id === cateringMealId);
+        if (!currentMeal) return;
+        const formData = new FormData();
+
+        formData.append('name', currentMeal.name);
+        formData.append('description', currentMeal.description || '');
+        formData.append('type', currentMeal.type);
+
+        if (currentMeal.tags?.length) {
+            currentMeal.tags.forEach((tag: { name: string }, index: number) => {
+                formData.append(`tags[${index}]name`, tag.name);
             });
         }
-    };
+        formData.append('base_price', String(currentMeal.base_price));
+        formData.append('waiting_time', currentMeal.waiting_time);
+        formData.append('is_visible', String(!currentMeal.is_visible));
 
-    const deleteAdditiveClick = async (mealId: number, type: string) => {
-        const currentMeal = meals.find((m) => m.id === mealId);
-        if (!currentMeal) return;
-        const updatedData: Partial<CateringMeal> & { id: number } = { ...currentMeal, id: mealId };
-
-        switch (type) {
-            case 'sizes':
-                updatedData.mealSizes = [];
-                break;
-            case 'additives':
-                updatedData.mealAdditives = [];
-                break;
-            case 'sauces':
-                updatedData.mealSauces = [];
-                break;
+        if (currentMeal) {
+            await updateMeal({
+                cateringId: Number(cateringId),
+                cateringMealId: Number(cateringMealId),
+                data: formData,
+            });
         }
-
-        await updateMeal(updatedData);
     };
 
     return (
@@ -100,18 +104,18 @@ const MealList = () => {
                     <ButtonIconAdd onClick={addMealClick}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
                 </div>
 
-                {isPending && <Preloader />}
+                {(isPending || isDeleting) && <Preloader />}
                 {meals.length > 0 && (
                     <ul className={styles.list}>
                         {meals.map((meal) => (
-                            <MealItem key={meal.id} onClickInfo={() => toggleClick(meal.id)} meal={meal} isOpen={isOpen === meal.id} onDelete={() => setShowConfirmationPopup(meal.id)} onEdit={() => editMealClick(meal.id)} isVisible={meal.is_visible} onVisible={() => toggleVisibleClick(meal.id)} onDeleteAdditive={(type) => deleteAdditiveClick(meal.id, type)} />
+                            <MealItem key={meal.id} onClickInfo={() => toggleClick(meal.id)} meal={meal} isOpen={isOpen === meal.id} onDelete={() => handleDelete(meal.id)} onEdit={() => editMealClick(meal.id)} isVisible={meal.is_visible} onVisible={() => toggleVisibleClick(meal.id)} />
                         ))}
                     </ul>
                 )}
             </Popup>
             {showConfirmationPopup && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
-                    <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheMeal')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(null)} onSubmit={() => deleteMealClick(showConfirmationPopup)} />
+                    <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheMeal')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(false)} onSubmit={handleConfirmDelete} />
                     {isDeleting && (
                         <div className={styles['preloader-wrapper']}>
                             <Preloader />
@@ -123,4 +127,4 @@ const MealList = () => {
     );
 };
 
-export default MealList;
+export default Menu;

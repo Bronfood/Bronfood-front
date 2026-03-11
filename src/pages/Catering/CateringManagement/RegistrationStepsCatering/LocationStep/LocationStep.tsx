@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import FormInputs from '../../../../../components/FormInputs/FormInputs';
 import Input from '../../../../../components/Input/Input';
 import Textarea from '../../../../../components/Textarea/Textarea';
-import { DEBOUNCE_VALUE, regexClientName } from '../../../../../utils/consts';
+import { DEBOUNCE_VALUE, regexClientName, regexTextBasic } from '../../../../../utils/consts';
 import AddressMap from './AddressMap/AdressMap';
 import { LngLat } from '@yandex/ymaps3-types';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -91,7 +91,7 @@ const LocationStep = () => {
                 <Input type="text" name="name" placeholder={t('pages.cateringManagement.placeholderName')} nameLabel={t('pages.cateringManagement.nameLabelName')} register={register} errors={errors} pattern={regexClientName} value={values.name} />
                 <AddressMap zoom={15} coordinates={coordinates} onDragEnd={handleMarkerPositionChange} />
                 <AddressInput register={register} errors={errors} onChange={handleAddressChange} value={values.address} />
-                <Textarea name="description" placeholder={t('pages.cateringManagement.placeholderDescription')} nameLabel={t('pages.cateringManagement.nameLabelDescription')} details={t('pages.cateringManagement.nameLabelDetails')} register={register} errors={errors} pattern={regexClientName} value={values.description} />
+                <Textarea name="description" placeholder={t('pages.cateringManagement.placeholderDescription')} nameLabel={t('pages.cateringManagement.nameLabelDescription')} details={t('pages.cateringManagement.nameLabelDetails')} register={register} errors={errors} pattern={regexTextBasic} value={values.description} />
             </FormInputs>
         </fieldset>
     );

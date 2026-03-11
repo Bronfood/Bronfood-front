@@ -1,4 +1,6 @@
+import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { CateringServiceMock } from './cateringServiceMock';
+import { CateringServiceReal } from './cateringServiceReal';
 
 export type VenueType = { type: number; name: string };
 export const weekdayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -6,8 +8,17 @@ export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
 export type TimeString = `${number}:${number}`;
 
 export type Day = {
+    /**
+     * Day's weekday
+     */
     weekday: number;
+    /**
+     * Day's open_time
+     */
     open_time: TimeString | null;
+    /**
+     * Day's close_time
+     */
     close_time: TimeString | null;
 };
 
@@ -50,128 +61,6 @@ export type WeeklyMenu = {
     weekday: Weekday;
 };
 
-export type MealSize = {
-    /**
-     * Size name (e.g., "Small", "500ml")
-     */
-    name: string;
-    /**
-     * Size or volume (e.g., "100г", "500мл")
-     */
-    size: string;
-    /**
-     * Price for this size
-     */
-    price: number;
-};
-
-export type MealSauce = {
-    /**
-     * Sauce name
-     */
-    name: string;
-    /**
-     * Price for this sauce
-     */
-    price: number;
-};
-
-export type MealAdditiveUnit = {
-    /**
-     * AdditiveUnit name
-     */
-    name: string;
-    /**
-     * Price for this AdditiveUnit
-     */
-    price: number;
-};
-
-export type MealAdditive = {
-    /**
-     * Additive name (e.g., "Milk")
-     */
-    nameAdditive: string;
-    /**
-     * Additive unit (e.g., "Cow's")
-     */
-    additiveUnit: MealAdditiveUnit[];
-};
-
-export type CateringMeal = {
-    /**
-     * Meal's id
-     */
-    id: number;
-    /**
-     * Meal's category
-     */
-    category?: Category;
-    /**
-     * Meal's name
-     */
-    name: string;
-    /**
-     * Meal's description
-     */
-    description?: string;
-    /**
-     * Link to meal's image
-     */
-    photo: string;
-    /**
-     * Meal's price
-     */
-    price: number;
-    /**
-     * Meal's disposable tableware
-     */
-    disposableTableware: boolean;
-    /**
-     * Array of meal sizes
-     */
-    mealSizes?: MealSize[];
-    /**
-     * Array of meal sauce
-     */
-    mealSauces?: MealSauce[];
-    /**
-     * Array of meal sauce
-     */
-    mealAdditives?: MealAdditive[];
-    /**
-     * Time taken for meal to be prepared in minutes
-     */
-    waitingTime?: number;
-    /**
-     * Venue's tags
-     */
-    tags?: { name: string }[];
-    /**
-     * Meal's visible
-     */
-    is_visible: boolean;
-};
-
-export type Administrator = {
-    /**
-     * Administrator's id
-     */
-    id: string;
-    /**
-     * Administrator's login
-     */
-    login: string;
-    /**
-     * Administrator's password
-     */
-    password: string;
-    /**
-     * Administrator's catering
-     */
-    catering: Catering;
-};
-
 export type Catering = {
     /**
      * Catering's id
@@ -192,7 +81,7 @@ export type Catering = {
     /**
      * Catering's rating
      */
-    rating: number;
+    rating?: number;
     /**
      * Catering's address
      */
@@ -222,20 +111,23 @@ export type Catering = {
     /**
      * Deadline for order cancellation
      */
-    cancellationTime?: number;
+    cancellation_time_limit?: string;
     /**
-     * Catering's categories
+     * Catering's legal_name
      */
-    categories?: Category[];
+    legal_name: string;
     /**
-     * Catering's meals
+     * Catering's legal_bin
      */
-    meals?: CateringMeal[];
+    legal_bin: string;
     /**
-     * Catering's administrators
+     * Catering's legal_address
      */
-    administrators?: Administrator[];
-    weeklyMenu?: WeeklyMenu[];
+    legal_address: string;
+    /**
+     * Catering's legal_director_fullname
+     */
+    legal_director_fullname: string;
 };
 
 export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
@@ -249,24 +141,15 @@ export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'].map((type
 });
 
 export interface CateringService {
-    getAdministrators: () => Promise<{ data: Administrator[] }>;
-    getAdministratorById: (id: string) => Promise<{ data: Administrator }>;
-    createAdministrator: (data: Omit<Administrator, 'id'>) => Promise<{ data: Administrator }>;
-    updateAdministrator: (data: Partial<Administrator> & { id: string }) => Promise<{ data: Administrator }>;
-    deleteAdministrator: (id: string) => Promise<{ success: boolean }>;
-
     getCaterings: () => Promise<{ data: Catering[] }>;
-    getCateringById: (id: number) => Promise<{ data: Catering }>;
-    createCatering: (data: Omit<Catering, 'id'>) => Promise<{ data: Catering }>;
-    deleteCatering: (id: number) => Promise<{ success: boolean }>;
-    updateCatering: (data: Partial<Catering> & { id: number }) => Promise<{ data: Catering }>;
+    getCateringById: (cateringId: number) => Promise<{ data: Catering }>;
+    createCatering: (data: FormData) => Promise<{ data: Catering }>;
+    deleteCatering: (cateringId: number) => Promise<{ success: boolean }>;
+    updateCatering: (cateringId: number, data: FormData) => Promise<{ data: Catering }>;
+}
 
-    getMeals: () => Promise<{ data: CateringMeal[] }>;
-    getMealById: (id: number) => Promise<{ data: CateringMeal }>;
-    createMeal: (data: Omit<CateringMeal, 'id'>) => Promise<{ data: CateringMeal }>;
-    deleteMeal: (id: number) => Promise<{ success: boolean }>;
-    updateMeal: (data: Partial<CateringMeal> & { id: number }) => Promise<{ data: CateringMeal }>;
-
+export const cateringService = new CateringServiceReal();
+export interface MockCateringService {
     getCategories: () => Promise<{ data: Category[] }>;
     getCategoryById: (id: number) => Promise<{ data: Category }>;
     createCategory: (data: Omit<Category, 'id'>) => Promise<{ data: Category }>;
@@ -278,4 +161,4 @@ export interface CateringService {
     updateCategoryToWeeklyMenu: (weekday: Weekday, category: Partial<DailyCategory> & { id: number }) => Promise<{ data: WeeklyMenu }>;
 }
 
-export const cateringService = new CateringServiceMock();
+export const cateringServiceMock = new CateringServiceMock();

@@ -5,7 +5,9 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import RegistrationStepsCatering from '../RegistrationStepsCatering/RegistrationStepsCatering';
-import { DAYS, TYPES } from '../../../../utils/api/cateringService/cateringService';
+import { Day, DAYS, TYPES } from '../../../../utils/api/cateringService/cateringService';
+import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
+import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 
 const AddCatering = () => {
     const { t } = useTranslation();
@@ -14,20 +16,35 @@ const AddCatering = () => {
     const { mutateAsync, isPending, error } = useCreateCatering();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const cateringData = {
-            name: data.name,
-            address: data.address,
-            description: data.description,
-            coordinates: data.coordinates,
-            type: data.type.name,
-            cancellationTime: data.cancellationTime,
-            photo: data.photo,
-            rating: data.rating,
-            tags: data.tags,
-            workingTime: data.workingTime,
-            categories: data.categories,
-        };
-        const response = await mutateAsync(cateringData);
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('address', data.address);
+        formData.append('description', data.description || '');
+        formData.append('type', data.type.name);
+        formData.append('cancellation_time_limit', formatCancellationTime(data.cancellation_time_limit));
+        formData.append('longitude', String(data.coordinates?.longitude || ''));
+        formData.append('latitude', String(data.coordinates?.latitude || ''));
+
+        formData.append('legal_name', data.legal_name);
+        formData.append('legal_bin', data.legal_bin);
+        formData.append('legal_address', data.legal_address);
+        formData.append('legal_director_fullname', data.legal_director_fullname);
+
+        const photoFile = dataURLtoFile(data.photo, 'photo.jpg');
+        formData.append('photo', photoFile);
+        if (data.tags.length) {
+            data.tags.forEach((tag: { name: string }, index: number) => {
+                formData.append(`tags[${index}]name`, tag.name);
+            });
+        }
+        if (data.workingTime?.schedule) {
+            data.workingTime.schedule.forEach((day: Day, index: number) => {
+                formData.append(`schedule[${index}]weekday`, String(day.weekday));
+                formData.append(`schedule[${index}]open_time`, day.open_time || '');
+                formData.append(`schedule[${index}]close_time`, day.close_time || '');
+            });
+        }
+        const response = await mutateAsync(formData);
         const createdCatering = response.data;
         if (createdCatering?.id) {
             navigate(`/catering/${createdCatering.id}`, {
@@ -46,20 +63,22 @@ const AddCatering = () => {
                 title={t('pages.cateringManagement.titleRegistrationCatering')}
                 onSubmit={onSubmit}
                 defaultValues={{
-                    type: TYPES[0],
-                    tags: [],
                     name: '',
                     address: '',
                     description: '',
-                    coordinates: null,
-                    cancellationTime: undefined,
-                    rating: 0,
+                    type: TYPES[0].name,
+                    cancellation_time_limit: '',
+                    coordinates: { latitude: 43.238949, longitude: 76.889709 },
+                    legal_name: '',
+                    legal_bin: '',
+                    legal_address: '',
+                    legal_director_fullname: '',
+                    tags: [],
                     photo: '',
                     workingTime: {
                         schedule: [...DAYS],
                         is24h: false,
                     },
-                    categories: [],
                 }}
             />
         </>

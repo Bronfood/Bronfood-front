@@ -30,7 +30,7 @@ const MediaStep = () => {
             <FormInputs>
                 <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhotoMeal')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImage={previewImage} />
                 <Input type="text" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderNameMeal')} name="name" register={register} errors={errors} pattern={regexClientName} value={values.name} />
-                <Input type="number" nameLabel={t('pages.cateringManagement.nameLabelPrice')} placeholder={t('pages.cateringManagement.placeholderPrice')} name="price" register={register} errors={errors} pattern={regexNumber} value={values.price} />
+                <Input type="number" nameLabel={t('pages.cateringManagement.nameLabelPrice')} placeholder={t('pages.cateringManagement.placeholderPrice')} name="base_price" register={register} errors={errors} pattern={regexNumber} value={values.base_price} />
             </FormInputs>
         </fieldset>
     );

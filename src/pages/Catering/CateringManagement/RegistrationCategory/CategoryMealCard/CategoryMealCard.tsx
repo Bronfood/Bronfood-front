@@ -1,5 +1,5 @@
 import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
-import { CateringMeal } from '../../../../../utils/api/cateringService/cateringService';
+import { CateringMeal } from '../../../../../utils/api/cateringMealService/cateringMealService';
 import styles from './CategoryMealCard.module.scss';
 
 type CategoryMealCardProps = {
@@ -29,7 +29,7 @@ const CategoryMealCard = ({ meal, onDelete, onToggle, isChecked = false, availab
             </div>
             <div className={styles.card__info}>
                 <p className={styles.card__name}>{meal.name}</p>
-                <p className={styles.card__price}>{`${meal.price} ₸`}</p>
+                <p className={styles.card__price}>{`${meal.base_price} ₸`}</p>
             </div>
         </li>
     );

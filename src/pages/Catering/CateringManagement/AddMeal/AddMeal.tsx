@@ -7,6 +7,8 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { useCreateCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import { useState } from 'react';
 import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
+import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
+import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 
 const AddMeal = () => {
     const { t } = useTranslation();
@@ -16,21 +18,27 @@ const AddMeal = () => {
     const { cateringId } = useParams();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const mealData = {
-            category: data.category,
-            photo: data.photo,
-            name: data.name,
-            description: data.description,
-            price: data.price,
-            disposableTableware: data.disposableTableware,
-            mealSizes: data.mealSizes,
-            mealSauces: data.mealSauces,
-            mealAdditives: data.mealAdditives,
-            waitingTime: data.waitingTime,
-            tags: data.tags,
-            is_visible: data.is_visible,
-        };
-        await mutateAsync(mealData);
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('description', data.description || '');
+        formData.append('type', data.type);
+
+        const photoFile = dataURLtoFile(data.photo, 'photo.jpg');
+        formData.append('photo', photoFile);
+
+        formData.append('waiting_time', formatCancellationTime(data.waiting_time));
+        if (data.tags.length) {
+            data.tags.forEach((tag: { name: string }, index: number) => {
+                formData.append(`tags[${index}]name`, tag.name);
+            });
+        }
+        formData.append('base_price', data.base_price);
+        formData.append('is_visible', String(data.is_visible));
+
+        await mutateAsync({
+            cateringId: Number(cateringId),
+            data: formData,
+        });
         setShowThanksPopup(true);
     };
 
@@ -50,18 +58,13 @@ const AddMeal = () => {
                 title={t('pages.cateringManagement.titleRegistrationMeal')}
                 onSubmit={onSubmit}
                 defaultValues={{
-                    categoryId: '',
-                    photo: '',
                     name: '',
                     description: '',
-                    price: undefined,
-                    disposableTableware: false,
-                    mealSizes: [],
-                    mealSauces: [],
-                    mealAdditives: [],
-                    type: '',
-                    waitingTime: undefined,
+                    type: 'food',
+                    waiting_time: '',
+                    photo: '',
                     tags: [],
+                    base_price: 0,
                     is_visible: true,
                 }}
             />

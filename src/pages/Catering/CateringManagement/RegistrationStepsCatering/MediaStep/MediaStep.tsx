@@ -3,15 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
 import InputWorkingHours from './InputWorkingHours/InputWorkingHours';
 import { useFormContext } from 'react-hook-form';
-import { Day, weekdayNames } from '../../../../../utils/api/cateringService/cateringService';
+import { Day, DAYS, weekdayNames } from '../../../../../utils/api/cateringService/cateringService';
 import { regexTime } from '../../../../../utils/consts';
 import InputImage from '../../../../../components/InputImage/InputImage';
 
-type MediaStepProps = {
-    days: Day[];
-};
-
-const MediaStep = ({ days }: MediaStepProps) => {
+const MediaStep = () => {
     const { t } = useTranslation();
     const {
         register,
@@ -78,7 +74,7 @@ const MediaStep = ({ days }: MediaStepProps) => {
 
     const handleCancellationTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setValue('cancellationTime', value === '' ? undefined : parseInt(value, 10), { shouldValidate: true });
+        setValue('cancellation_time_limit', value === '' ? undefined : parseInt(value, 10), { shouldValidate: true });
     };
 
     const getWorkingTimeError = (open: string, close: string): string | '' => {
@@ -106,12 +102,12 @@ const MediaStep = ({ days }: MediaStepProps) => {
 
     return (
         <fieldset className={styles.fieldset}>
-            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="imageCatering" register={register} errors={errors} onChange={handleImageUpload} previewImage={previewImage} />
+            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImage={previewImage} />
             <div className={styles.schedule}>
-                <label>{t('pages.cateringManagement.nameLabelWorkingTime')}</label>
+                <p>{t('pages.cateringManagement.nameLabelWorkingTime')}</p>
 
                 <div className={styles.schedule__days}>
-                    {days.map((day) => {
+                    {DAYS.map((day) => {
                         const openFieldName = `workingTime.schedule.${day.weekday}.open_time`;
                         const closeFieldName = `workingTime.schedule.${day.weekday}.close_time`;
 
@@ -154,30 +150,33 @@ const MediaStep = ({ days }: MediaStepProps) => {
                     </button>
                 </div>
                 {isActive && (
-                    <div className={styles.cancel__container}>
-                        <div className={styles.cancel__input}>
-                            <label className={styles.cancel__input_label}>{t('pages.cateringManagement.nameLabelTimeToCancel')}</label>
-                            <input
-                                type="number"
-                                className={styles.cancel__input_place}
-                                placeholder={t('pages.cateringManagement.placeholderTimeToCancel')}
-                                {...register('cancellationTime', {
-                                    pattern: {
-                                        value: /^\d*$/,
-                                        message: t('components.input.errorMessage'),
-                                    },
-                                    setValueAs: (v) => (v === '' ? undefined : Number(v)),
-                                })}
-                                onChange={handleCancellationTimeChange}
-                            />
-                        </div>
-                        <button className={styles.cancel__button} onClick={handleInfoToggle} ref={buttonRef}></button>
-                        {isInfo && (
-                            <div className={styles.cancel__info} ref={infoRef}>
-                                <p className={styles.cancel__text}>{t('pages.cateringManagement.infoTextTimeToCancel')}</p>
+                    <>
+                        <div className={styles.cancel__container}>
+                            <div className={styles.cancel__input}>
+                                <label htmlFor="cancellation_time_limit" className={`${styles.cancel__input_label} ${errors.cancellation_time_limit ? styles.cancel__input_label__error : ''}`}>
+                                    {t('pages.cateringManagement.nameLabelTimeToCancel')}
+                                </label>
+                                <input
+                                    id="cancellation_time_limit"
+                                    type="text"
+                                    className={styles.cancel__input_place}
+                                    placeholder={t('pages.cateringManagement.placeholderTimeToCancel')}
+                                    {...register('cancellation_time_limit', {
+                                        required: t('components.input.required'),
+                                    })}
+                                    onChange={handleCancellationTimeChange}
+                                    value={values.cancellation_time_limit}
+                                />
                             </div>
-                        )}
-                    </div>
+                            <button className={styles.cancel__button} onClick={handleInfoToggle} ref={buttonRef}></button>
+                            {isInfo && (
+                                <div className={styles.cancel__info} ref={infoRef}>
+                                    <p className={styles.cancel__text}>{t('pages.cateringManagement.infoTextTimeToCancel')}</p>
+                                </div>
+                            )}
+                        </div>
+                        {isActive && errors.cancellation_time_limit && <p className={styles.cancel__error}>{errors.cancellation_time_limit.message as string}</p>}
+                    </>
                 )}
             </div>
         </fieldset>

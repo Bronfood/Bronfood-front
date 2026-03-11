@@ -6,12 +6,13 @@ import CategoryMealCard from './CategoryMealCard/CategoryMealCard';
 import { useGetCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import Preloader from '../../../../components/Preloader/Preloader';
 import Button from '../../../../components/Button/Button';
-import { CateringMeal } from '../../../../utils/api/cateringService/cateringService';
 import styles from './RegistrationCategory.module.scss';
 import { useState } from 'react';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useGetCategories } from '../../../../utils/hooks/useCategory/useCategory';
+import { CateringMeal } from '../../../../utils/api/cateringMealService/cateringMealService';
+import { useParams } from 'react-router-dom';
 
 type RegistrationCategoryProps = {
     onSubmit: SubmitHandler<FieldValues>;
@@ -24,8 +25,9 @@ type RegistrationCategoryProps = {
 };
 
 const RegistrationCategory = ({ onSubmit, defaultValues, category }: RegistrationCategoryProps) => {
+    const { cateringId } = useParams();
     const { t } = useTranslation();
-    const { data: meal, isSuccess, isPending } = useGetCateringMeals();
+    const { data: meal, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
     const [showAvailableMeals, setShowAvailableMeals] = useState(false);
     const { data: categories } = useGetCategories();
     const allMeals = isSuccess ? meal.data : [];

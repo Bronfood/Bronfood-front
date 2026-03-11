@@ -88,7 +88,7 @@ const CollectWeeklyMenu = () => {
                                             {category.meals.map((meal) => (
                                                 <li key={meal.id} className={styles.list__meal_item}>
                                                     <p className={styles.list__meal_name}>{meal.name}</p>
-                                                    <p className={styles.list__meal_price}>{`${meal.price} ₸`}</p>
+                                                    <p className={styles.list__meal_price}>{`${meal.base_price} ₸`}</p>
                                                 </li>
                                             ))}
                                         </ul>

@@ -2,7 +2,7 @@ import { Catering, Day } from '../../../utils/api/cateringService/cateringServic
 import styles from './RestaurantCardCompact.module.scss';
 import { useTranslation } from 'react-i18next';
 
-function RestaurantCardCompact({ card, isTheOnlyOne, isActive }: { card: Catering; isTheOnlyOne: boolean; isActive: boolean }) {
+function RestaurantCardCompact({ card }: { card: Catering }) {
     const { t } = useTranslation();
 
     const formatWorkingTime = (schedule?: Day[]) => {
@@ -13,7 +13,7 @@ function RestaurantCardCompact({ card, isTheOnlyOne, isActive }: { card: Caterin
     };
 
     return (
-        <div className={`${styles.card} ${isTheOnlyOne || isActive ? styles.card__active : ''}`}>
+        <div className={styles.card}>
             <div className={styles.card__container}>
                 <div>
                     <div className={styles.card__image} style={{ backgroundImage: `url(${card.photo})` }} />

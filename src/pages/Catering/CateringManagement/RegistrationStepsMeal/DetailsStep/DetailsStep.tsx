@@ -40,7 +40,7 @@ const DetailsStep = () => {
         <fieldset className={styles.fieldset}>
             <Textarea name="description" placeholder={t('pages.cateringManagement.placeholderDescriptionMeal')} nameLabel={t('pages.cateringManagement.nameLabelDescription')} details={t('pages.cateringManagement.nameLabelDetails')} register={register} errors={errors} pattern={regexTextBasic} value={values.description} />
             <InputTag tags={tags} onDelete={handleDeleteTag} onAdd={handleAddTag} onChange={handleTagChange} nameLabel={t('pages.cateringManagement.nameLabelTagsMeal')} placeholder={t('pages.cateringManagement.placeholderTags')} value={currentTag} />
-            <Input type="number" nameLabel={t('pages.cateringManagement.cookingTime')} placeholder={t('pages.cateringManagement.placeholderCookingTime')} register={register} errors={errors} pattern={regexNumber} name="waitingTime" value={values.waitingTime} />
+            <Input type="text" nameLabel={t('pages.cateringManagement.cookingTime')} placeholder={t('pages.cateringManagement.placeholderCookingTime')} register={register} errors={errors} pattern={regexNumber} name="waiting_time" value={values.waiting_time} />
             <div className={styles.fieldset__checkbox}>
                 <input id="disposableTableware" type="checkbox" className={styles.fieldset__checkbox_input} name="disposableTableware" value={values.disposableTableware} />
                 <label className={styles.fieldset__checkbox_label} htmlFor="disposableTableware">

@@ -1,9 +1,9 @@
 import { FieldValues, SubmitHandler } from 'react-hook-form';
-import { DAYS, TYPES } from '../../../../utils/api/cateringService/cateringService';
 import RegistrationForm from '../RegistrationForm/RegistrationForm';
 import LocationStep from './LocationStep/LocationStep';
 import MediaStep from './MediaStep/MediaStep';
 import TypeStep from './TypeStep/TypeStep';
+import LegalStep from './LegalStep/LegalStep';
 
 type RegistrationStepsCateringProps = {
     title: string;
@@ -14,9 +14,10 @@ type RegistrationStepsCateringProps = {
 const RegistrationStepsCatering = ({ title, onSubmit, defaultValues }: RegistrationStepsCateringProps) => {
     return (
         <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues}>
-            <TypeStep types={TYPES} />
+            <TypeStep />
             <LocationStep />
-            <MediaStep days={DAYS} />
+            <MediaStep />
+            <LegalStep />
         </RegistrationForm>
     );
 };
