@@ -1,0 +1,7 @@
+@use '../../styles/variables';
+
+/* Override default styles */
+.rdp-root {
+    --rdp-accent-color: #{variables.$orange};
+    --rdp-accent-background-color: #f0f0f0;
+}
