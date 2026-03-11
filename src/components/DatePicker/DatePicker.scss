@@ -1,0 +1,23 @@
+@use '../../styles/variables';
+
+/* Override default styles */
+/* stylelint-disable */
+.rdp-root {
+    --rdp-accent-color: #{variables.$orange};
+    --rdp-outside-opacity: 0.3;
+    --rdp-today-color: #{variables.$orange};
+    --rdp-day_button-border-radius: 20%;
+}
+
+.rdp-chevron {
+    fill: #{variables.$grey-chevron};
+}
+
+.rdp-month_caption {
+    color: #{variables.$grey};
+}
+
+.rdp-selected .rdp-day_button {
+    background-color: #{variables.$orange};
+    color: #{variables.$white};
+}

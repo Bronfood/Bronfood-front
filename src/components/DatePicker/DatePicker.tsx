@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
-import styles from './DatePicker.module.scss';
+import './DatePicker.scss';
+
+import { ru } from 'react-day-picker/locale';
 
 export function DatePicker() {
     const [selected, setSelected] = useState<Date>();
 
-    return <DayPicker className={styles['rdp-root']} animate mode="single" selected={selected} onSelect={setSelected} footer={selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'} />;
+    return <DayPicker animate mode="single" selected={selected} onSelect={setSelected} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
 }
