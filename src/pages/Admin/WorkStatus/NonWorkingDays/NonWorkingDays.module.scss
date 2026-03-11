@@ -1,0 +1,15 @@
+@use '../../../../styles/variables';
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+    padding: 0 0 13px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: variables.$grey;
+}
