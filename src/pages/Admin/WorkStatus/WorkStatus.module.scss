@@ -1,0 +1,11 @@
+@use '../../../styles/variables';
+
+.title {
+    width: 100%;
+    text-align: center;
+    padding: 50px 0 30px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: variables.$black;
+}
