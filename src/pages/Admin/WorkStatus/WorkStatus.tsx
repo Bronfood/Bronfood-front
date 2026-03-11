@@ -9,7 +9,6 @@ import NonWorkingDays from './NonWorkingDays/NonWorkingDays';
 function WorkStatus() {
     const [selectedDates, setSelectedDates] = useState<Date[] | undefined>();
     const nonWorkingDays = useMemo(() => (selectedDates ? selectedDates.map((date) => date.getDate().toString()) : []), [selectedDates]);
-    console.log(nonWorkingDays);
     const { t } = useTranslation();
     const navigate = useNavigate();
     const close = () => {
