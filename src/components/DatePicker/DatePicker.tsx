@@ -6,7 +6,7 @@ import './DatePicker.scss';
 import { ru } from 'react-day-picker/locale';
 
 export function DatePicker() {
-    const [selected, setSelected] = useState<Date>();
+    const [selected, setSelected] = useState<Date[] | undefined>();
 
-    return <DayPicker animate mode="single" selected={selected} onSelect={setSelected} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
+    return <DayPicker animate mode="multiple" selected={selected} onSelect={setSelected} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
 }
