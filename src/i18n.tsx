@@ -380,6 +380,7 @@ i18n
                             issueOrder: 'Заказ выдан ?',
                             yes: 'Да',
                             nonWorkingDaysThisMonth: 'Выходные в этом месяце',
+                            workingHours: 'Время работы',
                         },
 
                         administrators: {

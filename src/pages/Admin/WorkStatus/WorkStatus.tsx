@@ -5,6 +5,7 @@ import AdminPopup from '../AdminPopup/AdminPopup';
 import { DatePicker } from '../../../components/DatePicker/DatePicker';
 import { useTranslation } from 'react-i18next';
 import NonWorkingDays from './NonWorkingDays/NonWorkingDays';
+import WorkingHours from './WorkingHours/WorkingHours';
 
 function WorkStatus() {
     const [selectedDates, setSelectedDates] = useState<Date[] | undefined>();
@@ -19,6 +20,7 @@ function WorkStatus() {
         <>
             <AdminPopup close={close}>
                 <h1 className={styles.title}>{t(`pages.admin.workStatus`)}</h1>
+                <WorkingHours openTime="9:00" closeTime="21:00" />
                 <NonWorkingDays days={nonWorkingDays} />
                 <DatePicker selected={selectedDates} setSelected={setSelectedDates} />
             </AdminPopup>
