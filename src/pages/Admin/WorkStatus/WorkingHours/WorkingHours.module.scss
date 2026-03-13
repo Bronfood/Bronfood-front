@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .title {
@@ -34,7 +34,7 @@
     max-width: 100%;
     border: 1px solid variables.$grey-line;
     border-radius: 20px;
-    padding: 15px 40px;
+    padding: 10px 40px;
     overflow: hidden;
 }
 
