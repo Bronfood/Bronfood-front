@@ -66,12 +66,6 @@ const LocationStep = () => {
         [setValue]
     );
 
-    useEffect(() => {
-        if (values.address && !isUpdatingFromMap.current) {
-            geocodeAddress(values.address);
-        }
-    }, [values.address, geocodeAddress]);
-
     const handleMarkerPositionChange = useMemo(
         () =>
             debounce((newCoordinates: LngLat) => {
@@ -84,6 +78,12 @@ const LocationStep = () => {
         setValue('address', address, { shouldValidate: true });
         geocodeAddress(address);
     };
+
+    useEffect(() => {
+        if (values.address && !isUpdatingFromMap.current) {
+            geocodeAddress(values.address);
+        }
+    }, [values.address, geocodeAddress]);
 
     return (
         <fieldset className={styles.fieldset}>

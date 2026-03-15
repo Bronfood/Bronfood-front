@@ -9,7 +9,7 @@ function RestaurantCardCompact({ card }: { card: Catering }) {
         if (!schedule || !schedule.length || !schedule[0].open_time || !schedule[0].close_time) {
             return t('pages.cateringManagement.noWorkingTime');
         }
-        return `${schedule[0].open_time} - ${schedule[0].close_time}`;
+        return `${schedule[0].open_time.slice(0, 5)} - ${schedule[0].close_time.slice(0, 5)}`;
     };
 
     return (
@@ -26,7 +26,7 @@ function RestaurantCardCompact({ card }: { card: Catering }) {
                     </div>
                     <div className={styles.card__feature}>
                         <div className={`${styles.card__icon} ${styles.card__icon_clock} ${styles.card__icon_small}`} />
-                        <p className={styles.card__feature_title}>{formatWorkingTime(card.workingTime?.schedule)}</p>
+                        <p className={styles.card__feature_title}>{formatWorkingTime(card.schedule)}</p>
                     </div>
                 </div>
             </div>

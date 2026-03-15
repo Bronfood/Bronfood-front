@@ -89,4 +89,16 @@
             color: variables.$black;
         }
     }
+
+    &__preloader {
+        padding: 15px;
+
+        div {
+            top: 145px;
+            height: 30px;
+            width: 30px;
+            left: 46px;
+            border-width: 10px;
+        }
+    }
 }

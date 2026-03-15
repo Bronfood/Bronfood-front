@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { Day, DAYS, weekdayNames } from '../../../../../utils/api/cateringService/cateringService';
 import { regexTime } from '../../../../../utils/consts';
 import InputImage from '../../../../../components/InputImage/InputImage';
+import { formatCancellationTime } from '../../../../../utils/serviceFuncs/formatCancellationTime';
 
 const MediaStep = () => {
     const { t } = useTranslation();
@@ -15,14 +16,14 @@ const MediaStep = () => {
         formState: { errors },
         setValue,
     } = useFormContext();
-
     const values = watch();
+
+    const infoRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const is24h = values.schedule?.every((day: Day) => day.open_time === '00:00' && day.close_time === '23:59') || false;
     const [previewImage, setPreviewImage] = useState<string | null>(values.photo || null);
     const [isActive, setIsActive] = useState(false);
     const [isInfo, setIsInfo] = useState(false);
-    const infoRef = useRef<HTMLDivElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const is24h = values?.workingTime?.is24h || false;
 
     const formatTimeInput = (value: string): string => {
         const digitsOnly = value.replace(/\D/g, '');
@@ -37,7 +38,7 @@ const MediaStep = () => {
 
     const handleTimeChange = (weekday: number, field: 'open' | 'close', value: string) => {
         const formattedValue = formatTimeInput(value);
-        const updatedSchedule = values.workingTime.schedule.map((day: Day) => {
+        const updatedSchedule = values.schedule.map((day: Day) => {
             if (day.weekday === weekday) {
                 return {
                     ...day,
@@ -46,26 +47,18 @@ const MediaStep = () => {
             }
             return day;
         });
-        setValue(`workingTime.schedule`, updatedSchedule, { shouldValidate: true });
+        setValue(`schedule`, updatedSchedule, { shouldValidate: true });
     };
 
     const handle24hToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
-        const updatedSchedule = values.workingTime.schedule.map((day: Day) => ({
+        const updatedSchedule = values.schedule.map((day: Day) => ({
             ...day,
             open_time: isChecked ? '00:00' : null,
             close_time: isChecked ? '23:59' : null,
         }));
 
-        setValue(
-            'workingTime',
-            {
-                ...values.workingTime,
-                is24h: isChecked,
-                schedule: updatedSchedule,
-            },
-            { shouldValidate: true }
-        );
+        setValue('schedule', updatedSchedule, { shouldValidate: true });
     };
 
     const handleCancellationToggle = () => {
@@ -74,7 +67,7 @@ const MediaStep = () => {
 
     const handleCancellationTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setValue('cancellation_time_limit', value === '' ? undefined : parseInt(value, 10), { shouldValidate: true });
+        setValue('cancellation_time_limit', formatCancellationTime(value), { shouldValidate: true });
     };
 
     const getWorkingTimeError = (open: string, close: string): string | '' => {
@@ -108,10 +101,10 @@ const MediaStep = () => {
 
                 <div className={styles.schedule__days}>
                     {DAYS.map((day) => {
-                        const openFieldName = `workingTime.schedule.${day.weekday}.open_time`;
-                        const closeFieldName = `workingTime.schedule.${day.weekday}.close_time`;
+                        const openFieldName = `schedule.${day.weekday}.open_time`;
+                        const closeFieldName = `schedule.${day.weekday}.close_time`;
 
-                        const schedule = values?.workingTime?.schedule || [];
+                        const schedule = values?.schedule || [];
                         const dayData = schedule[day.weekday] || day;
                         const openTime = dayData.open_time || '';
                         const closeTime = dayData.close_time || '';

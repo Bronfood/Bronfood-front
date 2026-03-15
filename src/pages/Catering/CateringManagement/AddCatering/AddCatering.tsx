@@ -7,7 +7,6 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import RegistrationStepsCatering from '../RegistrationStepsCatering/RegistrationStepsCatering';
 import { Day, DAYS, TYPES } from '../../../../utils/api/cateringService/cateringService';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
-import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 
 const AddCatering = () => {
     const { t } = useTranslation();
@@ -20,8 +19,8 @@ const AddCatering = () => {
         formData.append('name', data.name);
         formData.append('address', data.address);
         formData.append('description', data.description || '');
-        formData.append('type', data.type.name);
-        formData.append('cancellation_time_limit', formatCancellationTime(data.cancellation_time_limit));
+        formData.append('type', data.type);
+        formData.append('cancellation_time_limit', data.cancellation_time_limit);
         formData.append('longitude', String(data.coordinates?.longitude || ''));
         formData.append('latitude', String(data.coordinates?.latitude || ''));
 
@@ -37,8 +36,8 @@ const AddCatering = () => {
                 formData.append(`tags[${index}]name`, tag.name);
             });
         }
-        if (data.workingTime?.schedule) {
-            data.workingTime.schedule.forEach((day: Day, index: number) => {
+        if (data.schedule) {
+            data.schedule.forEach((day: Day, index: number) => {
                 formData.append(`schedule[${index}]weekday`, String(day.weekday));
                 formData.append(`schedule[${index}]open_time`, day.open_time || '');
                 formData.append(`schedule[${index}]close_time`, day.close_time || '');
@@ -51,7 +50,7 @@ const AddCatering = () => {
                 state: { catering: createdCatering },
             });
         } else {
-            navigate('/catering');
+            navigate('/');
         }
     };
 
@@ -60,25 +59,22 @@ const AddCatering = () => {
             {isPending && <Preloader />}
             {error && <ErrorMessage message={error.message} />}
             <RegistrationStepsCatering
-                title={t('pages.cateringManagement.titleRegistrationCatering')}
+                title={t('pages.cateringManagement.registrationCatering')}
                 onSubmit={onSubmit}
                 defaultValues={{
                     name: '',
                     address: '',
                     description: '',
-                    type: TYPES[0].name,
+                    type: TYPES[0],
                     cancellation_time_limit: '',
-                    coordinates: { latitude: 43.238949, longitude: 76.889709 },
+                    coordinates: { latitude: 43.246345, longitude: 76.921552 },
                     legal_name: '',
                     legal_bin: '',
                     legal_address: '',
                     legal_director_fullname: '',
                     tags: [],
                     photo: '',
-                    workingTime: {
-                        schedule: [...DAYS],
-                        is24h: false,
-                    },
+                    schedule: [...DAYS],
                 }}
             />
         </>

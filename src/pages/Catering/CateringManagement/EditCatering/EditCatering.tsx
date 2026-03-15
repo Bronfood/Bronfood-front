@@ -16,13 +16,19 @@ const EditCatering = () => {
     const { data: catering, isLoading: isLoadingCatering } = useGetCateringById(Number(cateringId));
     const { mutateAsync: updateCatering, isPending, error } = useUpdateCatering();
 
+    const normalizedSchedule = catering?.data.schedule.map((day) => ({
+        ...day,
+        open_time: day.open_time?.slice(0, 5) || null,
+        close_time: day.close_time?.slice(0, 5) || null,
+    }));
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const formData = new FormData();
 
         formData.append('name', data.name);
         formData.append('address', data.address);
         formData.append('description', data.description || '');
-        formData.append('type', data.type.name);
+        formData.append('type', data.type);
         formData.append('cancellation_time_limit', data.cancellation_time_limit);
         formData.append('longitude', String(data.coordinates?.longitude || ''));
         formData.append('latitude', String(data.coordinates?.latitude || ''));
@@ -46,8 +52,9 @@ const EditCatering = () => {
                 formData.append(`tags[${index}]name`, tag.name);
             });
         }
-        if (data.workingTime?.schedule) {
-            data.workingTime.schedule.forEach((day: Day, index: number) => {
+
+        if (data.schedule) {
+            data.schedule.forEach((day: Day, index: number) => {
                 formData.append(`schedule[${index}]weekday`, String(day.weekday));
                 formData.append(`schedule[${index}]open_time`, day.open_time || '');
                 formData.append(`schedule[${index}]close_time`, day.close_time || '');
@@ -73,7 +80,7 @@ const EditCatering = () => {
             {error && <ErrorMessage message={error.message} />}
             {catering && (
                 <RegistrationStepsCatering
-                    title={t('pages.cateringManagement.titleEditCatering')}
+                    title={t('pages.cateringManagement.editCatering')}
                     onSubmit={onSubmit}
                     defaultValues={{
                         name: catering.data.name,
@@ -88,7 +95,7 @@ const EditCatering = () => {
                         legal_director_fullname: catering.data.legal_director_fullname,
                         tags: catering.data.tags,
                         photo: catering.data.photo,
-                        workingTime: catering.data.workingTime?.schedule,
+                        schedule: normalizedSchedule,
                     }}
                 />
             )}

@@ -331,10 +331,10 @@ i18n
                         },
 
                         cateringManagement: {
-                            titleRegistrationCatering: 'Регистрация заведения',
+                            registrationCatering: 'Регистрация заведения',
                             titleAddCategory: 'Добавление категории',
                             titleEditCategory: 'Редактирование категории',
-                            titleEditCatering: 'Редактирование  заведения',
+                            editCatering: 'Редактирование  заведения',
                             titleMealMenu: 'Меню',
                             titleEditMeal: 'Редактирование  блюда',
                             titleRegistrationMeal: 'Регистрация блюда',
@@ -398,7 +398,7 @@ i18n
                             cafeBar: 'Кофейня',
                             businessCenter: 'Кухня БЦ',
                             timeToCancelAnOrder: 'Время для отмены заказа',
-                            placeholderTimeToCancel: '3 мин.',
+                            placeholderTimeToCancel: '00:12:00 мин.',
                             nameLabelTimeToCancel: 'Минуты',
                             noWorkingTime: 'График работы отсутствует',
                             monday: 'Пн',

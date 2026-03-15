@@ -2,7 +2,6 @@ import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { CateringServiceMock } from './cateringServiceMock';
 import { CateringServiceReal } from './cateringServiceReal';
 
-export type VenueType = { type: number; name: string };
 export const weekdayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export type TimeString = `${number}:${number}`;
@@ -67,25 +66,25 @@ export type Catering = {
      */
     id: number;
     /**
-     * Link to Catering's image
-     */
-    photo: string;
-    /**
      * Catering's name
      */
     name: string;
+    /**
+     * Catering's address
+     */
+    address: string;
     /**
      * Catering's description
      */
     description?: string;
     /**
-     * Catering's rating
+     * Catering's type
      */
-    rating?: number;
+    type: 'fastFood' | 'cafe' | 'cafeBar' | 'businessCenter';
     /**
-     * Catering's address
+     * Deadline for order cancellation
      */
-    address: string;
+    cancellation_time_limit?: string;
     /**
      * Catering's map coordinates
      */
@@ -94,24 +93,21 @@ export type Catering = {
         longitude: number;
     };
     /**
+     * Catering's rating
+     */
+    rating?: number;
+    /**
      * Catering's tags
      */
     tags?: { name: string }[];
     /**
-     * Catering's type
+     * Link to Catering's image
      */
-    type: 'fastFood' | 'cafe' | 'cafeBar' | 'businessCenter';
+    photo: string;
     /**
      * Catering's working hours for each day of the week
      */
-    workingTime?: {
-        schedule: Day[];
-        is24h: boolean;
-    };
-    /**
-     * Deadline for order cancellation
-     */
-    cancellation_time_limit?: string;
+    schedule: Day[];
     /**
      * Catering's legal_name
      */
@@ -136,9 +132,7 @@ export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
     close_time: null,
 }));
 
-export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'].map((type, index) => {
-    return { type: index, name: type };
-});
+export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'];
 
 export interface CateringService {
     getCaterings: () => Promise<{ data: Catering[] }>;

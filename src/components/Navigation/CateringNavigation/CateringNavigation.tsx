@@ -18,7 +18,6 @@ const CateringNavigation: FC<CateringNavigation> = (props) => {
 
     return (
         <ul className={`${styles.nav__menu} ${styles.nav__menu_user}`}>
-            {isLoading && <Preloader />}
             <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_catering}`}></div>
                 <p className={styles.nav__link}>{t('components.cateringNavigation.myCaterings')}</p>
@@ -30,6 +29,11 @@ const CateringNavigation: FC<CateringNavigation> = (props) => {
                                 {catering.name}
                             </Link>
                         ))}
+                    {isLoading && (
+                        <div className={styles.nav__preloader}>
+                            <Preloader />
+                        </div>
+                    )}
                     <Link to="/catering/add-catering" className={styles.nav__addcatering} onClick={props.handleItemMenuClick}>
                         <p className={styles.nav__addcatering__text}> {t('components.cateringNavigation.addCatering')}</p>
                         <div className={styles.nav__addcatering__plus}></div>

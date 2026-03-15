@@ -14,20 +14,20 @@ type RegistrationFormProps = {
     isLoading?: boolean;
     children: ReactNode;
     additionalPopup?: ReactNode;
+    nameForm: string;
 };
 
-const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup }: RegistrationFormProps) => {
-    const [currentStep, setCurrentStep] = useState(1);
+const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup, nameForm }: RegistrationFormProps) => {
     const navigate = useNavigate();
-
     const { t } = useTranslation();
-
     const methods = useForm<FieldValues>({
         defaultValues,
         mode: 'onChange',
     });
-
     const { trigger, handleSubmit } = methods;
+    const [currentStep, setCurrentStep] = useState(1);
+    const steps = React.Children.toArray(children);
+    const totalSteps = steps.length;
 
     const onClose = () => {
         navigate(-1);
@@ -48,14 +48,11 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, addit
         onSubmit(data);
     };
 
-    const steps = React.Children.toArray(children);
-    const totalSteps = steps.length;
-
     return (
         <FormProvider {...methods}>
             <RegistrationPopup title={title} close={onClose} {...(currentStep !== 1 && { prevStep: handlePrevClick })}>
                 <ProgressSteps currentStep={currentStep} totalSteps={totalSteps}></ProgressSteps>
-                <Form name="form-registration" onSubmit={(e) => e.preventDefault()}>
+                <Form name={nameForm} onSubmit={(e) => e.preventDefault()}>
                     {steps[currentStep - 1]}
                     {currentStep < totalSteps ? (
                         <Button type="button" onClick={handleNextClick}>

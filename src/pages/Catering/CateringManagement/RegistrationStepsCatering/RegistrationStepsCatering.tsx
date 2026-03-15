@@ -13,7 +13,7 @@ type RegistrationStepsCateringProps = {
 
 const RegistrationStepsCatering = ({ title, onSubmit, defaultValues }: RegistrationStepsCateringProps) => {
     return (
-        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues}>
+        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} nameForm="registration-form-catering">
             <TypeStep />
             <LocationStep />
             <MediaStep />

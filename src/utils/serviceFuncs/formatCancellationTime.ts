@@ -1,6 +1,6 @@
-export const formatCancellationTime = (minutes?: number): string => {
-    if (!minutes) return '00:00:00';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:00`;
+export const formatCancellationTime = (value: string): string => {
+    const digits = value.replace(/\D/g, '').slice(0, 6);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4, 6)}`;
 };
