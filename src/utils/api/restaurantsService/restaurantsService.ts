@@ -96,7 +96,7 @@ export type Meal = {
     /**
      * Meal's category
      */
-    category: MealCategory;
+    category: MealCategory | null;
 };
 
 export type Restaurant = {

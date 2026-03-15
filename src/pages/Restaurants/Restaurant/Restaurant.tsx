@@ -85,7 +85,7 @@ function Restaurant() {
         return null;
     }
 
-    const mealsFiltered = meals && selectedMealTypes.length === 0 ? meals : meals ? meals.filter((meal) => selectedMealTypes.includes(meal.category.name)) : [];
+    const mealsFiltered = meals && selectedMealTypes.length === 0 ? meals : meals ? meals.filter((meal) => selectedMealTypes.includes(meal.category && meal.category.name)) : [];
 
     return (
         <>
