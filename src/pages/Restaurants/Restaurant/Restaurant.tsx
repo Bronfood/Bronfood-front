@@ -30,7 +30,7 @@ function Restaurant() {
     const { setActiveRestaurant } = useRestaurantsContext();
     const { data: restaurantData, isLoading: restaurantLoading, error: restaurantError, isSuccess: isRestaurantSuccess } = useRestaurant(restaurantId);
     const restaurant = isRestaurantSuccess && restaurantData.data;
-    const mealTypes = restaurant && restaurant.categories.map((category) => category.name);
+    const mealTypes = restaurant ? restaurant.categories.map((category) => category.name) : [];
     const { data, isPending: mealsLoading, isSuccess } = useMeals(restaurantId);
     const meals = isSuccess && data.data;
     const { addMeal } = useBasketMutations();

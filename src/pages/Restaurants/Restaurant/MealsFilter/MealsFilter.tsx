@@ -16,7 +16,7 @@ function MealsFilter({ types, selectedTypes, addType, deleteType }: MealsFilterP
                 const isActive = selectedTypes.includes(type);
                 return (
                     <li key={`${type}-${index}`}>
-                        <Chip text={type} icon={type} isActive={isActive} add={() => addType(type)} delete={() => deleteType(type)} />
+                        <Chip text={type} isActive={isActive} add={() => addType(type)} delete={() => deleteType(type)} />
                     </li>
                 );
             })}
