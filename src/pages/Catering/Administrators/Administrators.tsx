@@ -3,7 +3,7 @@ import Preloader from '../../../components/Preloader/Preloader';
 import Popup from '../../../components/Popups/Popup/Popup';
 import { useTranslation } from 'react-i18next';
 import { useGetCaterings } from '../../../utils/hooks/useCatering/useCatering';
-import CateringsList from './CateringsList/CateringsList';
+import { CateringsList, EmptyCateringsList } from './CateringsList/CateringsList';
 
 const Administrators = () => {
     const navigate = useNavigate();
@@ -19,9 +19,9 @@ const Administrators = () => {
     };
 
     return (
-        <Popup title={t('pages.administrators.titleAdd')} arrowBack onClose={onClose}>
+        <Popup title={t('pages.administrators.addAdministrator')} arrowBack onClose={onClose}>
             {isLoading && <Preloader />}
-            {caterings?.data && caterings.data.length > 0 && <CateringsList caterings={caterings.data} onClick={handleClickCatering} />}
+            {caterings?.data && caterings.data.length > 0 ? <CateringsList caterings={caterings.data} onClick={handleClickCatering} /> : <EmptyCateringsList />}
         </Popup>
     );
 };

@@ -34,7 +34,7 @@ const AddManager = () => {
     };
 
     return (
-        <Popup title={t('pages.administrators.titleCreate')} arrowBack onClose={onClose}>
+        <Popup title={t('pages.administrators.createUsernameAndPassword')} arrowBack onClose={onClose}>
             {isPending && <Preloader />}
             {error && <ErrorMessage message={error.message} />}
             <ManagersForm onSubmit={onSubmit} isLoading={isPending} />

@@ -58,22 +58,23 @@ const EditManager = () => {
 
     return (
         <>
-            <Popup title={t('pages.administrators.titleEdit')} arrowBack onClose={onClose}>
+            <Popup title={t('pages.administrators.editData')} arrowBack onClose={onClose}>
                 {isFetching && <Preloader />}
                 {manager && (
                     <ManagersForm
                         onSubmit={onSubmit}
                         isLoading={isUpdating}
                         defaultValues={{
-                            username: manager.data.username,
                             name: manager.data.name,
+                            username: manager.data.username,
                             password: '',
                         }}
                         renderDeleteButton={
                             <ButtonGrey type="button" onClick={handleDelete}>
-                                {t('pages.administrators.buttonDelete')}
+                                {t('pages.administrators.delete')}
                             </ButtonGrey>
                         }
+                        edit={true}
                     />
                 )}
             </Popup>

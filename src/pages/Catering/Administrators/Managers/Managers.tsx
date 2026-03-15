@@ -27,18 +27,20 @@ const Managers = () => {
     };
 
     return (
-        <Popup title={t('pages.administrators.titleAdd')} arrowBack onClose={onClose}>
+        <Popup title={t('pages.administrators.addAdministrator')} arrowBack onClose={onClose}>
             {isPending && <Preloader />}
-            <ul className={styles.managers}>
-                {managers.map((manager) => {
-                    return (
-                        <li key={manager.id}>
-                            <ManagerDetails manager={manager} onEdit={() => editManager(manager.id)} />
-                        </li>
-                    );
-                })}
-            </ul>
-            <ButtonIconAdd onClick={addManager}>{t('pages.administrators.buttonAdd')}</ButtonIconAdd>
+            {managers.length > 0 && (
+                <ul className={styles.managers}>
+                    {managers.map((manager) => {
+                        return (
+                            <li key={manager.id}>
+                                <ManagerDetails manager={manager} onEdit={() => editManager(manager.id)} />
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+            <ButtonIconAdd onClick={addManager}>{t('pages.administrators.add')}</ButtonIconAdd>
         </Popup>
     );
 };

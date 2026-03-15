@@ -3,11 +3,11 @@ import { Catering } from '../../../../utils/api/cateringService/cateringService'
 import styles from './CateringsList.module.scss';
 import { useTranslation } from 'react-i18next';
 
-const CateringsList = ({ caterings, onClick }: { caterings: Catering[]; onClick: (id: number) => void }) => {
+export const CateringsList = ({ caterings, onClick }: { caterings: Catering[]; onClick: (id: number) => void }) => {
     const { t } = useTranslation();
     return (
         <div className={styles['restaurant__container']}>
-            <p className={styles['restaurant__title']}>{t('pages.administrators.chooseAnRestaurant')}</p>
+            <p className={styles['restaurant__title']}>{t('pages.administrators.chooseAnCatering')}</p>
             <ul className={styles['restaurant__list']}>
                 {caterings.map((catering) => (
                     <li key={catering.id} onClick={() => onClick(catering.id)}>
@@ -19,4 +19,11 @@ const CateringsList = ({ caterings, onClick }: { caterings: Catering[]; onClick:
     );
 };
 
-export default CateringsList;
+export const EmptyCateringsList = () => {
+    const { t } = useTranslation();
+    return (
+        <div className={styles['restaurant__container']}>
+            <p className={styles['restaurant__title']}>{t('pages.administrators.createCateringToAddAnAdministrator')}</p>
+        </div>
+    );
+};

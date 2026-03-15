@@ -18,9 +18,10 @@ type ManagersFormProps = {
     };
     onCopied?: () => void;
     renderDeleteButton?: React.ReactNode;
+    edit?: boolean;
 };
 
-const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', name: '', password: '' }, onCopied, renderDeleteButton }: ManagersFormProps) => {
+const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', name: '', password: '' }, onCopied, renderDeleteButton, edit = false }: ManagersFormProps) => {
     const { t } = useTranslation();
     const {
         register,
@@ -40,13 +41,13 @@ const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', nam
     return (
         <Form name="form-administrators" onSubmit={handleSubmit(processSubmit)}>
             <FormInputs>
-                {!defaultValues ? <Input type="text" name="username" placeholder={t('pages.administrators.placeholderLogin')} nameLabel={t('pages.administrators.nameLabelLogin')} register={register} errors={errors} pattern={regexClientName}></Input> : null}
+                {!edit ? <Input type="text" name="username" placeholder={t('pages.administrators.placeholderLogin')} nameLabel={t('pages.administrators.nameLabelLogin')} register={register} errors={errors} pattern={regexClientName}></Input> : null}
                 <Input type="text" name="name" placeholder={t('pages.administrators.placeholderFCs')} nameLabel={t('pages.administrators.nameLabelFCs')} register={register} errors={errors} pattern={regexClientName}></Input>
                 <InputPassword name="password" nameLabel={t('pages.administrators.nameLabelPassword')} register={register} errors={errors} required></InputPassword>
             </FormInputs>
             <p className={styles['form__info_title']}>{t('pages.administrators.copyInvitationText')}</p>
             <Button type="submit" disabled={isLoading}>
-                {t('pages.administrators.buttonSaveAndCopy')}
+                {t('pages.administrators.saveAndCopy')}
             </Button>
             {renderDeleteButton}
         </Form>
