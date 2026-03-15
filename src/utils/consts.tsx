@@ -1,5 +1,4 @@
 import { EasingFunctionDescription, LngLat } from '@yandex/ymaps3-types';
-import { MealType } from './api/restaurantsService/restaurantsService';
 import { increment } from './serviceFuncs/increment';
 /**
  * includes cyrillic alphabet, * includes latin alphabet, * includes kazakh alphabet,
@@ -13,7 +12,6 @@ export const regexEmail: RegExp = /.+@.+\..+/;
 export const regexAddress: RegExp = /^[a-zA-Zа-яА-ЯёЁӘәҒғҚқҢңӨөҰұҮүІі0-9\s.,/\-–—()"']{1,256}$/;
 export const regexMessage: RegExp = /^[\s\S]{10,5000}$/;
 
-export const mealTypes: MealType[] = ['food', 'drink', 'dessert'];
 export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {
     return { id: increment(), name: type, selected: false };
 });

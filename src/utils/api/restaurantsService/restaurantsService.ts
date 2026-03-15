@@ -51,7 +51,7 @@ export type Feature = {
     is_size: boolean;
 };
 
-export type MealType = 'food' | 'drink' | 'dessert';
+export type MealType = string;
 
 export type Meal = {
     /**

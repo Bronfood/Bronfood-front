@@ -21,27 +21,8 @@
         height: 0;
     }
 
-    &_icon {
-        width: 39px;
-        height: 39px;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    &_food {
-        background-image: url('./../../../../../vendor/images/restaurant/food-svg.svg');
-    }
-
-    &_drink {
-        background-image: url('./../../../../../vendor/images/restaurant/drink-svg.svg');
-    }
-
-    &_dessert {
-        background-image: url('./../../../../../vendor/images/restaurant/desert-svg.svg');
-    }
-
     &_text {
-        padding: 10px 10px 10px 2px;
+        padding: 10px;
         font-size: 14px;
         font-weight: 400;
         line-height: 1.4;
