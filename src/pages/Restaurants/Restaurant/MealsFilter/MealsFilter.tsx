@@ -1,6 +1,6 @@
 import styles from './MealsFilter.module.scss';
 import { MealType } from '../../../../utils/api/restaurantsService/restaurantsService';
-import Chip from './Chip/Chip';
+import Carousel from '../../../../components/Carousel/Carousel';
 
 type MealsFilterProps = {
     types: MealType[];
@@ -11,16 +11,9 @@ type MealsFilterProps = {
 
 function MealsFilter({ types, selectedTypes, addType, deleteType }: MealsFilterProps) {
     return (
-        <ul className={`${styles['meals-filter']}`}>
-            {types.map((type, index) => {
-                const isActive = selectedTypes.includes(type);
-                return (
-                    <li key={`${type}-${index}`}>
-                        <Chip text={type} isActive={isActive} add={() => addType(type)} delete={() => deleteType(type)} />
-                    </li>
-                );
-            })}
-        </ul>
+        <div className={`${styles['meals-filter']}`}>
+            <Carousel items={types} selectedItems={selectedTypes} select={addType} deselect={deleteType} />
+        </div>
     );
 }
 

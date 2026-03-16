@@ -39,6 +39,7 @@
         "react-i18next": "^15.4.0",
         "react-pin-field": "^4.0.2",
         "react-router-dom": "^7.1.3",
+        "react-simply-carousel": "^9.1.17",
         "use-debounce": "^10.0.5",
         "vite-plugin-svgr": "^4.3.0"
     },
