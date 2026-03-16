@@ -23,7 +23,10 @@ type CarouselProps = {
 };
 
 const containerStyles = {
-    gap: '10px',
+    width: '100%',
+    padding: '0 15px',
+    justifyContent: 'space-between',
+    userSelect: 'none',
 };
 
 const chevronStyles = {
@@ -48,7 +51,7 @@ function Carousel(props: CarouselProps) {
     const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
     return (
-        <div>
+        <>
             <ReactSimplyCarousel
                 activeSlideIndex={activeSlideIndex}
                 onRequestChange={setActiveSlideIndex}
@@ -68,8 +71,14 @@ function Carousel(props: CarouselProps) {
                 responsiveProps={[
                     {
                         itemsToShow: 3,
-                        itemsToScroll: 2,
-                        minWidth: 768,
+                        itemsToScroll: 1,
+                        minWidth: 340,
+                        maxWidth: 375,
+                    },
+                    {
+                        itemsToShow: 2,
+                        itemsToScroll: 1,
+                        maxWidth: 339,
                     },
                 ]}
                 itemsListProps={{
@@ -77,6 +86,8 @@ function Carousel(props: CarouselProps) {
                 }}
                 speed={500}
                 easing="linear"
+                disableNavIfAllVisible
+                hideNavIfAllVisible
             >
                 {props.items.map((item, index) => {
                     const isActive = props.selectedItems.includes(item);
@@ -87,7 +98,7 @@ function Carousel(props: CarouselProps) {
                     );
                 })}
             </ReactSimplyCarousel>
-        </div>
+        </>
     );
 }
 
