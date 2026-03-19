@@ -27,6 +27,7 @@ const containerStyles = {
     padding: '0 15px',
     justifyContent: 'space-between',
     UserSelect: 'none',
+    flexWrap: 'nowrap',
 };
 
 const chevronStyles = {
@@ -44,7 +45,7 @@ const chevronStyles = {
 };
 
 const listStyles = {
-    gap: '15px',
+    gap: '10px',
 };
 
 function Carousel(props: CarouselProps) {
@@ -70,21 +71,19 @@ function Carousel(props: CarouselProps) {
                 }}
                 responsiveProps={[
                     {
-                        itemsToShow: 3,
-                        itemsToScroll: 1,
+                        itemsToScroll: 2,
                         minWidth: 340,
                         maxWidth: 375,
                     },
                     {
-                        itemsToShow: 2,
-                        itemsToScroll: 1,
+                        itemsToScroll: 2,
                         maxWidth: 339,
                     },
                 ]}
                 itemsListProps={{
                     style: listStyles,
                 }}
-                speed={500}
+                speed={300}
                 easing="linear"
                 disableNavIfAllVisible
                 hideNavIfAllVisible
