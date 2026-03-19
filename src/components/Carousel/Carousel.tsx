@@ -27,7 +27,7 @@ const containerStyles = {
     padding: '0 15px',
     justifyContent: 'space-between',
     UserSelect: 'none',
-    flexWrap: 'nowrap',
+    FlexWrap: 'nowrap',
 };
 
 const chevronStyles = {
