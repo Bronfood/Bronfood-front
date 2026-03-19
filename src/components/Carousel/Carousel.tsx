@@ -15,18 +15,18 @@ type CarouselProps = {
     /**
      * Fires when user clicks on deselected item.
      */
-    select: () => void;
+    select: (item: string) => void;
     /**
      * Fires when user clicks on selected item.
      */
-    deselect: () => void;
+    deselect: (item: string) => void;
 };
 
 const containerStyles = {
     width: '100%',
     padding: '0 15px',
     justifyContent: 'space-between',
-    userSelect: 'none',
+    UserSelect: 'none',
 };
 
 const chevronStyles = {
@@ -39,7 +39,7 @@ const chevronStyles = {
     fontSize: '20px',
     height: 30,
     lineHeight: 1,
-    textAlign: 'center',
+    TextAlign: 'center',
     width: 30,
 };
 
