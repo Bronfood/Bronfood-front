@@ -1,3 +1,4 @@
+import { formatDate } from '../../serviceFuncs/formatDate';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
 import { AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService, Schedule } from './adminService';
 
@@ -37,8 +38,8 @@ export class AdminServiceReal implements AdminService {
     }
 
     async getAdminSchedules(start: Date, end: Date): Promise<{ data: Schedule[] }> {
-        const startDate = `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`;
-        const endDate = `${end.getFullYear()}-${end.getMonth() + 1}-${end.getDate()}`;
+        const startDate = formatDate(start);
+        const endDate = formatDate(end);
         return handleFetch(`api/restaurants/admin/schedules/?start_date=${startDate}&end_date=${endDate}`);
     }
 }

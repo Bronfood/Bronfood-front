@@ -5,10 +5,10 @@ import './DatePicker.scss';
 import { ru } from 'react-day-picker/locale';
 
 type DatePickerProps = {
-    selected: Date[] | undefined;
-    setSelected: Dispatch<SetStateAction<Date[] | undefined>>;
+    selected: Date | undefined;
+    setSelected: Dispatch<SetStateAction<Date | undefined>>;
 };
 
 export function DatePicker({ selected, setSelected }: DatePickerProps) {
-    return <DayPicker animate mode="multiple" selected={selected} onSelect={setSelected} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
+    return <DayPicker animate mode="single" selected={selected} onSelect={setSelected} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
 }
