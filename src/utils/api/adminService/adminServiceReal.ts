@@ -1,5 +1,5 @@
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService } from './adminService';
+import { AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService, Schedule } from './adminService';
 
 export class AdminServiceReal implements AdminService {
     async getAdminOrders(status: AdminOrderStatus): Promise<{ data: AdminOrder[] }> {
@@ -34,5 +34,9 @@ export class AdminServiceReal implements AdminService {
 
     async changeAdminOrderStatus(id: number, status: AdminOrderStatus): Promise<void> {
         return await handleFetch(`api/restaurants/admin/orders/${id}/${status}/`, { method: 'PATCH' });
+    }
+
+    async getAdminSchedules(): Promise<{ data: Schedule[] }> {
+        return await handleFetch(`api/restaurants/admin/schedules/`);
     }
 }
