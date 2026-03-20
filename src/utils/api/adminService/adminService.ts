@@ -1,4 +1,3 @@
-//import { AdminServiceMock } from './adminServiceMock';
 import { MealInBasket } from '../basketService/basketService';
 import { Choice, Meal } from '../restaurantsService/restaurantsService';
 import { AdminServiceReal } from './adminServiceReal';
@@ -71,5 +70,4 @@ export interface AdminService {
     getAdminSchedules: (start: Date, end: Date) => Promise<{ data: Schedule[] }>;
 }
 
-// export const adminService = new AdminServiceMock();
 export const adminService = new AdminServiceReal();
