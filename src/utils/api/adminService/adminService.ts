@@ -68,7 +68,7 @@ export type Schedule = {
 export interface AdminService {
     getAdminOrders: (status: AdminOrderStatus) => Promise<{ data: AdminOrder[] }>;
     changeAdminOrderStatus: (id: number, status: AdminOrderStatus) => Promise<void>;
-    getAdminSchedules: () => Promise<{ data: Schedule[] }>;
+    getAdminSchedules: (start: Date, end: Date) => Promise<{ data: Schedule[] }>;
 }
 
 // export const adminService = new AdminServiceMock();

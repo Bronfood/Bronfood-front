@@ -33,10 +33,12 @@ export class AdminServiceReal implements AdminService {
     }
 
     async changeAdminOrderStatus(id: number, status: AdminOrderStatus): Promise<void> {
-        return await handleFetch(`api/restaurants/admin/orders/${id}/${status}/`, { method: 'PATCH' });
+        return handleFetch(`api/restaurants/admin/orders/${id}/${status}/`, { method: 'PATCH' });
     }
 
-    async getAdminSchedules(): Promise<{ data: Schedule[] }> {
-        return await handleFetch(`api/restaurants/admin/schedules/`);
+    async getAdminSchedules(start: Date, end: Date): Promise<{ data: Schedule[] }> {
+        const startDate = `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`;
+        const endDate = `${end.getFullYear()}-${end.getMonth() + 1}-${end.getDate()}`;
+        return handleFetch(`api/restaurants/admin/schedules/?start_date=${startDate}&end_date=${endDate}`);
     }
 }
