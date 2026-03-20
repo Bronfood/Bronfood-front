@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import styles from './WorkStatus.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { find } from 'lodash';
 import AdminPopup from '../AdminPopup/AdminPopup';
 import { DatePicker } from '../../../components/DatePicker/DatePicker';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +24,7 @@ function WorkStatus() {
     const { data, isSuccess, isPending } = useGetAdminSchedules(start, end);
     const schedules: Schedule[] = isSuccess ? data.data : [];
     const formattedSelectedDate = selectedDate && formatDate(selectedDate);
-    const selectedSchedule: Schedule | undefined = formattedSelectedDate && find(schedules, { date: formattedSelectedDate });
+    const selectedSchedule = formattedSelectedDate ? schedules.find((schedule) => schedule.date === formattedSelectedDate) : undefined;
     const openTime = selectedSchedule ? selectedSchedule.open_time : '';
     const closeTime = selectedSchedule ? selectedSchedule.close_time : '';
     const close = () => {

@@ -1,3 +1,3 @@
-export const getLastDayOfMonth = (year, month) => {
+export const getLastDayOfMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0);
 };
