@@ -9,7 +9,7 @@ type DatePickerProps = {
     setMonth: Dispatch<SetStateAction<Date>>;
     selected: Date | undefined;
     setSelected: Dispatch<SetStateAction<Date | undefined>>;
-    onDayBlur: Dispatch<SetStateAction<boolean>>;
+    onDayBlur: () => void;
 };
 
 export function DatePicker({ month, setMonth, selected, setSelected, onDayBlur }: DatePickerProps) {
