@@ -51,7 +51,18 @@ export type Feature = {
     is_size: boolean;
 };
 
-export type MealType = 'food' | 'drink' | 'dessert';
+export type MealType = string;
+
+type MealCategory = {
+    /**
+     * Meal's category id
+     */
+    id: number;
+    /**
+     * Meal's category name
+     */
+    name: MealType;
+};
 
 export type Meal = {
     /**
@@ -75,10 +86,6 @@ export type Meal = {
      */
     price: number;
     /**
-     * Meal's type
-     */
-    type: MealType;
-    /**
      * Time taken for meal to be prepared in minutes
      */
     waitingTime: number;
@@ -86,6 +93,10 @@ export type Meal = {
      * If meal has features
      */
     hasFeatures: boolean;
+    /**
+     * Meal's category
+     */
+    category: MealCategory | null;
 };
 
 export type Restaurant = {
@@ -152,6 +163,10 @@ export type Restaurant = {
      * Venue's legal name
      */
     legal_name: string;
+    /**
+     * Meal categories
+     */
+    categories: MealCategory[];
 };
 
 export type Review = {
