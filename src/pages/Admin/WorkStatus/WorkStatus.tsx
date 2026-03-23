@@ -10,17 +10,20 @@ import { Schedule } from '../../../utils/api/adminService/adminService';
 import { formatDate } from '../../../utils/serviceFuncs/formatDate';
 import { getLastDayOfMonth } from '../../../utils/serviceFuncs/getLastDayOfMonth';
 import { getFirstDayOfMonth } from '../../../utils/serviceFuncs/getFirstDayOfMonth';
-import Form from '../../../components/Form/Form';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { InputTime } from '../../../components/InputTime/InputTime';
+import AdminConfirmation from '../AdminConfirmation/AdminConfirmation';
+import Form from '../../../components/Form/Form';
 
 function WorkStatus() {
+    const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
     const [date, setDate] = useState<Date>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const {
         register,
+        handleSubmit,
         formState: { errors },
     } = useForm({ mode: 'onBlur' });
     const year = useMemo(() => date.getFullYear(), [date]);
@@ -36,12 +39,17 @@ function WorkStatus() {
     const close = () => {
         navigate('/admin');
     };
+    const onSubmit: SubmitHandler<FieldValues> = async () => {
+        /* const { password, phoneNumber, username, captcha } = data;
+        await signUp.mutateAsync({ phone: phoneNumber.replace(/\D/g, ''), password, name: username, captcha });
+        setIsConfirmOpen(true); */
+    };
 
     return (
         <>
             <AdminPopup close={close}>
                 <h1 className={styles.title}>{t(`pages.admin.workStatus`)}</h1>
-                <Form name="work-status" /* onSubmit={handleSubmit(onSubmit)} */>
+                <Form name="work-status" id="work-status" onSubmit={handleSubmit(onSubmit)}>
                     {/* {signUp.isError && <ErrorMessage message={signUpErrorMessage} />} */}
                     <fieldset className={styles.fieldset} disabled={isPending}>
                         <InputTime name="open time" register={register} errors={errors} value={openTime} placeholder="HH:MM"></InputTime>
@@ -49,8 +57,9 @@ function WorkStatus() {
                         <InputTime name="close time" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                 </Form>
-                {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} />}
+                {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} onDayBlur={() => setIsConfirmationPopupOpen(true)} />}
             </AdminPopup>
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" /* isLoading={changeAdminOrderStatus.isPending} */ />}
         </>
     );
 }

@@ -382,8 +382,8 @@ i18n
                             isOrderReady: 'Заказ готов ?',
                             issueOrder: 'Заказ выдан ?',
                             yes: 'Да',
-                            nonWorkingDaysThisMonth: 'Выходные в этом месяце',
                             workingHours: 'Время работы',
+                            saveChanges: 'Сохранить изменения?',
                         },
 
                         administrators: {

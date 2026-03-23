@@ -3,6 +3,10 @@ import styles from './Form.module.scss';
 
 interface Form {
     /**
+     * Form id
+     */
+    id: string;
+    /**
      * Form name
      */
     name: string;
@@ -15,7 +19,7 @@ interface Form {
 
 const Form: FC<Form> = (props) => {
     return (
-        <form className={styles.form} name={props.name} onSubmit={props.onSubmit}>
+        <form className={styles.form} id={props.id} name={props.name} onSubmit={props.onSubmit}>
             {props.children}
         </form>
     );
