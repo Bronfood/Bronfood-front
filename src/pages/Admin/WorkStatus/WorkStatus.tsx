@@ -4,19 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import AdminPopup from '../AdminPopup/AdminPopup';
 import { DatePicker } from '../../../components/DatePicker/DatePicker';
 import { useTranslation } from 'react-i18next';
-import WorkingHours from './WorkingHours/WorkingHours';
 import { useGetAdminSchedules } from '../../../utils/hooks/useAdminSchedules/useAdminSchedules';
 import Preloader from '../../../components/Preloader/Preloader';
 import { Schedule } from '../../../utils/api/adminService/adminService';
 import { formatDate } from '../../../utils/serviceFuncs/formatDate';
 import { getLastDayOfMonth } from '../../../utils/serviceFuncs/getLastDayOfMonth';
 import { getFirstDayOfMonth } from '../../../utils/serviceFuncs/getFirstDayOfMonth';
+import Form from '../../../components/Form/Form';
+import { useForm } from 'react-hook-form';
+import { InputTime } from '../../../components/InputTime/InputTime';
 
 function WorkStatus() {
     const [date, setDate] = useState<Date>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const {
+        register,
+        formState: { errors },
+    } = useForm({ mode: 'onBlur' });
     const year = useMemo(() => date.getFullYear(), [date]);
     const month = useMemo(() => date.getMonth(), [date]);
     const start = useMemo(() => getFirstDayOfMonth(year, month), [year, month]);
@@ -35,7 +41,14 @@ function WorkStatus() {
         <>
             <AdminPopup close={close}>
                 <h1 className={styles.title}>{t(`pages.admin.workStatus`)}</h1>
-                <WorkingHours openTime={openTime} closeTime={closeTime} />
+                <Form name="work-status" /* onSubmit={handleSubmit(onSubmit)} */>
+                    {/* {signUp.isError && <ErrorMessage message={signUpErrorMessage} />} */}
+                    <fieldset className={styles.fieldset} disabled={isPending}>
+                        <InputTime name="open time" register={register} errors={errors} value={openTime} placeholder="HH:MM"></InputTime>
+                        <div className={styles.line}></div>
+                        <InputTime name="close time" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
+                    </fieldset>
+                </Form>
                 {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} />}
             </AdminPopup>
         </>

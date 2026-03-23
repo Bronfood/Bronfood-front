@@ -47,6 +47,9 @@ i18n
                             minLengthErrorMessage: 'Минимальное количество символов -',
                             maxLengthErrorMessage: 'Максимальное количество символов - ',
                         },
+                        inputTime: {
+                            invalidTimeFormat: 'Введите время в формате HH:MM',
+                        },
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',

@@ -9,3 +9,17 @@
     line-height: 1.4;
     color: variables.$black;
 }
+
+.fieldset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: none;
+}
+
+.line {
+    height: 1px;
+    width: 24px;
+    border-top: 1px solid variables.$grey-line;
+}
