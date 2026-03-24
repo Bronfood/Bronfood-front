@@ -42,4 +42,9 @@ export class AdminServiceReal implements AdminService {
         const endDate = formatDate(end);
         return handleFetch(`api/restaurants/admin/schedules/?start_date=${startDate}&end_date=${endDate}`);
     }
+
+    async addSchedule(date: Date, openTime: string | null, closeTime: string | null): Promise<{ data: Schedule }> {
+        const formattedDate = formatDate(date);
+        return handleFetch('api/restaurants/admin/schedules/', { method: 'POST', data: { day: formattedDate, open_time: openTime, close_time: closeTime } });
+    }
 }
