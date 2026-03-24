@@ -60,8 +60,8 @@ export type AdminOrderFromApi = Omit<AdminOrder, 'waitingTime' | 'meals'> & { wa
 export type Schedule = {
     id: number;
     date: string;
-    open_time: string;
-    close_time: string;
+    open_time: string | null;
+    close_time: string | null;
 };
 
 export interface AdminService {
