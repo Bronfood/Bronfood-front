@@ -26,7 +26,7 @@ interface InputTime {
     /**
      * Input Value
      */
-    value?: string;
+    value?: string | null;
 }
 
 export const InputTime: FC<InputTime> = (props) => {

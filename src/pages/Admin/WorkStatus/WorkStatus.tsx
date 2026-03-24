@@ -37,7 +37,7 @@ function WorkStatus() {
         register,
         handleSubmit,
         formState: { isDirty, errors },
-    } = useForm({ mode: 'onBlur', defaultValues: { openTime, closeTime } });
+    } = useForm({ mode: 'onBlur' });
     const close = () => {
         navigate('/admin');
     };
@@ -64,7 +64,7 @@ function WorkStatus() {
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} onDayBlur={handleDayBlur} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" /* isLoading={changeAdminOrderStatus.isPending} */ />}
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" isLoading={addSchedule.isPending} />}
         </>
     );
 }
