@@ -45,7 +45,6 @@ function WorkStatus() {
         if (isDirty) setIsConfirmationPopupOpen(true);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
         const { openTime, closeTime } = data;
         await addSchedule.mutateAsync({ date, openTime, closeTime });
         setIsConfirmationPopupOpen(false);
