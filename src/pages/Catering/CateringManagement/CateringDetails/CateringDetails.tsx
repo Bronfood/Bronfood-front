@@ -3,16 +3,16 @@ import Popup from '../../../../components/Popups/Popup/Popup';
 import { useTranslation } from 'react-i18next';
 import ButtonUnderline from '../../../../components/ButtonUnderline/ButtonUnderline';
 import styles from './CateringDetails.module.scss';
-import CateringCard from './CateringCard/CateringCard';
 import { useState, MouseEvent, useEffect, useMemo } from 'react';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import Preloader from '../../../../components/Preloader/Preloader';
 import { useDeleteCatering, useGetCateringById, useGetCaterings } from '../../../../utils/hooks/useCatering/useCatering';
-import CategoriesList from '../CategoriesList/CategoriesList';
 import { useGetCategories } from '../../../../utils/hooks/useCategory/useCategory';
 import { useCopyMenu, useGetCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { Catering } from '../../../../utils/api/cateringService/cateringService';
+import CateringCard from '../../../../components/Cards/CateringCard/CateringCard';
+import CategoriesList from '../../../../components/CategoriesList/CategoriesList';
 
 const CateringWithMealsCheck = ({ catering, onCopy }: { catering: Catering; onCopy: () => void }) => {
     const { data: meals, isLoading } = useGetCateringMeals(catering.id);
@@ -101,12 +101,12 @@ const CateringDetails = () => {
             <Popup arrowBack onClose={onClose}>
                 {(isLoadingCatering || isLoadingCategories || isLoadingMeals || isLoadingCaterings) && <Preloader />}
                 <div className={`${styles['container']} ${styles['container__catering']}`}>
-                    <ButtonUnderline onClick={onEditСatering}>{t('pages.cateringManagement.buttonEditCatering')}</ButtonUnderline>
+                    <ButtonUnderline onClick={onEditСatering}>{t('pages.cateringManagement.editCatering')}</ButtonUnderline>
                     {catering && <CateringCard key={catering.data.id} card={catering.data} onDelete={handleDeleteClick} />}
                 </div>
                 {catering?.data.type === 'businessCenter' && (
                     <div className={`${styles['container']} ${styles['container__collect']}`}>
-                        <ButtonUnderline onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.buttonCollectWeeklyMenu')}</ButtonUnderline>
+                        <ButtonUnderline onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.collectWeeklyMenu')}</ButtonUnderline>
                     </div>
                 )}
                 {meals && meals.data.length === 0 ? (
@@ -124,7 +124,7 @@ const CateringDetails = () => {
                 ) : (
                     <>
                         <div className={`${styles['container']} ${styles['container__menu']}`}>
-                            <ButtonUnderline onClick={onEditMenu}>{t('pages.cateringManagement.buttonEditMenu')}</ButtonUnderline>
+                            <ButtonUnderline onClick={onEditMenu}>{t('pages.cateringManagement.editMenu')}</ButtonUnderline>
                         </div>
                         {categories && categories.data.length > 0 && (
                             <div className={styles['container__categories']}>
