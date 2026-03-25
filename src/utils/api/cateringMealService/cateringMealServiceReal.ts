@@ -25,4 +25,11 @@ export class CateringMealServiceReal implements CateringMealService {
             data,
         });
     }
+
+    async copyMenu(cateringId: number, fromRestaurantId: number): Promise<void> {
+        return handleFetch(`api/dashboard/restaurants/${cateringId}/menu/copy/`, {
+            method: 'POST',
+            data: { from_restaurant_id: fromRestaurantId },
+        });
+    }
 }

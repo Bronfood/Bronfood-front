@@ -3,45 +3,57 @@ import { useTranslation } from 'react-i18next';
 import ButtonIconAdd from '../../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { useState } from 'react';
 import AddAdditivePopup from './AddAdditivePopup/AddAdditivePopup';
-import { useGetCateringMealById } from '../../../../../utils/hooks/useCateringMeal/useCateringMeal';
-import { useParams } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
+import { Feature } from '../../../../../utils/api/cateringMealService/cateringMealService';
 
 const AdditivesStep = () => {
     const { t } = useTranslation();
-    const [openPopup, setOpenPopup] = useState<boolean>(false);
-    const { cateringMealId, cateringId } = useParams();
+    const [popupState, setPopupState] = useState<{ feature: Feature | null } | null>(null);
+    const { watch, setValue, getValues } = useFormContext();
+    const features = (watch('features') as Feature[]) ?? [];
 
-    const { data } = useGetCateringMealById(Number(cateringId), Number(cateringMealId));
+    const handleOpenCreate = () => setPopupState({ feature: null });
 
-    const handleOpenPopup = () => setOpenPopup(true);
+    const handleOpenEdit = (feature: Feature) => setPopupState({ feature });
 
-    const handleClosePopup = () => setOpenPopup(false);
+    const handleClosePopup = () => setPopupState(null);
+
+    const handleSaveFeature = (savedFeature: Feature) => {
+        const current = (getValues('features') as Feature[]) ?? [];
+        const exists = current.some((f) => f.id === savedFeature.id);
+        const updated = exists ? current.map((f) => (f.id === savedFeature.id ? savedFeature : f)) : [...current, savedFeature];
+        setValue('features', updated, { shouldValidate: true });
+        handleClosePopup();
+    };
 
     return (
         <fieldset className={styles.fieldset}>
-            <div className={styles.list__header}>
-                <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealAdditives')}</p>
-            </div>
-            {data && data.data.features ? (
-                <ul className={`${styles.list__items} ${styles.list__items_additive}`}>
-                    {data.data.features.map((feature) => (
-                        <li className={`${styles.list__item} ${styles.list__additive}`} key={feature.id}>
-                            <p className={styles.list__additive_name}>{feature.name}</p>
-                            <button className={styles.list__edit} onClick={handleOpenPopup}></button>
-                            <ul className={styles.list__additives}>
-                                {feature.choices.map((choice) => (
-                                    <li key={choice.id} className={styles.list__additives_item}>
-                                        <p className={styles.list__additives_name}>{choice.name}</p>
-                                        <p className={styles.list__additives_price}>{`${choice.price} ₸`}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    ))}
-                </ul>
+            {features ? (
+                <div className={styles.list}>
+                    <p className={styles.list__title}>{t('pages.cateringManagement.mealAdditives')}</p>
+
+                    <ul className={styles.list__items}>
+                        {features.map((feature) => (
+                            <li className={styles.list__item} key={feature.id}>
+                                <div className={styles.list__item_title}>
+                                    <p className={styles.list__item_name}>{feature.name}</p>
+                                    <button className={styles.list__edit} onClick={() => handleOpenEdit(feature)}></button>
+                                </div>
+                                <ul className={styles.list__additives}>
+                                    {feature.choices.map((choice) => (
+                                        <li key={choice.id} className={styles.list__additives_item}>
+                                            <p className={styles.list__additives_name}>{choice.name}</p>
+                                            <p className={styles.list__additives_price}>{`${choice.price} ₸`}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             ) : null}
-            {openPopup && <AddAdditivePopup onClose={handleClosePopup} />}
-            <ButtonIconAdd onClick={handleOpenPopup}>{t('pages.cateringManagement.addAdditionsToMeal')}</ButtonIconAdd>
+            {popupState && <AddAdditivePopup data={popupState.feature} onClose={handleClosePopup} onSave={handleSaveFeature} />}
+            <ButtonIconAdd onClick={handleOpenCreate}>{t('pages.cateringManagement.addAdditionsToMeal')}</ButtonIconAdd>
         </fieldset>
     );
 };

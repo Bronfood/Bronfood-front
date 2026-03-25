@@ -16,6 +16,20 @@
         margin-top: 16px;
         padding: 0 14.5px;
     }
+
+    &__categories {
+        margin-top: 10px;
+        padding: 0 12.5px;
+    }
+
+    &__caterings {
+        gap: 35px;
+        padding: 10px 12.5px 0;
+
+        &_text {
+            text-align: center;
+        }
+    }
 }
 
 .confirmation-popup-wrapper {

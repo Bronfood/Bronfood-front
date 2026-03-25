@@ -41,3 +41,13 @@ export const useUpdateCateringMeal = () => {
         },
     });
 };
+
+export const useCopyMenu = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ cateringId, fromRestaurantId }: { cateringId: number; fromRestaurantId: number }) => cateringMealService.copyMenu(cateringId, fromRestaurantId),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['cateringMeals', variables.cateringId] });
+        },
+    });
+};

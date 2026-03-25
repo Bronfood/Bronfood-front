@@ -1,9 +1,6 @@
-import { CateringMeal } from '../cateringMealService/cateringMealService';
-import { CateringServiceMock } from './cateringServiceMock';
 import { CateringServiceReal } from './cateringServiceReal';
 
 export const weekdayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export type TimeString = `${number}:${number}`;
 
 export type Day = {
@@ -19,45 +16,6 @@ export type Day = {
      * Day's close_time
      */
     close_time: TimeString | null;
-};
-
-export type Category = {
-    /**
-     * Category's id
-     */
-    id: number;
-    /**
-     * Category's name
-     */
-    name: string;
-    /**
-     * Category's photo
-     */
-    photo: string;
-    /**
-     * Category's meals
-     */
-    meals?: CateringMeal[];
-};
-
-export type DailyCategory = {
-    /**
-     * Category's id
-     */
-    id: number;
-    /**
-     * Category's name
-     */
-    name: string;
-    /**
-     * Category's meals
-     */
-    meals?: CateringMeal[];
-};
-
-export type WeeklyMenu = {
-    daily_categories?: DailyCategory[];
-    weekday: Weekday;
 };
 
 export type Catering = {
@@ -143,16 +101,3 @@ export interface CateringService {
 }
 
 export const cateringService = new CateringServiceReal();
-export interface MockCateringService {
-    getCategories: () => Promise<{ data: Category[] }>;
-    getCategoryById: (id: number) => Promise<{ data: Category }>;
-    createCategory: (data: Omit<Category, 'id'>) => Promise<{ data: Category }>;
-
-    getWeeklyMenu: () => Promise<{ data: WeeklyMenu[] }>;
-    getWeeklyMenuByWeekday: (weekday: string) => Promise<{ data: WeeklyMenu }>;
-    addCategoryToWeeklyMenu: (weekday: Weekday, category: Omit<DailyCategory, 'id'>) => Promise<{ data: WeeklyMenu }>;
-    deleteCategoryToWeeklyMenu: (weekday: Weekday, dailyCategoryId: number) => Promise<{ data: WeeklyMenu }>;
-    updateCategoryToWeeklyMenu: (weekday: Weekday, category: Partial<DailyCategory> & { id: number }) => Promise<{ data: WeeklyMenu }>;
-}
-
-export const cateringServiceMock = new CateringServiceMock();

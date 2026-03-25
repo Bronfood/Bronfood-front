@@ -1,5 +1,5 @@
 import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
-import { CateringMeal } from '../../../../../utils/api/cateringMealService/cateringMealService';
+import { CateringMeal, Feature } from '../../../../../utils/api/cateringMealService/cateringMealService';
 import styles from './MealItem.module.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -11,9 +11,11 @@ type MealItemProps = {
     isOpen: boolean;
     isVisible: boolean;
     onVisible: () => void;
+    onDeleteFeature: (featureId: number) => void;
+    onEditFeature: (feature: Feature) => void;
 };
 
-const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVisible }: MealItemProps) => {
+const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVisible, onDeleteFeature, onEditFeature }: MealItemProps) => {
     const { t } = useTranslation();
 
     const isInfo = meal.features && meal.features.length > 0;
@@ -60,21 +62,21 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVi
                 )}
             </div>
             {isInfo && isOpen && (
-                <ul className={styles.list}>
+                <div className={styles.list}>
                     {meal.features && meal.features.length > 0 && (
-                        <li className={styles.list__unit}>
-                            <div className={styles.list__header}>
-                                <p className={styles.list__title}>{t('pages.cateringManagement.subtitleMealAdditives')}</p>
-                                <div className={styles.list__buttons}>
-                                    <button className={`${styles.list__button} ${styles.list__edit}`}></button>
-                                    <button className={`${styles.list__button} ${styles.list__delete}`}></button>
-                                </div>
-                            </div>
-
+                        <>
+                            <p className={styles.list__title}>{t('pages.cateringManagement.mealAdditives')}</p>
                             <ul className={styles.list__additives}>
                                 {meal.features.map((feature) => (
                                     <li key={feature.id} className={`${styles.list__item} ${styles.list__additive}`}>
-                                        <p className={styles.list__item_title}>{feature.name}</p>
+                                        <div className={styles.list__header}>
+                                            <p className={styles.list__item_title}>{feature.name}</p>
+                                            <div className={styles.list__buttons}>
+                                                <button className={`${styles.list__button} ${styles.list__edit}`} onClick={() => onEditFeature(feature)}></button>
+                                                <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => onDeleteFeature(feature.id)}></button>
+                                            </div>
+                                        </div>
+
                                         <ul className={styles.list__items}>
                                             {feature.choices.map((choice) => (
                                                 <li key={choice.id} className={styles.list__items_item}>
@@ -86,9 +88,9 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVi
                                     </li>
                                 ))}
                             </ul>
-                        </li>
+                        </>
                     )}
-                </ul>
+                </div>
             )}
         </li>
     );

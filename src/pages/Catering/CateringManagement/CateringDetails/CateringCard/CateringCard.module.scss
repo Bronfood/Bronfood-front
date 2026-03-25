@@ -99,4 +99,12 @@
         right: 18px;
         cursor: pointer;
     }
+
+    &__copy {
+        padding: 15px;
+
+        button {
+            margin-top: 0;
+        }
+    }
 }

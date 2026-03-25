@@ -87,8 +87,12 @@ i18n
                             areYouSureYouWantToRemoveTheCatering: 'Вы уверены, что хотите удалить заведение?',
                             areYouSureYouWantToRemoveCategoryToWeeklyMenu: 'Вы уверены, что хотите удалить категорию в еженедельном меню?',
                             areYouSureYouWantToRemoveTheMeal: 'Вы уверены, что хотите удалить блюдо?',
+                            areYouSureYouWantToRemoveTheMealFeature: 'Вы уверены, что хотите удалить дополнения к блюду?',
+                            areYouSureYouWantToRemoveTheCategory: 'Вы уверены, что хотите удалить категорию?',
+                            areYouSureYouWantCopyMenu: 'Вы уверены, что хотите скопировать меню?',
                             yes: 'Да',
                             delete: 'Удалить',
+                            copy: 'Копировать',
                         },
 
                         orderTimeCounter: {
@@ -332,7 +336,7 @@ i18n
 
                         cateringManagement: {
                             registrationCatering: 'Регистрация заведения',
-                            titleAddCategory: 'Добавление категории',
+                            addCategory: 'Добавление категории',
                             titleEditCategory: 'Редактирование категории',
                             editCatering: 'Редактирование  заведения',
                             titleMealMenu: 'Меню',
@@ -347,6 +351,7 @@ i18n
                             buttonPrev: 'Назад',
                             buttonSave: 'Сохранить',
                             buttonAdd: 'Добавить',
+                            deleteCategory: 'Удалить категорию',
                             buttonEditCatering: 'Редактировать заведение',
                             buttonEditMenu: 'Редактировать меню',
                             buttonCollectWeeklyMenu: 'Собрать еженедельное меню',
@@ -421,7 +426,7 @@ i18n
                             collapseInfoMealButton: 'Свернуть',
                             showAllInfoMealButton: 'Показать все',
                             subtitleMealSizes: 'Размеры',
-                            subtitleMealAdditives: 'Добавки',
+                            mealAdditives: 'Добавки',
                             subtitleMealSauces: 'Соусы',
                             subtitleAddMeal: 'Выберите блюда',
                             youDonHaveCollectMenu: 'У вас нет собранного меню',
@@ -430,6 +435,10 @@ i18n
                             chooseDayToCollectMenuForTheDesiredDayAndPlanTheCategoriesInAdvance: 'Выберите день, чтобы собрать меню на нужный день и спланировать категории заранее',
                             thereAreNoAvailableMealToAdd: 'Нет доступных блюд для добавления',
                             yourMenuSaved: 'Ваше меню сохранено',
+                            youCanCopyTheMenuFromTheCateringsYouHave: 'Вы можете скопировать меню из заведений кторые у вас есть',
+                            createNewMenu: 'Создать новое  меню',
+                            copyMenu: 'Скопировать меню',
+                            noPhoto: 'нет фото',
                         },
                     },
                     errors: {

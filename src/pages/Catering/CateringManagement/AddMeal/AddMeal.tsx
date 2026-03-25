@@ -9,6 +9,7 @@ import { useState } from 'react';
 import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
 import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
+import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
 
 const AddMeal = () => {
     const { t } = useTranslation();
@@ -17,11 +18,14 @@ const AddMeal = () => {
     const [showThanksPopup, setShowThanksPopup] = useState(false);
     const { cateringId } = useParams();
 
+    const handleNavigate = () => {
+        navigate(`/catering/${cateringId}/menu`);
+    };
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description || '');
-        formData.append('type', data.type);
 
         const photoFile = dataURLtoFile(data.photo, 'photo.jpg');
         formData.append('photo', photoFile);
@@ -35,15 +39,30 @@ const AddMeal = () => {
         formData.append('base_price', data.base_price);
         formData.append('is_visible', String(data.is_visible));
 
+        if (data.features && data.features.length > 0) {
+            data.features.forEach((feature: Feature, fIndex: number) => {
+                formData.append(`features[${fIndex}]name`, feature.name);
+
+                if (feature.id > 0) {
+                    formData.append(`features[${fIndex}]id`, String(feature.id));
+                }
+
+                feature.choices.forEach((choice, cIndex: number) => {
+                    formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
+                    formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
+
+                    if (choice.id > 0) {
+                        formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
+                    }
+                });
+            });
+        }
+
         await mutateAsync({
             cateringId: Number(cateringId),
             data: formData,
         });
         setShowThanksPopup(true);
-    };
-
-    const handleNavigate = () => {
-        navigate(`/catering/${cateringId}/menu`);
     };
 
     if (showThanksPopup) {
@@ -60,12 +79,13 @@ const AddMeal = () => {
                 defaultValues={{
                     name: '',
                     description: '',
-                    type: 'food',
+                    category: null,
                     waiting_time: '',
                     photo: '',
                     tags: [],
-                    base_price: 0,
+                    base_price: '',
                     is_visible: true,
+                    features: [],
                 }}
             />
         </>

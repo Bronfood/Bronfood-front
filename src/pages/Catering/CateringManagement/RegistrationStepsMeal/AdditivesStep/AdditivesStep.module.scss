@@ -12,7 +12,7 @@
 .list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
 
     &__title {
         color: variables.$grey;
@@ -21,27 +21,18 @@
     &__items {
         display: flex;
         flex-direction: column;
-
-        &_sauce {
-            gap: 8px;
-        }
-
-        &_additive {
-            gap: 12px;
-        }
-
-        &_size {
-            gap: 8px;
-        }
+        gap: 20px;
     }
 
     &__item {
         display: flex;
         flex-direction: column;
-    }
-
-    &__additive {
         gap: 4px;
+
+        &_title {
+            display: flex;
+            justify-content: space-between;
+        }
 
         &_name {
             color: variables.$black;
@@ -71,59 +62,11 @@
         }
     }
 
-    &__size {
-        gap: 4px;
-
-        &_name {
-            color: variables.$black;
-        }
-
-        &_item {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        &_size {
-            color: variables.$light-gray;
-            font-weight: 400;
-            font-size: 14px;
-        }
-
-        &_price {
-            color: variables.$grey;
-            font-weight: 400;
-            font-size: 14px;
-        }
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        padding-bottom: 16px;
-    }
-
     &__edit {
         background-image: url('../../../../../vendor/images/icons/buttonIconRound/edit.svg');
         border: none;
         background-color: transparent;
         width: 24px;
         height: 24px;
-    }
-
-    &__sauce {
-        justify-content: space-between;
-        flex-direction: row;
-
-        &_name {
-            color: variables.$light-gray;
-            font-weight: 400;
-            font-size: 14px;
-        }
-
-        &_price {
-            color: variables.$grey;
-            font-weight: 400;
-            font-size: 14px;
-        }
     }
 }

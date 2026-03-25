@@ -1,33 +1,8 @@
-import { emptyCategories, emptyWeeklyMenu } from './MockCateringService';
-import { MockCateringService, Category, DailyCategory, WeeklyMenu, Weekday } from './cateringService';
+import { CateringWeeklyMenuService, DailyCategory, Weekday, WeeklyMenu } from './cateringWeeklyMenuService';
+import { emptyWeeklyMenu } from './MockCateringWeeklyMenuService';
 
-export class CateringServiceMock implements MockCateringService {
-    private categories: Category[] = emptyCategories;
+export class CateringWeeklyMenuServiceMock implements CateringWeeklyMenuService {
     private weeklyMenu: WeeklyMenu[] = emptyWeeklyMenu;
-
-    async getCategories(): Promise<{ data: Category[] }> {
-        return await Promise.resolve({ data: this.categories });
-    }
-
-    async getCategoryById(id: number): Promise<{ data: Category }> {
-        const numericId = Number(id);
-        const category = this.categories.find((c) => c.id === numericId);
-
-        if (category) {
-            return await Promise.resolve({ data: category });
-        }
-        return await Promise.reject(new Error('Error: category not found'));
-    }
-
-    async createCategory(data: Omit<Category, 'id'>): Promise<{ data: Category }> {
-        const newCategory = {
-            ...data,
-            id: Date.now(),
-        };
-
-        this.categories.push(newCategory);
-        return { data: newCategory };
-    }
 
     async getWeeklyMenu(): Promise<{ data: WeeklyMenu[] }> {
         return await Promise.resolve({ data: this.weeklyMenu });

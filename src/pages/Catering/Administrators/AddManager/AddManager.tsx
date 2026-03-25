@@ -13,6 +13,10 @@ const AddManager = () => {
     const { cateringId } = useParams();
     const { mutateAsync, isPending, error } = useCreateManager();
 
+    const onClose = () => {
+        navigate('/');
+    };
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         await mutateAsync({
             cateringId: Number(cateringId),
@@ -27,10 +31,6 @@ const AddManager = () => {
                 fromSubmit: true,
             },
         });
-    };
-
-    const onClose = () => {
-        navigate('/');
     };
 
     return (

@@ -89,8 +89,8 @@ function App() {
                     <Route path=":cateringId/managers/add-manager" element={<AddManager />} />
                     <Route path=":cateringId/managers/:managerId" element={<EditManager />} />
 
-                    <Route path=":cateringId/menu/category" element={<AddCategory />} />
-                    <Route path=":cateringId/menu/category/:categoryId" element={<EditCategory />} />
+                    <Route path=":cateringId/menu/add-category" element={<AddCategory />} />
+                    <Route path=":cateringId/menu/categories/:categoryId" element={<EditCategory />} />
 
                     <Route path=":cateringId/collect-weekly-menu">
                         <Route index element={<CollectWeeklyMenu />} />

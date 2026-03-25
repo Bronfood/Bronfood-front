@@ -34,7 +34,7 @@ const AddCategoryToWeeklyMenu = () => {
 
     return (
         <Popup title={t('pages.cateringManagement.titleCollectCategory')} onClose={onClose}>
-            <RegistrationCategory onSubmit={onSubmit} category={true} />
+            <RegistrationCategory onSubmit={onSubmit} />
             {isPending && <Preloader />}
             {error && <ErrorMessage message={error.message} />}
         </Popup>

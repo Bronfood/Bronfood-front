@@ -9,22 +9,20 @@ import FormInputs from '../../../../../components/FormInputs/FormInputs';
 
 const MediaStep = () => {
     const { t } = useTranslation();
-
     const {
         register,
         watch,
         formState: { errors },
         setValue,
     } = useFormContext();
-
     const values = watch();
-
     const [previewImage, setPreviewImage] = useState<string | null>(values.photo || null);
 
     const handleImageUpload = (image: string | null) => {
         setPreviewImage(image);
         setValue('photo', image || '', { shouldValidate: true });
     };
+
     return (
         <fieldset className={styles.fieldset}>
             <FormInputs>

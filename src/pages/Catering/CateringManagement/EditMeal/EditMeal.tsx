@@ -9,6 +9,7 @@ import { useState } from 'react';
 import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
+import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
 
 const EditMeal = () => {
     const { t } = useTranslation();
@@ -19,11 +20,14 @@ const EditMeal = () => {
     const { mutateAsync: updateMeal, isPending, error } = useUpdateCateringMeal();
     const [showThanksPopup, setShowThanksPopup] = useState(false);
 
+    const handleNavigate = () => {
+        navigate(`/catering/${cateringId}/menu`);
+    };
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description || '');
-        formData.append('type', data.type);
 
         if (data.photo) {
             if (typeof data.photo === 'string' && data.photo.startsWith('data:')) {
@@ -44,16 +48,29 @@ const EditMeal = () => {
         formData.append('base_price', data.base_price);
         formData.append('is_visible', String(data.is_visible));
 
+        if (data.features && data.features.length > 0) {
+            data.features.forEach((feature: Feature, fIndex: number) => {
+                if (feature.id > 0) {
+                    formData.append(`features[${fIndex}]id`, String(feature.id));
+                }
+                formData.append(`features[${fIndex}]name`, feature.name);
+
+                feature.choices.forEach((choice, cIndex: number) => {
+                    if (choice.id > 0) {
+                        formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
+                    }
+                    formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
+                    formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
+                });
+            });
+        }
+
         await updateMeal({
             cateringId: Number(cateringId),
             cateringMealId: Number(cateringMealId),
             data: formData,
         });
         setShowThanksPopup(true);
-    };
-
-    const handleNavigate = () => {
-        navigate(`/catering/${cateringId}/menu`);
     };
 
     if (showThanksPopup) {
@@ -71,12 +88,13 @@ const EditMeal = () => {
                     defaultValues={{
                         name: meal.data.name,
                         description: meal.data.description,
-                        type: meal.data.type,
+                        category: meal.data.category,
                         waiting_time: meal.data.waiting_time,
                         photo: meal.data.photo,
                         tags: meal.data.tags,
                         base_price: meal.data.base_price,
                         is_visible: meal.data.is_visible,
+                        features: meal.data.features,
                     }}
                 />
             )}

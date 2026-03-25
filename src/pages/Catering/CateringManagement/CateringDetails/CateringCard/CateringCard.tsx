@@ -1,20 +1,26 @@
 import { Catering } from '../../../../../utils/api/cateringService/cateringService';
 import styles from './CateringCard.module.scss';
 import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
+import Button from '../../../../../components/Button/Button';
+import { useTranslation } from 'react-i18next';
 
 type CateringCardProps = {
     card: Catering;
-    onDelete: () => void;
+    onDelete?: () => void;
+    onCopy?: () => void;
 };
 
-const CateringCard = ({ card, onDelete }: CateringCardProps) => {
+const CateringCard = ({ card, onDelete, onCopy }: CateringCardProps) => {
+    const { t } = useTranslation();
     return (
         <div className={styles.card}>
             <div className={styles.card__container}>
                 <div className={styles.card__image} style={{ backgroundImage: `url(${card.photo})` }} />
-                <div className={styles.card__delete}>
-                    <ButtonIconRound icon="delete" onClick={onDelete} />
-                </div>
+                {onDelete && (
+                    <div className={styles.card__delete}>
+                        <ButtonIconRound icon="delete" onClick={onDelete} />
+                    </div>
+                )}
                 <div className={styles.card__description}>
                     <div className={styles.card__title_container}>
                         <p className={styles.card__title}>{card.name}</p>
@@ -26,6 +32,11 @@ const CateringCard = ({ card, onDelete }: CateringCardProps) => {
                         <p className={styles.card__feature_title}>{card.address}</p>
                     </div>
                 </div>
+                {onCopy && (
+                    <div className={styles.card__copy}>
+                        <Button onClick={onCopy}>{t('pages.cateringManagement.copyMenu')}</Button>
+                    </div>
+                )}
             </div>
         </div>
     );

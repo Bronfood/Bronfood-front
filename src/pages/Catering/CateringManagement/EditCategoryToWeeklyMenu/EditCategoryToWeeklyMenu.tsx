@@ -5,8 +5,8 @@ import RegistrationCategory from '../RegistrationCategory/RegistrationCategory';
 import Preloader from '../../../../components/Preloader/Preloader';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useGetWeeklyMenuByWeekday, useUpdateCategoryToWeeklyMenu } from '../../../../utils/hooks/useWeeklyMenu/useWeeklyMenu';
-import { DailyCategory } from '../../../../utils/api/cateringService/cateringService';
 import { useTranslation } from 'react-i18next';
+import { DailyCategory } from '../../../../utils/api/cateringWeeklyMenuService/cateringWeeklyMenuService';
 
 const EditCategoryToWeeklyMenu = () => {
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const EditCategoryToWeeklyMenu = () => {
 
     return (
         <Popup title={t('pages.cateringManagement.titleCollectCategory')} onClose={onClose}>
-            {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, meals: dailyCategory.meals || [] }} category={true} />}
+            {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, meal_ids: dailyCategory.meals?.map((meal) => meal.id) || [] }} />}
             {isPending && <Preloader />}
             {error && <ErrorMessage message={error.message} />}
         </Popup>

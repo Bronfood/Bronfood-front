@@ -1,29 +1,23 @@
-import Preloader from '../../../../components/Preloader/Preloader';
-import { useGetCategories } from '../../../../utils/hooks/useCategory/useCategory';
+import { Category } from '../../../../utils/api/categoryService/categoryService';
 import styles from './CategoriesList.module.scss';
+import { useTranslation } from 'react-i18next';
 
 type CategoriesListProps = {
     onClick?: (categoryId: number) => void;
+    categories: Category[];
 };
 
-const CategoriesList = ({ onClick }: CategoriesListProps) => {
-    const { data: categories, isLoading } = useGetCategories();
+const CategoriesList = ({ onClick, categories }: CategoriesListProps) => {
+    const { t } = useTranslation();
     return (
-        <>
-            {isLoading && <Preloader />}
-            {categories?.data && categories.data.length > 0 ? (
-                <ul className={styles.categories}>
-                    {categories?.data.map((category) => {
-                        return (
-                            <li key={category.id} className={styles.category} onClick={() => onClick && onClick(category.id)}>
-                                <div className={styles.category__image} style={{ backgroundImage: `url(${category.photo})` }}></div>
-                                <p className={styles.category__name}>{category.name}</p>
-                            </li>
-                        );
-                    })}
-                </ul>
-            ) : null}
-        </>
+        <ul className={styles.categories}>
+            {categories.map((category) => (
+                <li key={category.id} className={styles.category} onClick={() => onClick && onClick(category.id)}>
+                    <div className={styles.category__image}>{category.photo ? <div className={styles.category__imageBg} style={{ backgroundImage: `url(${category.photo})` }} /> : <p className={styles.category__noPhoto}>{t('pages.cateringManagement.noPhoto')}</p>}</div>
+                    <p className={styles.category__name}>{category.name}</p>
+                </li>
+            ))}
+        </ul>
     );
 };
 

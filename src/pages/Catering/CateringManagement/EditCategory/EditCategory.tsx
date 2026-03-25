@@ -4,41 +4,87 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import RegistrationCategory from '../RegistrationCategory/RegistrationCategory';
 import Preloader from '../../../../components/Preloader/Preloader';
-import { useGetCategoryById } from '../../../../utils/hooks/useCategory/useCategory';
+import { useDeleteCategory, useGetCategoryById, useUpdateCategory } from '../../../../utils/hooks/useCategory/useCategory';
+import { useState, MouseEvent } from 'react';
+import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
+import styles from './EditCategory.module.scss';
+import ButtonGrey from '../../../../components/ButtonGrey/ButtonGrey';
 
 const EditCategory = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { categoryId } = useParams();
+    const { cateringId, categoryId } = useParams();
+    const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+    const { data: category, isLoading } = useGetCategoryById(Number(cateringId), Number(categoryId));
+    const { mutateAsync: deleteCategory, isPending: isDeleting } = useDeleteCategory();
+    const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategory();
+
     const onClose = () => {
         navigate(-1);
     };
-    const { data: category, isLoading } = useGetCategoryById(Number(categoryId));
+
+    const handleDelete = () => {
+        setShowConfirmationPopup(true);
+    };
+
+    const handleOverlayClick = (e: MouseEvent) => {
+        if (e.target === e.currentTarget) {
+            setShowConfirmationPopup(false);
+        }
+    };
+
+    const handleConfirmDelete = async () => {
+        setShowConfirmationPopup(false);
+        await deleteCategory({ cateringId: Number(cateringId), categoryId: Number(categoryId) });
+        navigate(`/catering/${cateringId}/menu`);
+    };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const categoryData = {
-            id: Number(categoryId),
-            name: data.name,
-            photo: data.photo || '',
-            meals: data.meals || [],
-        };
-        console.log(data, categoryData);
+        await updateCategory({
+            cateringId: Number(cateringId),
+            data: {
+                categoryId: Number(categoryId),
+                name: data.name,
+                meal_ids: data.meal_ids || [],
+            },
+        });
+        navigate(`/catering/${cateringId}/menu`, {
+            state: {
+                fromSubmit: true,
+            },
+        });
     };
 
     return (
-        <Popup title={t('pages.cateringManagement.titleEditCategory')} onClose={onClose}>
-            {isLoading && <Preloader />}
-            {category && (
-                <RegistrationCategory
-                    onSubmit={onSubmit}
-                    defaultValues={{
-                        name: category.data.name || '',
-                        photo: category.data.photo || '',
-                        meals: category.data.meals || [],
-                    }}
-                />
+        <>
+            <Popup title={t('pages.cateringManagement.titleEditCategory')} onClose={onClose}>
+                {(isLoading || isUpdating) && <Preloader />}
+                {category && (
+                    <RegistrationCategory
+                        onSubmit={onSubmit}
+                        defaultValues={{
+                            name: category.data.name || '',
+                            meal_ids: category.data.meal_ids || [],
+                        }}
+                        renderDeleteButton={
+                            <ButtonGrey type="button" onClick={handleDelete}>
+                                {t('pages.cateringManagement.deleteCategory')}
+                            </ButtonGrey>
+                        }
+                    />
+                )}
+            </Popup>
+            {showConfirmationPopup && (
+                <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
+                    <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheCategory')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(false)} onSubmit={handleConfirmDelete} />
+                    {isDeleting && (
+                        <div className={styles['preloader-wrapper']}>
+                            <Preloader />
+                        </div>
+                    )}
+                </div>
             )}
-        </Popup>
+        </>
     );
 };
 

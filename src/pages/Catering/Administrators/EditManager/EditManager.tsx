@@ -20,22 +20,6 @@ const EditManager = () => {
     const { mutateAsync: updateManager, isPending: isUpdating } = useUpdateManager();
     const { mutateAsync: deleteManager, isPending: isDeleting } = useDeleteManager();
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        await updateManager({
-            cateringId: Number(cateringId),
-            data: {
-                managerId: Number(managerId),
-                name: data.name,
-                password: data.password,
-            },
-        });
-        navigate(`/catering/${cateringId}managers`, {
-            state: {
-                fromSubmit: true,
-            },
-        });
-    };
-
     const handleDelete = () => {
         setShowConfirmationPopup(true);
     };
@@ -54,6 +38,22 @@ const EditManager = () => {
         if (e.target === e.currentTarget) {
             setShowConfirmationPopup(false);
         }
+    };
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        await updateManager({
+            cateringId: Number(cateringId),
+            data: {
+                managerId: Number(managerId),
+                name: data.name,
+                password: data.password,
+            },
+        });
+        navigate(`/catering/${cateringId}managers`, {
+            state: {
+                fromSubmit: true,
+            },
+        });
     };
 
     return (

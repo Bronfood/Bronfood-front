@@ -1,4 +1,4 @@
-import { Category } from '../cateringService/cateringService';
+import { Category } from '../categoryService/categoryService';
 import { CateringMealServiceReal } from './cateringMealServiceReal';
 
 export type Choice = {
@@ -69,9 +69,9 @@ export type CateringMeal = {
      */
     description?: string;
     /**
-     * Meal's type
+     * Meal's category
      */
-    type: 'food' | 'drink' | 'dessert';
+    category?: Category;
     /**
      * Meal's waiting_time
      */
@@ -96,10 +96,6 @@ export type CateringMeal = {
      * Meal's features
      */
     features?: Feature[];
-    /**
-     * Meal's category
-     */
-    category?: Category;
 };
 
 export interface CateringMealService {
@@ -108,6 +104,7 @@ export interface CateringMealService {
     createCateringMeal: (cateringId: number, data: FormData) => Promise<{ data: CateringMeal }>;
     deleteCateringMeal: (cateringId: number, cateringMealId: number) => Promise<{ success: boolean }>;
     updateCateringMeal: (cateringId: number, cateringMealId: number, data: FormData) => Promise<{ data: CateringMeal }>;
+    copyMenu: (cateringId: number, fromRestaurantId: number) => Promise<void>;
 }
 
 export const cateringMealService = new CateringMealServiceReal();

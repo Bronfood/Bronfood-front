@@ -9,8 +9,8 @@ import Preloader from '../../../../components/Preloader/Preloader';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { useTranslation } from 'react-i18next';
 import { useMemo, useState, MouseEvent } from 'react';
-import { Weekday } from '../../../../utils/api/cateringService/cateringService';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
+import { Weekday } from '../../../../utils/api/cateringWeeklyMenuService/cateringWeeklyMenuService';
 
 const CollectWeeklyMenu = () => {
     const navigate = useNavigate();
