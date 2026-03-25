@@ -75,7 +75,7 @@ function AddAdditivePopup({ data, onClose, onSave }: { data: Feature | null; onC
                     <div onClick={onClose} className={styles.popup__close}>
                         <Button type="button" icon="close" />
                     </div>
-                    <h1 className={styles.popup__title}>{t('pages.cateringManagement.titleAddAdditivePopup')}</h1>
+                    <h1 className={styles.popup__title}>{t('pages.cateringManagement.specifySupplementCategoryAndTheNameTheSupplements')}</h1>
                     <div className={styles.popup__list}>
                         <div className={styles.additive}>
                             <div className={styles.input}>
@@ -101,7 +101,7 @@ function AddAdditivePopup({ data, onClose, onSave }: { data: Feature | null; onC
                         </div>
                     </div>
                     <ButtonSubmit onClick={handleSave} type="button">
-                        {t('pages.cateringManagement.buttonSave')}
+                        {t('pages.cateringManagement.save')}
                     </ButtonSubmit>
                 </div>
             </div>

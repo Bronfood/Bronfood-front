@@ -6,12 +6,14 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import ManagersForm from '../ManagersForm/ManagersForm';
 import { useCreateManager } from '../../../../utils/hooks/useManagers/useManagers';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const AddManager = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
     const { mutateAsync, isPending, error } = useCreateManager();
+    const errorMessage = error ? getErrorMessage(error, 'pages.administrators.') : '';
 
     const onClose = () => {
         navigate('/');
@@ -35,8 +37,12 @@ const AddManager = () => {
 
     return (
         <Popup title={t('pages.administrators.createUsernameAndPassword')} arrowBack onClose={onClose}>
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             {isPending && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
             <ManagersForm onSubmit={onSubmit} isLoading={isPending} />
         </Popup>
     );

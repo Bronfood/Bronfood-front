@@ -10,15 +10,16 @@ import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
 import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const EditMeal = () => {
     const { t } = useTranslation();
     const { cateringMealId, cateringId } = useParams();
     const navigate = useNavigate();
-
     const { data: meal, isLoading: isFetching } = useGetCateringMealById(Number(cateringId), Number(cateringMealId));
     const { mutateAsync: updateMeal, isPending, error } = useUpdateCateringMeal();
     const [showThanksPopup, setShowThanksPopup] = useState(false);
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const handleNavigate = () => {
         navigate(`/catering/${cateringId}/menu`);
@@ -80,10 +81,14 @@ const EditMeal = () => {
     return (
         <>
             {(isPending || isFetching) && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             {meal && (
                 <RegistrationStepsMeal
-                    title={t('pages.cateringManagement.titleEditMeal')}
+                    title={t('pages.cateringManagement.editingMeal')}
                     onSubmit={onSubmit}
                     defaultValues={{
                         name: meal.data.name,

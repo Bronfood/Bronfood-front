@@ -16,7 +16,7 @@ export const useGetCateringMealById = (cateringId: number, cateringMealId: numbe
     });
 };
 
-export const useCreateCateringMeals = () => {
+export const useCreateCateringMeal = () => {
     return useMutation({
         mutationFn: ({ cateringId, data }: { cateringId: number; data: FormData }) => cateringMealService.createCateringMeal(cateringId, data),
     });

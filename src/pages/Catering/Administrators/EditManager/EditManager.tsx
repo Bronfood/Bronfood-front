@@ -9,6 +9,8 @@ import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/C
 import styles from './EditManager.module.scss';
 import { useDeleteManager, useGetManagerById, useUpdateManager } from '../../../../utils/hooks/useManagers/useManagers';
 import ManagersForm from '../ManagersForm/ManagersForm';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 
 const EditManager = () => {
     const { t } = useTranslation();
@@ -17,8 +19,10 @@ const EditManager = () => {
 
     const { cateringId, managerId } = useParams();
     const { data: manager, isLoading: isFetching } = useGetManagerById(Number(cateringId), Number(managerId));
-    const { mutateAsync: updateManager, isPending: isUpdating } = useUpdateManager();
-    const { mutateAsync: deleteManager, isPending: isDeleting } = useDeleteManager();
+    const { mutateAsync: updateManager, error: updateManagerError, isPending: isUpdating } = useUpdateManager();
+    const { mutateAsync: deleteManager, error: deleteManagerError, isPending: isDeleting } = useDeleteManager();
+    const error = updateManagerError || deleteManagerError;
+    const errorMessage = error ? getErrorMessage(error, 'pages.administrators.') : '';
 
     const handleDelete = () => {
         setShowConfirmationPopup(true);
@@ -60,6 +64,11 @@ const EditManager = () => {
         <>
             <Popup title={t('pages.administrators.editData')} arrowBack onClose={onClose}>
                 {isFetching && <Preloader />}
+                {error && (
+                    <div style={{ padding: '0 20px' }}>
+                        <ErrorMessage message={errorMessage} />
+                    </div>
+                )}
                 {manager && (
                     <ManagersForm
                         onSubmit={onSubmit}

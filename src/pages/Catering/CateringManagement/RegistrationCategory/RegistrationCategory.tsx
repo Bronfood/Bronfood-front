@@ -83,13 +83,13 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>
                 {defaultValues && !showAvailableMeals && availableMeals.length !== 0 ? (
                     <div className={styles.form__add}>
-                        <ButtonIconAdd onClick={toggleClickAvailable}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={toggleClickAvailable}>{t('pages.cateringManagement.addMeal')}</ButtonIconAdd>
                     </div>
                 ) : availableMeals.length === 0 ? (
                     <p className={styles.form__subtitle}>{t('pages.cateringManagement.thereAreNoAvailableMealToAdd')}</p>
                 ) : (
                     <div className={styles.form__component}>
-                        <p className={styles.form__subtitle}>{t('pages.cateringManagement.subtitleAddMeal')}</p>
+                        <p className={styles.form__subtitle}>{t('pages.cateringManagement.chooseMeal')}</p>
                     </div>
                 )}
             </div>
@@ -109,7 +109,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                                     <CategoryMealCard key={meal.id} meal={meal} isChecked={tempSelected.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} available={true} />
                                 ))}
                             </ul>
-                            <Button type="submit">{t('pages.cateringManagement.buttonAdd')}</Button>
+                            <Button type="submit">{t('pages.cateringManagement.add')}</Button>
                         </>
                     )}
                     {currentCategoryMeals.length > 0 && (
@@ -122,7 +122,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                 </>
             )}
             {renderDeleteButton}
-            {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.buttonSave') : t('pages.cateringManagement.buttonAdd')}</Button>}
+            {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.save') : t('pages.cateringManagement.add')}</Button>}
         </form>
     );
 };

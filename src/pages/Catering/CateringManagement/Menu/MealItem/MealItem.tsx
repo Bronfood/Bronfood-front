@@ -17,7 +17,6 @@ type MealItemProps = {
 
 const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVisible, onDeleteFeature, onEditFeature }: MealItemProps) => {
     const { t } = useTranslation();
-
     const isInfo = meal.features && meal.features.length > 0;
 
     return (
@@ -26,7 +25,7 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVi
             <div className={styles.meal__image} style={{ backgroundImage: `url(${meal.photo})` }} />
             <div className={`${styles.meal__visible} ${!isVisible ? styles.meal__visible_active : ''}`}>
                 <button onClick={onVisible} className={styles.meal__visible_button}>
-                    {isVisible ? t('pages.cateringManagement.hideMealButton') : t('pages.cateringManagement.returnMealButton')}
+                    {isVisible ? t('pages.cateringManagement.hide') : t('pages.cateringManagement.returnInMenu')}
                 </button>
             </div>
             <div className={styles.meal__buttons}>
@@ -65,7 +64,7 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVi
                 <div className={styles.list}>
                     {meal.features && meal.features.length > 0 && (
                         <>
-                            <p className={styles.list__title}>{t('pages.cateringManagement.mealAdditives')}</p>
+                            <p className={styles.list__title}>{t('pages.cateringManagement.additives')}</p>
                             <ul className={styles.list__additives}>
                                 {meal.features.map((feature) => (
                                     <li key={feature.id} className={`${styles.list__item} ${styles.list__additive}`}>

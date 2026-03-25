@@ -7,14 +7,15 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { useGetCateringById, useUpdateCatering } from '../../../../utils/hooks/useCatering/useCatering';
 import { Day } from '../../../../utils/api/cateringService/cateringService';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const EditCatering = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
-
     const { data: catering, isLoading: isLoadingCatering } = useGetCateringById(Number(cateringId));
     const { mutateAsync: updateCatering, isPending, error } = useUpdateCatering();
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const normalizedSchedule = catering?.data.schedule.map((day) => ({
         ...day,
@@ -77,10 +78,14 @@ const EditCatering = () => {
     return (
         <>
             {(isPending || isLoadingCatering) && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             {catering && (
                 <RegistrationStepsCatering
-                    title={t('pages.cateringManagement.editCatering')}
+                    title={t('pages.cateringManagement.editingCatering')}
                     onSubmit={onSubmit}
                     defaultValues={{
                         name: catering.data.name,

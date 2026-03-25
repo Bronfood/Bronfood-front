@@ -69,7 +69,7 @@ const CollectWeeklyMenu = () => {
     return (
         <>
             {isLoading || (isLoadingAll && <Preloader />)}
-            <Popup arrowBack onClose={onClose} title={t('pages.cateringManagement.titleWeeklyMenu')}>
+            <Popup arrowBack onClose={onClose} title={t('pages.cateringManagement.weeklyMenu')}>
                 <WeeklyButtons selectedDay={selectedDay || null} onDayClick={handleDayClick} hasDailyCategories={hasDailyCategories} />
                 {selectedDay && menuWeekday?.data?.daily_categories && menuWeekday?.data.daily_categories.length > 0 ? (
                     <>
@@ -96,7 +96,7 @@ const CollectWeeklyMenu = () => {
                                 </li>
                             ))}
                         </ul>
-                        <ButtonIconAdd onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.buttonAddCategory')}</ButtonIconAdd>
+                        <ButtonIconAdd onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.addCategory')}</ButtonIconAdd>
                     </>
                 ) : selectedDay ? (
                     <>

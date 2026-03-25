@@ -15,7 +15,7 @@ const Managers = () => {
     const managers = isSuccess ? data.data : [];
 
     const onClose = () => {
-        navigate('/');
+        navigate('/catering/administrators');
     };
 
     const addManager = () => {

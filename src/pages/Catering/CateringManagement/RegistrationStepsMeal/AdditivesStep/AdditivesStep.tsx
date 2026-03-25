@@ -30,7 +30,7 @@ const AdditivesStep = () => {
         <fieldset className={styles.fieldset}>
             {features ? (
                 <div className={styles.list}>
-                    <p className={styles.list__title}>{t('pages.cateringManagement.mealAdditives')}</p>
+                    <p className={styles.list__title}>{t('pages.cateringManagement.additives')}</p>
 
                     <ul className={styles.list__items}>
                         {features.map((feature) => (

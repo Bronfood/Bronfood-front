@@ -6,6 +6,7 @@
     flex-direction: column;
     border: 1px solid variables.$grey-line;
     border-radius: 20px;
+    width: 150px;
 
     &__overlay {
         position: absolute;
@@ -63,6 +64,14 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
+    }
+
+    &__name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__price {

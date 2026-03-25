@@ -13,11 +13,10 @@ type RegistrationFormProps = {
     defaultValues?: FieldValues;
     isLoading?: boolean;
     children: ReactNode;
-    additionalPopup?: ReactNode;
     nameForm: string;
 };
 
-const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, additionalPopup, nameForm }: RegistrationFormProps) => {
+const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, nameForm }: RegistrationFormProps) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const methods = useForm<FieldValues>({
@@ -56,16 +55,15 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, addit
                     {steps[currentStep - 1]}
                     {currentStep < totalSteps ? (
                         <Button type="button" onClick={handleNextClick}>
-                            {t('pages.cateringManagement.buttonNext')}
+                            {t('pages.cateringManagement.next')}
                         </Button>
                     ) : (
                         <Button type="submit" onClick={handleSubmit(handleFormSubmit)}>
-                            {t('pages.cateringManagement.buttonSave')}
+                            {t('pages.cateringManagement.save')}
                         </Button>
                     )}
                 </Form>
             </RegistrationPopup>
-            {additionalPopup}
         </FormProvider>
     );
 };

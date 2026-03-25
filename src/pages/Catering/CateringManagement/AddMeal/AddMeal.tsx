@@ -4,19 +4,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Preloader from '../../../../components/Preloader/Preloader';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
-import { useCreateCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
+import { useCreateCateringMeal } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import { useState } from 'react';
 import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
 import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
 import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const AddMeal = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { mutateAsync, isPending, error } = useCreateCateringMeals();
+    const { mutateAsync, isPending, error } = useCreateCateringMeal();
     const [showThanksPopup, setShowThanksPopup] = useState(false);
     const { cateringId } = useParams();
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const handleNavigate = () => {
         navigate(`/catering/${cateringId}/menu`);
@@ -72,9 +74,13 @@ const AddMeal = () => {
     return (
         <>
             {isPending && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             <RegistrationStepsMeal
-                title={t('pages.cateringManagement.titleRegistrationMeal')}
+                title={t('pages.cateringManagement.registrationMeal')}
                 onSubmit={onSubmit}
                 defaultValues={{
                     name: '',

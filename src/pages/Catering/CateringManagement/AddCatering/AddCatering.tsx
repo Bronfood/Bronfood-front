@@ -7,12 +7,13 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import RegistrationStepsCatering from '../RegistrationStepsCatering/RegistrationStepsCatering';
 import { Day, DAYS, TYPES } from '../../../../utils/api/cateringService/cateringService';
 import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const AddCatering = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-
     const { mutateAsync, isPending, error } = useCreateCatering();
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const formData = new FormData();
@@ -57,7 +58,11 @@ const AddCatering = () => {
     return (
         <>
             {isPending && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             <RegistrationStepsCatering
                 title={t('pages.cateringManagement.registrationCatering')}
                 onSubmit={onSubmit}

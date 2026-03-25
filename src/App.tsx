@@ -35,9 +35,6 @@ import AddMeal from './pages/Catering/CateringManagement/AddMeal/AddMeal';
 import EditMeal from './pages/Catering/CateringManagement/EditMeal/EditMeal';
 import AddCategory from './pages/Catering/CateringManagement/AddCategory/AddCategory';
 import EditCategory from './pages/Catering/CateringManagement/EditCategory/EditCategory';
-import CollectWeeklyMenu from './pages/Catering/CateringManagement/CollectWeeklyMenu/CollectWeeklyMenu';
-import AddCategoryToWeeklyMenu from './pages/Catering/CateringManagement/AddCategoryToWeeklyMenu/AddCategoryToWeeklyMenu';
-import EditCategoryToWeeklyMenu from './pages/Catering/CateringManagement/EditCategoryToWeeklyMenu/EditCategoryToWeeklyMenu';
 import Menu from './pages/Catering/CateringManagement/Menu/Menu';
 import Managers from './pages/Catering/Administrators/Managers/Managers';
 import AddManager from './pages/Catering/Administrators/AddManager/AddManager';
@@ -91,13 +88,6 @@ function App() {
 
                     <Route path=":cateringId/menu/add-category" element={<AddCategory />} />
                     <Route path=":cateringId/menu/categories/:categoryId" element={<EditCategory />} />
-
-                    <Route path=":cateringId/collect-weekly-menu">
-                        <Route index element={<CollectWeeklyMenu />} />
-                        <Route path=":day" element={<CollectWeeklyMenu />} />
-                        <Route path=":day/add-category-weekly-menu" element={<AddCategoryToWeeklyMenu />} />
-                        <Route path=":day/edit-category-weekly-menu/:dailyCategoryId" element={<EditCategoryToWeeklyMenu />} />
-                    </Route>
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} />

@@ -9,6 +9,8 @@ import { useState, MouseEvent } from 'react';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import styles from './EditCategory.module.scss';
 import ButtonGrey from '../../../../components/ButtonGrey/ButtonGrey';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 
 const EditCategory = () => {
     const { t } = useTranslation();
@@ -16,8 +18,10 @@ const EditCategory = () => {
     const { cateringId, categoryId } = useParams();
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
     const { data: category, isLoading } = useGetCategoryById(Number(cateringId), Number(categoryId));
-    const { mutateAsync: deleteCategory, isPending: isDeleting } = useDeleteCategory();
-    const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategory();
+    const { mutateAsync: deleteCategory, error: deleteCategoryError, isPending: isDeleting } = useDeleteCategory();
+    const { mutateAsync: updateCategory, error: updateCategoryError, isPending: isUpdating } = useUpdateCategory();
+    const error = deleteCategoryError || updateCategoryError;
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const onClose = () => {
         navigate(-1);
@@ -57,8 +61,13 @@ const EditCategory = () => {
 
     return (
         <>
-            <Popup title={t('pages.cateringManagement.titleEditCategory')} onClose={onClose}>
+            <Popup title={t('pages.cateringManagement.editingCategory')} onClose={onClose}>
                 {(isLoading || isUpdating) && <Preloader />}
+                {error && (
+                    <div style={{ padding: '0 20px' }}>
+                        <ErrorMessage message={errorMessage} />
+                    </div>
+                )}
                 {category && (
                     <RegistrationCategory
                         onSubmit={onSubmit}

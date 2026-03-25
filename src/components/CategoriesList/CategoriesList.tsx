@@ -1,4 +1,4 @@
-import { Category } from '../../../../utils/api/categoryService/categoryService';
+import { Category } from '../../utils/api/categoryService/categoryService';
 import styles from './CategoriesList.module.scss';
 import { useTranslation } from 'react-i18next';
 

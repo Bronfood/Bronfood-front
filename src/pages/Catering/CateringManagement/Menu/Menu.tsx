@@ -8,10 +8,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Popup from '../../../../components/Popups/Popup/Popup';
 import MealItem from './MealItem/MealItem';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
-import CategoriesList from '../CategoriesList/CategoriesList';
 import { useGetCategories } from '../../../../utils/hooks/useCategory/useCategory';
 import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
 import AddAdditivePopup from '../RegistrationStepsMeal/AdditivesStep/AddAdditivePopup/AddAdditivePopup';
+import CategoriesList from '../../../../components/CategoriesList/CategoriesList';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 
 const Menu = () => {
     const { t } = useTranslation();
@@ -19,14 +21,16 @@ const Menu = () => {
     const { cateringId } = useParams();
     const { data: meal, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
     const { data: categories, isLoading } = useGetCategories(Number(cateringId));
-    const { mutateAsync: deleteMeal, isPending: isDeleting } = useDeleteCateringMeal();
-    const { mutateAsync: updateMeal, isPending: isUpdating } = useUpdateCateringMeal();
+    const { mutateAsync: deleteMeal, error: deleteMealError, isPending: isDeleting } = useDeleteCateringMeal();
+    const { mutateAsync: updateMeal, error: updateMealError, isPending: isUpdating } = useUpdateCateringMeal();
     const [showConfirmationPopupDeleteMeal, setShowConfirmationPopupDeleteMeal] = useState(false);
     const [showConfirmationPopupDeleteFeature, setShowConfirmationPopupDeleteFeature] = useState(false);
     const [mealToDelete, setMealToDelete] = useState<number | null>(null);
     const [featureToDelete, setFeatureToDelete] = useState<{ cateringMealId: number; featureId: number } | null>(null);
     const [featureToEdit, setFeatureToEdit] = useState<{ cateringMealId: number; feature: Feature } | null>(null);
     const [isOpen, setIsOpen] = useState<number | null>(null);
+    const error = deleteMealError || updateMealError;
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const meals = useMemo(() => {
         return isSuccess ? meal.data : [];
@@ -106,12 +110,12 @@ const Menu = () => {
             });
         });
 
-        setShowConfirmationPopupDeleteFeature(false);
         await updateMeal({
             cateringId: Number(cateringId),
             cateringMealId: featureToDelete.cateringMealId,
             data: formData,
         });
+        setShowConfirmationPopupDeleteFeature(false);
         setFeatureToDelete(null);
     };
 
@@ -165,8 +169,8 @@ const Menu = () => {
 
     const handleConfirmDeleteMeal = async () => {
         if (!mealToDelete) return;
-        setShowConfirmationPopupDeleteMeal(false);
         await deleteMeal({ cateringId: Number(cateringId), cateringMealId: mealToDelete });
+        setShowConfirmationPopupDeleteMeal(false);
         setMealToDelete(null);
     };
 
@@ -213,12 +217,17 @@ const Menu = () => {
 
     return (
         <>
-            <Popup title={t('pages.cateringManagement.titleMealMenu')} arrowBack={true} onClose={onCloseClick}>
+            <Popup title={t('pages.cateringManagement.menu')} arrowBack={true} onClose={onCloseClick}>
                 {(isPending || isDeleting || isLoading || isUpdating) && <Preloader />}
+                {error && (
+                    <div style={{ padding: '0 20px' }}>
+                        <ErrorMessage message={errorMessage} />
+                    </div>
+                )}
                 <div className={styles.buttons}>
                     <ButtonIconAdd onClick={addCategoryClick}>{t('pages.cateringManagement.addCategoriesMenu')}</ButtonIconAdd>
                     {categories && categories.data.length > 0 && <CategoriesList onClick={categoryClick} categories={categoriesWithPhoto} />}
-                    <ButtonIconAdd onClick={addMealClick}>{t('pages.cateringManagement.addMealToList')}</ButtonIconAdd>
+                    <ButtonIconAdd onClick={addMealClick}>{t('pages.cateringManagement.addMeal')}</ButtonIconAdd>
                 </div>
 
                 {meals.length > 0 && (

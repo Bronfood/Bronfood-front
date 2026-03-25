@@ -6,12 +6,14 @@ import RegistrationCategory from '../RegistrationCategory/RegistrationCategory';
 import { useCreateCategory } from '../../../../utils/hooks/useCategory/useCategory';
 import Preloader from '../../../../components/Preloader/Preloader';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const AddCategory = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
     const { mutateAsync, isPending, error } = useCreateCategory();
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const onClose = () => {
         navigate(-1);
@@ -33,10 +35,14 @@ const AddCategory = () => {
     };
 
     return (
-        <Popup title={t('pages.cateringManagement.addCategory')} onClose={onClose}>
+        <Popup title={t('pages.cateringManagement.addingCategory')} onClose={onClose}>
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
             <RegistrationCategory onSubmit={onSubmit} />
             {isPending && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
         </Popup>
     );
 };

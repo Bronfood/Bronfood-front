@@ -17,7 +17,6 @@ const EditCategoryToWeeklyMenu = () => {
     const { cateringId, day: selectedDay } = useParams<{ cateringId: string; day?: string }>();
     const { mutateAsync, isPending, error } = useUpdateCategoryToWeeklyMenu();
     const { data: menu } = useGetWeeklyMenuByWeekday(weekday);
-
     const dailyCategory = menu?.data?.daily_categories?.find((c: DailyCategory) => c.id === Number(dailyCategoryId));
 
     const onClose = () => {
@@ -39,10 +38,10 @@ const EditCategoryToWeeklyMenu = () => {
     };
 
     return (
-        <Popup title={t('pages.cateringManagement.titleCollectCategory')} onClose={onClose}>
+        <Popup title={t('pages.cateringManagement.collectCategory')} onClose={onClose}>
+            {error && <ErrorMessage message={error.message} />}
             {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, meal_ids: dailyCategory.meals?.map((meal) => meal.id) || [] }} />}
             {isPending && <Preloader />}
-            {error && <ErrorMessage message={error.message} />}
         </Popup>
     );
 };

@@ -39,7 +39,7 @@ const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', nam
     };
 
     return (
-        <Form name="form-administrators" onSubmit={handleSubmit(processSubmit)}>
+        <Form name="form-managers" onSubmit={handleSubmit(processSubmit)}>
             <FormInputs>
                 {!edit ? <Input type="text" name="username" placeholder={t('pages.administrators.placeholderLogin')} nameLabel={t('pages.administrators.nameLabelLogin')} register={register} errors={errors} pattern={regexClientName}></Input> : null}
                 <Input type="text" name="name" placeholder={t('pages.administrators.placeholderFCs')} nameLabel={t('pages.administrators.nameLabelFCs')} register={register} errors={errors} pattern={regexClientName}></Input>
