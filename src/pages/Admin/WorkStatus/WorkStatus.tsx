@@ -33,15 +33,16 @@ function WorkStatus() {
     const selectedSchedule = formattedSelectedDate ? schedules.find((schedule) => schedule.date === formattedSelectedDate) : undefined;
     const openTime = selectedSchedule ? selectedSchedule.open_time : '';
     const closeTime = selectedSchedule ? selectedSchedule.close_time : '';
+    const values = { openTime, closeTime };
     const {
         register,
         handleSubmit,
         formState: { isDirty, errors },
-    } = useForm({ mode: 'onBlur' });
+    } = useForm({ mode: 'onBlur', defaultValues: { openTime: '', closeTime: '' }, values });
     const close = () => {
         navigate('/admin');
     };
-    const handleDayBlur = () => {
+    const handleCalendarChange = () => {
         if (isDirty) setIsConfirmationPopupOpen(true);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -62,7 +63,7 @@ function WorkStatus() {
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                 </Form>
-                {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} onDayBlur={handleDayBlur} />}
+                {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} onChange={handleCalendarChange} />}
             </AdminPopup>
             {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" isLoading={addSchedule.isPending} />}
         </>
