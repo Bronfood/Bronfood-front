@@ -12,8 +12,8 @@ type AdminConfirmationProps = {
     question: string;
     onSubmit?: () => void;
     isLoading: boolean;
-    isError: boolean;
-    errorMessage: string;
+    isError?: boolean;
+    errorMessage?: string;
 };
 
 const AdminConfirmation = ({ formId, close, question, onSubmit, isLoading, isError, errorMessage }: AdminConfirmationProps) => {

@@ -385,6 +385,8 @@ i18n
                             workingHours: 'Время работы',
                             saveChanges: 'Сохранить изменения?',
                             dayYouCantChangeTheScheduleForPastDates: 'Нельзя изменить расписание для прошедшей даты',
+                            closeTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
+                            openTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
                         },
 
                         administrators: {

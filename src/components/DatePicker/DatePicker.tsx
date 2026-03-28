@@ -8,10 +8,11 @@ type DatePickerProps = {
     month: Date;
     setMonth: Dispatch<SetStateAction<Date>>;
     selected: Date | undefined;
-    setSelected: Dispatch<SetStateAction<Date | undefined>>;
+    onSelect: () => void;
     onChange: () => void;
+    onDayBlur: () => void;
 };
 
-export function DatePicker({ month, setMonth, selected, setSelected, onChange }: DatePickerProps) {
-    return <DayPicker animate mode="single" month={month} onMonthChange={setMonth} selected={selected} onSelect={setSelected} onDayClick={onChange} onDayKeyDown={onChange} onNextClick={onChange} onPrevClick={onChange} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
+export function DatePicker({ month, setMonth, selected, onSelect, onChange, onDayBlur }: DatePickerProps) {
+    return <DayPicker animate mode="single" month={month} onMonthChange={setMonth} selected={selected} onSelect={onSelect} onDayClick={onChange} onDayKeyDown={onChange} onNextClick={onChange} onPrevClick={onChange} onDayBlur={onDayBlur} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
 }
