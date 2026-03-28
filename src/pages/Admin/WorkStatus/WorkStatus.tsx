@@ -18,12 +18,12 @@ import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
 function WorkStatus() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
-    const [date, setDate] = useState<Date>(new Date());
+    const [today, setToday] = useState<Date>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const year = useMemo(() => date.getFullYear(), [date]);
-    const month = useMemo(() => date.getMonth(), [date]);
+    const year = useMemo(() => today.getFullYear(), [today]);
+    const month = useMemo(() => today.getMonth(), [today]);
     const start = useMemo(() => getFirstDayOfMonth(year, month), [year, month]);
     const end = useMemo(() => getLastDayOfMonth(year, month), [year, month]);
     const { data, isSuccess, isPending } = useGetAdminSchedules(start, end);
@@ -50,6 +50,8 @@ function WorkStatus() {
         await addSchedule.mutateAsync({ date, openTime, closeTime });
         setIsConfirmationPopupOpen(false);
     };
+    console.log(today);
+    console.log(selectedDate);
 
     return (
         <>
@@ -63,7 +65,7 @@ function WorkStatus() {
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                 </Form>
-                {isPending ? <Preloader /> : <DatePicker month={date} setMonth={setDate} selected={selectedDate} setSelected={setSelectedDate} onChange={handleCalendarChange} />}
+                {isPending ? <Preloader /> : <DatePicker month={today} setMonth={setToday} selected={selectedDate} setSelected={setSelectedDate} onChange={handleCalendarChange} />}
             </AdminPopup>
             {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" isLoading={addSchedule.isPending} />}
         </>
