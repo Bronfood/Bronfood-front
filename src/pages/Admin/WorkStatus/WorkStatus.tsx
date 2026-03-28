@@ -14,7 +14,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { InputTime } from '../../../components/InputTime/InputTime';
 import AdminConfirmation from '../AdminConfirmation/AdminConfirmation';
 import Form from '../../../components/Form/Form';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
+import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
 
 function WorkStatus() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
@@ -28,6 +28,7 @@ function WorkStatus() {
     const end = useMemo(() => getLastDayOfMonth(year, month), [year, month]);
     const { data, isSuccess, isPending } = useGetAdminSchedules(start, end);
     const { addSchedule } = useAdminScheduleMutations();
+    const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = isSuccess ? data.data : [];
     const formattedSelectedDate = selectedDate && formatDate(selectedDate);
     const selectedSchedule = formattedSelectedDate ? schedules.find((schedule) => schedule.date === formattedSelectedDate) : undefined;
@@ -47,18 +48,15 @@ function WorkStatus() {
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
-        await addSchedule.mutateAsync({ date, openTime, closeTime });
+        await addSchedule.mutateAsync({ date: selectedDate, openTime, closeTime });
         setIsConfirmationPopupOpen(false);
     };
-    console.log(today);
-    console.log(selectedDate);
 
     return (
         <>
             <AdminPopup close={close}>
                 <h1 className={styles.title}>{t(`pages.admin.workStatus`)}</h1>
                 <Form name="work-status" id="work-status" onSubmit={handleSubmit(onSubmit)}>
-                    {addSchedule.isError && <ErrorMessage message={addSchedule.error.message} />}
                     <fieldset className={styles.fieldset} disabled={isPending}>
                         <InputTime name="openTime" register={register} errors={errors} value={openTime} placeholder="HH:MM"></InputTime>
                         <div className={styles.line}></div>
@@ -67,7 +65,7 @@ function WorkStatus() {
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker month={today} setMonth={setToday} selected={selectedDate} setSelected={setSelectedDate} onChange={handleCalendarChange} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" isLoading={addSchedule.isPending} />}
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => setIsConfirmationPopupOpen(false)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
         </>
     );
 }

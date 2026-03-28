@@ -384,6 +384,7 @@ i18n
                             yes: 'Да',
                             workingHours: 'Время работы',
                             saveChanges: 'Сохранить изменения?',
+                            dayYouCantChangeTheScheduleForPastDates: 'Нельзя изменить расписание для прошедшей даты',
                         },
 
                         administrators: {
