@@ -1,16 +1,21 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
 import { useId } from 'react';
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { regex24HourTime } from '../../utils/consts';
 import { useTranslation } from 'react-i18next';
 import { InputMask, format } from '@react-input/mask';
+
+type FieldValues = {
+    openTime: string | null;
+    closeTime: string | null;
+};
 
 interface InputTime {
     /**
      * Name of input
      */
-    name: string;
+    name: 'openTime' | 'closeTime';
     /**
      * Register function for input
      */

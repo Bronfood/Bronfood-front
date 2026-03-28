@@ -49,19 +49,20 @@ function WorkStatus() {
             setIsConfirmationPopupOpen(true);
         }
     };
-    const handleDayBlur = (date) => {
+    const handleDayBlur = (date: Date) => {
         if (dirtyDate) return;
         setDirtyDate(date);
     };
-    const handleReset = (date) => {
+    const handleReset = (date: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
         addSchedule.reset();
         formReset();
-        setSelectedDate(date);
-        setDirtyDate();
+        if (date) setSelectedDate(date);
+        setDirtyDate(undefined);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
+
         await addSchedule.mutateAsync({ date: dirtyDate, openTime, closeTime });
         handleReset(dirtyDate);
         refetchSchedules();
@@ -80,7 +81,7 @@ function WorkStatus() {
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker month={today} setMonth={setToday} selected={selectedDate} onSelect={setSelectedDate} onChange={handleCalendarChange} onDayBlur={handleDayBlur} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={handleReset} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(dirtyDate)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
         </>
     );
 }
