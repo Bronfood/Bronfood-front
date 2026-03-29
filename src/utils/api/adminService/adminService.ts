@@ -62,6 +62,7 @@ export type Schedule = {
     date: string;
     open_time: string | null;
     close_time: string | null;
+    source: string;
 };
 
 export interface AdminService {

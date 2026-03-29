@@ -35,7 +35,7 @@ function WorkStatus() {
     const { addSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
-    const modifiers = getModifiers(schedules, ['regular', 'override']);
+    const modifiers = getModifiers(schedules, ['regular', 'override', 'closed']);
     const {
         register,
         handleSubmit,
@@ -115,7 +115,7 @@ function getOpenCloseTimes(schedules: Schedule[], date: Date) {
 }
 
 function getModifiers(schedules: Schedule[], sources: string[]) {
-    const acc = sources.reduce((obj, key) => {
+    const acc: Record<string, Date[]> = sources.reduce((obj: { [key: string]: Date[] }, key) => {
         obj[key] = [];
         return obj;
     }, {});
