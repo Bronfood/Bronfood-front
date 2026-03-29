@@ -25,3 +25,13 @@
 .rdp-selected .rdp-day_button {
     border-color: #{variables.$orange};
 }
+
+.regular {
+    border-radius: 20%;
+    background-color: #{variables.$orange-pale};
+}
+
+.override {
+    border-radius: 20%;
+    background-image: repeating-linear-gradient(to top right, #{variables.$orange-pale} 10%, #{variables.$orange} 20%);
+}

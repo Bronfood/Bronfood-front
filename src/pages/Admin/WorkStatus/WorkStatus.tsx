@@ -7,12 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { useAdminScheduleMutations, useGetAdminSchedules } from '../../../utils/hooks/useAdminSchedules/useAdminSchedules';
 import Preloader from '../../../components/Preloader/Preloader';
 import { Schedule } from '../../../utils/api/adminService/adminService';
-import { formatDate } from '../../../utils/serviceFuncs/formatDate';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { InputTime } from '../../../components/InputTime/InputTime';
 import AdminConfirmation from '../AdminConfirmation/AdminConfirmation';
 import Form from '../../../components/Form/Form';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
+import { formatDateToString } from '../../../utils/serviceFuncs/formatDateToString';
+import { formatStringToDate } from '../../../utils/serviceFuncs/formatStringToDate';
 
 type Time = {
     openTime: string | null;
@@ -34,6 +35,7 @@ function WorkStatus() {
     const { addSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
+    const modifiers = getModifiers(schedules, ['regular', 'override']);
     const {
         register,
         handleSubmit,
@@ -79,7 +81,7 @@ function WorkStatus() {
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                 </Form>
-                {isPending ? <Preloader /> : <DatePicker month={date} onDateChange={handleDateChange} />}
+                {isPending ? <Preloader /> : <DatePicker modifiers={modifiers} month={date} onDateChange={handleDateChange} />}
             </AdminPopup>
             {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(selectedDate)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
         </>
@@ -102,7 +104,7 @@ function getStartEndDatesOfMonth(date: Date) {
 }
 
 function getOpenCloseTimes(schedules: Schedule[], date: Date) {
-    const formattedDate = formatDate(date);
+    const formattedDate = formatDateToString(date);
     const schedule = schedules.find((schedule) => schedule.date === formattedDate);
     const openTime = schedule ? schedule.open_time : '';
     const closeTime = schedule ? schedule.close_time : '';
@@ -110,4 +112,18 @@ function getOpenCloseTimes(schedules: Schedule[], date: Date) {
         openTime,
         closeTime,
     };
+}
+
+function getModifiers(schedules: Schedule[], sources: string[]) {
+    const acc = sources.reduce((obj, key) => {
+        obj[key] = [];
+        return obj;
+    }, {});
+    return schedules.reduce((result, item) => {
+        if (Array.isArray(result[item.source])) {
+            const date = formatStringToDate(item.date);
+            result[item.source].push(date);
+        }
+        return result;
+    }, acc);
 }

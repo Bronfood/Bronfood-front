@@ -4,10 +4,11 @@ import './DatePicker.scss';
 import { ru } from 'react-day-picker/locale';
 
 type DatePickerProps = {
+    modifiers: Record<string, Date[]>;
     month: Date | undefined;
     onDateChange: (date: Date) => void;
 };
 
-export function DatePicker({ month, onDateChange }: DatePickerProps) {
-    return <DayPicker animate mode="single" month={month} onDayClick={onDateChange} onNextClick={onDateChange} onPrevClick={onDateChange} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
+export function DatePicker({ modifiers, month, onDateChange }: DatePickerProps) {
+    return <DayPicker animate mode="single" modifiers={modifiers} modifiersClassNames={{ regular: 'regular', override: 'override' }} month={month} onDayClick={onDateChange} onNextClick={onDateChange} onPrevClick={onDateChange} navLayout="around" locale={ru} showOutsideDays hideWeekdays />;
 }

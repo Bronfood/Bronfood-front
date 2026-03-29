@@ -1,4 +1,4 @@
-import { formatDate } from '../../serviceFuncs/formatDate';
+import { formatDateToString } from '../../serviceFuncs/formatDateToString';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
 import { AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService, Schedule } from './adminService';
 
@@ -38,13 +38,13 @@ export class AdminServiceReal implements AdminService {
     }
 
     async getAdminSchedules(start: Date, end: Date): Promise<{ data: Schedule[] }> {
-        const startDate = formatDate(start);
-        const endDate = formatDate(end);
+        const startDate = formatDateToString(start);
+        const endDate = formatDateToString(end);
         return handleFetch(`api/restaurants/admin/schedules/?start_date=${startDate}&end_date=${endDate}`);
     }
 
     async addSchedule(date: Date | undefined, openTime: string | null, closeTime: string | null): Promise<{ data: Schedule }> {
-        const formattedDate = date && formatDate(date);
+        const formattedDate = date && formatDateToString(date);
         return handleFetch('api/restaurants/admin/schedules/', { method: 'POST', data: { day: formattedDate, open_time: openTime, close_time: closeTime } });
     }
 }
