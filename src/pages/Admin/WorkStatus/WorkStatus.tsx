@@ -35,7 +35,7 @@ function WorkStatus() {
     const { addSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
-    const modifiers = getModifiers(schedules, ['regular', 'override', 'closed']);
+    const modifiers = useMemo(() => getModifiers(schedules, ['regular', 'override', 'closed']), [schedules]);
     const {
         register,
         handleSubmit,
