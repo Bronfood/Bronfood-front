@@ -387,6 +387,7 @@ i18n
                             dayYouCantChangeTheScheduleForPastDates: 'Нельзя изменить расписание для прошедшей даты',
                             closeTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
                             openTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
+                            authenticationCredentialsWereNotProvided: 'Вы не авторизованы',
                         },
 
                         administrators: {

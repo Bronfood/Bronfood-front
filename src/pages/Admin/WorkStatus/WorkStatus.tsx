@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './WorkStatus.module.scss';
 import { useNavigate } from 'react-router-dom';
 import AdminPopup from '../AdminPopup/AdminPopup';
@@ -8,8 +8,6 @@ import { useAdminScheduleMutations, useGetAdminSchedules } from '../../../utils/
 import Preloader from '../../../components/Preloader/Preloader';
 import { Schedule } from '../../../utils/api/adminService/adminService';
 import { formatDate } from '../../../utils/serviceFuncs/formatDate';
-import { getLastDayOfMonth } from '../../../utils/serviceFuncs/getLastDayOfMonth';
-import { getFirstDayOfMonth } from '../../../utils/serviceFuncs/getFirstDayOfMonth';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { InputTime } from '../../../components/InputTime/InputTime';
 import AdminConfirmation from '../AdminConfirmation/AdminConfirmation';
@@ -18,23 +16,19 @@ import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
 
 function WorkStatus() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
-    const [today, setToday] = useState<Date>(new Date());
+    const [date, setDate] = useState<Date | undefined>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-    const [dirtyDate, setDirtyDate] = useState<Date | undefined>();
+    const [{ openTime, closeTime }, setTime] = useState({
+        openTime: '',
+        closeTime: '',
+    });
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const year = useMemo(() => today.getFullYear(), [today]);
-    const month = useMemo(() => today.getMonth(), [today]);
-    const start = useMemo(() => getFirstDayOfMonth(year, month), [year, month]);
-    const end = useMemo(() => getLastDayOfMonth(year, month), [year, month]);
+    const { start, end } = getStartEndDatesOfMonth(date);
     const { data, isSuccess, isPending, refetch: refetchSchedules } = useGetAdminSchedules(start, end);
     const { addSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
-    const schedules: Schedule[] = isSuccess ? data.data : [];
-    const formattedSelectedDate = selectedDate && formatDate(selectedDate);
-    const selectedSchedule = formattedSelectedDate ? schedules.find((schedule) => schedule.date === formattedSelectedDate) : undefined;
-    const openTime = selectedSchedule ? selectedSchedule.open_time : '';
-    const closeTime = selectedSchedule ? selectedSchedule.close_time : '';
+    const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
     const {
         register,
         handleSubmit,
@@ -44,29 +38,30 @@ function WorkStatus() {
     const close = () => {
         navigate('/admin');
     };
-    const handleCalendarChange = () => {
+    const handleDateChange = (date) => {
         if (isDirty) {
             setIsConfirmationPopupOpen(true);
+            setSelectedDate(date);
+        } else {
+            setDate(date);
         }
     };
-    const handleDayBlur = (date: Date) => {
-        if (dirtyDate) return;
-        setDirtyDate(date);
-    };
-    const handleReset = (date: Date | undefined) => {
+    const handleReset = (date: Date) => {
         setIsConfirmationPopupOpen(false);
         addSchedule.reset();
         formReset();
-        if (date) setSelectedDate(date);
-        setDirtyDate(undefined);
+        setDate(date);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
-
-        await addSchedule.mutateAsync({ date: dirtyDate, openTime, closeTime });
-        handleReset(dirtyDate);
+        await addSchedule.mutateAsync({ date, openTime, closeTime });
+        handleReset(selectedDate);
         refetchSchedules();
     };
+
+    useEffect(() => {
+        setTime(getOpenCloseTimes(schedules, date));
+    }, [schedules, date]);
 
     return (
         <>
@@ -79,11 +74,35 @@ function WorkStatus() {
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                 </Form>
-                {isPending ? <Preloader /> : <DatePicker month={today} setMonth={setToday} selected={selectedDate} onSelect={setSelectedDate} onChange={handleCalendarChange} onDayBlur={handleDayBlur} />}
+                {isPending ? <Preloader /> : <DatePicker month={date} onDateChange={handleDateChange} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(dirtyDate)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(selectedDate)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
         </>
     );
 }
 
 export default WorkStatus;
+
+function getStartEndDatesOfMonth(date) {
+    const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1);
+    const getLastDayOfMonth = (year: number, month: number) => new Date(year, month + 1, 0);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const start = getFirstDayOfMonth(year, month);
+    const end = getLastDayOfMonth(year, month);
+    return {
+        start,
+        end,
+    };
+}
+
+function getOpenCloseTimes(schedules, date) {
+    const formattedDate = formatDate(date);
+    const schedule = schedules.find((schedule) => schedule.date === formattedDate);
+    const openTime = schedule ? schedule.open_time : '';
+    const closeTime = schedule ? schedule.close_time : '';
+    return {
+        openTime,
+        closeTime,
+    };
+}
