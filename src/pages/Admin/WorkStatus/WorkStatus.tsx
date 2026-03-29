@@ -120,9 +120,14 @@ function getModifiers(schedules: Schedule[], sources: string[]) {
         return obj;
     }, {});
     return schedules.reduce((result, item) => {
+        const date = formatStringToDate(item.date);
         if (Array.isArray(result[item.source])) {
-            const date = formatStringToDate(item.date);
             result[item.source].push(date);
+        } else {
+            result[item.source] = [date];
+        }
+        if (item.open_time === null && item.close_time === null) {
+            result['closed'].push(date);
         }
         return result;
     }, acc);
