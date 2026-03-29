@@ -46,10 +46,10 @@ function WorkStatus() {
     const handleDateChange = (date: Date) => {
         if (isDirty) {
             setIsConfirmationPopupOpen(true);
-            setSelectedDate(date);
         } else {
             setDate(date);
         }
+        setSelectedDate(date);
     };
     const handleReset = (date: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
