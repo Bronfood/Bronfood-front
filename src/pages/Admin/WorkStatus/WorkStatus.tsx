@@ -14,11 +14,16 @@ import AdminConfirmation from '../AdminConfirmation/AdminConfirmation';
 import Form from '../../../components/Form/Form';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
 
+type Time = {
+    openTime: string | null;
+    closeTime: string | null;
+};
+
 function WorkStatus() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
-    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-    const [{ openTime, closeTime }, setTime] = useState({
+    const [{ openTime, closeTime }, setTime] = useState<Time>({
         openTime: '',
         closeTime: '',
     });
@@ -38,7 +43,7 @@ function WorkStatus() {
     const close = () => {
         navigate('/admin');
     };
-    const handleDateChange = (date) => {
+    const handleDateChange = (date: Date) => {
         if (isDirty) {
             setIsConfirmationPopupOpen(true);
             setSelectedDate(date);
@@ -46,11 +51,11 @@ function WorkStatus() {
             setDate(date);
         }
     };
-    const handleReset = (date: Date) => {
+    const handleReset = (date: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
         addSchedule.reset();
         formReset();
-        setDate(date);
+        if (date) setDate(date);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
@@ -83,7 +88,7 @@ function WorkStatus() {
 
 export default WorkStatus;
 
-function getStartEndDatesOfMonth(date) {
+function getStartEndDatesOfMonth(date: Date) {
     const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1);
     const getLastDayOfMonth = (year: number, month: number) => new Date(year, month + 1, 0);
     const year = date.getFullYear();
@@ -96,7 +101,7 @@ function getStartEndDatesOfMonth(date) {
     };
 }
 
-function getOpenCloseTimes(schedules, date) {
+function getOpenCloseTimes(schedules: Schedule[], date: Date) {
     const formattedDate = formatDate(date);
     const schedule = schedules.find((schedule) => schedule.date === formattedDate);
     const openTime = schedule ? schedule.open_time : '';
