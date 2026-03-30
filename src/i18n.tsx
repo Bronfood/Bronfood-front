@@ -389,6 +389,9 @@ i18n
                             closeTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
                             openTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
                             authenticationCredentialsWereNotProvided: 'Вы не авторизованы',
+                            regularSchedule: '— стандартное расписание',
+                            overridenSchedule: '— измененное расписание',
+                            closed: '— выходной',
                         },
 
                         administrators: {

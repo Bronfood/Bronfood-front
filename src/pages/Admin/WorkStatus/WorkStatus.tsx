@@ -82,7 +82,7 @@ function WorkStatus() {
                         <div className={styles.line}></div>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
-                    <div className={styles.info}>{addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend />}</div>
+                    {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend />}
                     {addSchedule.isPending && <Preloader />}
                     <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
                         {t(`pages.admin.saveChanges`)}
@@ -98,19 +98,20 @@ function WorkStatus() {
 export default WorkStatus;
 
 function Legend() {
+    const { t } = useTranslation();
     return (
         <div className={styles.legend}>
             <div className={styles.legend__item}>
                 <div className={`${styles.legend__icon} ${styles.legend__icon_regular}`}></div>
-                <p className={styles.legend__text}>- стандартное расписание</p>
+                <p className={styles.legend__text}>{t(`pages.admin.regularSchedule`)}</p>
             </div>
             <div className={styles.legend__item}>
                 <div className={`${styles.legend__icon} ${styles.legend__icon_override}`}></div>
-                <p className={styles.legend__text}>- измененное расписание</p>
+                <p className={styles.legend__text}>{t(`pages.admin.overridenSchedule`)}</p>
             </div>
             <div className={styles.legend__item}>
                 <div className={`${styles.legend__icon} ${styles.legend__icon_closed}`}></div>
-                <p className={styles.legend__text}>- выходной</p>
+                <p className={styles.legend__text}>{t(`pages.admin.closed`)}</p>
             </div>
         </div>
     );

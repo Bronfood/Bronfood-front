@@ -7,12 +7,15 @@
     --rdp-outside-opacity: 0.3;
     --rdp-today-color: #{variables.$red};
     --rdp-day_button-border-radius: 20%;
-    --rdp-day-height: 40px;
-    --rdp-day-width: 40px;
-    --rdp-day_button-height: 38px;
+    --rdp-day-height: 30px;
+    --rdp-day-width: 38px;
+    --rdp-day_button-height: 28px;
+    --rdp-day_button-width: 36px;
     border: 1px solid #{variables.$grey-line};
     border-radius: 20px;
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 .rdp-chevron {
