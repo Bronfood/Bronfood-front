@@ -82,9 +82,9 @@ function WorkStatus() {
                         <div className={styles.line}></div>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
-                    {addSchedule.isError && <ErrorMessage message={addScheduleErrorMessage} />}
+                    <div className={styles.info}>{addSchedule.isError && <ErrorMessage message={addScheduleErrorMessage} />}</div>
                     {addSchedule.isPending && <Preloader />}
-                    <Button form="work-status" disabled={!isDirty || !isValid}>
+                    <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
                         {t(`pages.admin.saveChanges`)}
                     </Button>
                 </Form>
