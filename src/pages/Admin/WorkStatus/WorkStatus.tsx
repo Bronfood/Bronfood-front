@@ -82,7 +82,7 @@ function WorkStatus() {
                         <div className={styles.line}></div>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
-                    <div className={styles.info}>{addSchedule.isError && <ErrorMessage message={addScheduleErrorMessage} />}</div>
+                    <div className={styles.info}>{addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend />}</div>
                     {addSchedule.isPending && <Preloader />}
                     <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
                         {t(`pages.admin.saveChanges`)}
@@ -96,6 +96,25 @@ function WorkStatus() {
 }
 
 export default WorkStatus;
+
+function Legend() {
+    return (
+        <div className={styles.legend}>
+            <div className={styles.legend__item}>
+                <div className={`${styles.legend__icon} ${styles.legend__icon_regular}`}></div>
+                <p className={styles.legend__text}>- стандартное расписание</p>
+            </div>
+            <div className={styles.legend__item}>
+                <div className={`${styles.legend__icon} ${styles.legend__icon_override}`}></div>
+                <p className={styles.legend__text}>- измененное расписание</p>
+            </div>
+            <div className={styles.legend__item}>
+                <div className={`${styles.legend__icon} ${styles.legend__icon_closed}`}></div>
+                <p className={styles.legend__text}>- выходной</p>
+            </div>
+        </div>
+    );
+}
 
 function getStartEndDatesOfMonth(date: Date) {
     const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1);
