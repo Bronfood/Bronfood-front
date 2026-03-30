@@ -14,6 +14,8 @@ import Form from '../../../components/Form/Form';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
 import { formatDateToString } from '../../../utils/serviceFuncs/formatDateToString';
 import { formatStringToDate } from '../../../utils/serviceFuncs/formatStringToDate';
+import Button from '../../../components/Button/Button';
+import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
 type Time = {
     openTime: string | null;
@@ -40,7 +42,7 @@ function WorkStatus() {
         register,
         handleSubmit,
         reset: formReset,
-        formState: { isDirty, errors },
+        formState: { isDirty, errors, isValid },
     } = useForm({ mode: 'onBlur', defaultValues: { openTime, closeTime }, values: { openTime, closeTime } });
     const close = () => {
         navigate('/admin');
@@ -80,10 +82,15 @@ function WorkStatus() {
                         <div className={styles.line}></div>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
+                    {addSchedule.isError && <ErrorMessage message={addScheduleErrorMessage} />}
+                    {addSchedule.isPending && <Preloader />}
+                    <Button form="work-status" disabled={!isDirty || !isValid}>
+                        {t(`pages.admin.saveChanges`)}
+                    </Button>
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker modifiers={modifiers} month={date} onDateChange={handleDateChange} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(selectedDate)} question="saveChanges" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
+            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(selectedDate)} question="saveChangesQuestion" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
         </>
     );
 }
