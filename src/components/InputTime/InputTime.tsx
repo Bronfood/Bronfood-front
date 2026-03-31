@@ -44,10 +44,11 @@ export const InputTime: FC<InputTime> = (props) => {
     };
 
     useEffect(() => {
+        if (props.value !== inputValue) return;
         if (props.value) {
             setInputValue(props.value);
         } else setInputValue('');
-    }, [props.value]);
+    }, [props.value, inputValue]);
 
     return (
         <div className={styles.input}>
@@ -64,8 +65,8 @@ export const InputTime: FC<InputTime> = (props) => {
                     onChange(e) {
                         handleInputChange(e);
                     },
+                    value: inputValue,
                 })}
-                value={inputValue}
                 mask="__:__"
                 replacement={{ _: /\d/ }}
             />

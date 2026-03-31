@@ -43,11 +43,16 @@ function WorkStatus() {
         handleSubmit,
         reset: formReset,
         formState: { isDirty, errors, isValid },
-    } = useForm({ mode: 'onBlur', defaultValues: { openTime, closeTime }, values: { openTime, closeTime } });
+    } = useForm({ mode: 'onBlur', defaultValues: { openTime: '', closeTime: '' }, values: { openTime, closeTime } });
     const close = () => {
         navigate('/admin');
     };
     const handleDateChange = (date: Date) => {
+        if (addSchedule.isError) {
+            setSelectedDate(date);
+            handleReset();
+            return;
+        }
         if (isDirty) {
             setIsConfirmationPopupOpen(true);
         } else {
