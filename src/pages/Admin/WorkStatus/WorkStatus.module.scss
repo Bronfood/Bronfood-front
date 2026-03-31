@@ -29,9 +29,47 @@
     border-top: 1px solid variables.$grey-line;
 }
 
+.accordion {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    background-color: variables.$background;
+    border: 1px solid variables.$line;
+    border-radius: 20px;
+    margin-bottom: 10px;
+
+    &__summary {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        background-image: url('../../../vendor/images/icons/admin/arrow-down-black.svg');
+
+        &_active {
+            background-image: url('../../../vendor/images/icons/admin/arrow-up.svg');
+        }
+    }
+
+    &__details {
+        max-height: 0;
+        width: 100%;
+        overflow: hidden;
+        padding: 1px 6px;
+        transition: max-height 0.2s ease-out;
+    }
+}
+
 .legend {
     display: block;
-    padding: 5px 0;
 
     &__item {
         display: flex;

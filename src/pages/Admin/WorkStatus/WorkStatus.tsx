@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './WorkStatus.module.scss';
 import { useNavigate } from 'react-router-dom';
 import AdminPopup from '../AdminPopup/AdminPopup';
@@ -30,6 +30,7 @@ function WorkStatus() {
         openTime: '',
         closeTime: '',
     });
+    const [isLegendOpen, setIsLegendOpen] = useState(true);
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { start, end } = getStartEndDatesOfMonth(date);
@@ -87,7 +88,7 @@ function WorkStatus() {
                         <div className={styles.line}></div>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
-                    {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend />}
+                    {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend initialState={isLegendOpen} setInitialState={setIsLegendOpen} />}
                     {addSchedule.isPending && <Preloader />}
                     <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
                         {t(`pages.admin.saveChanges`)}
@@ -102,23 +103,54 @@ function WorkStatus() {
 
 export default WorkStatus;
 
-function Legend() {
+function Legend({ initialState, setInitialState }: { initialState: boolean; setInitialState: Dispatch<SetStateAction<boolean>> }) {
+    const [isOpen, setIsOpen] = useState(initialState);
+    const ref = useRef<HTMLDivElement>(null);
+    const toggleAccordion = () => {
+        if (ref.current) {
+            if (ref.current.style.maxHeight) {
+                ref.current.style.maxHeight = '';
+            } else {
+                ref.current.style.maxHeight = ref.current.scrollHeight + 'px';
+            }
+            setIsOpen(!isOpen);
+        }
+    };
+    useEffect(() => {
+        if (isOpen && ref.current) {
+            ref.current.style.maxHeight = ref.current.scrollHeight + 'px';
+        }
+    }, [isOpen]);
+
     const { t } = useTranslation();
     return (
-        <div className={styles.legend}>
-            <div className={styles.legend__item}>
-                <div className={`${styles.legend__icon} ${styles.legend__icon_regular}`}></div>
-                <p className={styles.legend__text}>{t(`pages.admin.regularSchedule`)}</p>
+        <li className={styles.accordion}>
+            <div
+                className={styles.accordion__summary}
+                onClick={() => {
+                    setInitialState(!initialState);
+                    toggleAccordion();
+                }}
+            >
+                <div className={`${styles.accordion__icon} ${isOpen ? styles.accordion__icon_active : ''}`} />
             </div>
-            <div className={styles.legend__item}>
-                <div className={`${styles.legend__icon} ${styles.legend__icon_override}`}></div>
-                <p className={styles.legend__text}>{t(`pages.admin.overridenSchedule`)}</p>
+            <div ref={ref} className={styles.accordion__details}>
+                <div className={styles.legend}>
+                    <div className={styles.legend__item}>
+                        <div className={`${styles.legend__icon} ${styles.legend__icon_regular}`}></div>
+                        <p className={styles.legend__text}>{t(`pages.admin.regularSchedule`)}</p>
+                    </div>
+                    <div className={styles.legend__item}>
+                        <div className={`${styles.legend__icon} ${styles.legend__icon_override}`}></div>
+                        <p className={styles.legend__text}>{t(`pages.admin.overridenSchedule`)}</p>
+                    </div>
+                    <div className={styles.legend__item}>
+                        <div className={`${styles.legend__icon} ${styles.legend__icon_closed}`}></div>
+                        <p className={styles.legend__text}>{t(`pages.admin.closed`)}</p>
+                    </div>
+                </div>
             </div>
-            <div className={styles.legend__item}>
-                <div className={`${styles.legend__icon} ${styles.legend__icon_closed}`}></div>
-                <p className={styles.legend__text}>{t(`pages.admin.closed`)}</p>
-            </div>
-        </div>
+        </li>
     );
 }
 
