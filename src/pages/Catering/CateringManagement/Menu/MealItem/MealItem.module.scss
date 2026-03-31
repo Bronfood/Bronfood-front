@@ -1,0 +1,210 @@
+@use '../../../../../styles/variables';
+
+.meal {
+    position: relative;
+    border: 1px solid variables.$grey-line;
+    border-radius: 20px;
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: variables.$grey-overlay;
+        border-radius: 20px;
+        z-index: 5;
+        opacity: 0.53;
+    }
+
+    &__visible {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: variables.$white;
+        border-radius: 27px;
+        padding: 0;
+        z-index: 7;
+        opacity: 0.85;
+
+        &_active {
+            opacity: 1;
+        }
+
+        &_button {
+            border: none;
+            background-color: transparent;
+            font-size: 17px;
+            padding: 8px 9px;
+            cursor: pointer;
+        }
+    }
+
+    &__image {
+        height: 101px;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px 20px 0 0;
+    }
+
+    &__buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        gap: 13px;
+    }
+
+    &__button {
+        cursor: pointer;
+        height: 43px;
+        width: 43px;
+    }
+
+    &__component {
+        display: flex;
+        padding: 15px 10px 5px;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 17px;
+        line-height: 140%;
+
+        &_price {
+            color: variables.$grey;
+        }
+    }
+
+    &__description {
+        font-size: 14px;
+        color: variables.$light-gray;
+        font-weight: 400;
+        line-height: 140%;
+    }
+
+    &__toggle {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+
+        &_container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        &_image {
+            width: 24px;
+            background-size: cover;
+            height: 24px;
+        }
+
+        &_text {
+            color: variables.$grey;
+            font-weight: 500;
+
+            &_hide {
+                color: variables.$orange;
+            }
+        }
+
+        &_hide {
+            background-image: url('/src/vendor/images/icons/arrow-orange.svg');
+        }
+
+        &_show {
+            rotate: -90deg;
+            background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        }
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 15px;
+    gap: 12px;
+
+    &__buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        color: variables.$grey;
+    }
+
+    &__button {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        background-size: cover;
+    }
+
+    &__edit {
+        background-image: url('/src/vendor/images/icons/buttonIconRound/edit.svg');
+    }
+
+    &__delete {
+        background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+    }
+
+    &__additive {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__additives {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &_item {
+            display: flex;
+            justify-content: space-between;
+            line-height: 20px;
+        }
+    }
+
+    &__item {
+        &_name {
+            color: variables.$light-gray;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &_price {
+            color: variables.$grey;
+            font-weight: 400;
+            font-size: 14px;
+        }
+    }
+}

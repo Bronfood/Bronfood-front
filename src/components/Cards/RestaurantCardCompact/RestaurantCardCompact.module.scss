@@ -7,10 +7,6 @@
     border: 1px solid variables.$line;
     cursor: pointer;
 
-    &__active {
-        border-color: variables.$orange;
-    }
-
     &__container {
         display: flex;
         flex-direction: column;

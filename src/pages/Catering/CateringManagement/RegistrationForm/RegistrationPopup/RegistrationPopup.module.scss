@@ -1,0 +1,46 @@
+@use '../../../../../styles/variables';
+
+.registration-popup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 30px);
+    background-color: variables.$background;
+    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
+    border-radius: 25px;
+    padding: 50px 0;
+    margin: 115px auto 20px;
+
+    &_overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        background-color: rgb(135 133 133 / 75%);
+        backdrop-filter: blur(2.5px);
+    }
+
+    &_title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 auto 25px;
+    }
+
+    &_button {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+
+        &_close {
+            top: 15px;
+            right: 15px;
+        }
+
+        &_prev {
+            top: 15px;
+            left: 15px;
+        }
+    }
+}

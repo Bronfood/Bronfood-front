@@ -1,0 +1,44 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    gap: 25px;
+}
+
+.buttons {
+    padding: 12px 15px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.confirmation-popup-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 122px;
+    position: fixed;
+    z-index: 2;
+    background: rgb(135 133 133 / 75%);
+    backdrop-filter: blur(2.5px);
+}
+
+.preloader-wrapper {
+    position: absolute;
+}
+
+.additive-popup-wrapper {
+    > div {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        position: fixed;
+        z-index: 2;
+    }
+}

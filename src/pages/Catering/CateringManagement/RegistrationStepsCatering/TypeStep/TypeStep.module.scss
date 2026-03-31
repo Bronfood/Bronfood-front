@@ -1,0 +1,60 @@
+@use '../../../../../styles/variables';
+
+.fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.types {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &__title {
+        margin-left: 12px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+    }
+}
+
+.type {
+    &__container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 10px;
+    }
+
+    &__input {
+        position: relative;
+        display: flex;
+        appearance: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        background-color: variables.$button-grey;
+        border: 1px solid variables.$line;
+        cursor: pointer;
+
+        &:checked {
+            background-color: variables.$orange;
+            background-image: url('../../../../../vendor/images/icons/radioButton/check.svg');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+
+    &__text {
+        font-size: 14px;
+        font-weight: normal;
+    }
+}

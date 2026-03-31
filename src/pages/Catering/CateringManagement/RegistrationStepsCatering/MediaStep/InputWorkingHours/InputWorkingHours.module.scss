@@ -1,0 +1,25 @@
+@use '../../../../../../styles/variables';
+
+.input {
+    flex: 1;
+
+    &__place {
+        border: 1px solid variables.$grey-line;
+        border-radius: 20px;
+        background-color: transparent;
+        height: 50px;
+        width: 100%;
+        font-size: 14px;
+        padding: 0;
+        text-align: center;
+
+        &::placeholder {
+            color: variables.$light-gray;
+        }
+    }
+
+    &__error {
+        color: red;
+        display: block;
+    }
+}

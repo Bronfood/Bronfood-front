@@ -74,6 +74,11 @@
         gap: 10px;
         margin-top: 10px;
         color: variables.$grey;
+        grid-column: 2;
+
+        &_item {
+            font-weight: 400;
+        }
     }
 
     &__addcatering {
@@ -90,6 +95,18 @@
         &__text {
             font-weight: 500;
             color: variables.$black;
+        }
+    }
+
+    &__preloader {
+        padding: 15px;
+
+        div {
+            top: 145px;
+            height: 30px;
+            width: 30px;
+            left: 46px;
+            border-width: 10px;
         }
     }
 }
