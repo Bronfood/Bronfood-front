@@ -15,6 +15,11 @@ export const emptyRestaurants: Restaurant[] = [
         workingTime: '09:00-22:00',
         isFavorite: false,
         type: 'fastFood',
+        description: 'Изысканные блюда европейской кухни. К нам хочется вернуться.',
+        legal_address: '11111',
+        legal_bin: '11112',
+        legal_director_fullname: '11113',
+        legal_name: '11114',
     },
     {
         id: 2,
@@ -26,6 +31,11 @@ export const emptyRestaurants: Restaurant[] = [
         workingTime: '09:00-22:00',
         isFavorite: false,
         type: 'fastFood',
+        description: 'Изысканные блюда европейской кухни. К нам хочется вернуться.',
+        legal_address: '11111',
+        legal_bin: '11112',
+        legal_director_fullname: '11113',
+        legal_name: '11114',
     },
     {
         id: 3,
@@ -37,6 +47,11 @@ export const emptyRestaurants: Restaurant[] = [
         workingTime: '09:00-22:00',
         isFavorite: false,
         type: 'fastFood',
+        description: null,
+        legal_address: '11111',
+        legal_bin: '11112',
+        legal_director_fullname: '11113',
+        legal_name: '11114',
     },
 ];
 

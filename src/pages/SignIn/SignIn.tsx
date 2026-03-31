@@ -13,10 +13,12 @@ import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useEffect } from 'react';
 import Preloader from '../../components/Preloader/Preloader';
 import { useQueryClient } from '@tanstack/react-query';
+import { getErrorMessage } from '../../utils/serviceFuncs/getErrorMessage';
 
 const SignIn = () => {
     const queryClient = useQueryClient();
     const { signIn, isLogin } = useCurrentUser();
+    const signInErrorMessage = signIn.isError ? getErrorMessage(signIn.error, 'pages.signIn.') : '';
     const navigate = useNavigate();
     const { t } = useTranslation();
     const {
@@ -27,7 +29,7 @@ const SignIn = () => {
 
     useEffect(() => {
         if (isLogin) {
-            navigate('/restaurants');
+            navigate('/');
         }
     }, [isLogin, navigate]);
 
@@ -47,7 +49,7 @@ const SignIn = () => {
         >
             {signIn.isPending && <Preloader />}
             <Form name="form-auth" onSubmit={handleSubmit(onSubmit)}>
-                {signIn.isError && <ErrorMessage message={t(`pages.signIn.${signIn.error.message}`)} />}
+                {signIn.isError && <ErrorMessage message={signInErrorMessage} />}
                 <fieldset className={styles.form__field} disabled={signIn.isPending}>
                     <FormInputs>
                         <InputPhone register={register} errors={errors}></InputPhone>

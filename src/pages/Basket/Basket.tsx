@@ -14,14 +14,13 @@ import BasketTotal from './BasketTotal/BasketTotal';
 import { useBasketMutations, useGetBasket } from '../../utils/hooks/useBasket/useBasket';
 import { Restaurant } from '../../utils/api/restaurantsService/restaurantsService';
 import { MealInBasket } from '../../utils/api/basketService/basketService';
-import { openPaymentWidgetHandler } from '../../lib/onevision';
 import { usePaymentMutations } from '../../utils/hooks/usePayment/usePayment';
 
 function Basket() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { getPaymentOptions } = usePaymentMutations();
+    const { getPaymentToken } = usePaymentMutations();
     const { addMeal, emptyBasket, errorMessage, reset, placeOrder } = useBasketMutations();
     const { data, isSuccess } = useGetBasket();
     const restaurant: Restaurant | Record<string, never> = isSuccess ? data.data.restaurant : {};
@@ -36,7 +35,7 @@ function Basket() {
     const restaurantId = restaurant.id;
     const close = () => {
         reset();
-        navigate(-1);
+        navigate('/');
     };
     useEffect(() => {
         if (placeOrder.data) {
@@ -45,20 +44,9 @@ function Basket() {
         }
     }, [placeOrder, navigate]);
     const handlePayOrder = async () => {
-        const { data } = await getPaymentOptions.mutateAsync();
-        const onPaymentSuccess = () => {
-            navigate('/waiting-order');
-            setTimeout(() => document.querySelector('iframe')?.remove(), 5000);
-        };
-        const onPaymentFailure = () => {
-            navigate('/basket');
-            setTimeout(() => document.querySelector('iframe')?.remove(), 5000);
-        };
-        openPaymentWidgetHandler({ ...data, api_key: import.meta.env.VITE_ONEVISION_API_KEY }, onPaymentSuccess, onPaymentFailure);
-        const element = document.getElementById('onevision-widget');
-        if (element) {
-            element.style.zIndex = '15';
-        }
+        const orderDescription = meals.map((meal) => meal.meal.name).join(', ');
+        const payment = await getPaymentToken.mutateAsync({ amount: price * 100, description: orderDescription });
+        window.location.href = payment.checkout.redirect_url;
         if (userId) {
             await placeOrder.mutate({ userId, restaurantId });
         }

@@ -6,6 +6,7 @@ function RestaurantCard({ card, isTheOnlyOne, lastClickedRestaurantId }: { card:
     const ref = useRef(null);
 
     const isClicked = card.id === lastClickedRestaurantId;
+    const distance = card.distance_km ? card.distance_km.toFixed(1) : '';
 
     return (
         <div ref={ref} className={`${styles.card} ${isTheOnlyOne || isClicked ? styles.card__active : ''}`}>
@@ -26,6 +27,7 @@ function RestaurantCard({ card, isTheOnlyOne, lastClickedRestaurantId }: { card:
                     <div className={styles.card__feature}>
                         <div className={`${styles.card__icon} ${styles.card__icon_clock} ${styles.card__icon_small}`} />
                         <p className={styles.card__feature_title}>{card.workingTime}</p>
+                        {distance && <p className={`${styles.card__feature_title_distance} ${styles.card__feature_title}`}>{`${distance} км`}</p>}
                     </div>
                 </div>
             </div>

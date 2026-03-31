@@ -1,34 +1,34 @@
-import { MouseEvent, useState, useId, ChangeEvent, ReactNode } from 'react';
+import { MouseEvent, useId, ChangeEvent, ReactNode } from 'react';
 import styles from './Filter.module.scss';
 import { useTranslation } from 'react-i18next';
 import OptionElement from './OptionElement/OptionElement';
 import { useRestaurantsContext } from '../../utils/hooks/useRestaurants/useRestaurantsContext';
-import { Option } from '../../contexts/RestaurantsContext';
 import Chip from './Chip/Chip';
 import { useEsc } from '../../utils/hooks/useEsc/useEsc';
+import { SearchSuggestion } from '../../utils/api/restaurantsService/restaurantsService';
 
 type OptionListTypes = {
     /**
      * List of options to be rendered
      */
-    options: Option[];
+    options: SearchSuggestion[];
     /**
      * Indicates whether option has been selected by user
      */
     selected: boolean;
     /**
      * Fires when user clicks on option. Sets option selected or deselected
-     * @param {Option} option
+     * @param {string} option
      */
-    action: (option: Option) => void;
+    action: (option: SearchSuggestion) => void;
 };
 
 const OptionList = ({ options, selected, action }: OptionListTypes) => {
     return (
         <ul className={`${styles.filter__options} ${!selected && styles.filter__options_nowrap}`}>
             {options.map((option) => (
-                <li key={option.id}>
-                    <OptionElement text={option.name} selected={selected} onClick={() => action(option)} />
+                <li key={option.text}>
+                    <OptionElement text={option.text} selected={selected} onClick={() => action(option)} />
                 </li>
             ))}
         </ul>
@@ -36,16 +36,13 @@ const OptionList = ({ options, selected, action }: OptionListTypes) => {
 };
 
 const Filter = ({ name, close, children }: { name?: string; close: () => void; children?: ReactNode }) => {
-    const { options, venueTypes } = useRestaurantsContext();
-    const [inputValue, setInputValue] = useState('');
+    const { options, venueTypes, searchQuery, setSearchQuery, searchSuggestions } = useRestaurantsContext();
     const { t } = useTranslation();
     const textId = useId();
     const buttonId = useId();
-    const searchValue = inputValue.trim();
-    const suggestedOptions: Option[] = searchValue ? options.all.filter((opt) => opt.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1) : [];
-    const nothingFound = suggestedOptions.length === 0 && inputValue !== '';
+    const nothingFound = searchSuggestions.length === 0 && searchQuery !== '';
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
+        setSearchQuery(e.target.value);
     };
     const handleOverlayClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
@@ -67,10 +64,10 @@ const Filter = ({ name, close, children }: { name?: string; close: () => void; c
                     <div className={styles.filter__options_container}>
                         <div className={styles.filter__input_container}>
                             <div className={styles.filter__icon_search} />
-                            <input id={textId} onChange={handleChange} value={inputValue} className={styles.filter__input} type="text" placeholder={t('pages.filter.placeholder')} />
+                            <input id={textId} onChange={handleChange} value={searchQuery} className={styles.filter__input} type="text" placeholder={t('pages.filter.placeholder')} />
                         </div>
                         <div className={styles.filter__options_list}>
-                            {nothingFound ? <p className={styles.filter__nothingFound}>{t('pages.filter.nothingFound')}</p> : <OptionList options={suggestedOptions} selected={false} action={options.addOption} />}
+                            {nothingFound ? <p className={styles.filter__nothingFound}>{t('pages.filter.nothingFound')}</p> : <OptionList options={searchSuggestions} selected={false} action={options.addOption} />}
                             <OptionList options={options.selectedOptions} selected={true} action={options.deleteOption} />
                         </div>
                     </div>

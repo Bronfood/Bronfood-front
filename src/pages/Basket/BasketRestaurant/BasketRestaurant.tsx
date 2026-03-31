@@ -2,11 +2,9 @@ import styles from './BasketRestaurant.module.scss';
 import { Restaurant } from '../../../utils/api/restaurantsService/restaurantsService';
 import ButtonIconSquare from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import { FormEvent } from 'react';
-import { useRestaurantsContext } from '../../../utils/hooks/useRestaurants/useRestaurantsContext';
 
 function BasketRestaurant({ restaurant, emptyBasket }: { restaurant: Restaurant | Record<string, never>; emptyBasket: () => void }) {
-    const { restaurantsOnMap } = useRestaurantsContext();
-    const photo = restaurantsOnMap.find((res) => res.id === restaurant.id)?.photo;
+    const { photo } = restaurant;
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         emptyBasket();

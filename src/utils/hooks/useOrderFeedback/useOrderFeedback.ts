@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import OrderServiceReal from '../../api/orderService/orderSeviceReal';
 import { useNavigate } from 'react-router-dom';
+import { orderService } from '../../api/orderService/orderService';
 
 interface UseOrderFeedbackProps {
+    orderId: number;
     restaurantId: number;
     onFeedbackSubmitted: () => void;
 }
@@ -13,8 +14,7 @@ interface ReviewData {
     review: string;
 }
 
-export const useOrderFeedback = ({ restaurantId, onFeedbackSubmitted }: UseOrderFeedbackProps) => {
-    const orderService = new OrderServiceReal();
+export const useOrderFeedback = ({ restaurantId, orderId, onFeedbackSubmitted }: UseOrderFeedbackProps) => {
     const queryClient = useQueryClient();
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
@@ -46,10 +46,10 @@ export const useOrderFeedback = ({ restaurantId, onFeedbackSubmitted }: UseOrder
     };
 
     const { mutate: submitOrderFeedback, isPending: isSubmitting } = useMutation({
-        mutationFn: (data: ReviewData) => orderService.submitOrderFeedback(restaurantId, data.rating, data.review),
+        mutationFn: (data: ReviewData) => orderService.submitOrderFeedback(restaurantId, orderId, data.rating, data.review),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['restaurant', restaurantId, 'reviews'],
+                queryKey: ['order', orderId, 'reviews'],
             });
             onFeedbackSubmitted();
             resetFeedback();

@@ -9,23 +9,26 @@ import PopupFeedbackThanks from '../PopupFeedbackThanks/PopupFeedbackThanks';
 import Preloader from '../../components/Preloader/Preloader';
 
 interface LocationState {
+    orderId: number;
     restaurantId: number;
 }
 
 const LeaveOrderFeedback: FC = () => {
     const { t } = useTranslation();
     const location = useLocation();
+    const [orderId, setOrderId] = useState<number | null>(null);
     const [restaurantId, setRestaurantId] = useState<number | null>(null);
     const [showThanksPopup, setShowThanksPopup] = useState(false);
+
     useEffect(() => {
         const state = location.state as LocationState;
-        if (state && state.restaurantId) {
-            setRestaurantId(state.restaurantId);
-        }
+        if (state && state.orderId) setOrderId(state.orderId);
+        if (state && state.restaurantId) setRestaurantId(state.restaurantId);
     }, [location.state]);
 
     const { rating, review, filledStars, isSubmitting, handleRatingChange, handleReviewChange, triggerFilledStars, resetFilledStars, handleSubmitReview, resetFeedback } = useOrderFeedback({
         restaurantId: restaurantId!,
+        orderId: orderId!,
         onFeedbackSubmitted: () => setShowThanksPopup(true),
     });
 
@@ -34,7 +37,7 @@ const LeaveOrderFeedback: FC = () => {
     const handleSkipOrClose = () => {
         resetFeedback();
         triggerFilledStars();
-        setTimeout(() => navigate('/'), 2000);
+        setTimeout(() => navigate('/my-orders'), 2000);
     };
 
     if (showThanksPopup) {

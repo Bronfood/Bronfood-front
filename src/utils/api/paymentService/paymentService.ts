@@ -1,40 +1,57 @@
 import { PaymentServiceReal } from './paymentServiceReal';
 
-type PaymentItem = {
-    merchant_id: string;
-    service_id: string;
-    merchant_name: string;
-    name: string; // Название блюда, например, "Куриный донер"
-    quantity: number;
-    amount_one_pcs: number;
-    amount_sum: number;
+type CustomerFields = Array<'email' | 'first_name' | 'last_name' | 'address' | 'city' | 'state' | 'zip' | 'phone' | 'country' | 'birth_date' | 'taxpayer_id'>;
+
+export type PaymentRequest = {
+    test: boolean;
+    transaction_type: 'payment' | 'authorization' | 'tokenization' | 'charge';
+    attempts: number;
+    settings: {
+        success_url: string;
+        fail_url: string;
+        button_text?: string;
+        button_next_text: string;
+        language: 'ru' | 'en' | 'kk';
+        customer_fields?: {
+            visible: CustomerFields;
+            read_only: CustomerFields;
+        };
+        credit_card_fields?: {
+            holder: string;
+            read_only: ['holder'];
+        };
+    };
+    payment_method?: {
+        types: ['credit_card', 'bank_transfer'];
+        bank_transfer: {
+            account: 'DE89370400440532013000';
+        };
+        excluded_brands: ['visa', 'google_pay'];
+    };
+    order: {
+        currency: 'KZT';
+        amount: number;
+        description: string;
+        tracking_id?: string;
+        expired_at?: string;
+    };
+    customer?: {
+        address: string;
+        country: string;
+        city: string;
+        email: string;
+    };
 };
 
-export type PaymentBackend = {
-    amount: number; // Положительное число с '.' в качестве разделителя, не более двух разрядов после точки
-    currency: 'KZT';
-    order_id: string;
-    description: string;
-    items: PaymentItem[];
-    email: string;
-    success_url: 'https://bronfood.vercel.app';
-    failure_url: 'https://bronfood.vercel.app';
-    payment_lifetime: number; // Время жизни платежа в секундах
-    extra_params: Record<string, never>;
+export type PaymentResponse = {
+    checkout: {
+        token: string;
+        redirect_url: string;
+    };
 };
-
-export type PaymentFrontend = {
-    payment_type: 'pay';
-    payment_method: 'ecom';
-    lang: 'ru' | 'kz' | 'en';
-    payment_gateway_host: 'https://api.paysage.kz/';
-    payment_widget_host: 'https://widget.paysage.kz';
-};
-
-export type Payment = PaymentBackend & PaymentFrontend;
 
 export interface PaymentService {
-    getPayment: () => Promise<{ data: Payment }>;
+    getPaymentToken: ({ amount, description }: { amount: number; description: string }) => Promise<PaymentResponse>;
 }
 
 export const paymentService = new PaymentServiceReal();

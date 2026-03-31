@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useOrderData } from '../../../utils/hooks/useOrderData/useOrderData';
 import { useTimers } from '../../../utils/hooks/useTimer/useTimer';
 import Modal from '../../../components/Modal/Modal';
 import OrderTimeCounter from '../../../components/OrderTimeCounter/OrderTimeCounter';
@@ -14,6 +13,7 @@ import { useEsc } from '../../../utils/hooks/useEsc/useEsc';
 import { formatTime } from '../../../utils/serviceFuncs/formatTime';
 import styles from './WaitingOrder.module.scss';
 import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUser';
+import { useOrderData } from '../../../utils/hooks/useOrder/useOrder';
 
 const WAIT_ORDER_ID_INITIAL_TIME = 2 * 60;
 

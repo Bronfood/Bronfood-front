@@ -13,11 +13,13 @@ import { useRestaurantsContext } from '../../../utils/hooks/useRestaurants/useRe
 import { useMeals } from '../../../utils/hooks/useMeals/useMeals';
 import { useRestaurant } from '../../../utils/hooks/useRestaurant/useRestaurant';
 import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUser';
-import { useBasketMutations, useGetBasket } from '../../../utils/hooks/useBasket/useBasket';
+import { useBasketMutations } from '../../../utils/hooks/useBasket/useBasket';
 import { useReviews } from '../../../utils/hooks/useReviews/useReviews';
 import Reviews from './Reviews/Reviews';
+import RestaurantInfoPopup from './RestaurantInfoPopup/RestaurantInfoPopup';
 
 function Restaurant() {
+    const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
     const [isMealPageOpen, setIsMealPageOpen] = useState(false);
     const [selectedMealTypes, setSelectedMealTypes] = useState<MealType[]>([]);
     const [isReviewsVisible, setIsReviewsVisible] = useState(false);
@@ -31,27 +33,25 @@ function Restaurant() {
     const { data, isPending: mealsLoading, isSuccess } = useMeals(restaurantId);
     const meals = isSuccess && data.data;
     const { addMeal } = useBasketMutations();
-    const { refetch: refetchBasket } = useGetBasket();
     const { data: reviewsData, isSuccess: isReviewsSuccess } = useReviews(restaurantId);
     const rating = isReviewsSuccess ? reviewsData.data.results.restaurant.rating : '';
     const reviewsCount = isReviewsSuccess ? `( ${reviewsData.data.count} )` : '';
     const reviews = isReviewsSuccess ? reviewsData.data.results.reviews : [];
     const handleAddMealClick = async (meal: Meal) => {
         if (isLogin && restaurant) {
-            if (meal.hasFeatures) {
-                navigate(`meal/${meal.id}`);
-                setIsMealPageOpen(true);
-            } else {
-                await addMeal.mutateAsync({ restaurantId: restaurant.id, mealId: meal.id, features: [] });
-                refetchBasket();
-            }
+            navigate(`meal/${meal.id}`);
+            setIsMealPageOpen(true);
         } else {
             navigate(`/signin`);
         }
     };
     const handleReviewsClick = () => setIsReviewsVisible((prev) => !prev);
+    const handleInfoPopupClose = () => {
+        setIsInfoPopupOpen(false);
+        navigate(`/restaurants/${restaurantId}`);
+    };
     const close = () => {
-        navigate('/restaurants');
+        navigate('/');
     };
 
     const addMealType = (mealType: MealType) => {
@@ -88,9 +88,9 @@ function Restaurant() {
 
     return (
         <>
-            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} restaurant={restaurant}>
+            <RestaurantPopup close={close} isMealPageOpen={isMealPageOpen} setIsMealPageOpen={setIsMealPageOpen} setIsInfoPopupOpen={setIsInfoPopupOpen} restaurant={restaurant}>
                 <RestaurantImage image={restaurant.photo} />
-                <RestaurantDescription name={restaurant.name} address={restaurant.address} workingTime={restaurant.workingTime} rating={rating} reviews={reviewsCount} onReviews={handleReviewsClick} />
+                <RestaurantDescription name={restaurant.name} address={restaurant.address} workingTime={restaurant.workingTime} rating={rating} reviews={reviewsCount} onReviews={handleReviewsClick} description={restaurant.description} />
                 {isReviewsVisible ? (
                     <Reviews reviews={reviews} />
                 ) : (
@@ -100,6 +100,7 @@ function Restaurant() {
                     </>
                 )}
             </RestaurantPopup>
+            {isInfoPopupOpen && <RestaurantInfoPopup close={handleInfoPopupClose} name={restaurant.legal_name} address={restaurant.legal_address} bin={restaurant.legal_bin} directorFullname={restaurant.legal_director_fullname} />}
             <Outlet />
         </>
     );

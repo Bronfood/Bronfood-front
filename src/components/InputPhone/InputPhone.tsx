@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './InputPhone.module.scss';
 import { useId } from 'react';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
@@ -22,19 +22,13 @@ interface InputPhone {
 }
 
 const InputPhone: FC<InputPhone> = (props) => {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(props.value ? format(props.value, { mask: '+_ (___) ___-__-__', replacement: { _: /\d/ } }) : '');
     const { t } = useTranslation();
     const errorMessage = (props.errors['phoneNumber']?.message as string) || undefined;
     const id = useId();
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
     };
-    useEffect(() => {
-        if (props.value) {
-            const value = format(props.value, { mask: '+_ (___) ___-__-__', replacement: { _: /\d/ } });
-            setInputValue(value);
-        }
-    }, [props.value]);
 
     return (
         <div className={styles.input}>

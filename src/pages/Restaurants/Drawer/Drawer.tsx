@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import RestaurantCard from '../../../components/Cards/RestaurantCard/RestaurantCard';
 import styles from './Drawer.module.scss';
@@ -7,11 +7,11 @@ import { useRestaurantsContext } from '../../../utils/hooks/useRestaurants/useRe
 import Preloader from '../../../components/Preloader/Preloader';
 import { useNavigate } from 'react-router-dom';
 import PageNotFound from '../../PageNotFound/PageNotFound';
+import CityList from './CityList/CityList';
 
-const Drawer = () => {
-    const [isOpen, setIsOpen] = useState(true);
+const Drawer = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const { restaurantsFiltered, isLoading, isError, lastClickedRestaurantId, setLastClickedRestaurantId, setActiveRestaurant } = useRestaurantsContext();
+    const { restaurantsFiltered, isLoading, isFetched, isError, lastClickedRestaurantId, setLastClickedRestaurantId, setActiveRestaurant } = useRestaurantsContext();
     const { t } = useTranslation();
     const container = useRef(null);
     const navigate = useNavigate();
@@ -24,7 +24,6 @@ const Drawer = () => {
             setLastClickedRestaurantId(id);
         }
     };
-
     if (isError) {
         return <PageNotFound />;
     } else {
@@ -39,13 +38,17 @@ const Drawer = () => {
                         <button onClick={() => setIsFilterOpen(true)} type="button" className={styles.drawer__icon} title={t('pages.restaurants.filters')} />
                     </div>
                     {isLoading && <Preloader />}
-                    <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>
-                        {restaurantsFiltered.map((card) => (
-                            <li key={card.id} className={styles.drawer__list_item} onClick={() => handleClick(card.id)}>
-                                <RestaurantCard card={card} isTheOnlyOne={restaurantsFiltered.length === 1} lastClickedRestaurantId={lastClickedRestaurantId} />
-                            </li>
-                        ))}
-                    </ul>
+                    {isFetched && restaurantsFiltered.length === 0 ? (
+                        <CityList />
+                    ) : (
+                        <ul ref={container} className={`${styles.drawer__list} bronfood-scrollbar`}>
+                            {restaurantsFiltered.map((card) => (
+                                <li key={card.id} className={styles.drawer__list_item} onClick={() => handleClick(card.id)}>
+                                    <RestaurantCard card={card} isTheOnlyOne={restaurantsFiltered.length === 1} lastClickedRestaurantId={lastClickedRestaurantId} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 {isFilterOpen && <Filter name="filters" close={() => setIsFilterOpen(false)} />}
             </div>

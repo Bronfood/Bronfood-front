@@ -1,5 +1,3 @@
-import { API_URL } from '../consts';
-
 interface FetchOptions extends RequestInit {
     data?: object;
 }
@@ -13,7 +11,7 @@ interface FetchOptions extends RequestInit {
 export const handleFetch = async (endpoint: string, { data, ...customOptions }: FetchOptions | Record<string, never> = {}) => {
     const token = localStorage.getItem('token');
     const headers: RequestInit['headers'] = {};
-    if (token) {
+    if (token && endpoint !== 'api/auth/jwt/refresh/') {
         headers.Authorization = `Bearer ${token}`;
     }
     if (data) {
@@ -32,7 +30,7 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
         options.body = JSON.stringify(data);
     }
     try {
-        const res = await fetch(`${API_URL}/${endpoint}`, options);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, options);
         if (res.status === 401) {
             localStorage.removeItem('token');
         }
@@ -43,7 +41,15 @@ export const handleFetch = async (endpoint: string, { data, ...customOptions }: 
         if (res.ok) {
             return result;
         } else {
-            throw new Error(result.data.detail);
+            if (result.data.detail) {
+                throw new Error(result.data.detail);
+            } else {
+                const errorCause: Record<string, string> = {};
+                for (const key in result.data) {
+                    errorCause[key] = result.data[key];
+                }
+                throw new Error('Validation Error', { cause: errorCause });
+            }
         }
     } catch (error) {
         if (error instanceof TypeError) {

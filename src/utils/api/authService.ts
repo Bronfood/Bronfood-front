@@ -8,6 +8,7 @@ export interface RegisterPayload {
     phone: string;
     password: string;
     name: string;
+    captcha: string;
 }
 export interface RegisterPromise {
     id: number;
@@ -18,17 +19,16 @@ export interface ConfirmRegisterPayload {
     phone: string;
     code: string;
 }
-export interface UpdateUser {
-    name: string;
-    phone: string;
-    password?: string;
-    password_confirm?: string;
+export interface UpdateUserPayload {
+    name?: string;
+    phone?: string;
+    currentPassword?: string;
+    newPassword?: string;
+    newPasswordConfirm?: string;
 }
-
 export interface ConfirmUpdateUser {
-    confirmation_code: string;
+    code: string;
 }
-
 export interface User {
     id: number;
     is_banned: boolean;
@@ -39,14 +39,6 @@ export interface User {
     role: string;
     username: string;
 }
-
-export interface UserExtra {
-    userId: number;
-    phone: string;
-    name: string;
-    role?: 'CLIENT';
-    auth_token: string;
-}
 export interface SuccessProfileResponse {
     status: 'success';
     data: User;
@@ -54,6 +46,20 @@ export interface SuccessProfileResponse {
 export interface ErrorProfileResponse {
     status: 'error';
     error_message: string;
+}
+export interface RestorePasswordPayload {
+    phone: string;
+}
+export interface confirmRestorePasswordPayload {
+    phone: string;
+    newPassword: string;
+    reNewPassword: string;
+    code: string;
+}
+
+export interface CaptchaResponse {
+    image: string;
+    ttl: number;
 }
 
 export interface AuthService {
@@ -63,15 +69,21 @@ export interface AuthService {
 
     confirmRegister: ({ phone, code }: ConfirmRegisterPayload) => Promise<void>;
 
-    updateUser: ({ name, phone, password, password_confirm }: UpdateUser) => Promise<{ data: { temp_data_code: string } }>;
+    updateUser: ({ name, phone, currentPassword, newPassword, newPasswordConfirm }: UpdateUserPayload) => Promise<void>;
 
-    confirmUpdateUser: ({ confirmation_code }: ConfirmUpdateUser) => Promise<{ data: UserExtra }>;
+    confirmUpdateUser: ({ code }: ConfirmUpdateUser) => Promise<void>;
 
     logOut: () => Promise<void>;
 
     getProfile: () => Promise<{ data: User }>;
 
     refreshToken: () => Promise<void>;
+
+    restorePassword: ({ phone }: RestorePasswordPayload) => Promise<void>;
+
+    confirmRestorePassword: ({ phone, newPassword, reNewPassword, code }: confirmRestorePasswordPayload) => Promise<void>;
+
+    getCaptcha(): Promise<CaptchaResponse>;
 }
 
 export const authService = new AuthServiceReal();

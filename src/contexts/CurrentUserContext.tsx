@@ -1,6 +1,9 @@
-import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react';
-import { authService, LoginData, RegisterPayload, RegisterPromise, UpdateUser, User, UserExtra } from '../utils/api/authService';
+import { createContext, FC, PropsWithChildren, useState, useEffect } from 'react';
+import { authService, CaptchaResponse, LoginData, RegisterPayload, RegisterPromise, RestorePasswordPayload, UpdateUserPayload, User } from '../utils/api/authService';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult, useQueryClient } from '@tanstack/react-query';
+import { requestNotificationPermission } from '../utils/serviceFuncs/requestNotificationPermission';
+import { subscribeUserToPushNotifications } from '../utils/serviceFuncs/subscribeUserToPushNotifications';
+import { sendPushSubscriptionToServer } from '../utils/serviceFuncs/sendPushSubscriptionToServer';
 
 type CurrentUserContext = {
     currentUser: User | null;
@@ -8,10 +11,13 @@ type CurrentUserContext = {
     signIn: UseMutationResult<void, Error, LoginData, unknown> | Record<string, never>;
     signUp: UseMutationResult<{ data: RegisterPromise }, Error, RegisterPayload, unknown> | Record<string, never>;
     logout: UseMutationResult<void, Error, void, unknown> | Record<string, never>;
-    updateUser: UseMutationResult<{ data: { temp_data_code: string } }, Error, UpdateUser, unknown> | Record<string, never>;
+    updateUser: UseMutationResult<void, Error, UpdateUserPayload, unknown> | Record<string, never>;
     confirmSignUp: UseMutationResult<void, Error, { confirmation_code: string }, unknown> | Record<string, never>;
-    confirmUpdateUser: UseMutationResult<{ data: UserExtra }, Error, { confirmation_code: string }, unknown> | Record<string, never>;
+    confirmUpdateUser: UseMutationResult<void, Error, { confirmation_code: string }, unknown> | Record<string, never>;
     profile: UseQueryResult<{ data: User }, Error> | Record<string, never>;
+    restorePassword: UseMutationResult<void, Error, RestorePasswordPayload, unknown> | Record<string, never>;
+    confirmRestorePassword: UseMutationResult<void, Error, { newPassword: string; reNewPassword: string; code: string }, unknown> | Record<string, never>;
+    getCaptcha: UseQueryResult<CaptchaResponse, Error> | Record<string, never>;
 };
 
 export const CurrentUserContext = createContext<CurrentUserContext>({
@@ -24,18 +30,35 @@ export const CurrentUserContext = createContext<CurrentUserContext>({
     confirmSignUp: {},
     confirmUpdateUser: {},
     profile: {},
+    restorePassword: {},
+    confirmRestorePassword: {},
+    getCaptcha: {},
 });
 
 export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
+    const token = localStorage.getItem('token');
     const [phone, setPhone] = useState<string>('');
     const client = useQueryClient();
+
+    useQuery({
+        queryKey: ['refresh token'],
+        queryFn: () => authService.refreshToken(),
+        refetchInterval: 4.9 * 60 * 1000,
+        refetchIntervalInBackground: true,
+        retry: false,
+    });
 
     const profile = useQuery({
         queryKey: ['profile'],
         queryFn: () => authService.getProfile(),
+        retry: false,
+        enabled: !!token,
+    });
 
-        //retry: false,
-        staleTime: 5 * 60 * 1000 * 0,
+    const captcha = useQuery({
+        queryKey: ['captcha'],
+        queryFn: () => authService.getCaptcha(),
+        retry: false,
     });
 
     const isLogin = !!profile.data;
@@ -53,13 +76,12 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
         onSuccess: () => profile.refetch(),
     });
     const updateUser = useMutation({
-        mutationFn: (variables: UpdateUser) => authService.updateUser(variables),
+        mutationFn: (variables: UpdateUserPayload) => authService.updateUser(variables),
+        onSuccess: () => profile.refetch(),
     });
     const confirmUpdateUser = useMutation({
-        mutationFn: (variables: { confirmation_code: string }) => authService.confirmUpdateUser({ confirmation_code: variables.confirmation_code }),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ['profile'] });
-        },
+        mutationFn: (variables: { confirmation_code: string }) => authService.confirmUpdateUser({ code: variables.confirmation_code }),
+        onSuccess: () => profile.refetch(),
     });
     const logout = useMutation({
         mutationFn: () => authService.logOut(),
@@ -68,12 +90,30 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
             profile.refetch();
         },
     });
+    const restorePassword = useMutation({
+        mutationFn: (variables: RestorePasswordPayload) => authService.restorePassword(variables),
+        onSuccess: (_res, variables: RestorePasswordPayload) => setPhone(variables.phone),
+    });
+    const confirmRestorePassword = useMutation({
+        mutationFn: (variables: { newPassword: string; reNewPassword: string; code: string }) => authService.confirmRestorePassword({ phone, newPassword: variables.newPassword, reNewPassword: variables.reNewPassword, code: variables.code }),
+        onSuccess: () => profile.refetch(),
+    });
 
     useEffect(() => {
-        if (profile.error?.message === 'Authentication credentials were not provided.') {
-            authService.refreshToken();
+        if (!('Notification' in window) && !('serviceWorker' in navigator)) {
+            // eslint-disable-next-line no-console
+            console.log('Push notifications not supported.');
+            return;
+        } else if (profile.data?.data && Notification.permission !== 'granted') {
+            requestNotificationPermission().then((permission) => {
+                if (permission === 'granted') {
+                    subscribeUserToPushNotifications().then((subscription) => {
+                        if (subscription) sendPushSubscriptionToServer(subscription);
+                    });
+                }
+            });
         }
-    }, [profile.error]);
+    }, [profile.data?.data]);
 
     return (
         <CurrentUserContext.Provider
@@ -87,6 +127,9 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
                 confirmSignUp,
                 confirmUpdateUser,
                 profile,
+                restorePassword,
+                confirmRestorePassword,
+                getCaptcha: captcha,
             }}
         >
             {children}
