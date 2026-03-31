@@ -60,7 +60,7 @@ function WorkStatus() {
         }
         setSelectedDate(date);
     };
-    const handleReset = (date: Date | undefined) => {
+    const handleReset = (date?: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
         addSchedule.reset();
         formReset();
