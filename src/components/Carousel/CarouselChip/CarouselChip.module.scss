@@ -1,0 +1,40 @@
+@use '../../../styles/variables';
+
+.chip {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: 41px;
+    border: 1px solid variables.$line;
+    border-radius: 35px;
+    padding-inline: 0;
+    padding-block: 0;
+    user-select: none;
+    cursor: pointer;
+
+    &__input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    &__text {
+        padding: 10px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+
+        &_active {
+            color: variables.$white;
+        }
+    }
+
+    &_active {
+        background-color: variables.$orange;
+        border: 1px solid variables.$orange;
+    }
+}
