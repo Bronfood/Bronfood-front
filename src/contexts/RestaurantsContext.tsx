@@ -1,19 +1,9 @@
 import { FC, PropsWithChildren, createContext, useCallback, useState, Dispatch, SetStateAction, useMemo } from 'react';
-import { Restaurant } from '../utils/api/restaurantsService/restaurantsService';
-import { options, types } from '../pages/Restaurants/MockRestaurantsList';
-import { LngLatBounds } from '@yandex/ymaps3-types';
+import { Restaurant, SearchSuggestion } from '../utils/api/restaurantsService/restaurantsService';
+import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { useRestaurants } from '../utils/hooks/useRestaurants/useRestaurants';
-
-export type Option = {
-    /**
-     * Option's id. Option may be either a meal's name or a venue's name
-     */
-    id: number;
-    /**
-     * Option's name
-     */
-    name: string;
-};
+import { useSearchSuggestions } from '../utils/hooks/useSearchSuggestions/useSearchSuggestions';
+import { types } from '../utils/consts';
 
 export type VenueType = {
     /**
@@ -40,10 +30,6 @@ export type RestaurantsContext = {
      */
     inView?: number;
     /**
-     * List of restaurants currently on map
-     */
-    restaurantsOnMap: Restaurant[];
-    /**
      * List of restaurants filtered with user selected options
      */
     restaurantsFiltered: Restaurant[];
@@ -51,6 +37,10 @@ export type RestaurantsContext = {
      * Indicates whether restaurants are loading
      */
     isLoading: boolean;
+    /**
+     * Indicates whether restaurants have been fetched
+     */
+    isFetched: boolean;
     /**
      * Indicates whether query encountered an error
      */
@@ -72,21 +62,17 @@ export type RestaurantsContext = {
      */
     options: {
         /**
-         * List of all options available
-         */
-        all: Option[];
-        /**
          * List of options selected by user
          */
-        selectedOptions: Option[];
+        selectedOptions: SearchSuggestion[];
         /**
          * Add option to the list of selected options
          */
-        addOption: (option: Option) => void;
+        addOption: (option: SearchSuggestion) => void;
         /**
          * Remove option from the list of selected options
          */
-        deleteOption: (option: Option) => void;
+        deleteOption: (option: SearchSuggestion) => void;
     };
     /**
      * Types of venues states and control
@@ -113,20 +99,39 @@ export type RestaurantsContext = {
      * Sets Yandex map's bounds
      */
     setBounds: Dispatch<SetStateAction<LngLatBounds | never[]>>;
+    /**
+     * User's location on YandexMap
+     */
+    userLocation: LngLat | undefined;
+    /**
+     * Sets user's location on YandexMap
+     */
+    setUserLocation: Dispatch<SetStateAction<LngLat | undefined>>;
+    /**
+     * Input value
+     */
+    searchQuery: string;
+    /**
+     * Sets input value
+     */
+    setSearchQuery: Dispatch<SetStateAction<string>>;
+    /**
+     * Search suggestions on user input
+     */
+    searchSuggestions: SearchSuggestion[];
 };
 
 export const RestaurantsContext = createContext<RestaurantsContext>({
     setActiveRestaurant: () => {},
-    restaurantsOnMap: [],
     restaurantsFiltered: [],
     isLoading: false,
+    isFetched: false,
     isError: false,
     refetch: () => {},
     setInView: () => {},
     lastClickedRestaurantId: null,
     setLastClickedRestaurantId: () => {},
     options: {
-        all: [],
         selectedOptions: [],
         addOption: () => {},
         deleteOption: () => {},
@@ -138,30 +143,38 @@ export const RestaurantsContext = createContext<RestaurantsContext>({
         deleteVenueType: () => {},
     },
     setBounds: () => {},
+    userLocation: undefined,
+    setUserLocation: () => {},
+    searchQuery: '',
+    setSearchQuery: () => {},
+    searchSuggestions: [],
 });
 
 export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [inView, setInView] = useState<number | undefined>(undefined);
     const [lastClickedRestaurantId, setLastClickedRestaurantId] = useState<number | null>(null);
     const [bounds, setBounds] = useState<LngLatBounds | never[]>([]);
-    const { isLoading, isError, restaurantsOnMap, refetch } = useRestaurants(bounds as LngLatBounds);
-    const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+    const [userLocation, setUserLocation] = useState<LngLat | undefined>(undefined);
+    const [searchQuery, setSearchQuery] = useState('');
+    const { isSuccess: isSearchSuggestionsSuccess, data: searchSuggestionsData } = useSearchSuggestions(searchQuery);
+    const searchSuggestions = useMemo(() => (isSearchSuggestionsSuccess ? searchSuggestionsData.data : []), [isSearchSuggestionsSuccess, searchSuggestionsData]);
+    const [selectedOptions, setSelectedOptions] = useState<SearchSuggestion[]>([]);
     const [selectedVenueTypes, setSelectedVenueTypes] = useState<VenueType[]>([]);
-    const restaurantsFiltered: Restaurant[] = useMemo(() => filterRestaurants(selectedOptions, selectedVenueTypes, restaurantsOnMap), [selectedOptions, selectedVenueTypes, restaurantsOnMap]);
+    const { isLoading, isError, restaurantsOnMap: restaurantsFiltered, refetch, isFetched } = useRestaurants(bounds as LngLatBounds, userLocation as LngLat, selectedOptions as SearchSuggestion[], selectedVenueTypes as VenueType[]);
     const setActiveRestaurant = useCallback((id: number) => {
         setInView(id);
     }, []);
     const addOption = useCallback(
-        (option: Option) => {
-            if (!selectedOptions.find((opt: Option) => opt.id === option.id)) {
+        (option: SearchSuggestion) => {
+            if (!selectedOptions.find((opt: SearchSuggestion) => opt.text === option.text)) {
                 setSelectedOptions([...selectedOptions, option]);
             }
         },
         [selectedOptions]
     );
     const deleteOption = useCallback(
-        (option: Option) => {
-            setSelectedOptions(selectedOptions.filter((opt: Option) => opt.id !== option.id));
+        (option: SearchSuggestion) => {
+            setSelectedOptions(selectedOptions.filter((opt: SearchSuggestion) => opt.text !== option.text));
         },
         [selectedOptions]
     );
@@ -179,21 +192,19 @@ export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
         },
         [selectedVenueTypes]
     );
-
     const contextValue = useMemo(
         () => ({
             isLoading,
+            isFetched,
             isError,
             setActiveRestaurant,
             restaurantsFiltered,
             refetch: refetch,
-            restaurantsOnMap,
             inView,
             setInView,
             lastClickedRestaurantId,
             setLastClickedRestaurantId,
             options: {
-                all: options,
                 selectedOptions,
                 addOption,
                 deleteOption,
@@ -205,21 +216,14 @@ export const RestaurantsProvider: FC<PropsWithChildren> = ({ children }) => {
                 deleteVenueType,
             },
             setBounds,
+            userLocation,
+            setUserLocation,
+            searchQuery,
+            setSearchQuery,
+            searchSuggestions,
         }),
-        [isLoading, isError, setActiveRestaurant, restaurantsFiltered, refetch, restaurantsOnMap, inView, setInView, lastClickedRestaurantId, setLastClickedRestaurantId, selectedOptions, addOption, deleteOption, selectedVenueTypes, addVenueType, deleteVenueType, setBounds]
+        [isLoading, isFetched, isError, setActiveRestaurant, restaurantsFiltered, refetch, inView, setInView, lastClickedRestaurantId, setLastClickedRestaurantId, selectedOptions, addOption, deleteOption, selectedVenueTypes, addVenueType, deleteVenueType, setBounds, userLocation, setUserLocation, searchQuery, setSearchQuery, searchSuggestions]
     );
 
     return <RestaurantsContext.Provider value={contextValue}>{children}</RestaurantsContext.Provider>;
 };
-
-function filterRestaurants(options: Option[], types: VenueType[], restaurants: Restaurant[]) {
-    if (options.length === 0 && types.length === 0) {
-        return restaurants;
-    } else {
-        return restaurants.filter((restaurant) => {
-            const optionNames = options.map((option) => option.name.toLowerCase());
-            const typeNames = types.map((type) => type.name.toLowerCase());
-            return optionNames.includes(restaurant.name.toLowerCase()) || typeNames.includes(restaurant.type.toLowerCase());
-        });
-    }
-}

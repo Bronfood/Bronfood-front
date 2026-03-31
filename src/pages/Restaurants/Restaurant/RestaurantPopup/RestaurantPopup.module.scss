@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 375px;
     background-color: variables.$background;
     box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
     border-radius: 25px 25px 0 0;
@@ -27,28 +28,17 @@
         backdrop-filter: blur(2.5px);
     }
 
-    &_button {
+    &_button-group {
         position: absolute;
+        display: flex;
+        gap: 8px;
+        top: 15px;
+        right: 16px;
+    }
+
+    &_button {
         width: 43px;
         height: 41px;
         opacity: 0.85;
-        top: 15px;
-
-        &_favorite {
-            right: 69px;
-        }
-
-        &_close {
-            right: 16px;
-        }
-
-        &_like {
-            right: 69px;
-        }
-
-        &_feedback {
-            left: 20px;
-            cursor: pointer;
-        }
     }
 }

@@ -1,4 +1,4 @@
-import { AuthService, ConfirmUpdateUser, LoginData, RegisterPayload, ConfirmRegisterPayload, UpdateUser, UserExtra, User, RegisterPromise } from './authService';
+import { AuthService, ConfirmUpdateUser, LoginData, RegisterPayload, ConfirmRegisterPayload, UpdateUserPayload, User, RegisterPromise, RestorePasswordPayload, confirmRestorePasswordPayload, CaptchaResponse } from './authService';
 import { handleFetch } from '../serviceFuncs/handleFetch';
 
 export class AuthServiceReal implements AuthService {
@@ -9,8 +9,13 @@ export class AuthServiceReal implements AuthService {
         delete result.data.access;
     }
 
-    async register({ name, phone, password }: RegisterPayload): Promise<{ data: RegisterPromise }> {
-        const result = await handleFetch('api/auth/users/', { method: 'POST', data: { phone, password, name } });
+    async getCaptcha(): Promise<CaptchaResponse> {
+        const result = await handleFetch('api/auth/users/captcha/', { method: 'GET' });
+        return result.data;
+    }
+
+    async register({ name, phone, password, captcha }: RegisterPayload): Promise<{ data: RegisterPromise }> {
+        const result = await handleFetch('api/auth/users/', { method: 'POST', data: { phone, password, name, captcha } });
         return result;
     }
 
@@ -21,19 +26,20 @@ export class AuthServiceReal implements AuthService {
         delete result.data.access;
     }
 
-    async updateUser({ name, phone, password, password_confirm }: UpdateUser): Promise<{ data: { temp_data_code: string } }> {
-        let requestData: UpdateUser = { name, phone };
-        if (password && password_confirm) {
-            requestData = { ...requestData, password, password_confirm };
-        }
-        return handleFetch('api/auth/users/me/', { method: 'PATCH', data: requestData });
+    async updateUser({ name, phone, currentPassword, newPassword, newPasswordConfirm }: UpdateUserPayload): Promise<void> {
+        const requestData = {
+            name,
+            phone,
+            current_password: currentPassword,
+            new_password: newPassword,
+            re_new_password: newPasswordConfirm,
+        };
+        const result = await handleFetch('api/auth/users/me/', { method: 'PATCH', data: requestData });
+        return result;
     }
 
-    async confirmUpdateUser({ confirmation_code }: ConfirmUpdateUser): Promise<{ data: UserExtra }> {
-        const result = await handleFetch('client/profile/', { method: 'PATCH', data: { confirmation_code } });
-        delete result.data.auth_token;
-        delete result.data.role;
-        return result;
+    async confirmUpdateUser({ code }: ConfirmUpdateUser): Promise<void> {
+        await handleFetch('api/auth/users/me/set-phone/confirm/', { method: 'POST', data: { code } });
     }
 
     async logOut(): Promise<void> {
@@ -53,5 +59,20 @@ export class AuthServiceReal implements AuthService {
         const { access } = result.data;
         localStorage.setItem('token', access);
         delete result.data.access;
+        return result;
+    }
+
+    async restorePassword({ phone }: RestorePasswordPayload): Promise<void> {
+        return handleFetch('api/auth/users/password/reset/send-code/', { method: 'POST', data: { phone } });
+    }
+
+    async confirmRestorePassword({ phone, newPassword, reNewPassword, code }: confirmRestorePasswordPayload): Promise<void> {
+        const requestData = {
+            phone,
+            new_password: newPassword,
+            re_new_password: reNewPassword,
+            code,
+        };
+        return handleFetch('api/auth/users/password/reset/', { method: 'POST', data: requestData });
     }
 }

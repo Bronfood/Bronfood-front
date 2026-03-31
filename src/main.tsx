@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { CurrentUserProvider } from './contexts/CurrentUserContext.tsx';
 import { RestaurantsProvider } from './contexts/RestaurantsContext.tsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { MapProvider } from './contexts/MapContext.tsx';
+import { registerServiceWorker } from './utils/serviceFuncs/registerServiceWorker.ts';
 
 const queryClient = new QueryClient();
 
@@ -15,11 +17,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
             <CurrentUserProvider>
                 <RestaurantsProvider>
-                    <BrowserRouter>
-                        <App />
-                    </BrowserRouter>
+                    <MapProvider>
+                        <BrowserRouter>
+                            <App />
+                        </BrowserRouter>
+                    </MapProvider>
                 </RestaurantsProvider>
             </CurrentUserProvider>
         </QueryClientProvider>
     </React.StrictMode>
 );
+
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+    registerServiceWorker();
+}

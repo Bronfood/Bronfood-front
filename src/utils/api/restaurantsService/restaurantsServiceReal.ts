@@ -1,6 +1,6 @@
-import { LngLatBounds } from '@yandex/ymaps3-types';
+import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { Feature, Meal, Restaurant, RestaurantsService, ReviewResponse } from './restaurantsService';
+import { Feature, Meal, Restaurant, RestaurantsService, ReviewResponse, SearchSuggestion } from './restaurantsService';
 
 type WorkingTime = {
     close_time: string;
@@ -19,7 +19,7 @@ export class RestaurantsServiceReal implements RestaurantsService {
             const todaysWorkingTimes = restaurant.working_times.filter((time) => time.date === todaysDate)[0];
             const open = todaysWorkingTimes.open_time;
             const close = todaysWorkingTimes.close_time;
-            const workingTime = `${open}-${close}`;
+            const workingTime = open && close ? `${open}-${close}` : 'Закрыт';
             const newRestaurant = {
                 ...restaurant,
                 workingTime,
@@ -28,20 +28,31 @@ export class RestaurantsServiceReal implements RestaurantsService {
             return newRestaurant;
         });
     }
-
-    async getRestaurants(bounds: LngLatBounds): Promise<{ data: Restaurant[] }> {
-        const coords = bounds.flat();
-        const swlat = `swlat=${coords[1]}`;
-        const swlon = `swlon=${coords[0]}`;
-        const nelat = `nelat=${coords[3]}`;
-        const nelon = `nelon=${coords[2]}`;
-        const endpoint = `api/restaurants/?${swlat}&${swlon}&${nelat}&${nelon}`;
+    async getRestaurants(bounds: LngLatBounds, userLocation: LngLat, ids: number[], types: string[]): Promise<{ data: Restaurant[] }> {
+        let endpoint;
+        if (ids.length > 0) {
+            endpoint = `api/restaurants/?ids=${ids}&types=${types}`;
+        } else {
+            let userCoordinates;
+            if (userLocation) {
+                const [userLon, userLat] = userLocation;
+                userCoordinates = `&usr_lat=${userLat}&usr_lon=${userLon}`;
+            }
+            const coords = bounds.flat();
+            const swlat = `swlat=${coords[1]}`;
+            const swlon = `swlon=${coords[0]}`;
+            const nelat = `nelat=${coords[3]}`;
+            const nelon = `nelon=${coords[2]}`;
+            endpoint = `api/restaurants/?${swlat}&${swlon}&${nelat}&${nelon}${userLocation ? userCoordinates : ''} &types=${types}`;
+        }
         const responseData = await handleFetch(endpoint);
         const restaurants = this.addWorkingTime(responseData.data);
         return { data: restaurants };
     }
     async getRestaurantById(id: number): Promise<{ data: Restaurant }> {
-        return handleFetch(`api/restaurants/${id}/`);
+        const responseData = await handleFetch(`api/restaurants/${id}/`);
+        const restaurant = this.addWorkingTime([responseData.data])[0];
+        return { data: restaurant };
     }
     async getMeals(restaurantId: number): Promise<{ data: Meal[] }> {
         return handleFetch(`api/restaurants/${restaurantId}/meals/`);
@@ -53,5 +64,8 @@ export class RestaurantsServiceReal implements RestaurantsService {
         const limit = 100;
         const offset = 0;
         return handleFetch(`api/restaurants/${restaurantId}/reviews/?limit=${limit}&offset=${offset}`);
+    }
+    async getSearchSuggestions(searchQuery: string): Promise<{ data: SearchSuggestion[] }> {
+        return handleFetch(`api/restaurants/search/?q=${searchQuery}`);
     }
 }

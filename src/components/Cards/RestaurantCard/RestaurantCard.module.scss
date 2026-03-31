@@ -93,7 +93,6 @@
     }
 
     &__feature_title {
-        width: 100%;
         font-size: 13px;
         font-weight: 400;
         line-height: 1.21;
@@ -103,5 +102,9 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    &__feature_title_distance {
+        margin-left: auto;
     }
 }

@@ -11,7 +11,7 @@ interface FetchOptions extends RequestInit {
 export const handleFetch = async (endpoint: string, { data, ...customOptions }: FetchOptions | Record<string, never> = {}) => {
     const token = localStorage.getItem('token');
     const headers: RequestInit['headers'] = {};
-    if (token) {
+    if (token && endpoint !== 'api/auth/jwt/refresh/') {
         headers.Authorization = `Bearer ${token}`;
     }
     if (data) {

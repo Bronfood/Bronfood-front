@@ -1,4 +1,4 @@
-import { LngLatBounds } from '@yandex/ymaps3-types';
+import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { RestaurantsServiceReal } from './restaurantsServiceReal';
 
 export type Choice = {
@@ -51,7 +51,18 @@ export type Feature = {
     is_size: boolean;
 };
 
-export type MealType = 'food' | 'drink' | 'dessert';
+export type MealType = string;
+
+type MealCategory = {
+    /**
+     * Meal's category id
+     */
+    id: number;
+    /**
+     * Meal's category name
+     */
+    name: MealType;
+};
 
 export type Meal = {
     /**
@@ -75,10 +86,6 @@ export type Meal = {
      */
     price: number;
     /**
-     * Meal's type
-     */
-    type: MealType;
-    /**
      * Time taken for meal to be prepared in minutes
      */
     waitingTime: number;
@@ -86,6 +93,10 @@ export type Meal = {
      * If meal has features
      */
     hasFeatures: boolean;
+    /**
+     * Meal's category
+     */
+    category: MealCategory | null;
 };
 
 export type Restaurant = {
@@ -128,6 +139,34 @@ export type Restaurant = {
      * Venue's type
      */
     type: 'fastFood' | 'cafe' | 'cafeBar';
+    /**
+     * Venue's description
+     */
+    description: string | null;
+    /**
+     * Distance to restaurant
+     */
+    distance_km?: number;
+    /**
+     * Venue's legal address
+     */
+    legal_address: string;
+    /**
+     * Venue's bin (state register id)
+     */
+    legal_bin: string;
+    /**
+     * Venue director's full name
+     */
+    legal_director_fullname: string;
+    /**
+     * Venue's legal name
+     */
+    legal_name: string;
+    /**
+     * Meal categories
+     */
+    categories: MealCategory[];
 };
 
 export type Review = {
@@ -151,12 +190,20 @@ export type ReviewResponse = {
     };
 };
 
+export type SearchSuggestion = {
+    text: string;
+    item_ids: number[];
+    restaurant_ids: number[];
+    source: string;
+};
+
 export interface RestaurantsService {
-    getRestaurants: (bounds: LngLatBounds) => Promise<{ data: Restaurant[] }>;
+    getRestaurants: (bounds: LngLatBounds, userLocation: LngLat, ids: number[], types: string[]) => Promise<{ data: Restaurant[] }>;
     getRestaurantById: (id: number) => Promise<{ data: Restaurant }>;
     getMeals: (restaurantId: number) => Promise<{ data: Meal[] }>;
     getFeatures: (restaurantId: number, mealId: number) => Promise<{ data: Feature[] }>;
     getReviews: (restaurantId: number) => Promise<{ data: ReviewResponse }>;
+    getSearchSuggestions: (searchQuery: string) => Promise<{ data: SearchSuggestion[] }>;
 }
 
 export const restaurantsService = new RestaurantsServiceReal();

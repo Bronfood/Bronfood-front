@@ -1,7 +1,7 @@
 import { FC, useEffect, useId, useState } from 'react';
 import styles from './Textarea.module.scss';
 import { useTranslation } from 'react-i18next';
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, FieldValues, RegisterOptions, UseFormRegister } from 'react-hook-form';
 
 interface Textarea {
     /**
@@ -19,7 +19,7 @@ interface Textarea {
     /**
      * Description of textarea
      */
-    details: string;
+    details?: string;
     /**
      * Register function textareas
      */
@@ -40,6 +40,10 @@ interface Textarea {
      * Textarea Value
      */
     value?: string;
+    /**
+     * Required field textarea
+     */
+    required?: boolean;
 }
 
 const Textarea: FC<Textarea> = (props) => {
@@ -56,26 +60,25 @@ const Textarea: FC<Textarea> = (props) => {
         if (props.value) setTextareaValue(props.value);
     }, [props.value]);
 
+    const validationRules: RegisterOptions = {
+        pattern: {
+            value: props.pattern,
+            message: t('components.input.errorMessage'),
+        },
+        validate: props.validate,
+    };
+
+    if (props.required) {
+        validationRules.required = typeof props.required === 'string' ? props.required : t('components.input.required');
+    }
+
     return (
         <div className={styles.textarea}>
             <label htmlFor={id} className={`${styles.textarea__label} ${errorMessage ? styles.textarea__label__error : ''}`}>
                 <span>{props.nameLabel}</span>
-                <span className={styles.textarea__details}>{props.details}</span>
+                {props.details && <span className={styles.textarea__details}>{props.details}</span>}
             </label>
-            <textarea
-                id={id}
-                className={styles.textarea__place}
-                placeholder={props.placeholder}
-                {...props.register(props.name, {
-                    pattern: {
-                        value: props.pattern,
-                        message: t('components.input.errorMessage'),
-                    },
-                    validate: props.validate,
-                })}
-                onChange={handleTextareaChange}
-                value={textareaValue}
-            ></textarea>
+            <textarea id={id} className={styles.textarea__place} placeholder={props.placeholder} {...props.register(props.name, validationRules)} onChange={handleTextareaChange} value={textareaValue}></textarea>
             {errorMessage && <p className={styles.textarea__error}>{errorMessage}</p>}
         </div>
     );

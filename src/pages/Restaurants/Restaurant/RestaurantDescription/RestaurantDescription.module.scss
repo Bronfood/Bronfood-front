@@ -90,4 +90,12 @@
         line-height: 1.4;
         color: variables.$light-gray;
     }
+
+    &__description {
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+    }
 }
