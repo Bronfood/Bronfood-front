@@ -16,6 +16,7 @@
     padding: 0 15px;
     margin: 0 auto;
     z-index: map.get(variables.$z-indexes, 'menu');
+    overflow-y: scroll;
 
     &_overlay {
         position: absolute;
