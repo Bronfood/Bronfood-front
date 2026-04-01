@@ -3,7 +3,7 @@ import { Choice, Meal } from '../restaurantsService/restaurantsService';
 import { AdminServiceReal } from './adminServiceReal';
 
 export type ChoiceInAdminOrder = Omit<Choice, 'price' | 'default' | 'feature_name' | 'chosen'>;
-export type MealInAdminOrder = Omit<Meal, 'description' | 'photo' | 'type' | 'hasFeatures'>;
+export type MealInAdminOrder = Omit<Meal, 'description' | 'photo' | 'type' | 'hasFeatures' | 'category'>;
 export type MealInOrder = Omit<MealInBasket, 'meal' | 'choices'> & {
     meal: MealInAdminOrder;
     choices: ChoiceInAdminOrder[];

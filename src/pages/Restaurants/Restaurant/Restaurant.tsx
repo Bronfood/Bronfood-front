@@ -30,6 +30,7 @@ function Restaurant() {
     const { setActiveRestaurant } = useRestaurantsContext();
     const { data: restaurantData, isLoading: restaurantLoading, error: restaurantError, isSuccess: isRestaurantSuccess } = useRestaurant(restaurantId);
     const restaurant = isRestaurantSuccess && restaurantData.data;
+    const mealTypes = restaurant ? restaurant.categories.map((category) => category.name) : [];
     const { data, isPending: mealsLoading, isSuccess } = useMeals(restaurantId);
     const meals = isSuccess && data.data;
     const { addMeal } = useBasketMutations();
@@ -84,7 +85,7 @@ function Restaurant() {
         return null;
     }
 
-    const mealsFiltered = meals && selectedMealTypes.length === 0 ? meals : meals ? meals.filter((meal) => selectedMealTypes.includes(meal.type)) : [];
+    const mealsFiltered = meals && selectedMealTypes.length === 0 ? meals : meals ? meals.filter((meal) => meal.category && selectedMealTypes.includes(meal.category.name)) : [];
 
     return (
         <>
@@ -95,7 +96,7 @@ function Restaurant() {
                     <Reviews reviews={reviews} />
                 ) : (
                     <>
-                        <MealsFilter selectedTypes={selectedMealTypes} addType={addMealType} deleteType={deleteMealType} />
+                        <MealsFilter types={mealTypes} selectedTypes={selectedMealTypes} addType={addMealType} deleteType={deleteMealType} />
                         {mealsLoading ? <Preloader /> : <MealsList meals={mealsFiltered} handleClick={handleAddMealClick} isActive={addMeal.isPending} />}
                     </>
                 )}
