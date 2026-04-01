@@ -13,7 +13,7 @@
 .fieldset {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     border: none;
 }
@@ -24,9 +24,10 @@
 }
 
 .line {
-    height: 1px;
+    height: 40px;
     width: 24px;
-    border-top: 1px solid variables.$grey-line;
+    color: variables.$grey-line;
+    padding: 10px 0;
 }
 
 .accordion {

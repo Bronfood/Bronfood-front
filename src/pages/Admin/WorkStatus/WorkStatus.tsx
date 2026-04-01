@@ -85,7 +85,7 @@ function WorkStatus() {
                 <Form name="work-status" id="work-status" onSubmit={handleSubmit(onSubmit)}>
                     <fieldset className={styles.fieldset} disabled={isPending}>
                         <InputTime name="openTime" register={register} errors={errors} value={openTime} placeholder="HH:MM"></InputTime>
-                        <div className={styles.line}></div>
+                        <span className={styles.line}>—</span>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
                     {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend initialState={isLegendOpen} setInitialState={setIsLegendOpen} />}
