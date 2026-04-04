@@ -258,11 +258,7 @@ const Menu = () => {
                     )}
                 </div>
             )}
-            {featureToEdit && (
-                <div className={styles['additive-popup-wrapper']}>
-                    <AddAdditivePopup data={featureToEdit.feature} onClose={() => setFeatureToEdit(null)} onSave={handleSaveFeature} />
-                </div>
-            )}
+            {featureToEdit && <AddAdditivePopup data={featureToEdit.feature} onClose={() => setFeatureToEdit(null)} onSave={handleSaveFeature} />}
         </>
     );
 };

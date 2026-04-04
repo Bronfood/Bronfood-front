@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import InputImage from '../../../../../components/InputImage/InputImage';
 import styles from './MediaStep.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -16,17 +15,18 @@ const MediaStep = () => {
         setValue,
     } = useFormContext();
     const values = watch();
-    const [previewImage, setPreviewImage] = useState<string | null>(values.photo || null);
+    const photoValue = watch('photo');
+    const previewImage = typeof photoValue === 'string' ? photoValue : null;
 
-    const handleImageUpload = (image: string | null) => {
-        setPreviewImage(image);
-        setValue('photo', image || '', { shouldValidate: true });
+    const handleImageUpload = (image: string | string[] | null) => {
+        const currentImage = typeof image === 'string' ? image : null;
+        setValue('photo', currentImage || '', { shouldValidate: true });
     };
 
     return (
         <fieldset className={styles.fieldset}>
             <FormInputs>
-                <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhotoMeal')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImage={previewImage} />
+                <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhotoMeal')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing />
                 <Input type="text" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderNameMeal')} name="name" register={register} errors={errors} pattern={regexClientName} value={values.name} />
                 <Input type="number" nameLabel={t('pages.cateringManagement.nameLabelPrice')} placeholder={t('pages.cateringManagement.placeholderPrice')} name="base_price" register={register} errors={errors} pattern={regexNumber} value={values.base_price} />
             </FormInputs>

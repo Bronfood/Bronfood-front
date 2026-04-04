@@ -88,8 +88,8 @@ function AddAdditivePopup({ data, onClose, onSave }: { data: Feature | null; onC
                                 {feature.choices.map((choice, index) => (
                                     <li className={styles.unit__item} key={choice.id}>
                                         <div className={styles.unit__inputs}>
-                                            <input type="text" name={`choices.${choice.id}.name`} className={`${styles.unit__input}`} placeholder={t('pages.cateringManagement.placeholderDefaultName')} value={choice.name} onChange={(e) => handleChoiceChange(index, 'name', e.target.value)} />
-                                            <input type="number" name={`choices.${choice.id}.price`} className={`${styles.unit__input}`} placeholder={t('pages.cateringManagement.placeholderDefaultPrice')} value={choice.price || ''} onChange={(e) => handleChoiceChange(index, 'price', e.target.value)} />
+                                            <input type="text" name={`choices.${choice.id}.name`} className={`${styles.unit__input} ${choice.is_default ? styles.unit__default : ''}`} placeholder={t('pages.cateringManagement.placeholderDefaultName')} value={choice.name} onChange={(e) => handleChoiceChange(index, 'name', e.target.value)} />
+                                            <input type="number" name={`choices.${choice.id}.price`} className={`${styles.unit__input} ${choice.is_default ? styles.unit__default : ''}`} placeholder={t('pages.cateringManagement.placeholderDefaultPrice')} value={choice.price || ''} onChange={(e) => handleChoiceChange(index, 'price', e.target.value)} />
                                         </div>
                                         <button type="button" className={`${styles.unit__button} ${styles.unit__button_delete}`} onClick={() => handleDeleteChoice(index)}></button>
                                     </li>

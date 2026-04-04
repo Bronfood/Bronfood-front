@@ -4,12 +4,12 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: calc(100% - 30px);
     background-color: variables.$background;
     box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
     border-radius: 25px;
     padding: 50px 0;
     margin: 115px auto 20px;
+    max-width: 375px;
 
     &_overlay {
         position: absolute;

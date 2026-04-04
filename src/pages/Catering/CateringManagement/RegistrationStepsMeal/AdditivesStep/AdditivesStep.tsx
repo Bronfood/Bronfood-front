@@ -42,8 +42,8 @@ const AdditivesStep = () => {
                                 <ul className={styles.list__additives}>
                                     {feature.choices.map((choice) => (
                                         <li key={choice.id} className={styles.list__additives_item}>
-                                            <p className={styles.list__additives_name}>{choice.name}</p>
-                                            <p className={styles.list__additives_price}>{`${choice.price} ₸`}</p>
+                                            <p className={`${styles.list__additives_name} ${choice.is_default ? styles.list__additives_default : ''}`}>{choice.name}</p>
+                                            <p className={`${styles.list__additives_price} ${choice.is_default ? styles.list__additives_default : ''}`}>{`${choice.price} ₸`}</p>
                                         </li>
                                     ))}
                                 </ul>

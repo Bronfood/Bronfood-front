@@ -79,8 +79,8 @@ const MealItem = ({ meal, onClickInfo, onDelete, onEdit, isOpen, isVisible, onVi
                                         <ul className={styles.list__items}>
                                             {feature.choices.map((choice) => (
                                                 <li key={choice.id} className={styles.list__items_item}>
-                                                    <p className={styles.list__item_name}>{choice.name}</p>
-                                                    <p className={styles.list__item_price}>{`${choice.price} ₸`}</p>
+                                                    <p className={`${styles.list__item_name} ${choice.is_default ? styles.list__item_default : ''}`}>{choice.name}</p>
+                                                    <p className={`${styles.list__item_price} ${choice.is_default ? styles.list__item_default : ''}`}>{`${choice.price} ₸`}</p>
                                                 </li>
                                             ))}
                                         </ul>

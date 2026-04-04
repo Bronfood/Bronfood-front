@@ -6,7 +6,8 @@
     box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
     border-radius: 25px;
     padding: 50px 0;
-    margin: 130px 15px 20px;
+    margin: 130px auto 20px;
+    max-width: 375px;
 
     &__list {
         display: flex;
@@ -33,9 +34,12 @@
     }
 
     &__overlay {
-        position: absolute;
-        top: -115px;
-        left: -15px;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100vw;
         min-height: 100vh;
         background-color: rgb(135 133 133 / 75%);
@@ -141,6 +145,10 @@
             cursor: pointer;
             flex-shrink: 0;
         }
+    }
+
+    &__default {
+        border-bottom: 1px solid variables.$orange;
     }
 }
 

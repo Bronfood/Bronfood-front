@@ -13,7 +13,6 @@ export const regexTime: RegExp = /^([01]\d|2[0-3]):([0-5]\d)$/;
 export const regexTextBasic: RegExp = /^[a-zA-Zа-яА-ЯёЁ\s\d.,!?;:«»"“”‘’'()[\]{}<>\-–—]+/;
 export const regexCaptcha: RegExp = /^[A-Za-z0-9]+$/;
 export const regexEmail: RegExp = /.+@.+\..+/;
-export const regexAddress: RegExp = /^[a-zA-Zа-яА-ЯёЁӘәҒғҚқҢңӨөҰұҮүІі0-9\s.,/\-–—()"']{1,256}$/;
 export const regexMessage: RegExp = /^[\s\S]{10,5000}$/;
 
 export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {

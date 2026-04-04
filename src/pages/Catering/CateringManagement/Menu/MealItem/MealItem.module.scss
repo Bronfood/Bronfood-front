@@ -206,5 +206,10 @@
             font-weight: 400;
             font-size: 14px;
         }
+
+        &_default {
+            border-bottom: 1px solid variables.$orange;
+            padding: 0 2px;
+        }
     }
 }

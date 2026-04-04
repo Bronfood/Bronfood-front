@@ -17,11 +17,11 @@ const MediaStep = () => {
         setValue,
     } = useFormContext();
     const values = watch();
-
     const infoRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const is24h = values.schedule?.every((day: Day) => day.open_time === '00:00' && day.close_time === '23:59') || false;
-    const [previewImage, setPreviewImage] = useState<string | null>(values.photo || null);
+    const photoValue = watch('photo');
+    const previewImage = typeof photoValue === 'string' ? photoValue : null;
     const [isActive, setIsActive] = useState(false);
     const [isInfo, setIsInfo] = useState(false);
 
@@ -31,9 +31,9 @@ const MediaStep = () => {
         return `${digitsOnly.slice(0, 2)}:${digitsOnly.slice(2, 4)}`;
     };
 
-    const handleImageUpload = (image: string | null) => {
-        setPreviewImage(image);
-        setValue('photo', image || '', { shouldValidate: true });
+    const handleImageUpload = (image: string | string[] | null) => {
+        const currentImage = typeof image === 'string' ? image : null;
+        setValue('photo', currentImage || '', { shouldValidate: true });
     };
 
     const handleTimeChange = (weekday: number, field: 'open' | 'close', value: string) => {
@@ -95,7 +95,7 @@ const MediaStep = () => {
 
     return (
         <fieldset className={styles.fieldset}>
-            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImage={previewImage} />
+            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing />
             <div className={styles.schedule}>
                 <p>{t('pages.cateringManagement.nameLabelWorkingTime')}</p>
 
