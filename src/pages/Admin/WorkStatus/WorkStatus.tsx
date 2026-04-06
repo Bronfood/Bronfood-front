@@ -16,6 +16,7 @@ import { formatDateToString } from '../../../utils/serviceFuncs/formatDateToStri
 import { formatStringToDate } from '../../../utils/serviceFuncs/formatStringToDate';
 import Button from '../../../components/Button/Button';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
+import Checkbox from '../../../components/Checkbox/Checkbox';
 
 type Time = {
     openTime: string | null;
@@ -43,6 +44,7 @@ function WorkStatus() {
         register,
         handleSubmit,
         reset: formReset,
+        setValue,
         formState: { isDirty, errors, isValid },
     } = useForm({ mode: 'onBlur', defaultValues: { openTime: '', closeTime: '' }, values: { openTime, closeTime } });
     const close = () => {
@@ -68,6 +70,7 @@ function WorkStatus() {
         if (date) setDate(date);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        console.log(data);
         const { openTime, closeTime } = data;
         await addSchedule.mutateAsync({ date, openTime, closeTime });
         handleReset(selectedDate);
@@ -88,6 +91,15 @@ function WorkStatus() {
                         <span className={styles.line}>—</span>
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
                     </fieldset>
+                    <Checkbox
+                        initialState={isDirty}
+                        text={t(`pages.admin.makeItaDayOff`)}
+                        setValue={() => {
+                            setValue('openTime', null, { shouldDirty: true });
+                            setValue('closeTime', null);
+                        }}
+                        resetValue={() => formReset()}
+                    />
                     {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend initialState={isLegendOpen} setInitialState={setIsLegendOpen} />}
                     {addSchedule.isPending && <Preloader />}
                     <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>

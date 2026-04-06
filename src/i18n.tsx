@@ -392,6 +392,7 @@ i18n
                             regularSchedule: '— стандартное расписание',
                             overridenSchedule: '— измененное расписание',
                             closed: '— выходной',
+                            makeItaDayOff: 'сделать выходным',
                         },
 
                         administrators: {
