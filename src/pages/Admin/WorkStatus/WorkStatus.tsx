@@ -70,7 +70,6 @@ function WorkStatus() {
         if (date) setDate(date);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
         const { openTime, closeTime } = data;
         await addSchedule.mutateAsync({ date, openTime, closeTime });
         handleReset(selectedDate);
