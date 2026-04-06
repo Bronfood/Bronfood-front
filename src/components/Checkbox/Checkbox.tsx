@@ -15,7 +15,7 @@ type CheckboxProps = {
      */
     setValue: () => void;
     /**
-     * Fires when user unchecks checkbox.
+     * Fires when user unchecks checkbox
      */
     resetValue: () => void;
 };
@@ -34,9 +34,10 @@ const Checkbox = (props: CheckboxProps) => {
     useEffect(() => setIsActive(props.initialState), [props.initialState]);
 
     return (
-        <label className={`${styles['button-element']} ${isActive ? styles['button-element_active'] : ''}`}>
-            <input className={styles['button-element_input']} type="checkbox" defaultChecked={false} onChange={handleChange} />
-            <span className={`${styles['button-element_text']} ${isActive ? styles['button-element_text_active'] : ''}`}>{props.text}</span>
+        <label className={styles['checkbox']}>
+            <input className={styles['checkbox_input']} type="checkbox" defaultChecked={false} onChange={handleChange} />
+            <span className={styles['checkbox_text']}>{props.text}</span>
+            <div className={`${styles['checkbox_icon']} ${isActive ? styles['checkbox_icon_active'] : ''}`}></div>
         </label>
     );
 };
