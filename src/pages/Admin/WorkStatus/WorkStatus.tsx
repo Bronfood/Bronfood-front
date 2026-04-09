@@ -45,6 +45,7 @@ function WorkStatus() {
         register,
         handleSubmit,
         reset: formReset,
+        clearErrors: clearFormErrors,
         setValue,
         formState: { isDirty, errors, isValid },
     } = useForm({ mode: 'onBlur', defaultValues: { openTime: '', closeTime: '' }, values: { openTime, closeTime } });
@@ -97,7 +98,8 @@ function WorkStatus() {
                         disabled={!selectedDate}
                         setValue={() => {
                             setValue('openTime', null, { shouldDirty: true });
-                            setValue('closeTime', null);
+                            setValue('closeTime', null, { shouldDirty: true });
+                            clearFormErrors();
                         }}
                         resetValue={() => formReset()}
                     />
