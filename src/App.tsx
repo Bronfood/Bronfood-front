@@ -26,8 +26,17 @@ import Restaurant from './pages/Restaurants/Restaurant/Restaurant';
 import { Analytics } from '@vercel/analytics/react';
 import Administrators from './pages/Catering/Administrators/Administrators';
 import Catering from './pages/Catering/Catering';
-import AddAdministrator from './pages/Catering/Administrators/AddAdministrator/AddAdministrator';
-import EditAdministrator from './pages/Catering/Administrators/EditAdministrator/EditAdministrator';
+import AddCatering from './pages/Catering/CateringManagement/AddCatering/AddCatering';
+import CateringDetails from './pages/Catering/CateringManagement/CateringDetails/CateringDetails';
+import EditCatering from './pages/Catering/CateringManagement/EditCatering/EditCatering';
+import AddMeal from './pages/Catering/CateringManagement/AddMeal/AddMeal';
+import EditMeal from './pages/Catering/CateringManagement/EditMeal/EditMeal';
+import AddCategory from './pages/Catering/CateringManagement/AddCategory/AddCategory';
+import EditCategory from './pages/Catering/CateringManagement/EditCategory/EditCategory';
+import Menu from './pages/Catering/CateringManagement/Menu/Menu';
+import Managers from './pages/Catering/Administrators/Managers/Managers';
+import AddManager from './pages/Catering/Administrators/AddManager/AddManager';
+import EditManager from './pages/Catering/Administrators/EditManager/EditManager';
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
@@ -67,11 +76,21 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
 
                 <Route path="/catering" element={<Catering />}>
-                    <Route path="administrators">
-                        <Route index element={<Administrators />} />
-                        <Route path="add" element={<AddAdministrator />} />
-                        <Route path=":administratorId" element={<EditAdministrator />} />
-                    </Route>
+                    <Route path="add-catering" element={<AddCatering />} />
+                    <Route path=":cateringId" element={<CateringDetails />} />
+                    <Route path=":cateringId/edit-catering" element={<EditCatering />} />
+
+                    <Route path=":cateringId/menu" element={<Menu />} />
+                    <Route path=":cateringId/menu/add-meal" element={<AddMeal />} />
+                    <Route path=":cateringId/menu/:cateringMealId" element={<EditMeal />} />
+
+                    <Route path="administrators" element={<Administrators />} />
+                    <Route path=":cateringId/managers" element={<Managers />} />
+                    <Route path=":cateringId/managers/add-manager" element={<AddManager />} />
+                    <Route path=":cateringId/managers/:managerId" element={<EditManager />} />
+
+                    <Route path=":cateringId/menu/add-category" element={<AddCategory />} />
+                    <Route path=":cateringId/menu/categories/:categoryId" element={<EditCategory />} />
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} />

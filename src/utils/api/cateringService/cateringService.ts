@@ -1,19 +1,103 @@
-import { Restaurant } from '../restaurantsService/restaurantsService';
-import { CateringServiceMock } from './cateringServiceMock';
+import { CateringServiceReal } from './cateringServiceReal';
 
-export type Administrator = {
-    id: string;
-    login: string;
-    password: string;
-    restaurant: Restaurant;
+export const weekdayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+export type TimeString = `${number}:${number}`;
+
+export type Day = {
+    /**
+     * Day's weekday
+     */
+    weekday: number;
+    /**
+     * Day's open_time
+     */
+    open_time: TimeString | null;
+    /**
+     * Day's close_time
+     */
+    close_time: TimeString | null;
 };
 
+export type Catering = {
+    /**
+     * Catering's id
+     */
+    id: number;
+    /**
+     * Catering's name
+     */
+    name: string;
+    /**
+     * Catering's address
+     */
+    address: string;
+    /**
+     * Catering's description
+     */
+    description?: string;
+    /**
+     * Catering's type
+     */
+    type: 'fastFood' | 'cafe' | 'cafeBar' | 'businessCenter';
+    /**
+     * Deadline for order cancellation
+     */
+    cancellation_time_limit?: string;
+    /**
+     * Catering's map coordinates
+     */
+    coordinates?: {
+        latitude: number;
+        longitude: number;
+    };
+    /**
+     * Catering's rating
+     */
+    rating?: number;
+    /**
+     * Catering's tags
+     */
+    tags?: { name: string }[];
+    /**
+     * Link to Catering's image
+     */
+    photo: string;
+    /**
+     * Catering's working hours for each day of the week
+     */
+    schedule: Day[];
+    /**
+     * Catering's legal_name
+     */
+    legal_name: string;
+    /**
+     * Catering's legal_bin
+     */
+    legal_bin: string;
+    /**
+     * Catering's legal_address
+     */
+    legal_address: string;
+    /**
+     * Catering's legal_director_fullname
+     */
+    legal_director_fullname: string;
+};
+
+export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
+    weekday,
+    open_time: null,
+    close_time: null,
+}));
+
+export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'];
+
 export interface CateringService {
-    getAdministrators: () => Promise<{ data: Administrator[] }>;
-    getAdministratorById: (id: string) => Promise<{ data: Administrator }>;
-    createAdministrator: (data: Omit<Administrator, 'id'>) => Promise<{ data: Administrator }>;
-    updateAdministrator: (data: Partial<Administrator> & { id: string }) => Promise<{ data: Administrator }>;
-    deleteAdministrator: (id: string) => Promise<{ success: boolean }>;
+    getCaterings: () => Promise<{ data: Catering[] }>;
+    getCateringById: (cateringId: number) => Promise<{ data: Catering }>;
+    createCatering: (data: FormData) => Promise<{ data: Catering }>;
+    deleteCatering: (cateringId: number) => Promise<{ success: boolean }>;
+    updateCatering: (cateringId: number, data: FormData) => Promise<{ data: Catering }>;
 }
 
-export const cateringService = new CateringServiceMock();
+export const cateringService = new CateringServiceReal();

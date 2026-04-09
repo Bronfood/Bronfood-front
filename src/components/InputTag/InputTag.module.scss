@@ -1,0 +1,88 @@
+@use '../../styles/variables';
+
+.tags {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    margin-top: 8px;
+
+    &__title {
+        color: variables.$grey;
+        position: absolute;
+        top: -10px;
+        left: 8px;
+        padding: 0 4px;
+        background-color: variables.$background;
+    }
+
+    &__container {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 58px;
+        border-radius: 20px;
+        border: 1px solid variables.$line;
+        background-color: transparent;
+        padding: 18px 13px 12px;
+    }
+
+    &__input {
+        font-size: 14px;
+        box-sizing: border-box;
+        min-width: 150px;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        height: 20px;
+        padding: 0;
+        flex: 1;
+
+        &::placeholder {
+            color: variables.$light-gray;
+            font-weight: 400;
+            line-height: 21px;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex: 1;
+    }
+}
+
+.tag {
+    &__container {
+        display: flex;
+        align-items: center;
+        background-color: variables.$button-grey;
+        padding: 0 5px;
+        border-radius: 15px;
+        min-height: 26px;
+    }
+
+    &__text {
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 140%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 150px;
+    }
+
+    &__button {
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        background-size: cover;
+        background-position: center;
+        background-image: url('../../vendor/images/icons/close-icon.svg');
+    }
+}

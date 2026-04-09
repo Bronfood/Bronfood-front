@@ -1,0 +1,39 @@
+@use '../../../../../styles/variables';
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 37px;
+        width: 38px;
+        justify-content: space-between;
+        border: none;
+        background-color: transparent;
+    }
+
+    &__text {
+        color: variables.$light-gray;
+    }
+
+    &__icon {
+        width: 10px;
+        height: 10px;
+        background-image: url('../../../../../vendor/images/icons/add-orange.svg');
+    }
+}
+
+.selected {
+    background-color: variables.$orange;
+    height: 29px;
+    justify-content: center;
+    border-radius: 100px;
+
+    &__text {
+        color: variables.$white;
+    }
+}

@@ -40,11 +40,11 @@ interface InputImage {
     /**
      * Changing the input value
      */
-    onChange: (image: string[] | null) => void;
+    onChange: (image: string | string[] | null) => void;
     /**
      * Preview image value
      */
-    previewImages: string[] | null;
+    previewImages: string | string[] | null;
 }
 
 const InputImage: FC<InputImage> = (props) => {
@@ -54,20 +54,22 @@ const InputImage: FC<InputImage> = (props) => {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const errorMessage = customError || (props.errors[props.name]?.message as string) || undefined;
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const currentImages = props.previewImages || [];
+    const isMultiple = props.multiple === true;
     const maxFiles = props.maxFiles || 1;
+    const currentImages = !props.previewImages ? [] : isMultiple ? (props.previewImages as string[]) : [props.previewImages as string];
 
     const updateImages = (newImages: string[]) => {
-        if (editingIndex !== null) {
-            const updated = [...currentImages];
-            updated[editingIndex] = newImages[0];
-            props.onChange(updated);
-        } else if (props.multiple) {
-            const updated = [...currentImages, ...newImages];
-            props.onChange(updated);
+        if (isMultiple) {
+            if (editingIndex !== null) {
+                const updated = [...currentImages];
+                updated[editingIndex] = newImages[0];
+                props.onChange(updated);
+            } else {
+                const updated = [...currentImages, ...newImages];
+                props.onChange(updated);
+            }
         } else {
-            props.onChange(newImages.length > 0 ? [newImages[0]] : null);
+            props.onChange(newImages.length > 0 ? newImages[0] : null);
         }
         setEditingIndex(null);
     };
@@ -122,14 +124,18 @@ const InputImage: FC<InputImage> = (props) => {
 
     const triggerFileInput = (index?: number) => {
         setCustomError(null);
-        setEditingIndex(index ?? null);
+        setEditingIndex(isMultiple ? (index ?? null) : 0);
         fileInputRef.current?.click();
     };
 
     const removeImage = (index: number) => {
         setCustomError(null);
-        const updated = currentImages.filter((_, i) => i !== index);
-        props.onChange(updated.length > 0 ? updated : null);
+        if (isMultiple) {
+            const updated = currentImages.filter((_, i) => i !== index);
+            props.onChange(updated.length > 0 ? updated : null);
+        } else {
+            props.onChange(null);
+        }
     };
 
     return (
@@ -145,7 +151,7 @@ const InputImage: FC<InputImage> = (props) => {
                         {currentImages.map((image, index) => (
                             <div key={index} style={{ backgroundImage: `url(${image})` }} className={styles.photo__image}>
                                 {props.editing && (
-                                    <div className={styles.photo__image_edit}>
+                                    <div className={`${styles.photo__image_edit} ${props.editing && !props.deleting ? styles.photo__image_edit_only : ''}`}>
                                         <ButtonIconRound type="button" icon="edit" onClick={() => triggerFileInput(index)} />
                                     </div>
                                 )}

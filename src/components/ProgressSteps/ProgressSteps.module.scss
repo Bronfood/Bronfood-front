@@ -1,0 +1,48 @@
+@use '../../styles/variables';
+
+.progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 35px;
+
+    &__step-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__step {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: variables.$grey-line;
+        color: variables.$light-gray;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    &__step--active {
+        background: variables.$orange;
+        color: variables.$white;
+    }
+
+    &__step--completed {
+        background: variables.$orange;
+        color: variables.$white;
+    }
+
+    &__line {
+        width: 40px;
+        height: 1px;
+        background: variables.$grey-line;
+    }
+
+    &__line--completed {
+        background: variables.$orange;
+    }
+}

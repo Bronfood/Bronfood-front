@@ -1,6 +1,7 @@
 import GuestNavigation from './GuestNavigation/GuestNavigation';
 import CustomerNavigation from './CustomerNavigation/CustomerNavigation';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
+import CateringNavigation from './CateringNavigation/CateringNavigation';
 import { FC } from 'react';
 /**
  * Contains 2 menu types: guest/customer
@@ -12,11 +13,10 @@ interface Navigation {
     handleItemMenuClick: React.MouseEventHandler<HTMLElement>;
 }
 const Navigation: FC<Navigation> = (props) => {
-    const { isLogin } = useCurrentUser();
-    type UserRole = 'guest' | 'customer' | 'catering';
-    const userRole: UserRole = isLogin ? 'customer' : 'guest';
-    const navigation = userRole === 'guest' ? <GuestNavigation handleItemMenuClick={props.handleItemMenuClick} /> : <CustomerNavigation handleItemMenuClick={props.handleItemMenuClick} />;
-    return <nav> {navigation} </nav>;
+    const { isLogin, currentUser } = useCurrentUser();
+    const role = currentUser?.role;
+
+    return <nav>{isLogin ? role === 'CLIENT' ? <CustomerNavigation handleItemMenuClick={props.handleItemMenuClick} /> : role === 'OWNER' ? <CateringNavigation handleItemMenuClick={props.handleItemMenuClick} /> : null : <GuestNavigation handleItemMenuClick={props.handleItemMenuClick} />}</nav>;
 };
 
 export default Navigation;
