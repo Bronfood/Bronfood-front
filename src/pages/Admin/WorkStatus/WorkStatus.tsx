@@ -109,7 +109,19 @@ function WorkStatus() {
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker modifiers={modifiers} month={date} onDateChange={handleDateChange} />}
             </AdminPopup>
-            {isConfirmationPopupOpen && <AdminConfirmation formId="work-status" close={() => handleReset(selectedDate)} question="saveChangesQuestion" isLoading={addSchedule.isPending} isError={addSchedule.isError} errorMessage={addScheduleErrorMessage} />}
+            {isConfirmationPopupOpen && (
+                <AdminConfirmation
+                    formId="work-status"
+                    close={() => {
+                        handleReset(selectedDate);
+                        formReset();
+                    }}
+                    question="saveChangesQuestion"
+                    isLoading={addSchedule.isPending}
+                    isError={addSchedule.isError}
+                    errorMessage={addScheduleErrorMessage}
+                />
+            )}
         </>
     );
 }

@@ -43,7 +43,6 @@ const Checkbox = (props: CheckboxProps) => {
     };
     useEffect(() => {
         setIsActive(props.initialState);
-        console.log(props.initialState);
     }, [props.initialState]);
 
     return (
