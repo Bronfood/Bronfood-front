@@ -27,7 +27,11 @@
 }
 
 .rdp-selected .rdp-day_button {
-    border-color: #{variables.$orange};
+    border: 3px solid #{variables.$orange};
+}
+
+.rdp-selected.closed .rdp-day_button {
+    border: 3px solid #{variables.$white};
 }
 
 .regular {
