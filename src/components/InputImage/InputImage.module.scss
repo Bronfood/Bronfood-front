@@ -39,6 +39,10 @@
             right: 60px;
             height: 41px;
             width: 43px;
+
+            &_only {
+                right: 10px;
+            }
         }
 
         &_delete {

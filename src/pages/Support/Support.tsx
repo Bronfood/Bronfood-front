@@ -33,15 +33,16 @@ const Support: FC = () => {
         formState: { errors },
     } = useForm();
     const values = watch();
-    const [previewImages, setPreviewImages] = useState<string[] | null>(values.imageFormSupport ? (Array.isArray(values.imageFormSupport) ? values.imageFormSupport : [values.imageFormSupport]) : null);
+    const [previewImages, setPreviewImages] = useState<string[] | null>(Array.isArray(values.imageFormSupport) ? values.imageFormSupport : null);
 
     const onClose = () => {
         navigate('/');
     };
 
-    const handleImageUpload = (images: string[] | null) => {
-        setPreviewImages(images);
-        setValue('imageFormSupport', images || '', { shouldValidate: true });
+    const handleImageUpload = (images: string | string[] | null) => {
+        const imagesArray = Array.isArray(images) ? images : null;
+        setPreviewImages(imagesArray);
+        setValue('imageFormSupport', imagesArray, { shouldValidate: true });
     };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -75,7 +76,7 @@ const Support: FC = () => {
                     <InputPhone register={register} errors={errors} />
                     <Input type="text" name="emailClient" placeholder={t('pages.support.placeholderEmailClient')} nameLabel={t('pages.support.nameLabelEmailClient')} register={register} errors={errors} pattern={regexEmail} />
                     <Textarea name="messageClient" placeholder={t('pages.support.placeholderMessageClient')} nameLabel={t('pages.support.nameLabelMessageClient')} register={register} errors={errors} pattern={regexMessage} required />
-                    <InputImage nameLabel={t('pages.support.nameLabelPhoto')} name="imageFormSupport" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImages} multiple={true} maxFiles={5} editing={true} deleting={true} />
+                    <InputImage nameLabel={t('pages.support.nameLabelPhoto')} name="imageFormSupport" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImages} multiple={true} maxFiles={5} editing deleting />
                 </FormInputs>
                 <Button type="submit">{t('pages.support.buttonSendRequest')}</Button>
             </Form>

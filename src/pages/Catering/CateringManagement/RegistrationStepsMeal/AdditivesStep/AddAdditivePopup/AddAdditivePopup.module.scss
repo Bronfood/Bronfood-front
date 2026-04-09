@@ -1,0 +1,185 @@
+@use '../../../../../../styles/variables';
+
+.popup {
+    position: relative;
+    background-color: variables.$background;
+    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
+    border-radius: 25px;
+    padding: 50px 0;
+    margin: 130px auto 20px;
+    max-width: 375px;
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__content {
+        padding: 0 21.5px;
+    }
+
+    &__title {
+        font-size: 17px;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 25px;
+        line-height: 140%;
+    }
+
+    &__close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    &__overlay {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        min-height: 100vh;
+        background-color: rgb(135 133 133 / 75%);
+        backdrop-filter: blur(2.5px);
+        z-index: 10;
+    }
+}
+
+.additive {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+
+    &__inputs {
+        display: flex;
+        gap: 16px;
+        flex: 1;
+        padding: 3px 0;
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        &_wrapper {
+            border: none;
+            background-color: variables.$button-grey;
+            border-radius: 25px;
+            height: 26px;
+            width: 26px;
+            margin-top: 16px;
+        }
+
+        &_add {
+            width: 14px;
+            height: 14px;
+            background-image: url('/src/vendor/images/icons/add-icon-black.svg');
+            background-size: cover;
+            cursor: pointer;
+        }
+    }
+}
+
+.unit {
+    display: flex;
+    flex-direction: column;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 39px;
+        justify-content: space-between;
+    }
+
+    &__inputs {
+        display: flex;
+        gap: 16px;
+        flex: 1;
+        padding: 3px 0;
+    }
+
+    &__input {
+        border: none;
+        padding: 0;
+        width: 111px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid variables.$grey-line;
+        flex: 1;
+        font-size: 14px;
+        line-height: 140%;
+    }
+
+    &__button {
+        border: none;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        background-color: transparent;
+
+        &_delete {
+            background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+    }
+
+    &__default {
+        border-bottom: 1px solid variables.$orange;
+    }
+}
+
+.input {
+    position: relative;
+    width: 100%;
+    margin-top: 8px;
+
+    &__label {
+        color: variables.$grey;
+        position: absolute;
+        top: -10px;
+        left: 8px;
+        padding: 0 4px;
+        background-color: variables.$background;
+    }
+
+    &__place {
+        box-sizing: border-box;
+        width: 100%;
+        height: 50px;
+        border-radius: 20px;
+        border: 1px solid variables.$line;
+        background-color: transparent;
+        padding-left: 16px;
+
+        &::placeholder {
+            color: variables.$light-gray;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+        }
+    }
+}

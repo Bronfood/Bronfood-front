@@ -48,6 +48,12 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
                     {t('components.guestNavigation.signInAsAdmin')}
                 </Link>
             </li>
+            <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
+                <Link to="/catering/administrators" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.guestNavigation.signInAsCatering')}
+                </Link>
+            </li>
         </ul>
     );
 };
