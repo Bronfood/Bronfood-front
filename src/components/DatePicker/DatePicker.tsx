@@ -6,7 +6,7 @@ import { ru } from 'react-day-picker/locale';
 type DatePickerProps = {
     modifiers: Record<string, Date[]>;
     month: Date | undefined;
-    onDateChange: (date: Date) => void;
+    onDateChange: (date: Date, modifiers?: object) => void;
 };
 
 export function DatePicker({ modifiers, month, onDateChange }: DatePickerProps) {

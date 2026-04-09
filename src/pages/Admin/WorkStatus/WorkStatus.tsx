@@ -51,7 +51,7 @@ function WorkStatus() {
     const close = () => {
         navigate('/admin');
     };
-    const handleDateChange = (date: Date) => {
+    const handleDateChange = (date: Date, modifiers?: object) => {
         if (addSchedule.isError) {
             setSelectedDate(date);
             handleReset();
@@ -62,7 +62,7 @@ function WorkStatus() {
         } else {
             setDate(date);
         }
-        setSelectedDate(date);
+        if (modifiers) setSelectedDate(date);
     };
     const handleReset = (date?: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
