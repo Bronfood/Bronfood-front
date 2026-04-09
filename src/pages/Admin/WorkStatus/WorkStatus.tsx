@@ -77,8 +77,8 @@ function WorkStatus() {
     };
 
     useEffect(() => {
-        setTime(getOpenCloseTimes(schedules, date));
-    }, [schedules, date]);
+        if (selectedDate) setTime(getOpenCloseTimes(schedules, selectedDate));
+    }, [schedules, selectedDate]);
 
     return (
         <>
