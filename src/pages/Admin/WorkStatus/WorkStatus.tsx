@@ -25,6 +25,7 @@ type Time = {
 
 function WorkStatus() {
     const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
+    const [checkboxInitialState, setCheckboxInitialState] = useState(false);
     const [date, setDate] = useState<Date>(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
     const [{ openTime, closeTime }, setTime] = useState<Time>({
@@ -65,6 +66,7 @@ function WorkStatus() {
     };
     const handleReset = (date?: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
+        setCheckboxInitialState(false);
         addSchedule.reset();
         if (date) setDate(date);
     };
@@ -89,7 +91,8 @@ function WorkStatus() {
                         <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM" disabled={!selectedDate}></InputTime>
                     </fieldset>
                     <Checkbox
-                        initialState={false}
+                        initialState={checkboxInitialState}
+                        setInitialState={setCheckboxInitialState}
                         text={t(`pages.admin.makeItaDayOff`)}
                         disabled={!selectedDate}
                         setValue={() => {

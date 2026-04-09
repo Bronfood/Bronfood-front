@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styles from './Checkbox.module.scss';
 
 type CheckboxProps = {
@@ -6,6 +6,10 @@ type CheckboxProps = {
      * Initial state of the checkbox
      */
     initialState: boolean;
+    /**
+     * Setter for initial state
+     */
+    setInitialState: Dispatch<SetStateAction<boolean>>;
     /**
      * Text displayed on HTML element
      */
@@ -29,13 +33,18 @@ const Checkbox = (props: CheckboxProps) => {
     const handleChange = () => {
         if (isActive) {
             setIsActive(false);
+            props.setInitialState(false);
             props.resetValue();
         } else {
             setIsActive(true);
+            props.setInitialState(true);
             props.setValue();
         }
     };
-    useEffect(() => setIsActive(props.initialState), [props.initialState]);
+    useEffect(() => {
+        setIsActive(props.initialState);
+        console.log(props.initialState);
+    }, [props.initialState]);
 
     return (
         <label className={styles['checkbox']}>
