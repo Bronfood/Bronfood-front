@@ -86,13 +86,14 @@ function WorkStatus() {
                 <h1 className={styles.title}>{t(`pages.admin.workStatus`)}</h1>
                 <Form name="work-status" id="work-status" onSubmit={handleSubmit(onSubmit)}>
                     <fieldset className={styles.fieldset} disabled={isPending}>
-                        <InputTime name="openTime" register={register} errors={errors} value={openTime} placeholder="HH:MM"></InputTime>
+                        <InputTime name="openTime" register={register} errors={errors} value={openTime} placeholder="HH:MM" disabled={!selectedDate}></InputTime>
                         <span className={styles.line}>—</span>
-                        <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM"></InputTime>
+                        <InputTime name="closeTime" register={register} errors={errors} value={closeTime} placeholder="HH:MM" disabled={!selectedDate}></InputTime>
                     </fieldset>
                     <Checkbox
-                        initialState={isDirty}
+                        initialState={false}
                         text={t(`pages.admin.makeItaDayOff`)}
+                        disabled={!selectedDate}
                         setValue={() => {
                             setValue('openTime', null, { shouldDirty: true });
                             setValue('closeTime', null);

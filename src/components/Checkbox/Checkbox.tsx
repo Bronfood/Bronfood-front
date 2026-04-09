@@ -11,6 +11,10 @@ type CheckboxProps = {
      */
     text: string;
     /**
+     * Is checkbox disabled
+     */
+    disabled?: boolean;
+    /**
      * Fires when user checks checkbox
      */
     setValue: () => void;
@@ -35,7 +39,7 @@ const Checkbox = (props: CheckboxProps) => {
 
     return (
         <label className={styles['checkbox']}>
-            <input className={styles['checkbox_input']} type="checkbox" defaultChecked={false} onChange={handleChange} />
+            <input className={styles['checkbox_input']} type="checkbox" defaultChecked={false} onChange={handleChange} disabled={props.disabled} />
             <span className={styles['checkbox_text']}>{props.text}</span>
             <div className={`${styles['checkbox_icon']} ${isActive ? styles['checkbox_icon_active'] : ''}`}></div>
         </label>

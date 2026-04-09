@@ -32,6 +32,10 @@ interface InputTime {
      * Input Value
      */
     value?: string | null;
+    /**
+     * Is input disabled
+     */
+    disabled?: boolean;
 }
 
 export const InputTime: FC<InputTime> = (props) => {
@@ -66,6 +70,7 @@ export const InputTime: FC<InputTime> = (props) => {
                         handleInputChange(e);
                     },
                     value: inputValue,
+                    disabled: props.disabled,
                 })}
                 mask="__:__"
                 replacement={{ _: /\d/ }}
