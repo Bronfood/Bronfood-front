@@ -145,6 +145,10 @@ i18n
                             aboutService: 'О сервисе',
                             signOut: 'Выйти',
                         },
+
+                        managerNavigation: {
+                            signOut: 'Выйти',
+                        },
                     },
                     pages: {
                         signIn: {
