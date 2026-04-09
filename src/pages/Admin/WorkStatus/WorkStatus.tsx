@@ -35,7 +35,7 @@ function WorkStatus() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { start, end } = getStartEndDatesOfMonth(date);
-    const { data, isSuccess, isPending, refetch: refetchSchedules } = useGetAdminSchedules(start, end);
+    const { data, isSuccess, isPending } = useGetAdminSchedules(start, end);
     const { addSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
@@ -66,14 +66,12 @@ function WorkStatus() {
     const handleReset = (date?: Date | undefined) => {
         setIsConfirmationPopupOpen(false);
         addSchedule.reset();
-        formReset();
         if (date) setDate(date);
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
         await addSchedule.mutateAsync({ date, openTime, closeTime });
         handleReset(selectedDate);
-        refetchSchedules();
     };
 
     useEffect(() => {
