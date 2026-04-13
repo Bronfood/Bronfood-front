@@ -18,6 +18,12 @@
     border: none;
 }
 
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
 .button {
     position: relative;
     bottom: 25px;

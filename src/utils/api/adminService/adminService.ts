@@ -69,7 +69,8 @@ export interface AdminService {
     getAdminOrders: (status: AdminOrderStatus) => Promise<{ data: AdminOrder[] }>;
     changeAdminOrderStatus: (id: number, status: AdminOrderStatus) => Promise<void>;
     getAdminSchedules: (start: Date, end: Date) => Promise<{ data: Schedule[] }>;
-    addSchedule(date: Date | undefined, openTime: string | null, closeTime: string | null): Promise<{ data: Schedule }>;
+    addSchedule: (date: Date | undefined, openTime: string | null, closeTime: string | null) => Promise<{ data: Schedule }>;
+    deleteSchedule: (id: number) => Promise<{ data: Schedule }>;
 }
 
 export const adminService = new AdminServiceReal();

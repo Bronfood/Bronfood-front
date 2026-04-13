@@ -32,12 +32,13 @@ function WorkStatus() {
         openTime: '',
         closeTime: '',
     });
+    const [scheduleId, setScheduleId] = useState<number | null>(null);
     const [isLegendOpen, setIsLegendOpen] = useState(true);
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { start, end } = getStartEndDatesOfMonth(date);
     const { data, isSuccess, isPending } = useGetAdminSchedules(start, end);
-    const { addSchedule } = useAdminScheduleMutations();
+    const { addSchedule, deleteSchedule } = useAdminScheduleMutations();
     const addScheduleErrorMessage = addSchedule.isError ? getErrorMessage(addSchedule.error, 'pages.admin.') : '';
     const schedules: Schedule[] = useMemo(() => (isSuccess ? data.data : []), [isSuccess, data?.data]);
     const modifiers = useMemo(() => getModifiers(schedules, ['regular', 'override', 'closed']), [schedules]);
@@ -71,6 +72,10 @@ function WorkStatus() {
         addSchedule.reset();
         if (date) setDate(date);
     };
+    const handleDelete = async () => {
+        await deleteSchedule.mutateAsync({ id: scheduleId });
+        handleReset(selectedDate);
+    };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
         await addSchedule.mutateAsync({ date, openTime, closeTime });
@@ -78,7 +83,11 @@ function WorkStatus() {
     };
 
     useEffect(() => {
-        if (selectedDate) setTime(getOpenCloseTimes(schedules, selectedDate));
+        if (selectedDate) {
+            const { openTime, closeTime, scheduleId } = getSchedule(schedules, selectedDate);
+            setTime({ openTime, closeTime });
+            setScheduleId(scheduleId);
+        }
     }, [schedules, selectedDate]);
 
     return (
@@ -105,9 +114,14 @@ function WorkStatus() {
                     />
                     {addSchedule.isError ? <ErrorMessage message={addScheduleErrorMessage} /> : <Legend initialState={isLegendOpen} setInitialState={setIsLegendOpen} />}
                     {addSchedule.isPending && <Preloader />}
-                    <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
-                        {t(`pages.admin.saveChanges`)}
-                    </Button>
+                    <div className={styles['button-container']}>
+                        <Button style={{ marginTop: 0 }} onClick={handleDelete} disabled={false}>
+                            {t(`pages.admin.deleteChanges`)}
+                        </Button>
+                        <Button style={{ marginTop: 0 }} form="work-status" disabled={!isDirty || !isValid}>
+                            {t(`pages.admin.saveChanges`)}
+                        </Button>
+                    </div>
                 </Form>
                 {isPending ? <Preloader /> : <DatePicker modifiers={modifiers} month={date} onDateChange={handleDateChange} />}
             </AdminPopup>
@@ -194,14 +208,16 @@ function getStartEndDatesOfMonth(date: Date) {
     };
 }
 
-function getOpenCloseTimes(schedules: Schedule[], date: Date) {
+function getSchedule(schedules: Schedule[], date: Date) {
     const formattedDate = formatDateToString(date);
     const schedule = schedules.find((schedule) => schedule.date === formattedDate);
     const openTime = schedule ? schedule.open_time : '';
     const closeTime = schedule ? schedule.close_time : '';
+    const scheduleId = schedule ? schedule.id : null;
     return {
         openTime,
         closeTime,
+        scheduleId,
     };
 }
 

@@ -18,7 +18,16 @@ export const useAdminScheduleMutations = () => {
             });
         },
     });
+    const deleteSchedule = useMutation({
+        mutationFn: ({ id }: { id: number }) => adminService.deleteSchedule(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['adminSchedules'],
+            });
+        },
+    });
     return {
         addSchedule,
+        deleteSchedule,
     };
 };

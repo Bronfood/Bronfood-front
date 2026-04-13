@@ -47,4 +47,8 @@ export class AdminServiceReal implements AdminService {
         const formattedDate = date && formatDateToString(date);
         return handleFetch('api/restaurants/admin/schedules/', { method: 'POST', data: { day: formattedDate, open_time: openTime, close_time: closeTime } });
     }
+
+    async deleteSchedule(id: number): Promise<{ data: Schedule }> {
+        return handleFetch(`api/restaurants/admin/schedules/${id}/`, { method: 'DELETE' });
+    }
 }
