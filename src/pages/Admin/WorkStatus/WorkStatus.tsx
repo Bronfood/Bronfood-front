@@ -73,8 +73,10 @@ function WorkStatus() {
         if (date) setDate(date);
     };
     const handleDelete = async () => {
-        await deleteSchedule.mutateAsync({ id: scheduleId });
-        handleReset(selectedDate);
+        if (scheduleId) {
+            await deleteSchedule.mutateAsync({ id: scheduleId });
+            handleReset(selectedDate);
+        }
     };
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const { openTime, closeTime } = data;
