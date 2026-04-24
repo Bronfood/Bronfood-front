@@ -59,6 +59,13 @@ i18n
                             errorUploadingFile: 'Ошибка при загрузке файла',
                             youCanAttachMaximumImages: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
+                        inputImage: {
+                            scale: 'Масштаб',
+                            verticalPosition: 'Положение по вертикали',
+                            horizontalPosition: 'Положение по горизонтали',
+                            selectArea: 'Выберите область',
+                            save: 'Сохранить',
+                        },
                         passwordRecovery: {
                             title: 'Восстановить пароль',
                             phoneNumber: 'Телефон',
