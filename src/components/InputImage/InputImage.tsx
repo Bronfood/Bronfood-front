@@ -3,7 +3,8 @@ import ButtonIconRound from '../ButtonIconRound/ButtonIconRound';
 import styles from './InputImage.module.scss';
 import { FC, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ImageCropPopup, { CropParams } from './ImageCropPopup/ImageCropPopup';
+import ImageCropPopup from './ImageCropPopup/ImageCropPopup';
+import { CropParams, CropState } from '../../utils/consts';
 
 interface InputImage {
     /**
@@ -42,6 +43,14 @@ interface InputImage {
         targetHeight: number;
     };
     /**
+     * Crop state
+     */
+    cropState?: CropState;
+    /**
+     * Changing crop state
+     */
+    onCropStateChange?: (state: CropState) => void;
+    /**
      * Maximum number of files allowed
      */
     maxFiles?: number;
@@ -63,8 +72,6 @@ const InputImage: FC<InputImage> = (props) => {
     const [openCropPopup, setOpenCropPopup] = useState(false);
     const [indexCroppedImage, setIndexCroppedImage] = useState<number | null>(null);
     const [srcCroppedImage, setSrcCroppedImage] = useState<string | null>(null);
-    const [originalImage, setOriginalImage] = useState<Record<number, string>>({});
-    const [cropParams, setCropParams] = useState<Record<number, CropParams>>({});
     const errorMessage = customError || (props.errors[props.name]?.message as string) || undefined;
     const fileInputRef = useRef<HTMLInputElement>(null);
     const isMultiple = props.multiple === true;
@@ -108,7 +115,7 @@ const InputImage: FC<InputImage> = (props) => {
 
     const handleOpenCropPopup = (index: number) => {
         setIndexCroppedImage(index);
-        setSrcCroppedImage(originalImage[index] ?? currentImages[index]);
+        setSrcCroppedImage(props.cropState?.originalImages?.[index] ?? currentImages[index]);
         setOpenCropPopup(true);
     };
 
@@ -120,16 +127,21 @@ const InputImage: FC<InputImage> = (props) => {
 
     const handleSaveCrop = (croppedDataUrl: string, params: CropParams) => {
         if (indexCroppedImage !== null) {
-            if (!originalImage[indexCroppedImage] && srcCroppedImage) {
-                setOriginalImage((prev) => ({
-                    ...prev,
-                    [indexCroppedImage]: srcCroppedImage,
-                }));
+            const newOriginals = { ...(props.cropState?.originalImages ?? {}) };
+            if (!newOriginals[indexCroppedImage] && srcCroppedImage) {
+                newOriginals[indexCroppedImage] = srcCroppedImage;
             }
-            setCropParams((prev) => ({
-                ...prev,
+
+            const newCropParams = {
+                ...(props.cropState?.cropParams ?? {}),
                 [indexCroppedImage]: params,
-            }));
+            };
+
+            props.onCropStateChange?.({
+                originalImages: newOriginals,
+                cropParams: newCropParams,
+            });
+
             const updated = [...currentImages];
             updated[indexCroppedImage] = croppedDataUrl;
             props.onChange(isMultiple ? updated : updated[0]);
@@ -175,18 +187,18 @@ const InputImage: FC<InputImage> = (props) => {
 
                 if (loadedCount === files.length) {
                     if (files.length === 1 && props.crop) {
-                        const newIndex = isMultiple ? currentImages.length : 0;
+                        const newIndex = editingIndex !== null ? editingIndex : isMultiple ? currentImages.length : 0;
                         setIndexCroppedImage(newIndex);
                         setSrcCroppedImage(images[0]);
-                        setOriginalImage((prev) => {
-                            const updated = { ...prev };
-                            delete updated[newIndex];
-                            return updated;
-                        });
-                        setCropParams((prev) => {
-                            const updated = { ...prev };
-                            delete updated[newIndex];
-                            return updated;
+
+                        const newOriginals = { ...(props.cropState?.originalImages ?? {}) };
+                        delete newOriginals[newIndex];
+                        const newCropParams = { ...(props.cropState?.cropParams ?? {}) };
+                        delete newCropParams[newIndex];
+
+                        props.onCropStateChange?.({
+                            originalImages: newOriginals,
+                            cropParams: newCropParams,
                         });
                         setOpenCropPopup(true);
                     } else {
@@ -251,7 +263,7 @@ const InputImage: FC<InputImage> = (props) => {
                 {errorMessage && <p className={styles.photo__error}>{errorMessage}</p>}
             </div>
 
-            {props.crop && openCropPopup && srcCroppedImage && <ImageCropPopup src={srcCroppedImage} targetWidth={props.crop.targetWidth} targetHeight={props.crop.targetHeight} onSave={handleSaveCrop} onClose={handleCloseCropPopup} initialParams={indexCroppedImage !== null ? cropParams[indexCroppedImage] : undefined}></ImageCropPopup>}
+            {props.crop && openCropPopup && srcCroppedImage && <ImageCropPopup src={srcCroppedImage} targetWidth={props.crop.targetWidth} targetHeight={props.crop.targetHeight} onSave={handleSaveCrop} onClose={handleCloseCropPopup} initialParams={indexCroppedImage !== null ? props.cropState?.cropParams?.[indexCroppedImage] : undefined}></ImageCropPopup>}
         </>
     );
 };

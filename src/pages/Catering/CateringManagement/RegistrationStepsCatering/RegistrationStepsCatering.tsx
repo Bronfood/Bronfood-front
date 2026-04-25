@@ -4,6 +4,8 @@ import LocationStep from './LocationStep/LocationStep';
 import MediaStep from './MediaStep/MediaStep';
 import TypeStep from './TypeStep/TypeStep';
 import LegalStep from './LegalStep/LegalStep';
+import { useState } from 'react';
+import { CropState } from '../../../../utils/consts';
 
 type RegistrationStepsCateringProps = {
     title: string;
@@ -12,11 +14,13 @@ type RegistrationStepsCateringProps = {
 };
 
 const RegistrationStepsCatering = ({ title, onSubmit, defaultValues }: RegistrationStepsCateringProps) => {
+    const [cropState, setCropState] = useState<CropState>({ originalImages: {}, cropParams: {} });
+
     return (
         <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} nameForm="registration-form-catering">
             <TypeStep />
             <LocationStep />
-            <MediaStep />
+            <MediaStep cropState={cropState} onCropStateChange={setCropState} />
             <LegalStep />
         </RegistrationForm>
     );

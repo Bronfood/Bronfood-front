@@ -3,12 +3,7 @@ import styles from './ImageCropPopup.module.scss';
 import { cropImage } from '../../../utils/serviceFuncs/cropImage';
 import Button from '../../Button/Button';
 import { useTranslation } from 'react-i18next';
-
-export interface CropParams {
-    scale: number;
-    posX: number;
-    posY: number;
-}
+import { CropParams } from '../../../utils/consts';
 
 interface ImageCropPopup {
     src: string;
