@@ -4,6 +4,7 @@ import { cropImage } from '../../../utils/serviceFuncs/cropImage';
 import Button from '../../Button/Button';
 import { useTranslation } from 'react-i18next';
 import { CropParams } from '../../../utils/consts';
+import { createPortal } from 'react-dom';
 
 interface ImageCropPopup {
     src: string;
@@ -19,6 +20,7 @@ const ImageCropPopup: FC<ImageCropPopup> = (props) => {
     const [scale, setScale] = useState(props.initialParams?.scale ?? 1);
     const [posX, setPosX] = useState(props.initialParams?.posX ?? 50);
     const [posY, setPosY] = useState(props.initialParams?.posY ?? 50);
+    const component = document.querySelector('#root > div')!;
 
     const handleApply = async () => {
         const params: CropParams = { scale, posX, posY };
@@ -26,7 +28,7 @@ const ImageCropPopup: FC<ImageCropPopup> = (props) => {
         props.onSave(cropped, params);
     };
 
-    return (
+    return createPortal(
         <div className={styles.popup_overlay}>
             <div className={styles.popup}>
                 <button className={styles.popup__close} type="button" onClick={props.onClose}></button>
@@ -57,7 +59,8 @@ const ImageCropPopup: FC<ImageCropPopup> = (props) => {
                     </Button>
                 </div>
             </div>
-        </div>
+        </div>,
+        component
     );
 };
 
