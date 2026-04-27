@@ -4,11 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import InputWorkingHours from './InputWorkingHours/InputWorkingHours';
 import { useFormContext } from 'react-hook-form';
 import { Day, DAYS, weekdayNames } from '../../../../../utils/api/cateringService/cateringService';
-import { regexTime } from '../../../../../utils/consts';
+import { CropState, regexTime } from '../../../../../utils/consts';
 import InputImage from '../../../../../components/InputImage/InputImage';
 import { formatCancellationTime } from '../../../../../utils/serviceFuncs/formatCancellationTime';
 
-const MediaStep = () => {
+interface MediaStepProps {
+    cropState: CropState;
+    onCropStateChange: (state: CropState) => void;
+}
+
+const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
     const { t } = useTranslation();
     const {
         register,
@@ -95,7 +100,7 @@ const MediaStep = () => {
 
     return (
         <fieldset className={styles.fieldset}>
-            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing />
+            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing crop={{ targetWidth: 375, targetHeight: 180 }} cropState={cropState} onCropStateChange={onCropStateChange} />
             <div className={styles.schedule}>
                 <p>{t('pages.cateringManagement.nameLabelWorkingTime')}</p>
 

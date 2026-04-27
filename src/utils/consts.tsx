@@ -26,3 +26,13 @@ export const ORDERS_COUNT = 2;
 export const DEBOUNCE_VALUE = 1000;
 export const CLUSTER_GRIDSIZE = 64;
 export const COMMON_LOCATION_PARAMS: { easing: EasingFunctionDescription; duration: number } = { easing: 'ease-in-out', duration: 1000 };
+
+export type CropParams = {
+    scale: number;
+    posX: number;
+    posY: number;
+};
+export type CropState = {
+    originalImages: Record<number, string>;
+    cropParams: Record<number, CropParams>;
+};
