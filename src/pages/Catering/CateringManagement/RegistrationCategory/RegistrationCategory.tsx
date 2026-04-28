@@ -16,7 +16,7 @@ type RegistrationCategoryProps = {
     defaultValues?: {
         name: string;
         photo?: string;
-        meal_ids: number[];
+        mealIds: number[];
     };
     renderDeleteButton?: React.ReactNode;
 };
@@ -27,7 +27,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
     const { data: meals, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
     const allMeals = isSuccess ? meals.data : [];
     const [showAvailableMeals, setShowAvailableMeals] = useState(false);
-    const [selectedMeals, setSelectedMeals] = useState<number[]>(defaultValues?.meal_ids.map((id) => id) || []);
+    const [selectedMeals, setSelectedMeals] = useState<number[]>(defaultValues?.mealIds.map((id) => id) || []);
     const [tempSelected, setTempSelected] = useState<number[]>([]);
     const {
         register,
@@ -42,13 +42,17 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
     const currentCategoryMeals = allMeals.filter((meal) => selectedMeals.includes(meal.id));
 
     const handleMealToggle = (mealId: number) => {
-        setTempSelected((prev) => (prev.includes(mealId) ? prev.filter((id) => id !== mealId) : [...prev, mealId]));
+        setTempSelected((prev) => {
+            const updated = prev.includes(mealId) ? prev.filter((id) => id !== mealId) : [...prev, mealId];
+            setValue('mealIds', updated);
+            return updated;
+        });
     };
 
     const handleDeleteCategory = (mealId: number) => {
         setSelectedMeals((prev) => {
             const newSelectedMeals = prev.filter((id) => id !== mealId);
-            setValue('meal_ids', newSelectedMeals);
+            setValue('mealIds', newSelectedMeals);
             return newSelectedMeals;
         });
     };
@@ -72,7 +76,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
     };
 
     useEffect(() => {
-        setSelectedMeals(defaultValues?.meal_ids || []);
+        setSelectedMeals(defaultValues?.mealIds || []);
         setTempSelected([]);
     }, [defaultValues]);
 
@@ -83,7 +87,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>
                 <input
                     type="hidden"
-                    {...register('meal_ids', {
+                    {...register('mealIds', {
                         validate: (value: number[]) => (value && value.length > 0) || t('components.input.necessaryAddAtLeastOneMeal'),
                     })}
                 />
@@ -127,7 +131,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                     )}
                 </>
             )}
-            {errors.meal_ids && <p className={styles.form__error}>{errors.meal_ids.message as string}</p>}
+            {errors.mealIds && <p className={styles.form__error}>{errors.mealIds.message as string}</p>}
             {renderDeleteButton}
             {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.save') : t('pages.cateringManagement.add')}</Button>}
         </form>
