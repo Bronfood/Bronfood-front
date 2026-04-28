@@ -73,7 +73,7 @@ const EditCategory = () => {
                         onSubmit={onSubmit}
                         defaultValues={{
                             name: category.data.name || '',
-                            meal_ids: category.data.meal_ids || [],
+                            mealIds: category.data.meal_ids || [],
                         }}
                         renderDeleteButton={
                             <ButtonGrey type="button" onClick={handleDelete}>

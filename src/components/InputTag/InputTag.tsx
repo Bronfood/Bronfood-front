@@ -27,6 +27,10 @@ interface InputTag {
      */
     placeholder: string;
     /**
+     * React Hook Forms error object
+     */
+    errors?: string;
+    /**
      * Input Value
      */
     value?: string;
@@ -70,6 +74,7 @@ const InputTag: FC<InputTag> = (props) => {
                     <input id={id} className={styles.tags__input} type="text" placeholder={props.placeholder} value={props.value} onKeyDown={handleKeyDown} onChange={handleChange}></input>
                 </ul>
             </div>
+            {props.errors && <p className={styles.tags__error}>{props.errors}</p>}
         </div>
     );
 };

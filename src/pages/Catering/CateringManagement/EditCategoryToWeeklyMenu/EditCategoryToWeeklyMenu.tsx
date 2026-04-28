@@ -40,7 +40,7 @@ const EditCategoryToWeeklyMenu = () => {
     return (
         <Popup title={t('pages.cateringManagement.collectCategory')} onClose={onClose}>
             {error && <ErrorMessage message={error.message} />}
-            {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, meal_ids: dailyCategory.meals?.map((meal) => meal.id) || [] }} />}
+            {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, mealIds: dailyCategory.meals?.map((meal) => meal.id) || [] }} />}
             {isPending && <Preloader />}
         </Popup>
     );

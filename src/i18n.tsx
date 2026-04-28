@@ -56,6 +56,8 @@ i18n
                             errorImageFileType: 'Выберите файл изображения',
                             errorImageFileRead: 'Ошибка при загрузке файла',
                             selectImageFile: 'Выберите файл изображения',
+                            necessaryAddAtLeastOneMeal: 'Необходимо добавить хотя бы одно блюдо',
+                            maximumTenTags: 'Максимум 10 тегов',
                             errorUploadingFile: 'Ошибка при загрузке файла',
                             youCanAttachMaximumImages: 'Вы можете прикрепить максимум {{max}} изоображений',
                         },
