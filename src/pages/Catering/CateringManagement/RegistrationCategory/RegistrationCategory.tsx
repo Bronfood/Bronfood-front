@@ -81,6 +81,12 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
             {isPending && <Preloader />}
             <div className={styles.form__conteiner}>
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>
+                <input
+                    type="hidden"
+                    {...register('meal_ids', {
+                        validate: (value: number[]) => (value && value.length > 0) || t('components.input.necessaryAddAtLeastOneMeal'),
+                    })}
+                />
                 {defaultValues && !showAvailableMeals && availableMeals.length !== 0 ? (
                     <div className={styles.form__add}>
                         <ButtonIconAdd onClick={toggleClickAvailable}>{t('pages.cateringManagement.addMeal')}</ButtonIconAdd>
@@ -121,6 +127,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                     )}
                 </>
             )}
+            {errors.meal_ids && <p className={styles.form__error}>{errors.meal_ids.message as string}</p>}
             {renderDeleteButton}
             {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.save') : t('pages.cateringManagement.add')}</Button>}
         </form>

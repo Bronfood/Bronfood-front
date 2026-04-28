@@ -9,6 +9,7 @@ const TypeStep = () => {
     const { t } = useTranslation();
     const { setValue, watch, register } = useFormContext();
     const [currentTag, setCurrentTag] = useState('');
+    const [error, setError] = useState<string>('');
 
     const selectedType = watch('type');
     const tags: { name: string }[] = watch('tags') || [];
@@ -18,18 +19,25 @@ const TypeStep = () => {
     };
 
     const handleAddTag = (tag: string) => {
+        if (tags.length >= 10) {
+            setError(t('components.input.maximumTenTags'));
+            return;
+        }
         const newTags = [...tags, { name: tag }];
         setValue('tags', newTags, { shouldValidate: true });
         setCurrentTag('');
+        setError('');
     };
 
     const handleDeleteTag = (index: number) => {
         const newTags = tags.filter((_, i) => i !== index);
         setValue('tags', newTags, { shouldValidate: true });
+        setError('');
     };
 
     const handleTagChange = (tag: string) => {
         setCurrentTag(tag);
+        if (error) setError('');
     };
 
     return (
@@ -57,7 +65,7 @@ const TypeStep = () => {
                     })}
                 </ul>
             </div>
-            <InputTag tags={tags} onDelete={handleDeleteTag} onAdd={handleAddTag} onChange={handleTagChange} nameLabel={t('pages.cateringManagement.nameLabelTags')} placeholder={t('pages.cateringManagement.placeholderTags')} value={currentTag} />
+            <InputTag tags={tags} errors={error} onDelete={handleDeleteTag} onAdd={handleAddTag} onChange={handleTagChange} nameLabel={t('pages.cateringManagement.nameLabelTags')} placeholder={t('pages.cateringManagement.placeholderTags')} value={currentTag} />
         </fieldset>
     );
 };
