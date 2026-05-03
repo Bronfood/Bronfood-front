@@ -1,0 +1,50 @@
+@use '../../styles/variables';
+
+/* Override default styles */
+/* stylelint-disable */
+.rdp-root {
+    --rdp-accent-color: #{variables.$orange};
+    --rdp-outside-opacity: 0.3;
+    --rdp-today-color: #{variables.$red};
+    --rdp-day_button-border-radius: 20%;
+    --rdp-day-height: 30px;
+    --rdp-day-width: 38px;
+    --rdp-day_button-height: 28px;
+    --rdp-day_button-width: 36px;
+    border: 1px solid #{variables.$grey-line};
+    border-radius: 20px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.rdp-chevron {
+    fill: #{variables.$grey-chevron};
+}
+
+.rdp-month_caption {
+    color: #{variables.$grey};
+}
+
+.rdp-selected .rdp-day_button {
+    border: 3px solid #{variables.$orange};
+}
+
+.rdp-selected.closed .rdp-day_button {
+    border: 3px solid #{variables.$white};
+}
+
+.regular {
+    border-radius: 20%;
+    background-color: #{variables.$orange-pale};
+}
+
+.override {
+    border-radius: 20%;
+    background-image: repeating-linear-gradient(to top right, #{variables.$orange-pale} 10%, #{variables.$orange} 20%);
+}
+
+.closed {
+    border-radius: 20%;
+    background-color: #{variables.$orange};
+}

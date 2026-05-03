@@ -1,0 +1,114 @@
+@use '../../../styles/variables';
+
+.title {
+    width: 100%;
+    text-align: center;
+    padding: 50px 0 20px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: variables.$black;
+}
+
+.fieldset {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    border: none;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.button {
+    position: relative;
+    bottom: 25px;
+}
+
+.line {
+    height: 40px;
+    width: 24px;
+    color: variables.$grey-line;
+    padding: 10px 0;
+}
+
+.accordion {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    background-color: variables.$background;
+    border: 1px solid variables.$line;
+    border-radius: 20px;
+    margin: 10px 0;
+
+    &__summary {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        background-image: url('../../../vendor/images/icons/admin/arrow-down-black.svg');
+
+        &_active {
+            background-image: url('../../../vendor/images/icons/admin/arrow-up.svg');
+        }
+    }
+
+    &__details {
+        max-height: 0;
+        width: 100%;
+        overflow: hidden;
+        padding: 1px 6px;
+        transition: max-height 0.2s ease-out;
+    }
+}
+
+.legend {
+    display: block;
+
+    &__item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 4px 0;
+    }
+
+    &__icon {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #{variables.$grey-line};
+        border-radius: 20%;
+        margin-right: 5px;
+
+        &_regular {
+            background-color: variables.$orange-pale;
+        }
+
+        &_override {
+            background-image: repeating-linear-gradient(to top right, #{variables.$orange-pale} 10%, #{variables.$orange} 20%);
+        }
+
+        &_closed {
+            background-color: variables.$orange;
+        }
+    }
+
+    &__text {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$grey;
+    }
+}

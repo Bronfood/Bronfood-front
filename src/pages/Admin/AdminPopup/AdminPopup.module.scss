@@ -9,13 +9,13 @@
     flex-direction: column;
     width: 100%;
     max-width: 345px;
-    max-height: 584px;
     background-color: variables.$background;
     box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
     border-radius: 25px;
     padding: 0 15px;
     margin: 0 auto;
     z-index: map.get(variables.$z-indexes, 'menu');
+    overflow-y: scroll;
 
     &_overlay {
         position: absolute;

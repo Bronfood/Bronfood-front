@@ -1,4 +1,3 @@
-//import { AdminServiceMock } from './adminServiceMock';
 import { MealInBasket } from '../basketService/basketService';
 import { Choice, Meal } from '../restaurantsService/restaurantsService';
 import { AdminServiceReal } from './adminServiceReal';
@@ -52,17 +51,26 @@ export type AdminOrder = {
      */
     waitingTime: number;
 };
-
 export type MealInAdminOrderFromApi = Omit<MealInAdminOrder, 'waitingTime'> & { waiting_time: number };
 export type MealInOrderFromApi = Omit<MealInOrder, 'meal'> & {
     meal: MealInAdminOrderFromApi;
 };
 export type AdminOrderFromApi = Omit<AdminOrder, 'waitingTime' | 'meals'> & { waiting_time: number; meals: MealInOrderFromApi[] };
 
+export type Schedule = {
+    id: number;
+    date: string;
+    open_time: string | null;
+    close_time: string | null;
+    source: string;
+};
+
 export interface AdminService {
     getAdminOrders: (status: AdminOrderStatus) => Promise<{ data: AdminOrder[] }>;
     changeAdminOrderStatus: (id: number, status: AdminOrderStatus) => Promise<void>;
+    getAdminSchedules: (start: Date, end: Date) => Promise<{ data: Schedule[] }>;
+    addSchedule: (date: Date | undefined, openTime: string | null, closeTime: string | null) => Promise<{ data: Schedule }>;
+    deleteSchedule: (id: number) => Promise<{ data: Schedule }>;
 }
 
-// export const adminService = new AdminServiceMock();
 export const adminService = new AdminServiceReal();

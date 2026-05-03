@@ -48,6 +48,9 @@ i18n
                             minLengthErrorMessage: 'Минимальное количество символов -',
                             maxLengthErrorMessage: 'Максимальное количество символов - ',
                         },
+                        inputTime: {
+                            invalidTimeFormat: 'Введите время в формате HH:MM',
+                        },
                         input: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод',
@@ -405,6 +408,18 @@ i18n
                             isOrderReady: 'Заказ готов ?',
                             issueOrder: 'Заказ выдан ?',
                             yes: 'Да',
+                            workingHours: 'Время работы',
+                            saveChangesQuestion: 'Сохранить изменения?',
+                            saveChanges: 'Сохранить изменения',
+                            deleteChanges: 'Удалить изменения',
+                            dayYouCantChangeTheScheduleForPastDates: 'Нельзя изменить расписание для прошедшей даты',
+                            closeTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
+                            openTimeTimeHasWrongFormatUseOneOfTheseFormatsInsteadHhMmSsUuuuuu: 'Неправильный формат времени. Попробуйте: HH:MM',
+                            authenticationCredentialsWereNotProvided: 'Вы не авторизованы',
+                            regularSchedule: '— стандартное расписание',
+                            overridenSchedule: '— измененное расписание',
+                            closed: '— выходной',
+                            makeItaDayOff: 'сделать выходным',
                         },
 
                         administrators: {
