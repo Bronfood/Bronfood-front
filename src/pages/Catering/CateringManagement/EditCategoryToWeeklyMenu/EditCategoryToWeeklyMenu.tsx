@@ -1,12 +1,12 @@
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import Popup from '../../../../components/Popups/Popup/Popup';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import RegistrationCategory from '../RegistrationCategory/RegistrationCategory';
 import Preloader from '../../../../components/Preloader/Preloader';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useGetWeeklyMenuByWeekday, useUpdateCategoryToWeeklyMenu } from '../../../../utils/hooks/useWeeklyMenu/useWeeklyMenu';
 import { useTranslation } from 'react-i18next';
 import { DailyCategory } from '../../../../utils/api/cateringWeeklyMenuService/cateringWeeklyMenuService';
+import RegistrationCategoryWeeklyMenu from '../RegistrationCategoryWeeklyMenu/RegistrationCategoryWeeklyMenu';
 
 const EditCategoryToWeeklyMenu = () => {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const EditCategoryToWeeklyMenu = () => {
         const categoryData = {
             id: Number(dailyCategoryId),
             name: data.name,
-            meals: data.meals || [],
+            meal_ids: data.meal_ids || [],
         };
         await mutateAsync({
             weekday: weekday,
@@ -40,7 +40,7 @@ const EditCategoryToWeeklyMenu = () => {
     return (
         <Popup title={t('pages.cateringManagement.collectCategory')} onClose={onClose}>
             {error && <ErrorMessage message={error.message} />}
-            {dailyCategory && <RegistrationCategory onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, mealIds: dailyCategory.meals?.map((meal) => meal.id) || [] }} />}
+            {dailyCategory && <RegistrationCategoryWeeklyMenu onSubmit={onSubmit} defaultValues={{ name: dailyCategory.name, mealIds: dailyCategory.meal_ids || [] }} />}
             {isPending && <Preloader />}
         </Popup>
     );

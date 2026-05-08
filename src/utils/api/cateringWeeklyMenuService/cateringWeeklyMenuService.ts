@@ -1,4 +1,3 @@
-import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { CateringWeeklyMenuServiceMock } from './cateringWeeklyMenuServiceMock';
 
 export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
@@ -15,7 +14,7 @@ export type DailyCategory = {
     /**
      * Category's meals
      */
-    meals?: CateringMeal[];
+    meal_ids: number[];
 };
 
 export type WeeklyMenu = {

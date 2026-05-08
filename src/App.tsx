@@ -41,6 +41,9 @@ import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
 import LisenceAgreement from './pages/LisenceAgreement/LisenceAgreement';
+import CollectWeeklyMenu from './pages/Catering/CateringManagement/CollectWeeklyMenu/CollectWeeklyMenu';
+import AddCategoryToWeeklyMenu from './pages/Catering/CateringManagement/AddCategoryToWeeklyMenu/AddCategoryToWeeklyMenu';
+import EditCategoryToWeeklyMenu from './pages/Catering/CateringManagement/EditCategoryToWeeklyMenu/EditCategoryToWeeklyMenu';
 
 function App() {
     return (
@@ -91,6 +94,13 @@ function App() {
 
                     <Route path=":cateringId/menu/add-category" element={<AddCategory />} />
                     <Route path=":cateringId/menu/categories/:categoryId" element={<EditCategory />} />
+
+                    <Route path=":cateringId/collect-weekly-menu">
+                        <Route index element={<CollectWeeklyMenu />} />
+                        <Route path=":day" element={<CollectWeeklyMenu />} />
+                        <Route path=":day/add-category-weekly-menu" element={<AddCategoryToWeeklyMenu />} />
+                        <Route path=":day/:dailyCategoryId" element={<EditCategoryToWeeklyMenu />} />
+                    </Route>
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} />

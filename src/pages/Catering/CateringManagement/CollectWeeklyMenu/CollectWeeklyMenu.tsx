@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo, useState, MouseEvent } from 'react';
 import ConfirmationPopup from '../../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
 import { Weekday } from '../../../../utils/api/cateringWeeklyMenuService/cateringWeeklyMenuService';
+import { useGetCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 
 const CollectWeeklyMenu = () => {
     const navigate = useNavigate();
@@ -20,7 +21,16 @@ const CollectWeeklyMenu = () => {
     const { data: menuWeekday, isLoading } = useGetWeeklyMenuByWeekday(selectedDay || '');
     const [categoryIdToDelete, setCategoryIdToDelete] = useState<number | null>(null);
     const { data: allMenuWeekday, isLoading: isLoadingAll } = useGetWeeklyMenu();
+    const { data: meals, isPending } = useGetCateringMeals(Number(cateringId));
     const { mutateAsync: deleteCategoryToWeeklyMenu, isPending: isDeleting } = useDeleteCategoryToWeeklyMenu();
+
+    const categoriesWithMeals = useMemo(() => {
+        if (!menuWeekday?.data?.daily_categories) return [];
+        return menuWeekday.data.daily_categories.map((category) => ({
+            ...category,
+            meals: meals?.data.filter((meal) => category.meal_ids?.includes(meal.id)),
+        }));
+    }, [menuWeekday, meals]);
 
     const handleDeleteClick = (dailyCategoryId: number) => {
         setCategoryIdToDelete(dailyCategoryId);
@@ -48,6 +58,12 @@ const CollectWeeklyMenu = () => {
         });
     };
 
+    const handleEditCategory = (dailyCategoryId: number) => {
+        navigate(`/catering/${cateringId}/collect-weekly-menu/${selectedDay}/${dailyCategoryId}`, {
+            state: { weekday: selectedDay },
+        });
+    };
+
     const hasDailyCategories = useMemo(() => {
         if (!allMenuWeekday?.data) return [];
 
@@ -56,25 +72,20 @@ const CollectWeeklyMenu = () => {
 
     const handleDeleteCategory = async () => {
         if (!selectedDay || !categoryIdToDelete) return;
-        setShowConfirmationPopup(false);
         await deleteCategoryToWeeklyMenu({ weekday: selectedDay as Weekday, dailyCategoryId: categoryIdToDelete });
-    };
-
-    const handleEditCategory = (dailyCategoryId: number) => {
-        navigate(`/catering/${cateringId}/collect-weekly-menu/${selectedDay}/edit-category-weekly-menu/${dailyCategoryId}`, {
-            state: { weekday: selectedDay },
-        });
+        setShowConfirmationPopup(false);
     };
 
     return (
         <>
-            {isLoading || (isLoadingAll && <Preloader />)}
+            {(isLoading || isLoadingAll || isPending) && <Preloader />}
+
             <Popup arrowBack onClose={onClose} title={t('pages.cateringManagement.weeklyMenu')}>
                 <WeeklyButtons selectedDay={selectedDay || null} onDayClick={handleDayClick} hasDailyCategories={hasDailyCategories} />
                 {selectedDay && menuWeekday?.data?.daily_categories && menuWeekday?.data.daily_categories.length > 0 ? (
                     <>
                         <ul className={styles.list}>
-                            {menuWeekday.data.daily_categories.map((category) => (
+                            {categoriesWithMeals.map((category) => (
                                 <li key={category.id} className={styles.list__item}>
                                     <div className={styles.list__header}>
                                         <p className={styles.list__name}>{category.name}</p>
@@ -119,6 +130,7 @@ const CollectWeeklyMenu = () => {
                     </div>
                 )}
             </Popup>
+
             {showConfirmationPopup && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
                     <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveCategoryToWeeklyMenu')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(false)} onSubmit={handleDeleteCategory} />
