@@ -44,7 +44,7 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
             </li>
             <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
-                <Link to="/admin" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                <Link to="/manager" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.guestNavigation.signInAsAdmin')}
                 </Link>
             </li>
