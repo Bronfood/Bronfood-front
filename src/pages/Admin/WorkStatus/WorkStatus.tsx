@@ -51,7 +51,7 @@ function WorkStatus() {
         formState: { isDirty, errors, isValid },
     } = useForm({ mode: 'onBlur', defaultValues: { openTime: '', closeTime: '' }, values: { openTime, closeTime } });
     const close = () => {
-        navigate('/admin');
+        navigate('/manager');
     };
     const handleDateChange = (date: Date, modifiers?: object) => {
         if (addSchedule.isError) {

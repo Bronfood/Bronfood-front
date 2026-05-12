@@ -68,7 +68,7 @@ function App() {
                 <Route path="/lisence-agreement" element={<LisenceAgreement />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/admin" element={<Admin />}>
+                <Route path="/manager" element={<Admin />}>
                     <Route path="orders" element={<Orders />} />
                     <Route path="work-status" element={<WorkStatus />} />
                 </Route>

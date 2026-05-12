@@ -9,15 +9,15 @@ function AdminFooter() {
     const { t } = useTranslation();
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === '/admin') {
+        if (location.pathname === '/manager') {
             setIsOrdersActive(false);
             setIsWorkStatusActive(false);
         }
-        if (location.pathname === '/admin/orders') {
+        if (location.pathname === '/manager/orders') {
             setIsOrdersActive(true);
             setIsWorkStatusActive(false);
         }
-        if (location.pathname === '/admin/work-status') {
+        if (location.pathname === '/manager/work-status') {
             setIsWorkStatusActive(true);
             setIsOrdersActive(false);
         }
@@ -26,7 +26,7 @@ function AdminFooter() {
     return (
         <footer className={styles['admin-footer']}>
             <div className={`${styles['admin-footer__container']}`}>
-                <Link to={isOrdersActive ? '/admin' : '/admin/orders'} className={styles['admin-footer__element_container']}>
+                <Link to={isOrdersActive ? '/manager' : '/manager/orders'} className={styles['admin-footer__element_container']}>
                     <button
                         title={t('pages.admin.orders')}
                         className={`
@@ -37,7 +37,7 @@ function AdminFooter() {
                     />
                     <h3 className={`${styles['admin-footer__element_title']} ${isOrdersActive ? styles['admin-footer__element_title_active'] : ''}`}>{t('pages.admin.orders')}</h3>
                 </Link>
-                <Link to={isWorkStatusActive ? '/admin' : '/admin/work-status'} className={styles['admin-footer__element_container']}>
+                <Link to={isWorkStatusActive ? '/manager' : '/manager/work-status'} className={styles['admin-footer__element_container']}>
                     <button
                         title={t('pages.admin.workStatus')}
                         className={`

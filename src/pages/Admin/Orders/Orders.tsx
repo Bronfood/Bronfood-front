@@ -31,7 +31,7 @@ function Orders() {
     const navigate = useNavigate();
     const { changeAdminOrderStatus } = useAdminOrdersMutations();
     const close = () => {
-        navigate('/admin');
+        navigate('/manager');
     };
     const selectTab = (nextTab: TabNames) => setTab(nextTab);
     const onSubmit = async () => {
