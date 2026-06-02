@@ -1,4 +1,4 @@
-@use '../../../../../styles/variables';
+@use '../../../styles/variables';
 
 .card {
     display: flex;
@@ -6,7 +6,7 @@
     flex-direction: column;
     border: 1px solid variables.$grey-line;
     border-radius: 20px;
-    width: 150px;
+    width: 100%;
 
     &__overlay {
         position: absolute;
@@ -22,7 +22,7 @@
 
     &__content {
         position: relative;
-        width: 148px;
+        width: 100%;
         height: 101px;
     }
 
@@ -52,7 +52,7 @@
 
             &:checked {
                 background-color: variables.$orange;
-                background-image: url('../../../../../vendor/images/icons/radioButton/check.svg');
+                background-image: url('../../../vendor/images/icons/radioButton/check.svg');
                 background-position: center;
                 background-repeat: no-repeat;
                 border: 1px solid variables.$orange;

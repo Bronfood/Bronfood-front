@@ -7,9 +7,9 @@ import Input from '../../../../components/Input/Input';
 import { useMemo, useState } from 'react';
 import { regexClientName } from '../../../../utils/consts';
 import styles from './RegistrationCategoryWeeklyMenu.module.scss';
-import CategoryMealCard from '../RegistrationCategory/CategoryMealCard/CategoryMealCard';
 import Button from '../../../../components/Button/Button';
 import { useGetCategories } from '../../../../utils/hooks/useCategory/useCategory';
+import CategoryMealCard from '../../../../components/Cards/CategoryMealCard/CategoryMealCard';
 
 type RegistrationCategoryWeeklyMenuProps = {
     onSubmit: SubmitHandler<FieldValues>;
@@ -26,6 +26,8 @@ const RegistrationCategoryWeeklyMenu = ({ onSubmit, defaultValues }: Registratio
     const { data: categories } = useGetCategories(Number(cateringId));
     const [selectedMeals, setSelectedMeals] = useState<number[]>(defaultValues?.mealIds.map((id) => id) || []);
     const allMeals = isSuccess ? meals.data : [];
+    const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+    const currentMeals = selectedCategoryIds.length === 0 ? allMeals : allMeals.filter((meal) => meal.category?.id && selectedCategoryIds.includes(meal.category.id));
     const currentCategoryMeals = allMeals.filter((meal) => selectedMeals.includes(meal.id));
     const {
         register,
@@ -61,6 +63,10 @@ const RegistrationCategoryWeeklyMenu = ({ onSubmit, defaultValues }: Registratio
         });
     };
 
+    const handleSortMeals = (categoryId: number) => {
+        setSelectedCategoryIds((prev) => (prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]));
+    };
+
     const handleFormSubmit = (data: FieldValues) => {
         onSubmit({
             ...data,
@@ -86,7 +92,7 @@ const RegistrationCategoryWeeklyMenu = ({ onSubmit, defaultValues }: Registratio
             {categories && categories.data.length > 0 && (
                 <ul className={styles.form__category}>
                     {categoriesWithPhoto.map((category) => (
-                        <li key={category.id} className={styles.form__category_item}>
+                        <li key={category.id} className={`${styles.form__category_item} ${selectedCategoryIds.includes(category.id) ? styles.form__category_active : ''}`} onClick={() => handleSortMeals(category.id)}>
                             <div className={styles.form__category_photo} style={{ backgroundImage: `url(${category.photo})` }}></div>
                             <p className={styles.form__category_name}>{category.name}</p>
                         </li>
@@ -94,9 +100,9 @@ const RegistrationCategoryWeeklyMenu = ({ onSubmit, defaultValues }: Registratio
                 </ul>
             )}
 
-            {allMeals.length > 0 && (
+            {allMeals.length > 0 && currentMeals.length > 0 && (
                 <ul className={styles.form__list}>
-                    {allMeals.map((meal) => (
+                    {currentMeals.map((meal) => (
                         <CategoryMealCard key={meal.id} meal={meal} isChecked={selectedMeals.includes(meal.id)} onToggle={() => handleMealToggle(meal.id)} available={true} />
                     ))}
                 </ul>

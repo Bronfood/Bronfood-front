@@ -17,8 +17,8 @@
     }
 
     &__list {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
     }
 
@@ -27,6 +27,7 @@
         gap: 16px;
         padding-bottom: 5px;
         overflow-x: auto;
+        cursor: pointer;
 
         &_item {
             display: flex;
@@ -49,6 +50,10 @@
         &_name {
             font-weight: 400;
             font-size: 14px;
+        }
+
+        &_active {
+            background-color: variables.$line;
         }
     }
 }
