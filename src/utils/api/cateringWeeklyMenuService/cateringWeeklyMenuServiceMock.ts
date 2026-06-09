@@ -61,14 +61,14 @@ export class CateringWeeklyMenuServiceMock implements CateringWeeklyMenuService 
             return Promise.reject(new Error(`No categories found for ${weekday}`));
         }
 
-        const categoryIndex = menu.daily_categories.findIndex((c) => c.id === dailyCategoryId);
+        const updatedMenu: WeeklyMenu = {
+            ...menu,
+            daily_categories: menu.daily_categories.filter((c) => c.id !== dailyCategoryId),
+        };
 
-        if (categoryIndex !== -1) {
-            menu.daily_categories?.splice(categoryIndex, 1);
-            return await Promise.resolve({ data: menu });
-        } else {
-            return await Promise.reject(new Error('Error: category not found'));
-        }
+        this.weeklyMenu = this.weeklyMenu.map((m, i) => (i === menuIndex ? updatedMenu : m));
+
+        return Promise.resolve({ data: updatedMenu });
     }
 
     async updateCategoryToWeeklyMenu(weekday: Weekday, category: Partial<DailyCategory> & { id: number }): Promise<{ data: WeeklyMenu }> {
@@ -85,11 +85,17 @@ export class CateringWeeklyMenuServiceMock implements CateringWeeklyMenuService 
         const numericId = Number(category.id);
         const categoryIndex = menu.daily_categories.findIndex((c) => c.id === numericId);
 
-        if (categoryIndex !== -1) {
-            menu.daily_categories[categoryIndex] = { ...menu.daily_categories[categoryIndex], ...category };
-            return await Promise.resolve({ data: this.weeklyMenu[menuIndex] });
-        } else {
-            return await Promise.reject(new Error('Error: category not found'));
+        if (categoryIndex === -1) {
+            return Promise.reject(new Error('Error: category not found'));
         }
+
+        const updatedMenu: WeeklyMenu = {
+            ...menu,
+            daily_categories: menu.daily_categories.map((c) => (c.id === numericId ? { ...c, ...category } : c)),
+        };
+
+        this.weeklyMenu = this.weeklyMenu.map((m, i) => (i === menuIndex ? updatedMenu : m));
+
+        return Promise.resolve({ data: updatedMenu });
     }
 }

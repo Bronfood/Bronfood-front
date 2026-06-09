@@ -1,0 +1,59 @@
+@use '../../../../styles/variables';
+
+.form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 18.5px;
+    gap: 16px;
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__text {
+        color: variables.$grey;
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    &__category {
+        display: flex;
+        gap: 16px;
+        padding-bottom: 5px;
+        overflow-x: auto;
+        cursor: pointer;
+
+        &_item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            border: 1px solid variables.$grey-overlay;
+            border-radius: 35px;
+            padding-right: 10px;
+        }
+
+        &_photo {
+            width: 39px;
+            height: 39px;
+            border-radius: 35px;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        &_name {
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &_active {
+            background-color: variables.$line;
+        }
+    }
+}

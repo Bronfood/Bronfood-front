@@ -103,6 +103,40 @@
         flex-direction: column;
         gap: 5px;
     }
+
+    &__component {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__weekday {
+        &_list {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &_day {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            border: 1px solid variables.$light-gray;
+            border-radius: 5px;
+            min-width: 32px;
+            max-width: 32px;
+        }
+
+        &_text {
+            font-size: 13px;
+            color: variables.$grey;
+        }
+
+        &_selected {
+            border-color: variables.$orange;
+        }
+    }
 }
 
 .day {

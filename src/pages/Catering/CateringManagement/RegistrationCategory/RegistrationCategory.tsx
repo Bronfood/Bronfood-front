@@ -2,7 +2,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import Input from '../../../../components/Input/Input';
 import { useTranslation } from 'react-i18next';
 import { regexClientName } from '../../../../utils/consts';
-import CategoryMealCard from './CategoryMealCard/CategoryMealCard';
 import { useGetCateringMeals } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import Preloader from '../../../../components/Preloader/Preloader';
 import Button from '../../../../components/Button/Button';
@@ -10,6 +9,7 @@ import styles from './RegistrationCategory.module.scss';
 import { useEffect, useState } from 'react';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { useParams } from 'react-router-dom';
+import CategoryMealCard from '../../../../components/Cards/CategoryMealCard/CategoryMealCard';
 
 type RegistrationCategoryProps = {
     onSubmit: SubmitHandler<FieldValues>;
@@ -81,7 +81,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
     }, [defaultValues]);
 
     return (
-        <form name="form-add-category" onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>
+        <form name="form-category" onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>
             {isPending && <Preloader />}
             <div className={styles.form__conteiner}>
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>

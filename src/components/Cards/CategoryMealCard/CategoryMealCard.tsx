@@ -1,5 +1,5 @@
-import ButtonIconRound from '../../../../../components/ButtonIconRound/ButtonIconRound';
-import { CateringMeal } from '../../../../../utils/api/cateringMealService/cateringMealService';
+import { CateringMeal } from '../../../utils/api/cateringMealService/cateringMealService';
+import ButtonIconRound from '../../ButtonIconRound/ButtonIconRound';
 import styles from './CategoryMealCard.module.scss';
 
 type CategoryMealCardProps = {

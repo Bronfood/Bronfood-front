@@ -1,11 +1,11 @@
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import Popup from '../../../../components/Popups/Popup/Popup';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import RegistrationCategory from '../RegistrationCategory/RegistrationCategory';
 import Preloader from '../../../../components/Preloader/Preloader';
 import { useTranslation } from 'react-i18next';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useAddCategoryToWeeklyMenu } from '../../../../utils/hooks/useWeeklyMenu/useWeeklyMenu';
+import RegistrationCategoryWeeklyMenu from '../RegistrationCategoryWeeklyMenu/RegistrationCategoryWeeklyMenu';
 
 const AddCategoryToWeeklyMenu = () => {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const AddCategoryToWeeklyMenu = () => {
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const categoryData = {
             name: data.name,
-            meals: data.meals || [],
+            meal_ids: data.meal_ids || [],
         };
 
         await mutateAsync({
@@ -35,7 +35,7 @@ const AddCategoryToWeeklyMenu = () => {
     return (
         <Popup title={t('pages.cateringManagement.collectCategory')} onClose={onClose}>
             {error && <ErrorMessage message={error.message} />}
-            <RegistrationCategory onSubmit={onSubmit} />
+            <RegistrationCategoryWeeklyMenu onSubmit={onSubmit} />
             {isPending && <Preloader />}
         </Popup>
     );
