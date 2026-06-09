@@ -41,10 +41,6 @@ export type Basket = {
      * Total price of meals in basket
      */
     basket_price: number;
-    /**
-     * Comission value
-     */
-    basket_commission: number;
 };
 
 export type FeatureInPayload = {
