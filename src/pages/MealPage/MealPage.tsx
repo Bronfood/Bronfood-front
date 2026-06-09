@@ -39,7 +39,6 @@ function MealPage() {
             : meal
               ? meal.price
               : 0;
-    const percentage = parseInt(((price * 7) / 100).toFixed(0));
     const goBack = () => {
         navigate(`/restaurants/${restaurantId}`);
     };
@@ -97,7 +96,7 @@ function MealPage() {
                         <MealImage image={meal.photo} />
                         <MealDescription name={meal.name} description={meal.description} />
                         {features.length > 0 ? <MealFeatureList features={features} /> : <div style={{ flexGrow: '1' }}></div>}
-                        <MealTotal price={price} percentage={percentage} buttonDisabled={addMeal.isPending} />
+                        <MealTotal price={price} buttonDisabled={addMeal.isPending} />
                         {addMeal.isPending && <Preloader />}
                     </MealPopup>
                 </form>
