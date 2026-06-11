@@ -40,7 +40,6 @@ import EditManager from './pages/Catering/Administrators/EditManager/EditManager
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
-import LisenceAgreement from './pages/LisenceAgreement/LisenceAgreement';
 
 function App() {
     return (
@@ -65,7 +64,6 @@ function App() {
                 <Route path="/restore-password" element={<RestorePassword />} />
                 <Route path="/basket" element={<ProtectedRoute component={<Basket />} />} />
                 <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/lisence-agreement" element={<LisenceAgreement />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/manager" element={<Admin />}>
