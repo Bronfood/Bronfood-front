@@ -27,7 +27,7 @@ function FeedbackPopup() {
                 <nav className={styles['feedback-popup__links']}>
                     <Link to="/about-us">{t('pages.feedback.aboutUs')}</Link>
                     {legalLinks.map((link) => (
-                        <a key={link.label} href={`${import.meta.env.VITE_API_URL}/${link.href}`} download={link.href !== '#refund-rules' ? '' : null}>
+                        <a key={link.label} href={`${import.meta.env.VITE_API_URL}/${link.href}`}>
                             {link.label}
                         </a>
                     ))}
