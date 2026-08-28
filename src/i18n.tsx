@@ -160,6 +160,7 @@ i18n
 
                         managerNavigation: {
                             signOut: 'Выйти',
+                            workStatus: 'Рабочий статус',
                         },
                     },
                     pages: {
@@ -388,6 +389,15 @@ i18n
                         },
                         admin: {
                             orders: 'Заказы',
+                            order: 'Заказ',
+                            main: 'Главная',
+                            basket: 'Корзина',
+                            stock: 'В наличии',
+                            aboutClient: 'О клиенте',
+                            whenToCook: 'Когда приготовить',
+                            methodOfGetting: 'Способ получения',
+                            newOrder: 'Новый заказ',
+                            noAvailableMeal: 'Нет доступных блюд',
                             notAccepted: 'Не принятые',
                             beingPrepared: 'Готовятся',
                             archive: 'Архив',
@@ -417,6 +427,17 @@ i18n
                             overridenSchedule: '— измененное расписание',
                             closed: '— выходной',
                             makeItaDayOff: 'сделать выходным',
+                            placeholderName: 'Иван Петров',
+                            nameLabelName: 'Полное имя клиента',
+                            pickup: 'Самовывоз',
+                            delivery: 'Доставка',
+                            inHall: 'В зале',
+                            now: 'Сейчас',
+                            preparingInTheNearFuture: 'Готовим в ближайшее время',
+                            preOrder: 'Предзаказ',
+                            chooseConvenientTimeToReceive: 'Выберите удобное время получения',
+                            deliveryTime: 'Время доставки',
+                            forCertainTime: 'На конкретное время',
                         },
 
                         administrators: {

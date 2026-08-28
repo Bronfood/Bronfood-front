@@ -1,0 +1,144 @@
+@use '../../../styles/variables';
+
+.stock {
+    &__meals {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__short-info {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border-radius: 12px;
+        padding: 8px;
+        background-color: variables.$button-grey;
+
+        &_additives {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        &_additive {
+            &_name {
+                font-size: 13px;
+            }
+
+            &_choice {
+                color: #aaa;
+                font-weight: 400;
+                font-size: 13px;
+            }
+        }
+
+        &_info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        &_text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &_name {
+            font-size: 17px;
+        }
+
+        &_description {
+            font-size: 13px;
+            font-weight: 400;
+
+            &.hide {
+                display: none;
+            }
+        }
+
+        &_photo {
+            width: 40px;
+            height: 40px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+    }
+
+    &__details {
+        width: 24px;
+        background-size: cover;
+        height: 24px;
+
+        &_hide {
+            background-image: url('/src/vendor/images/icons/arrow-orange.svg');
+        }
+
+        &_show {
+            rotate: -90deg;
+            background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        flex-shrink: 0;
+    }
+
+    &__button {
+        padding: 0;
+        border: none;
+        background-color: transparent;
+    }
+
+    &__slider {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        background-color: variables.$grey-light-line;
+        border-radius: 25px;
+        transition: background 0.3s ease;
+
+        &.active {
+            background: variables.$orange;
+        }
+    }
+
+    &__handle {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: variables.$white;
+        transition: transform 0.3s ease;
+
+        &.active {
+            transform: translateX(16px);
+        }
+    }
+
+    &__title {
+        width: 100%;
+        text-align: center;
+        padding: 50px 0 20px;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: variables.$black;
+    }
+}

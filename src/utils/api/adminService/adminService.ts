@@ -1,5 +1,7 @@
 import { MealInBasket } from '../basketService/basketService';
+import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { Choice, Meal } from '../restaurantsService/restaurantsService';
+import { AdminServiceMock } from './adminServiceMock';
 import { AdminServiceReal } from './adminServiceReal';
 
 export type ChoiceInAdminOrder = Omit<Choice, 'price' | 'default' | 'feature_name' | 'chosen'>;
@@ -73,4 +75,9 @@ export interface AdminService {
     deleteSchedule: (id: number) => Promise<{ data: Schedule }>;
 }
 
+export interface MockAdminService {
+    getMealsStock: () => Promise<{ data: CateringMeal[] }>;
+}
+
 export const adminService = new AdminServiceReal();
+export const adminServiceMock = new AdminServiceMock();

@@ -1,0 +1,112 @@
+@use '../../../../styles/variables';
+
+.client-step {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__label {
+        font-size: 17px;
+    }
+
+    &__method {
+        display: flex;
+        gap: 12px;
+
+        &_item {
+            font-size: 13px;
+            line-height: 100%;
+            padding: 6px 16px;
+            border: 1px solid variables.$orange;
+            border-radius: 20px;
+        }
+    }
+
+    &__button {
+        border: none;
+        background-color: transparent;
+    }
+
+    &__cook-method {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__pre-order {
+        position: relative;
+        flex-direction: column;
+
+        &_component {
+            display: flex;
+            gap: 10px;
+        }
+
+        &_about {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        &_radio {
+            display: flex;
+            gap: 8px;
+        }
+
+        &_toggle {
+            position: absolute;
+            top: 16px;
+            right: 8px;
+            width: 24px;
+            background-size: cover;
+            height: 24px;
+            border: none;
+            background-color: transparent;
+            background-image: url('/src/vendor/images/icons/arrow-back.svg');
+            rotate: 90deg;
+        }
+
+        &_hide {
+            rotate: -90deg;
+        }
+    }
+
+    &__line {
+        border-bottom: 1px solid variables.$line;
+        padding-top: 12px;
+        margin-bottom: 12px;
+    }
+
+    &__radio {
+        display: flex;
+        gap: 10px;
+        padding: 8px;
+        background-color: variables.$button-grey;
+        border-radius: 12px;
+
+        &_text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &_name {
+            font-size: 17px;
+        }
+
+        &_about {
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+}
