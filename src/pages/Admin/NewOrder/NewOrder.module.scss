@@ -1,0 +1,49 @@
+@use '../../../styles/variables';
+@use 'sass:map';
+
+.new-order {
+    position: fixed;
+    top: 90px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 345px;
+    background-color: variables.$background;
+    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
+    border-radius: 25px 25px 0 0;
+    padding: 20px 15px 15px;
+    margin: 0 auto;
+    z-index: map.get(variables.$z-indexes, 'menu');
+    overflow-y: auto;
+
+    &__overlay {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        background-color: rgb(135 133 133 / 0%);
+        backdrop-filter: blur(2.5px);
+    }
+
+    &__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 0 28px 60px;
+    }
+
+    &__button {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+
+        &_close {
+            top: 15px;
+            right: 15px;
+        }
+    }
+}

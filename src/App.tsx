@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Header from './components/Header/Header';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
@@ -40,6 +40,11 @@ import EditManager from './pages/Catering/Administrators/EditManager/EditManager
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
+import Stock from './pages/Admin/Stock/Stock';
+import NewOrder from './pages/Admin/NewOrder/NewOrder';
+import ClientStep from './pages/Admin/NewOrder/ClientStep/ClientStep';
+import FoodStep from './pages/Admin/NewOrder/FoodStep/FoodStep';
+import BasketStep from './pages/Admin/NewOrder/BasketStep/BasketStep';
 
 function App() {
     return (
@@ -69,6 +74,13 @@ function App() {
                 <Route path="/manager" element={<Admin />}>
                     <Route path="orders" element={<Orders />} />
                     <Route path="work-status" element={<WorkStatus />} />
+                    <Route path="stock" element={<Stock />} />
+                    <Route path="new-order" element={<NewOrder />}>
+                        <Route index element={<Navigate to="client" replace />} />
+                        <Route path="client" element={<ClientStep />} />
+                        <Route path="food" element={<FoodStep />} />
+                        <Route path="basket" element={<BasketStep />} />
+                    </Route>
                 </Route>
                 <Route path="/favorites" element={<ProtectedRoute component={<Favorites />} />} />
                 <Route path="*" element={<PageNotFound />} />
