@@ -1,0 +1,39 @@
+@use '../../../styles/variables';
+@use 'sass:map';
+
+.new-order {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: variables.$button-grey;
+    padding: 44px 16px 155px 15px;
+    margin: 0 auto;
+    z-index: map.get(variables.$z-indexes, 'drawer');
+    overflow-y: auto;
+    min-height: 100vh;
+
+    &__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 0 28px 60px;
+    }
+
+    &__button {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+
+        &_close {
+            top: 39px;
+            right: 15px;
+
+            button {
+                background-color: variables.$button-grey;
+            }
+        }
+    }
+}
