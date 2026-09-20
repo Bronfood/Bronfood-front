@@ -1,0 +1,214 @@
+@use '../../../../../styles/variables';
+
+.food {
+    display: flex;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: variables.$white;
+    position: relative;
+
+    &__add {
+        width: 12px;
+        height: 12px;
+        background-image: url('/src/vendor/images/icons/add-icon-gray.svg');
+
+        &_wrapper {
+            display: flex;
+            position: absolute;
+            left: 31px;
+            top: 5px;
+            background-color: variables.$orange;
+            padding: 4px;
+            border-radius: 25px;
+            border: none;
+        }
+    }
+
+    &__open {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__conteiner-short {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__conteiner-name {
+        display: flex;
+        flex-direction: column;
+        margin-right: 29px;
+
+        h3 {
+            font-size: 17px;
+        }
+
+        p {
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        h3,
+        p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &__toggle {
+        position: absolute;
+        top: 16px;
+        right: 8px;
+        width: 24px;
+        background-size: cover;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        rotate: 90deg;
+
+        &_hide {
+            rotate: -90deg;
+        }
+    }
+
+    &__photo {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+    }
+
+    &__features {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__feature {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        &_name {
+            font-size: 17px;
+            line-height: 140%;
+        }
+    }
+
+    &__choices {
+        border-width: 1px 0;
+        border-style: solid;
+        border-color: variables.$line;
+    }
+
+    &__choices-size {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    &__choice-size,
+    &__choice {
+        cursor: pointer;
+
+        input[type='radio'] {
+            appearance: none;
+            appearance: none;
+            outline: none;
+            transition: all 0.2s;
+        }
+    }
+
+    &__choice-size {
+        padding: 4px 11px;
+        border: 1px solid variables.$orange;
+        border-radius: 8px;
+        width: 100px;
+
+        &_default {
+            background-color: variables.$orange;
+            color: variables.$white;
+        }
+    }
+
+    &__choice {
+        padding: 8.5px 0;
+
+        input[type='radio'] {
+            margin-left: 8px;
+            width: 20px;
+            height: 20px;
+            border: 1px solid variables.$orange;
+            border-radius: 50%;
+
+            &:checked {
+                border-width: 6px;
+            }
+        }
+
+        &:not(:first-child, :last-child) {
+            border-width: 1px 0;
+            border-style: solid;
+            border-color: variables.$line;
+        }
+
+        &_label-size {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        &_price {
+            margin-left: auto;
+        }
+
+        &_label {
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        &_name,
+        &_price {
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        &_name-size {
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        &_price-size {
+            font-size: 17px;
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 38px;
+        justify-content: space-between;
+        margin-top: 4px;
+
+        button {
+            margin: 0;
+        }
+
+        span {
+            width: 33px;
+            text-align: center;
+        }
+    }
+
+    &__counter {
+        display: flex;
+        gap: 10px;
+    }
+}

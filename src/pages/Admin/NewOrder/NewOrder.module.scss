@@ -2,32 +2,18 @@
 @use 'sass:map';
 
 .new-order {
-    position: fixed;
-    top: 90px;
-    bottom: 100px;
     display: flex;
     flex-direction: column;
+    position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 345px;
-    background-color: variables.$background;
-    box-shadow: 0 27px 48px -23px rgb(28 39 49 / 100%);
-    border-radius: 25px 25px 0 0;
-    padding: 20px 15px 15px;
+    background-color: variables.$button-grey;
+    padding: 44px 16px 155px 15px;
     margin: 0 auto;
-    z-index: map.get(variables.$z-indexes, 'menu');
+    z-index: map.get(variables.$z-indexes, 'drawer');
     overflow-y: auto;
-
-    &__overlay {
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        top: 0;
-        left: 0;
-        width: 100%;
-        min-height: 100vh;
-        background-color: rgb(135 133 133 / 0%);
-        backdrop-filter: blur(2.5px);
-    }
+    min-height: 100vh;
 
     &__title {
         font-size: 20px;
@@ -42,8 +28,12 @@
         height: 35px;
 
         &_close {
-            top: 15px;
+            top: 39px;
             right: 15px;
+
+            button {
+                background-color: variables.$button-grey;
+            }
         }
     }
 }

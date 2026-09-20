@@ -1,0 +1,34 @@
+@use '../../../../styles/variables';
+
+.basket {
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__total {
+        display: flex;
+        gap: 7px;
+        margin-top: 12px;
+
+        p {
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 140%;
+        }
+
+        &_price {
+            color: variables.$orange;
+        }
+    }
+
+    &__empty {
+        display: block;
+        width: 100%;
+        margin: 100px auto;
+        text-align: center;
+        font-size: 14px;
+        color: variables.$orange;
+    }
+}

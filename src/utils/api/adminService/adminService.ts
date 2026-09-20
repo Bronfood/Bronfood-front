@@ -1,4 +1,5 @@
 import { MealInBasket } from '../basketService/basketService';
+import { Category } from '../categoryService/categoryService';
 import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { Choice, Meal } from '../restaurantsService/restaurantsService';
 import { AdminServiceMock } from './adminServiceMock';
@@ -67,6 +68,11 @@ export type Schedule = {
     source: string;
 };
 
+export type AdminBasket = {
+    meals: CateringMeal[];
+    total: number;
+};
+
 export interface AdminService {
     getAdminOrders: (status: AdminOrderStatus) => Promise<{ data: AdminOrder[] }>;
     changeAdminOrderStatus: (id: number, status: AdminOrderStatus) => Promise<void>;
@@ -77,6 +83,13 @@ export interface AdminService {
 
 export interface MockAdminService {
     getMealsStock: () => Promise<{ data: CateringMeal[] }>;
+
+    getFoodForOrder: () => Promise<{ data: CateringMeal[] }>;
+
+    getAdminBasket: () => Promise<{ data: AdminBasket }>;
+    deleteMealInBasket: (mealId: number) => Promise<{ data: AdminBasket }>;
+
+    getAdminCategory: () => Promise<{ data: Category[] }>;
 }
 
 export const adminService = new AdminServiceReal();

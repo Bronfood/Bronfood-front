@@ -5,6 +5,11 @@
     flex-direction: column;
     gap: 20px;
 
+    &__custom-radio {
+        display: flex;
+        gap: 12px;
+    }
+
     &__container {
         display: flex;
         flex-direction: column;
@@ -15,22 +20,94 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
+
+        > div {
+            > label {
+                background-color: variables.$button-grey;
+                color: variables.$black;
+            }
+        }
+    }
+
+    &__address {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px;
+        background-color: variables.$white;
+        border-radius: 12px;
+
+        &_title {
+            font-size: 17px;
+        }
+
+        &_info {
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        &_inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            > div {
+                > label {
+                    color: variables.$black;
+                }
+            }
+        }
+
+        &_inputs-house {
+            display: flex;
+            gap: 16px;
+
+            > div {
+                > label {
+                    color: variables.$black;
+                }
+            }
+        }
+    }
+
+    &__now {
+        align-items: center;
     }
 
     &__label {
         font-size: 17px;
     }
 
-    &__method {
+    &__get-method {
         display: flex;
         gap: 12px;
 
-        &_item {
+        &_text {
             font-size: 13px;
+            font-weight: 400;
             line-height: 100%;
+        }
+
+        &_radio {
+            input[type='radio'] {
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+                margin: 0;
+                pointer-events: none;
+            }
+        }
+
+        &_item {
             padding: 6px 16px;
             border: 1px solid variables.$orange;
             border-radius: 20px;
+        }
+
+        &_active {
+            background-color: variables.$orange;
+            color: variables.$white;
         }
     }
 
@@ -49,8 +126,41 @@
         position: relative;
         flex-direction: column;
 
+        &_through-time,
+        &_certain-time {
+            margin-left: auto;
+            display: flex;
+            gap: 4px;
+
+            input,
+            select {
+                border: 1px solid variables.$light-gray;
+                border-radius: 12px;
+                font-size: 13px;
+                width: 75px;
+                color: variables.$black;
+                padding: 10px;
+                text-align: center;
+                background-color: variables.$white;
+                cursor: pointer;
+            }
+
+            select {
+                padding: 6px 10px;
+                appearance: none;
+                appearance: none;
+                appearance: none;
+                outline: none;
+            }
+        }
+
+        &_time {
+            margin-top: 16px;
+        }
+
         &_component {
             display: flex;
+            align-items: center;
             gap: 10px;
         }
 
@@ -61,6 +171,7 @@
 
         &_radio {
             display: flex;
+            align-items: center;
             gap: 8px;
         }
 
@@ -88,12 +199,27 @@
         margin-bottom: 12px;
     }
 
-    &__radio {
-        display: flex;
-        gap: 10px;
+    &__label-radio {
         padding: 8px;
-        background-color: variables.$button-grey;
+        background-color: variables.$white;
         border-radius: 12px;
+
+        input[type='radio'] {
+            appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1px solid variables.$orange;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+
+            &:checked {
+                border-width: 6px;
+            }
+        }
 
         &_text {
             display: flex;

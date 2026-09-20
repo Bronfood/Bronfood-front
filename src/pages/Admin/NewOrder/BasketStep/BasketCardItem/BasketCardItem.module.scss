@@ -1,0 +1,208 @@
+@use '../../../../../styles/variables';
+
+.food {
+    display: flex;
+    position: relative;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: variables.$white;
+
+    &__info {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    &__open {
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    &__photo {
+        border-radius: 8px;
+        width: 84px;
+        height: 84px;
+        flex-shrink: 0;
+        background-size: cover;
+        background-position: center;
+    }
+
+    &__management {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    &__toggle {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 24px;
+        background-size: cover;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        rotate: 90deg;
+
+        &_hide {
+            rotate: -90deg;
+        }
+    }
+
+    &__price {
+        font-size: 20px;
+        color: variables.$orange;
+    }
+
+    &__conteiner {
+        display: flex;
+        flex-direction: column;
+
+        &_text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        h3 {
+            font-size: 17px;
+            line-height: 140%;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+
+    &__counter {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        span {
+            width: 33px;
+            text-align: center;
+        }
+    }
+
+    &__features {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__choices {
+        border-width: 1px 0;
+        border-style: solid;
+        border-color: variables.$line;
+    }
+
+    &__delete {
+        width: 35px;
+        height: 35px;
+        border: none;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
+    }
+
+    &__choice-size,
+    &__choice {
+        input[type='radio'] {
+            appearance: none;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+    }
+
+    &__choices-size {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    &__choice-size {
+        padding: 4px 11px;
+        border: 1px solid variables.$orange;
+        border-radius: 8px;
+        width: 100px;
+
+        &_default {
+            background-color: variables.$orange;
+            color: variables.$white;
+        }
+    }
+
+    &__choice {
+        padding: 8.5px 0;
+
+        input[type='radio'] {
+            margin-left: 8px;
+            width: 20px;
+            height: 20px;
+            border: 1px solid variables.$orange;
+            border-radius: 50%;
+
+            &:checked {
+                border-width: 6px;
+            }
+        }
+
+        &:not(:first-child, :last-child) {
+            border-width: 1px 0;
+            border-style: solid;
+            border-color: variables.$line;
+        }
+
+        &_label-size {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &_price {
+            margin-left: auto;
+        }
+
+        &_label {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &_name,
+        &_price {
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        &_name-size {
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        &_price-size {
+            font-size: 17px;
+        }
+    }
+
+    &__feature {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        &_name {
+            font-size: 17px;
+            line-height: 140%;
+        }
+    }
+}
