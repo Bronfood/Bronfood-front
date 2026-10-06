@@ -1,0 +1,362 @@
+@use '../../styles/variables';
+
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 375px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 44px 15px 0;
+    background-color: variables.$background;
+}
+
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0 20px;
+
+    &__burger {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border: 1px solid variables.$line;
+        border-radius: 14px;
+        background-color: variables.$white;
+        background-image: url('../../vendor/images/manager/orders/menu.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: 0 2px 6px rgb(40 40 40 / 10%);
+        cursor: pointer;
+    }
+
+    &__avatar {
+        width: 46px;
+        height: 46px;
+        border: 2px solid variables.$white;
+        border-radius: 50%;
+        background-image: url('../../vendor/images/manager/orders/avatar.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        box-shadow: 0 2px 8px rgb(40 40 40 / 15%);
+    }
+}
+
+.list {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card {
+    list-style: none;
+    padding: 14px 15px;
+    border: 1px solid variables.$line;
+    border-radius: 18px;
+    background-color: variables.$white;
+
+    &_open {
+        border-color: variables.$orange;
+    }
+
+    &__summary {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    &__code {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: variables.$black;
+    }
+
+    &__user {
+        margin-left: 8px;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$grey;
+    }
+
+    &__badge {
+        margin-left: 8px;
+        padding: 1px 10px;
+        border-radius: 20px;
+        background-color: variables.$orange-pale;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.5;
+        white-space: nowrap;
+        color: variables.$orange;
+    }
+
+    &__price {
+        margin-left: auto;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+        white-space: nowrap;
+        color: variables.$orange;
+    }
+
+    &__chevron {
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background-image: url('../../vendor/images/manager/orders/chevron-down.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+
+        &_open {
+            background-image: url('../../vendor/images/manager/orders/chevron-up.svg');
+        }
+    }
+
+    &__meals {
+        display: flex;
+        flex-direction: column;
+        margin-top: 8px;
+    }
+
+    &__meal {
+        position: relative;
+        display: flex;
+        align-items: baseline;
+        padding-left: 15px;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 2;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.9em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: variables.$orange;
+        }
+
+        &_name {
+            color: variables.$black;
+        }
+
+        &_count {
+            color: variables.$grey;
+        }
+
+        &_price {
+            margin-left: auto;
+            color: variables.$black;
+        }
+    }
+
+    &__text {
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+    }
+
+    &__divider {
+        margin: 12px 0;
+        border: none;
+        border-top: 1px solid variables.$grey-line;
+    }
+
+    &__payment {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &_text {
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: variables.$black;
+        }
+    }
+
+    &__marketplace {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &_icon {
+            width: 22px;
+            height: 22px;
+            background-image: url('../../vendor/images/manager/orders/marketplace.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        &_text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: variables.$green;
+        }
+    }
+}
+
+.toggle {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+
+    &__input {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    &__track {
+        position: relative;
+        display: block;
+        width: 52px;
+        height: 30px;
+        border-radius: 15px;
+        background-color: variables.$grey-line;
+        transition: background-color 0.2s ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: variables.$white;
+            box-shadow: 0 1px 3px rgb(40 40 40 / 20%);
+            transition: transform 0.2s ease;
+        }
+    }
+
+    &__input:checked + &__track {
+        background-color: variables.$orange;
+    }
+
+    &__input:checked + &__track::after {
+        transform: translateX(22px);
+    }
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 20px;
+    padding: 0 5px;
+    overflow-x: auto;
+    border-bottom: 2px solid variables.$grey-line;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &__tab {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        flex-shrink: 0;
+        height: 38px;
+        margin-bottom: -2px;
+        padding: 0;
+        border: none;
+        border-bottom: 2px solid transparent;
+        background-color: transparent;
+        font-family: inherit;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: variables.$grey;
+        cursor: pointer;
+
+        &_active {
+            border-bottom-color: variables.$orange;
+            color: variables.$orange;
+        }
+    }
+
+    &__count {
+        font-size: 15px;
+        font-weight: 500;
+        color: inherit;
+    }
+}
+
+.footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: 0 -15px;
+    padding: 18px 30px 22px;
+    border-radius: 25px 25px 0 0;
+    background-color: variables.$white;
+    box-shadow: 0 -6px 24px -12px rgb(28 39 49 / 60%);
+
+    &__item {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    &__icon {
+        width: 26px;
+        height: 26px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+
+        &_home {
+            background-image: url('../../vendor/images/manager/orders/home.svg');
+        }
+
+        &_packages {
+            background-image: url('../../vendor/images/manager/orders/packages.svg');
+        }
+    }
+
+    &__plus {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: variables.$orange;
+        background-image: url('../../vendor/images/manager/orders/plus.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    &__label {
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: variables.$black;
+
+        &_active {
+            color: variables.$orange;
+        }
+    }
+}

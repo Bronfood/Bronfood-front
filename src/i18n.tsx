@@ -563,6 +563,23 @@ i18n
                             nameLabelMessageClient: 'Обращение',
                             nameLabelPhoto: 'Прикрепите скриншоты',
                         },
+
+                        managerOrders: {
+                            menu: 'Меню',
+                            pickup: 'Самовывоз',
+                            delivery: 'Доставка',
+                            paid: 'Оплачено',
+                            notPaid: 'Не оплачено',
+                            paidByMarketplace: 'Оплачено маркетплейсом',
+                            accept: 'Принять',
+                            new: 'Новые',
+                            inProgress: 'В работе',
+                            ready: 'Готовы',
+                            preorder: 'Предзаказ',
+                            home: 'Главная',
+                            newOrder: 'Новый заказ',
+                            inStock: 'В наличии',
+                        },
                     },
                     errors: {
                         anUnexpectedErrorHasOccurred: 'Произошла непредвиденная ошибка',
