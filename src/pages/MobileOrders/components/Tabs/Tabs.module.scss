@@ -1,0 +1,62 @@
+@use '../../../../styles/variables';
+
+.tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 14px;
+    color: variables.$grey;
+    transition: all 0.2s ease;
+
+    &__label {
+        font-size: 14px;
+        font-weight: 500;
+
+        &_mode_active {
+            color: variables.$orange;
+            font-weight: 600;
+        }
+    }
+
+    &__count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: 10px;
+        background-color: variables.$button-grey;
+        font-size: 12px;
+        font-weight: 600;
+        color: variables.$grey;
+
+        &_mode_active {
+            background-color: variables.$orange;
+            color: variables.$white;
+        }
+    }
+
+    &--mode_active {
+        border-bottom-color: variables.$orange;
+    }
+}
