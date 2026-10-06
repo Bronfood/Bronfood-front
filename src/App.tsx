@@ -40,6 +40,7 @@ import EditManager from './pages/Catering/Administrators/EditManager/EditManager
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
+import MobileOrders from './pages/MobileOrders/MobileOrders';
 
 function App() {
     return (
@@ -69,6 +70,7 @@ function App() {
                 <Route path="/manager" element={<Admin />}>
                     <Route path="orders" element={<Orders />} />
                     <Route path="work-status" element={<WorkStatus />} />
+                    <Route path="mobile-orders" element={<MobileOrders />} />
                 </Route>
                 <Route path="/favorites" element={<ProtectedRoute component={<Favorites />} />} />
                 <Route path="*" element={<PageNotFound />} />
