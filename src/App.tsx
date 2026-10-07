@@ -43,8 +43,8 @@ import Support from './pages/Support/Support';
 import Stock from './pages/Admin/Stock/Stock';
 import NewOrder from './pages/Admin/NewOrder/NewOrder';
 import ClientStep from './pages/Admin/NewOrder/ClientStep/ClientStep';
-import FoodStep from './pages/Admin/NewOrder/FoodStep/FoodStep';
 import BasketStep from './pages/Admin/NewOrder/BasketStep/BasketStep';
+import MealStep from './pages/Admin/NewOrder/MealStep/MealStep';
 
 function App() {
     return (
@@ -76,10 +76,10 @@ function App() {
                     <Route path="work-status" element={<WorkStatus />} />
                     <Route path="stock" element={<Stock />} />
                     <Route path="new-order" element={<NewOrder />}>
-                        <Route index element={<Navigate to="client" replace />} />
-                        <Route path="client" element={<ClientStep />} />
-                        <Route path="food" element={<FoodStep />} />
-                        <Route path="basket" element={<BasketStep />} />
+                        <Route index element={<Navigate to="client-step" replace />} />
+                        <Route path="client-step" element={<ClientStep />} />
+                        <Route path="meal-step" element={<MealStep />} />
+                        <Route path="basket-step" element={<BasketStep />} />
                     </Route>
                 </Route>
                 <Route path="/favorites" element={<ProtectedRoute component={<Favorites />} />} />

@@ -1,10 +1,11 @@
 @use '../../../../styles/variables';
 
-.food {
+.meal {
     &__list {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        margin-bottom: 40px;
     }
 
     &__empty {
@@ -14,5 +15,12 @@
         text-align: center;
         font-size: 14px;
         color: variables.$orange;
+    }
+
+    &__category-filter {
+        position: fixed;
+        left: 12px;
+        bottom: 106px;
+        max-width: calc(100% - 12px);
     }
 }

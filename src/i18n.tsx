@@ -457,6 +457,8 @@ i18n
                             noMealsInTheSelectedCategories: 'Нет блюд в выбранных категориях.',
                             noАddedMeals: 'Нет добавленных блюд.',
                             uncategorized: 'Вне категорий',
+                            hidden: 'Скрытые',
+                            timeForDelivery: 'Время на доставку',
                         },
 
                         administrators: {

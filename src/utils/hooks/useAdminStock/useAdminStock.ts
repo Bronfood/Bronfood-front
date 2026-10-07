@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { adminServiceMock } from '../../api/adminService/adminService';
+import { adminNewOrderService } from '../../api/adminNewOrderService/adminNewOrderService';
 
-export const useGetMealsStock = () => {
+export const useGetAdminStockMeals = (restaurantId: number) => {
     return useQuery({
-        queryKey: ['mealsStock'],
-        queryFn: () => adminServiceMock.getMealsStock(),
+        queryKey: ['adminStockMeals', restaurantId],
+        queryFn: () => adminNewOrderService.getAdminStockMeals(restaurantId),
     });
 };

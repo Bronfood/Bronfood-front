@@ -9,7 +9,7 @@
     left: 0;
     width: 100%;
     background-color: variables.$button-grey;
-    padding: 44px 16px 155px 15px;
+    padding: 44px 16px 120px 15px;
     margin: 0 auto;
     z-index: map.get(variables.$z-indexes, 'drawer');
     overflow-y: auto;
@@ -19,7 +19,7 @@
         font-size: 20px;
         font-weight: 500;
         line-height: 28px;
-        margin: 0 0 28px 60px;
+        margin: 3.5px 0 28px 100px;
     }
 
     &__button {
@@ -28,12 +28,32 @@
         height: 35px;
 
         &_close {
-            top: 39px;
-            right: 15px;
+            top: 44px;
+            right: 16px;
 
             button {
                 background-color: variables.$button-grey;
             }
         }
+    }
+
+    &__total {
+        display: flex;
+        gap: 7px;
+        margin-top: 12px;
+
+        p {
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 140%;
+        }
+
+        &_price {
+            color: variables.$orange;
+        }
+    }
+
+    &__footer {
+        margin-top: auto;
     }
 }

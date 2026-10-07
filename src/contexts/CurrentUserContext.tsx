@@ -4,10 +4,12 @@ import { useMutation, UseMutationResult, useQuery, UseQueryResult, useQueryClien
 import { requestNotificationPermission } from '../utils/serviceFuncs/requestNotificationPermission';
 import { subscribeUserToPushNotifications } from '../utils/serviceFuncs/subscribeUserToPushNotifications';
 import { sendPushSubscriptionToServer } from '../utils/serviceFuncs/sendPushSubscriptionToServer';
+import { parseJwt } from '../utils/serviceFuncs/parseJwt';
 
 type CurrentUserContext = {
     currentUser: User | null;
     isLogin: boolean;
+    restaurantId: number | null;
     signIn: UseMutationResult<void, Error, LoginData, unknown> | Record<string, never>;
     signUp: UseMutationResult<{ data: RegisterPromise }, Error, RegisterPayload, unknown> | Record<string, never>;
     logout: UseMutationResult<void, Error, void, unknown> | Record<string, never>;
@@ -23,6 +25,7 @@ type CurrentUserContext = {
 export const CurrentUserContext = createContext<CurrentUserContext>({
     currentUser: null,
     isLogin: false,
+    restaurantId: null,
     signIn: {},
     signUp: {},
     logout: {},
@@ -62,6 +65,7 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
     });
 
     const isLogin = !!profile.data;
+    const restaurantId = token ? (parseJwt(token)?.restaurants_manager?.[0]?.id ?? null) : null;
 
     const signIn = useMutation({
         mutationFn: (variables: LoginData) => authService.login(variables),
@@ -120,6 +124,7 @@ export const CurrentUserProvider: FC<PropsWithChildren> = ({ children }) => {
             value={{
                 currentUser: profile.data?.data || null,
                 isLogin,
+                restaurantId,
                 signIn,
                 signUp,
                 logout,
