@@ -13,12 +13,12 @@ function NewOrder() {
     const { mutateAsync: emptyBasket } = useEmptyAdminBasket();
     const { mutateAsync: createNewOrder } = useCreateAdminNewOrder();
     const { mutateAsync: createRegularClient } = useCreateRegularClient();
-    const { clientData, cookMethod, clearClientData } = useAdminNewOrderContext();
+    const { clientData, clearClientData } = useAdminNewOrderContext();
 
     const location = useLocation();
     const basketId = basket?.data?.id;
     const basketPrice = basket?.data?.basket_price;
-    const isBasketStep = location.pathname.endsWith('/basket');
+    const isBasketStep = location.pathname.endsWith('/basket-step');
 
     const handleEmptyBasket = async () => {
         if (basketId == null) return;
@@ -36,7 +36,7 @@ function NewOrder() {
 
     const clickEmptyBasket = async () => {
         await handleEmptyBasket();
-        navigate('/manager/new-order/food');
+        navigate('/manager/new-order/meal-step');
     };
 
     const handleSubmit: SubmitHandler<FieldValues> = async () => {
@@ -59,8 +59,7 @@ function NewOrder() {
             client_id: clientId,
             fulfillment: clientData.fulfillment ?? 'pickup',
             is_paid: false,
-            scheduled_for: cookMethod === 'certainTime' ? clientData.scheduled_for : undefined,
-            delivery_duration: cookMethod === 'deliveryTime' ? (clientData.delivery_duration ?? null) : null,
+            delivery_duration: clientData.delivery_duration ?? null,
             delivery:
                 clientData.fulfillment === 'delivery'
                     ? {

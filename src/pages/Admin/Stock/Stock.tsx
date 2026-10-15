@@ -5,16 +5,14 @@ import { useState } from 'react';
 import Button from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import { useNavigate } from 'react-router-dom';
 import CategoryFilter from '../../../components/CategoryFilter/CategoryFilter';
-import { useGetAdminCategory } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
 import { useGetAdminStockMeals } from '../../../utils/hooks/useAdminStock/useAdminStock';
 import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUser';
+import { useRestaurant } from '../../../utils/hooks/useRestaurant/useRestaurant';
+import { useGetAdminFeatures } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
 
 function Stock() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { restaurantId } = useCurrentUser();
-    const { data: meals, isLoading: isLoadingMeals } = useGetAdminStockMeals(Number(restaurantId));
-    const { data: categories, isLoading: isLoadingCategories } = useGetAdminCategory();
 
     const [overrides, setOverrides] = useState<Record<number, boolean>>({});
     const [isOpen, setIsOpen] = useState<number | null>(null);
@@ -22,6 +20,15 @@ function Stock() {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showUncategorized, setShowUncategorized] = useState(false);
     const [showHidden, setShowHidden] = useState(false);
+    const [mealId, setMealId] = useState<number | null>(null);
+
+    const { restaurantId } = useCurrentUser();
+    const { data: meals, isLoading: isLoadingMeals } = useGetAdminStockMeals(Number(restaurantId));
+    const { data: featuresData } = useGetAdminFeatures(Number(restaurantId), Number(mealId));
+    const { data: restaurant, isLoading: isLoadingCategories } = useRestaurant(Number(restaurantId));
+
+    const categories = restaurant?.data.categories || [];
+    const features = featuresData?.data ?? [];
 
     const handleSelect = (id: number) => {
         setSelectedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -41,6 +48,7 @@ function Stock() {
 
     const handleInfoToggle = (mealId: number) => {
         setIsOpen((prev) => (prev === mealId ? null : mealId));
+        setMealId(mealId);
     };
 
     const close = () => {
@@ -75,12 +83,12 @@ function Stock() {
             {filteredMeals.length > 0 && (
                 <ul className={styles['stock__meals']}>
                     {filteredMeals.map((meal) => {
-                        const isMealVisible = overrides[meal.id] ?? !!meal.is_visible;
+                        const isMealVisible = overrides[meal.id] ?? !meal.is_visible;
                         return (
                             <li key={meal.id} className={styles['stock__item']}>
                                 {!isMealVisible && <div className={styles['stock__item_overlay']}></div>}
                                 <div className={`${styles['stock__item_visible']} ${isMealVisible ? styles['stock__item_visible_active'] : ''}`}>
-                                    <button className={`${styles['stock__item_visible_slider']} ${styles['stock__slider']} ${isMealVisible ? styles.active : ''}`} onClick={() => handleVisibleToggle(meal.id, isMealVisible)}>
+                                    <button type="button" className={`${styles['stock__item_visible_slider']} ${styles['stock__slider']} ${isMealVisible ? styles['stock__item_visible_active'] : ''}`} onClick={() => handleVisibleToggle(meal.id, isMealVisible)}>
                                         <span className={`${styles['stock__handle']} ${isMealVisible ? styles.active : ''}`} />
                                     </button>
                                 </div>
@@ -90,16 +98,16 @@ function Stock() {
                                         <p className={`${styles['stock__item_name']} ${styles['stock__item_text']}`}>{meal.name}</p>
                                         <p className={`${styles['stock__item_description']} ${styles['stock__item_text']} ${isOpen === meal.id ? styles.hide : ''}`}>{meal.description}</p>
                                     </div>
-                                    <button className={styles['stock__button']} onClick={() => handleInfoToggle(meal.id)}>
+                                    <button type="button" className={styles['stock__button']} onClick={() => handleInfoToggle(meal.id)}>
                                         {isOpen === meal.id ? <div className={`${styles['stock__details']} ${styles['stock__details_hide']}`}></div> : <div className={`${styles['stock__details']} ${styles['stock__details_show']}`}></div>}
                                     </button>
                                 </div>
                                 {isOpen === meal.id && (
                                     <div className={styles['stock__detail-info']}>
                                         <p className={styles['stock__item_description']}>{meal.description}</p>
-                                        {meal.features && meal.features.length > 0 && (
+                                        {features && features.length > 0 && (
                                             <ul className={styles['stock__item_features']}>
-                                                {meal.features.map((feature) => (
+                                                {features.map((feature) => (
                                                     <li key={feature.id} className={styles['stock__item_feature']}>
                                                         <p className={styles['stock__item_feature_name']}>{feature.name}</p>
                                                         {feature.choices.length > 0 && (
@@ -129,9 +137,9 @@ function Stock() {
                 </ul>
             )}
 
-            {categories && categories.data.length > 0 && (
+            {categories && categories.length > 0 && (
                 <div className={styles['stock__category-filter']}>
-                    <CategoryFilter categories={categories.data} selectedIds={selectedIds} select={handleSelect} deselect={handleDeselect} hidden={{ selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) }} uncategorized={{ selected: showUncategorized, onSelect: () => setShowUncategorized(true), onDeselect: () => setShowUncategorized(false) }} />{' '}
+                    <CategoryFilter categories={categories} selectedIds={selectedIds} select={handleSelect} deselect={handleDeselect} hidden={{ selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) }} uncategorized={{ selected: showUncategorized, onSelect: () => setShowUncategorized(true), onDeselect: () => setShowUncategorized(false) }} />{' '}
                 </div>
             )}
         </div>

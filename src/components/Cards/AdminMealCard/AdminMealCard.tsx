@@ -39,7 +39,7 @@ function Features({ features, selected, onSelectChoice }: { features: Feature[];
     );
 }
 
-function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMeal; restaurantId: number; onAddCount?: (mealId: number, count: number) => void; isBascket?: boolean }) {
+function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMeal; restaurantId: number; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; isBascket?: boolean }) {
     const { t } = useTranslation();
     const { data: featuresData, isLoading } = useGetAdminFeatures(restaurantId, meal.id);
     const features = featuresData?.data ?? [];
@@ -50,9 +50,18 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMea
     const handleSelectChoice = (featureId: number, choiceId: number) => {
         setSelected((prev) => ({ ...prev, [featureId]: choiceId }));
     };
+
+    const buildFeatures = (): { featureId: number; choiceId: number }[] =>
+        features
+            .map((f) => {
+                const choiceId = selected[f.id] ?? f.choices[0]?.id;
+                return choiceId != null ? { featureId: f.id, choiceId } : null;
+            })
+            .filter((f): f is { featureId: number; choiceId: number } => f !== null);
+
     const handleClickIncrement = () => setCount((prev) => prev + 1);
     const handleClickDecrement = () => setCount((prev) => Math.max(0, prev - 1));
-    const handleClickAddCount = () => onAddCount?.(meal.id, count);
+    const handleClickAddCount = () => onAddCount?.(meal.id, count, buildFeatures());
 
     if (isLoading) return <Preloader />;
 
@@ -71,9 +80,15 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMea
     );
 }
 
-function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: AdminMeal; restaurantId: number; onAdd?: (mealId: number) => void; onAddCount?: (mealId: number, count: number) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
+function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: AdminMeal; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
-    const handleClickAdd = () => onAdd?.(meal.id);
+    const handleClickAdd = () => {
+        if (meal.hasFeatures) {
+            setIsOpen(true);
+            return;
+        }
+        onAdd?.(meal.id, []);
+    };
     const handleClickOpen = () => setIsOpen((prev) => !prev);
 
     const toggleButton = () => {

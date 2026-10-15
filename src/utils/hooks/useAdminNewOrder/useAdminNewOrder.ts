@@ -1,14 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AdminNewOrderPayload, adminNewOrderService, adminNewOrderServiceMock, RegularClient } from '../../api/adminNewOrderService/adminNewOrderService';
+import { AdminNewOrderPayload, adminNewOrderService, RegularClient } from '../../api/adminNewOrderService/adminNewOrderService';
 import { useDebounce } from 'use-debounce';
 import { useCurrentUser } from '../useCurrentUser/useCurretUser';
-
-export const useGetAdminCategory = () => {
-    return useQuery({
-        queryKey: ['adminCategory'],
-        queryFn: () => adminNewOrderServiceMock.getAdminCategory(),
-    });
-};
 
 export const useGetAdminBasket = () => {
     const { isLogin } = useCurrentUser();

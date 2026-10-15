@@ -1,11 +1,12 @@
 import { Category } from '../categoryService/categoryService';
 import { CateringMeal } from '../cateringMealService/cateringMealService';
 import { Choice, Feature, Restaurant } from '../restaurantsService/restaurantsService';
-import { AdminNewOrderServiceMock } from './adminNewOrderServiceMock';
 import { AdminNewOrderServiceReal } from './adminNewOrderServiceReal';
 
 export type Fulfillment = 'delivery' | 'pickup' | 'dine_in';
-export type CookMethod = 'now' | 'preOrder' | 'deliveryTime' | 'certainTime';
+export type CookMethod = 'now' | 'preOrder';
+export type PreOrderType = 'inTime' | 'certainTime';
+export type DurationUnit = 'min' | 'hour';
 
 export type AdminMeal = {
     /**
@@ -312,9 +313,4 @@ export interface AdminNewOrderService {
     createRegularClient: (data: Omit<RegularClient, 'id'>) => Promise<{ data: RegularClient }>;
 }
 
-export interface MockAdminNewOrderService {
-    getAdminCategory: () => Promise<{ data: Category[] }>;
-}
-
 export const adminNewOrderService = new AdminNewOrderServiceReal();
-export const adminNewOrderServiceMock = new AdminNewOrderServiceMock();

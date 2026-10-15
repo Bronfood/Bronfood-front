@@ -26,6 +26,10 @@ export type Choice = {
      * Is choice chosen by user
      */
     chosen?: boolean;
+    /**
+     * Choice's is_visible
+     */
+    is_visible?: boolean;
 };
 
 export type Feature = {

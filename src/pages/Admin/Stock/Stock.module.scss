@@ -232,12 +232,13 @@
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background-color: variables.$orange;
+        background-color: variables.$white;
         transition: transform 0.3s ease;
 
         &.active {
+            left: 1px;
             transform: translateX(16px);
-            background-color: variables.$white;
+            background-color: variables.$orange;
         }
     }
 

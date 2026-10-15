@@ -16,7 +16,8 @@ export const regexEmail: RegExp = /.+@.+\..+/;
 export const regexMessage: RegExp = /^[\s\S]{10,5000}$/;
 export const regex24HourTime: RegExp = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-export const MASK = '+_ (___) ___-__-__';
+export const MASKPHONE = '+_ (___) ___-__-__';
+export const MASKTIME = '__:__';
 export const REPLACEMENT = { _: /\d/ };
 
 export const types = ['fastFood', 'cafe', 'cafeBar'].map((type) => {

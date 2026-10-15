@@ -459,6 +459,8 @@ i18n
                             uncategorized: 'Вне категорий',
                             hidden: 'Скрытые',
                             timeForDelivery: 'Время на доставку',
+                            placeholderDuration: '45',
+                            placeholderCertainTime: '14:30',
                         },
 
                         administrators: {

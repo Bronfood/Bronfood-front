@@ -21,7 +21,7 @@ function BasketStep() {
 
     const handleEmptyBasket = async (basketId: number) => {
         await emptyBasket(basketId);
-        navigate('/manager/new-order/food');
+        navigate('/manager/new-order/meal-step');
     };
 
     const handleIncrementMeal = async (mealId: number) => {
@@ -40,7 +40,7 @@ function BasketStep() {
 
     if (restaurantId === null) return <Navigate to="/signin" replace />;
     if (is404) return null;
-    if (basket?.data?.meals?.length === 0) return <Navigate to="/manager/new-order/food" replace />;
+    if (basket?.data?.meals?.length === 0) return <Navigate to="/manager/new-order/meal-step" replace />;
     if (isLoading) return <Preloader />;
     if (error) {
         return (
