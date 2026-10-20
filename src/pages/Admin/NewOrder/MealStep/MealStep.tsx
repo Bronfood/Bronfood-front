@@ -1,30 +1,51 @@
 import Preloader from '../../../../components/Preloader/Preloader';
-import { useAddMealAdminBasket, useGetAdminMeals, useIncrementMealAdminBasket } from '../../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
 import styles from './MealStep.module.scss';
 import CategoryFilter from '../../../../components/CategoryFilter/CategoryFilter';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
-import { useAdminNewOrderContext } from '../../../../utils/hooks/useAdminNewOrder/useAdminNewOrderContext';
 import AdminMealCard from '../../../../components/Cards/AdminMealCard/AdminMealCard';
 import { useNavigate } from 'react-router-dom';
-import { useRestaurant } from '../../../../utils/hooks/useRestaurant/useRestaurant';
+import { useAddAdminMeal, useIncrementAdminMeal } from '../../../../utils/hooks/useAdminBasket/useAdminBasket';
+import { useAdminOrderContext } from '../../../../utils/hooks/useAdminOrders/useAdminOrderContext';
+import { useMeals } from '../../../../utils/hooks/useMeals/useMeals';
+import { useGetAdminCategories } from '../../../../utils/hooks/useAdminCategory/useAdminCategory';
+import { Category } from '../../../../utils/api/categoryService/categoryService';
+import { MealFilters } from '../../../../utils/api/restaurantsService/restaurantsService';
 
 function MealStep() {
     const { t } = useTranslation();
-
-    const { restaurantId, isClientDataValid } = useAdminNewOrderContext();
-    const { data: meals, isLoading: isLoadingMeals, error } = useGetAdminMeals(Number(restaurantId));
-    const { data: restaurant, isLoading: isLoadingCategories } = useRestaurant(Number(restaurantId));
-    const { mutateAsync: increment } = useIncrementMealAdminBasket();
-    const { mutateAsync: addMeal } = useAddMealAdminBasket();
+    const navigate = useNavigate();
 
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [showUncategorized, setShowUncategorized] = useState(false);
-    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
-    const navigate = useNavigate();
-    const categories = restaurant?.data.categories || [];
+    const [showPopular, setShowPopular] = useState(false);
+    const [showFavorite, setShowFavorite] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const { restaurantId, isClientDataValid, clientData } = useAdminOrderContext();
+    const clientId = clientData.client_id;
+    const numericRestaurantId = Number(restaurantId);
+    const filters: MealFilters = {
+        popular: showPopular ? true : undefined,
+        favorite: showFavorite && clientId ? { clientId } : undefined,
+        categoryIds: selectedIds.length > 0 ? selectedIds : undefined,
+    };
+    const { data: meals, isLoading: isLoadingMeals, error: errorMeals } = useMeals(numericRestaurantId, filters);
+    const { data: categoriesData, isLoading: isLoadingCategories } = useGetAdminCategories(numericRestaurantId);
+    const { mutateAsync: increment } = useIncrementAdminMeal();
+    const { mutateAsync: addMeal } = useAddAdminMeal();
+
+    const errorMessage = errorMeals ? getErrorMessage(errorMeals, 'pages.admin.') : '';
+    const categories: Category[] = categoriesData?.data ?? [];
+
+    const renderErrorMessage = (error: string) => {
+        return (
+            <div style={{ padding: '0 20px' }}>
+                <ErrorMessage message={error} />
+            </div>
+        );
+    };
 
     const handleSelect = (id: number) => {
         setSelectedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -44,10 +65,13 @@ function MealStep() {
             if (count > 1) {
                 await Promise.all(Array.from({ length: count - 1 }, () => increment({ mealId: basketMealId })));
             }
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            setError(getErrorMessage(error as Error, 'pages.admin.'));
         }
     };
+
+    const hasFilters = selectedIds.length > 0 || showPopular || showFavorite;
+    const mealsList = meals?.data ?? [];
 
     useEffect(() => {
         if (!isClientDataValid) {
@@ -55,34 +79,16 @@ function MealStep() {
         }
     }, [isClientDataValid, navigate]);
 
-    if (isLoadingMeals || isLoadingCategories) return <Preloader />;
-    if (error) {
-        return (
-            <div style={{ padding: '0 20px' }}>
-                <ErrorMessage message={errorMessage} />
-            </div>
-        );
-    }
-    if (!meals?.data) return null;
-    if (restaurantId == null) return null;
-
-    const filteredMeals =
-        selectedIds.length > 0 || showUncategorized
-            ? meals.data.filter((meal) => {
-                  if (meal.category) return selectedIds.includes(meal.category.id);
-                  return showUncategorized;
-              })
-            : meals.data;
-
     return (
         <>
-            {filteredMeals.length === 0 ? (
-                <p className={styles['meal__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>
-            ) : (
+            {(isLoadingMeals || isLoadingCategories) && <Preloader />}
+            {!isLoadingMeals && mealsList.length === 0 && !hasFilters && <p className={styles['meal__empty']}>{t('pages.admin.noAvailableMeal')}</p>}
+            {!isLoadingMeals && mealsList.length === 0 && hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>}
+            {mealsList.length > 0 && (
                 <ul className={styles['meal__list']}>
-                    {filteredMeals.map((meal) => (
+                    {mealsList.map((meal) => (
                         <li key={meal.id}>
-                            <AdminMealCard meal={meal} restaurantId={restaurantId} onAdd={(id, features) => handleAddMeal(id, 1, features)} onAddCount={handleAddMeal} />
+                            <AdminMealCard meal={meal} restaurantId={numericRestaurantId} onAdd={(id, features) => handleAddMeal(id, 1, features)} onAddCount={handleAddMeal} />
                         </li>
                     ))}
                 </ul>
@@ -94,13 +100,15 @@ function MealStep() {
                     selectedIds={selectedIds}
                     select={handleSelect}
                     deselect={handleDeselect}
-                    uncategorized={{
-                        selected: showUncategorized,
-                        onSelect: () => setShowUncategorized(true),
-                        onDeselect: () => setShowUncategorized(false),
-                    }}
+                    customFilters={[
+                        { name: 'popular', text: t('pages.admin.popular'), selected: showPopular, onSelect: () => setShowPopular(true), onDeselect: () => setShowPopular(false) },
+                        { name: 'favorite', text: t('pages.admin.favorite'), selected: showFavorite, onSelect: () => setShowFavorite(true), onDeselect: () => setShowFavorite(false) },
+                    ]}
                 />
             </div>
+
+            {error && renderErrorMessage(error)}
+            {errorMessage && renderErrorMessage(errorMessage)}
         </>
     );
 }

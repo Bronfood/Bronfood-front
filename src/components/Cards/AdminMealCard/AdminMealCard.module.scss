@@ -122,6 +122,11 @@
     }
 }
 
+.description {
+    font-size: 13px;
+    font-weight: 400;
+}
+
 .meal {
     display: flex;
     padding: 8px;
@@ -143,6 +148,7 @@
     &__management {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 8px;
         width: 100%;
     }
@@ -179,20 +185,25 @@
             font-size: 17px;
             line-height: 140%;
             font-weight: 500;
-        }
-
-        p {
-            font-size: 13px;
-            font-weight: 400;
-        }
-
-        h3,
-        p {
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+    }
+
+    &__description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 13px;
+        font-weight: 400;
+
+        &_hide {
+            display: none;
         }
     }
 

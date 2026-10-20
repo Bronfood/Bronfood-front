@@ -1,39 +1,28 @@
 import { Category } from '../../utils/api/categoryService/categoryService';
 import styles from './CategoryFilter.module.scss';
-import { useTranslation } from 'react-i18next';
 
 type CategoryFilterProps = {
-    categories?: Category[];
+    categories: Category[];
     selectedIds: number[];
     select: (id: number) => void;
     deselect: (id: number) => void;
-    uncategorized?: {
+    customFilters?: {
+        name: string;
+        text: string;
         selected: boolean;
         onSelect: () => void;
         onDeselect: () => void;
-    };
-    hidden?: {
-        selected: boolean;
-        onSelect: () => void;
-        onDeselect: () => void;
-    };
+    }[];
 };
 
-const CategoryFilter = ({ categories, selectedIds, select, deselect, uncategorized, hidden }: CategoryFilterProps) => {
-    const { t } = useTranslation();
-
+const CategoryFilter = ({ categories, selectedIds, select, deselect, customFilters }: CategoryFilterProps) => {
     return (
         <ul className={styles.categories}>
-            {hidden && (
-                <li onClick={() => (hidden.selected ? hidden.onDeselect() : hidden.onSelect())} className={`${styles.categories__item} ${hidden.selected ? styles.categories__item_selected : ''}`}>
-                    <p className={styles.categories__name}>{t('pages.admin.hidden')}</p>
+            {customFilters?.map((filter) => (
+                <li key={filter.name} onClick={() => (filter.selected ? filter.onDeselect() : filter.onSelect())} className={`${styles.categories__item} ${filter.selected ? styles.categories__item_selected : ''}`}>
+                    <p className={styles.categories__name}>{filter.text}</p>
                 </li>
-            )}
-            {uncategorized && (
-                <li onClick={() => (uncategorized.selected ? uncategorized.onDeselect() : uncategorized.onSelect())} className={`${styles.categories__item} ${uncategorized.selected ? styles.categories__item_selected : ''}`}>
-                    <p className={styles.categories__name}>{t('pages.admin.uncategorized')}</p>
-                </li>
-            )}
+            ))}
             {categories &&
                 categories.map((category) => {
                     const isSelected = selectedIds.includes(category.id);

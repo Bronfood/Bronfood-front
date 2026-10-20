@@ -1,10 +1,10 @@
 import { FC, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './TimeInputs.module.scss';
-import { DurationUnit } from '../../../../../utils/api/adminNewOrderService/adminNewOrderService';
 import { InputMask } from '@react-input/mask';
 import { MASKTIME, regex24HourTime, regexNumber, REPLACEMENT } from '../../../../../utils/consts';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+import { DurationUnit } from '../../../../../utils/api/adminService/adminService';
 
 interface DurationInputProps {
     text: string;

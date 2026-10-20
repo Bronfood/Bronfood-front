@@ -458,6 +458,8 @@ i18n
                             noАddedMeals: 'Нет добавленных блюд.',
                             uncategorized: 'Вне категорий',
                             hidden: 'Скрытые',
+                            favorite: 'Любимое',
+                            popular: 'Популярное',
                             timeForDelivery: 'Время на доставку',
                             placeholderDuration: '45',
                             placeholderCertainTime: '14:30',

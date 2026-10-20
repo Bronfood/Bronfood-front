@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { AdminOrderStatus, adminService } from '../../api/adminService/adminService';
+import { AdminNewOrderPayload, AdminOrderStatus, adminService } from '../../api/adminService/adminService';
 
 export const useGetAdminOrders = (status: AdminOrderStatus) => {
     return useQuery({
@@ -27,4 +27,10 @@ export const useAdminOrdersMutations = () => {
         changeAdminOrderStatus,
         errorMessage,
     };
+};
+
+export const useCreateAdminOrder = () => {
+    return useMutation({
+        mutationFn: ({ payload }: { payload: AdminNewOrderPayload }) => adminService.createAdminOrder(payload),
+    });
 };

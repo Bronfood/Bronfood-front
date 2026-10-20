@@ -4,20 +4,21 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { MASKPHONE, regexAddress, regexClientName, regexPhoneNumberKazakhstan, regexTextBasic, REPLACEMENT } from '../../../../utils/consts';
 import { useEffect, useRef, useState } from 'react';
 import Textarea from '../../../../components/Textarea/Textarea';
-import { useGetClientsByPhone } from '../../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
 import Preloader from '../../../../components/Preloader/Preloader';
-import { CookMethod, DurationUnit, PreOrderType, RegularClient } from '../../../../utils/api/adminNewOrderService/adminNewOrderService';
 import { format } from '@react-input/mask';
-import { useAdminNewOrderContext } from '../../../../utils/hooks/useAdminNewOrder/useAdminNewOrderContext';
 import ClientStepInput from './ClientStepInput/ClientStepInput';
 import Fulfillments from './Fulfillments/Fulfillments';
 import ClientsList from './ClientsList/ClientsList';
 import { CookMethodRadio, PreOrderTypeRadioLayout } from './RadioInputs/RadioInputs';
 import { CertainTimeInput, DurationInput } from './TimeInputs/TimeInputs';
+import { CookMethod, DurationUnit, PreOrderType } from '../../../../utils/api/adminService/adminService';
+import { RegularClient } from '../../../../utils/api/adminClientService/adminClientService';
+import { useAdminOrderContext } from '../../../../utils/hooks/useAdminOrders/useAdminOrderContext';
+import { useGetClientsByPhone } from '../../../../utils/hooks/useAdminClient/useAdminClient';
 
 function ClientStep() {
     const { t } = useTranslation();
-    const { clientData, setClientData, cookMethod, setCookMethod, preOrderType, setPreOrderType, isPreOrderOpen, setIsPreOrderOpen } = useAdminNewOrderContext();
+    const { clientData, setClientData, cookMethod, setCookMethod, preOrderType, setPreOrderType, isPreOrderOpen, setIsPreOrderOpen } = useAdminOrderContext();
     const {
         register,
         formState: { errors },

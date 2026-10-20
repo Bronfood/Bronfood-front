@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import styles from './RadioInputs.module.scss';
-import { CookMethod, PreOrderType } from '../../../../../utils/api/adminNewOrderService/adminNewOrderService';
+import { CookMethod, PreOrderType } from '../../../../../utils/api/adminService/adminService';
 
 interface CookMethodRadio {
     method: CookMethod;

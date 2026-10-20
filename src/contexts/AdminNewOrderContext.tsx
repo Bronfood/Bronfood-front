@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useState, Dispatch, SetStateAction } from 'react';
-import { AdminNewOrderClientData, CookMethod, PreOrderType } from '../utils/api/adminNewOrderService/adminNewOrderService';
 import { useCurrentUser } from '../utils/hooks/useCurrentUser/useCurretUser';
+import { AdminNewOrderClientData, CookMethod, PreOrderType } from '../utils/api/adminService/adminService';
 
 export type AdminNewOrderContext = {
     restaurantId: number | null;

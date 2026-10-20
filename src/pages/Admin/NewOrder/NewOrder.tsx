@@ -2,18 +2,20 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './NewOrder.module.scss';
 import ButtonIconSquare from '../../../components/ButtonIconSquare/ButtonIconSquare';
-import { useCreateAdminNewOrder, useCreateRegularClient, useEmptyAdminBasket, useGetAdminBasket } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
 import Button from '../../../components/Button/Button';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
-import { AdminNewOrderPayload } from '../../../utils/api/adminNewOrderService/adminNewOrderService';
-import { useAdminNewOrderContext } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrderContext';
+import { useEmptyAdminBasket, useGetAdminBasket } from '../../../utils/hooks/useAdminBasket/useAdminBasket';
+import { useCreateAdminOrder } from '../../../utils/hooks/useAdminOrders/useAdminOrders';
+import { AdminNewOrderPayload } from '../../../utils/api/adminService/adminService';
+import { useAdminOrderContext } from '../../../utils/hooks/useAdminOrders/useAdminOrderContext';
+import { useCreateRegularClient } from '../../../utils/hooks/useAdminClient/useAdminClient';
 
 function NewOrder() {
     const { data: basket } = useGetAdminBasket();
     const { mutateAsync: emptyBasket } = useEmptyAdminBasket();
-    const { mutateAsync: createNewOrder } = useCreateAdminNewOrder();
+    const { mutateAsync: createNewOrder } = useCreateAdminOrder();
     const { mutateAsync: createRegularClient } = useCreateRegularClient();
-    const { clientData, clearClientData } = useAdminNewOrderContext();
+    const { clientData, clearClientData } = useAdminOrderContext();
 
     const location = useLocation();
     const basketId = basket?.data?.id;

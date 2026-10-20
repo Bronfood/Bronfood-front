@@ -5,30 +5,35 @@ import { useState } from 'react';
 import Button from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import { useNavigate } from 'react-router-dom';
 import CategoryFilter from '../../../components/CategoryFilter/CategoryFilter';
-import { useGetAdminStockMeals } from '../../../utils/hooks/useAdminStock/useAdminStock';
+import { useGetAdminStockMeals, useSetAdminStockMealChoiceVisibility, useSetAdminStockMealVisibility } from '../../../utils/hooks/useAdminStock/useAdminStock';
 import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUser';
-import { useRestaurant } from '../../../utils/hooks/useRestaurant/useRestaurant';
-import { useGetAdminFeatures } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
+import { useGetAdminCategories } from '../../../utils/hooks/useAdminCategory/useAdminCategory';
+import { Category } from '../../../utils/api/categoryService/categoryService';
+import StockAdminMealCard from '../../../components/Cards/StockAdminMealCard/StockAdminMealCard';
+import { AdminStockFilters } from '../../../utils/api/adminStockService/adminStockService';
 
 function Stock() {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [overrides, setOverrides] = useState<Record<number, boolean>>({});
-    const [isOpen, setIsOpen] = useState<number | null>(null);
-    const [selected, setSelected] = useState<Record<number, boolean>>({});
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showUncategorized, setShowUncategorized] = useState(false);
     const [showHidden, setShowHidden] = useState(false);
-    const [mealId, setMealId] = useState<number | null>(null);
 
     const { restaurantId } = useCurrentUser();
-    const { data: meals, isLoading: isLoadingMeals } = useGetAdminStockMeals(Number(restaurantId));
-    const { data: featuresData } = useGetAdminFeatures(Number(restaurantId), Number(mealId));
-    const { data: restaurant, isLoading: isLoadingCategories } = useRestaurant(Number(restaurantId));
+    const numericRestaurantId = Number(restaurantId);
+    const filters: AdminStockFilters = {
+        isVisible: showHidden ? false : undefined,
+        uncategorized: showUncategorized || undefined,
+        categoryIds: selectedIds.length > 0 ? selectedIds : undefined,
+    };
 
-    const categories = restaurant?.data.categories || [];
-    const features = featuresData?.data ?? [];
+    const { data: meals, isLoading: isLoadingMeals } = useGetAdminStockMeals(numericRestaurantId, filters);
+    const { data: categoriesData, isLoading: isLoadingCategories } = useGetAdminCategories(numericRestaurantId);
+    const { mutateAsync: setMealVisibility } = useSetAdminStockMealVisibility();
+    const { mutateAsync: setMealChoiceVisibility } = useSetAdminStockMealChoiceVisibility();
+
+    const categories: Category[] = categoriesData?.data ?? [];
 
     const handleSelect = (id: number) => {
         setSelectedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -38,38 +43,29 @@ function Stock() {
         setSelectedIds((prev) => prev.filter((x) => x !== id));
     };
 
-    const handleSelectChoice = (choiceId: number, current: boolean) => {
-        setSelected((prev) => ({ ...prev, [choiceId]: !current }));
+    const handleVisibleToggleMealChoice = (mealId: number, choiceId: number, current: boolean) => {
+        setMealChoiceVisibility({
+            restaurantId: numericRestaurantId,
+            mealId,
+            choiceId,
+            payload: { is_visible: !current },
+        });
     };
 
-    const handleVisibleToggle = (mealId: number, current: boolean) => {
-        setOverrides((prev) => ({ ...prev, [mealId]: !current }));
-    };
-
-    const handleInfoToggle = (mealId: number) => {
-        setIsOpen((prev) => (prev === mealId ? null : mealId));
-        setMealId(mealId);
+    const handleVisibleToggleMeal = (mealId: number, current: boolean) => {
+        setMealVisibility({
+            restaurantId: numericRestaurantId,
+            mealId,
+            payload: { is_visible: !current },
+        });
     };
 
     const close = () => {
         navigate('/manager');
     };
 
-    const filteredMeals = !meals?.data
-        ? []
-        : (() => {
-              const hasFilters = selectedIds.length > 0 || showHidden || showUncategorized;
-              if (!hasFilters) return meals.data;
-
-              return meals.data.filter((meal) => {
-                  const isVisible = overrides[meal.id] ?? !!meal.is_visible;
-                  if (showHidden && !isVisible) return true;
-                  if (meal.category && selectedIds.includes(meal.category.id)) return true;
-                  if (!meal.category && showUncategorized) return true;
-
-                  return false;
-              });
-          })();
+    const hasFilters = selectedIds.length > 0 || showHidden || showUncategorized;
+    const mealsList = meals?.data ?? [];
 
     return (
         <div className={styles['stock']}>
@@ -78,70 +74,28 @@ function Stock() {
             </div>
             {(isLoadingMeals || isLoadingCategories) && <Preloader />}
             <h2 className={styles['stock__title']}>{t(`pages.admin.stock`)}</h2>
-            {!meals?.data?.length && <p className={styles['stock__empty']}>{t('pages.admin.noAvailableMeal')}</p>}
-            {!!meals?.data?.length && filteredMeals.length === 0 && <p className={styles['stock__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>}
-            {filteredMeals.length > 0 && (
+            {!isLoadingMeals && mealsList.length === 0 && !hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noAvailableMeal')}</p>}
+            {!isLoadingMeals && mealsList.length === 0 && hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>}
+            {mealsList.length > 0 && (
                 <ul className={styles['stock__meals']}>
-                    {filteredMeals.map((meal) => {
-                        const isMealVisible = overrides[meal.id] ?? !meal.is_visible;
-                        return (
-                            <li key={meal.id} className={styles['stock__item']}>
-                                {!isMealVisible && <div className={styles['stock__item_overlay']}></div>}
-                                <div className={`${styles['stock__item_visible']} ${isMealVisible ? styles['stock__item_visible_active'] : ''}`}>
-                                    <button type="button" className={`${styles['stock__item_visible_slider']} ${styles['stock__slider']} ${isMealVisible ? styles['stock__item_visible_active'] : ''}`} onClick={() => handleVisibleToggle(meal.id, isMealVisible)}>
-                                        <span className={`${styles['stock__handle']} ${isMealVisible ? styles.active : ''}`} />
-                                    </button>
-                                </div>
-                                <div className={styles['stock__short-info']}>
-                                    <div className={styles['stock__item_photo']} style={{ backgroundImage: `url(${meal.photo})` }}></div>
-                                    <div className={styles['stock__item_info']}>
-                                        <p className={`${styles['stock__item_name']} ${styles['stock__item_text']}`}>{meal.name}</p>
-                                        <p className={`${styles['stock__item_description']} ${styles['stock__item_text']} ${isOpen === meal.id ? styles.hide : ''}`}>{meal.description}</p>
-                                    </div>
-                                    <button type="button" className={styles['stock__button']} onClick={() => handleInfoToggle(meal.id)}>
-                                        {isOpen === meal.id ? <div className={`${styles['stock__details']} ${styles['stock__details_hide']}`}></div> : <div className={`${styles['stock__details']} ${styles['stock__details_show']}`}></div>}
-                                    </button>
-                                </div>
-                                {isOpen === meal.id && (
-                                    <div className={styles['stock__detail-info']}>
-                                        <p className={styles['stock__item_description']}>{meal.description}</p>
-                                        {features && features.length > 0 && (
-                                            <ul className={styles['stock__item_features']}>
-                                                {features.map((feature) => (
-                                                    <li key={feature.id} className={styles['stock__item_feature']}>
-                                                        <p className={styles['stock__item_feature_name']}>{feature.name}</p>
-                                                        {feature.choices.length > 0 && (
-                                                            <ul className={styles['stock__item_feature_choices']}>
-                                                                {feature.choices.map((choice) => {
-                                                                    const checked = selected[choice.id] ?? choice.is_visible ?? false;
-                                                                    return (
-                                                                        <li key={choice.id} className={styles['stock__item_feature_item']}>
-                                                                            <label>
-                                                                                <p className={styles['stock__item_feature_item_name']}>{choice.name}</p>
-                                                                                <input type="checkbox" name={`choice-${meal.id}-${feature.id}-${choice.id}`} checked={checked} onChange={() => handleSelectChoice(choice.id, checked)}></input>
-                                                                            </label>
-                                                                        </li>
-                                                                    );
-                                                                })}
-                                                            </ul>
-                                                        )}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-                                )}
-                            </li>
-                        );
-                    })}
+                    {mealsList.map((meal) => (
+                        <StockAdminMealCard key={meal.id} meal={meal} isMealVisible={meal.is_visible} onVisibleToggle={() => handleVisibleToggleMeal(meal.id, meal.is_visible)} onChoiceToggle={(choiceId, current) => handleVisibleToggleMealChoice(meal.id, choiceId, current)} />
+                    ))}
                 </ul>
             )}
 
-            {categories && categories.length > 0 && (
-                <div className={styles['stock__category-filter']}>
-                    <CategoryFilter categories={categories} selectedIds={selectedIds} select={handleSelect} deselect={handleDeselect} hidden={{ selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) }} uncategorized={{ selected: showUncategorized, onSelect: () => setShowUncategorized(true), onDeselect: () => setShowUncategorized(false) }} />{' '}
-                </div>
-            )}
+            <div className={styles['stock__category-filter']}>
+                <CategoryFilter
+                    categories={categories}
+                    selectedIds={selectedIds}
+                    select={handleSelect}
+                    deselect={handleDeselect}
+                    customFilters={[
+                        { name: 'hidden', text: t('pages.admin.hidden'), selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) },
+                        { name: 'uncategorized', text: t('pages.admin.uncategorized'), selected: showUncategorized, onSelect: () => setShowUncategorized(true), onDeselect: () => setShowUncategorized(false) },
+                    ]}
+                />
+            </div>
         </div>
     );
 }

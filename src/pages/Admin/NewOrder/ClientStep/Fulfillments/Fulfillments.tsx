@@ -1,8 +1,8 @@
 import { FC, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Fulfillments.module.scss';
-import { Fulfillment } from '../../../../../utils/api/adminNewOrderService/adminNewOrderService';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+import { Fulfillment } from '../../../../../utils/api/adminService/adminService';
 
 const FULFILLMENTS: { name: Fulfillment; label: string }[] = [
     { name: 'pickup', label: 'pages.admin.pickup' },
@@ -29,13 +29,13 @@ const Fulfillments: FC<FulfillmentsProps> = (props) => {
                 const checked = props.value === item.name;
 
                 return (
-                    <>
-                        <li key={item.name} className={`${styles.fulfillment} ${checked ? styles.fulfillment__active : ''}`}>
+                    <li key={item.name} className={`${styles.fulfillment} ${checked ? styles.fulfillment__active : ''}`}>
+                        <>
                             <label htmlFor={itemId}>{t(item.label)}</label>
                             <input id={itemId} type="radio" {...props.register(props.name)} value={item.name} checked={checked} readOnly />
-                        </li>
+                        </>
                         {errorMessage && <p className={styles.input__error}>{errorMessage}</p>}
-                    </>
+                    </li>
                 );
             })}
         </ul>

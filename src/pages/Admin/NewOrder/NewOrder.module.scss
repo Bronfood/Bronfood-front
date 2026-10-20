@@ -9,7 +9,7 @@
     left: 0;
     width: 100%;
     background-color: variables.$button-grey;
-    padding: 44px 16px 120px 15px;
+    padding: 44px 15px 120px;
     margin: 0 auto;
     z-index: map.get(variables.$z-indexes, 'drawer');
     overflow-y: auto;

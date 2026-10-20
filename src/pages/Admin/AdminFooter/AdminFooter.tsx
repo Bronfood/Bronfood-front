@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './AdminFooter.module.scss';
-import { useGetAdminBasket } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
-import { useAdminNewOrderContext } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrderContext';
+import { useGetAdminBasket } from '../../../utils/hooks/useAdminBasket/useAdminBasket';
+import { useAdminOrderContext } from '../../../utils/hooks/useAdminOrders/useAdminOrderContext';
 
 function NewOrderLinks({ isBasketActive, isClientActive, isFoodActive }: { isBasketActive: boolean; isClientActive: boolean; isFoodActive: boolean }) {
     const { t } = useTranslation();
     const { data: basket } = useGetAdminBasket();
-    const { isClientDataValid } = useAdminNewOrderContext();
+    const { isClientDataValid } = useAdminOrderContext();
     const count = basket?.data?.meals?.reduce((sum, m) => sum + m.count, 0) ?? 0;
     const isEmpty = count === 0;
 

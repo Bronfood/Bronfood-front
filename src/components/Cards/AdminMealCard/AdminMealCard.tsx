@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Feature } from '../../../utils/api/restaurantsService/restaurantsService';
+import { Feature, Meal } from '../../../utils/api/restaurantsService/restaurantsService';
 import styles from './AdminMealCard.module.scss';
-import { AdminMeal } from '../../../utils/api/adminNewOrderService/adminNewOrderService';
 import { ReactNode, useState } from 'react';
 import Button from '../../Button/Button';
 import Counter from '../../Counter/Counter';
 import Preloader from '../../Preloader/Preloader';
-import { useGetAdminFeatures } from '../../../utils/hooks/useAdminNewOrder/useAdminNewOrder';
+import { useFeatures } from '../../../utils/hooks/useFeatures/useFeatures';
 
 function Features({ features, selected, onSelectChoice }: { features: Feature[]; selected: Record<number, number>; onSelectChoice: (featureId: number, choiceId: number) => void }) {
     if (features.length === 0) return null;
@@ -39,9 +38,9 @@ function Features({ features, selected, onSelectChoice }: { features: Feature[];
     );
 }
 
-function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMeal; restaurantId: number; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; isBascket?: boolean }) {
+function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: Meal; restaurantId: number; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; isBascket?: boolean }) {
     const { t } = useTranslation();
-    const { data: featuresData, isLoading } = useGetAdminFeatures(restaurantId, meal.id);
+    const { data: featuresData, isLoading } = useFeatures(restaurantId, meal.id);
     const features = featuresData?.data ?? [];
 
     const [selected, setSelected] = useState<Record<number, number>>({});
@@ -67,6 +66,7 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMea
 
     return (
         <>
+            <p className={styles.description}>{meal.description}</p>
             <Features features={features} selected={selected} onSelectChoice={handleSelectChoice} />
             {!isBascket && (
                 <div className={styles.buttons}>
@@ -80,7 +80,7 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: AdminMea
     );
 }
 
-function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: AdminMeal; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
+function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: Meal; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const handleClickAdd = () => {
         if (meal.hasFeatures) {
@@ -106,7 +106,7 @@ function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBasc
                         <div className={styles.meal__management}>
                             <div className={styles['meal__conteiner-name']}>
                                 <h3>{meal.name}</h3>
-                                {meal.description && <p>{meal.description}</p>}
+                                <p className={`${styles.meal__description} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                             </div>
                             {counter && (
                                 <div className={styles.meal__counter}>
@@ -127,11 +127,11 @@ function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBasc
                     <div className={styles.meal__photo} style={{ backgroundImage: `url(${meal.photo})` }} />
                     <div className={styles['meal__conteiner-name']}>
                         <h3>{meal.name}</h3>
-                        {meal.description && <p>{meal.description}</p>}
+                        <p className={`${styles.meal__description} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                     </div>
                 </div>
             )}
-            {isOpen && meal.hasFeatures && <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} isBascket={isBascket} />}
+            {isOpen && <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} isBascket={isBascket} />}
         </div>
     );
 }
