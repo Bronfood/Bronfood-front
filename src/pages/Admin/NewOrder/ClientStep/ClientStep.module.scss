@@ -1,0 +1,133 @@
+@use '../../../../styles/variables';
+
+.client-step {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__title {
+        font-size: 17px;
+    }
+
+    &__clients-info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &:has(.clients) {
+            gap: 0;
+        }
+
+        div {
+            label {
+                background-color: variables.$button-grey;
+            }
+        }
+    }
+
+    &__cook-method {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__line {
+        border-bottom: 1px solid variables.$line;
+        padding-top: 12px;
+        margin-bottom: 12px;
+    }
+
+    &__duration {
+        cursor: default;
+        padding: 8px;
+        background-color: variables.$white;
+        border-radius: 12px;
+        border: 1px solid variables.$orange;
+
+        div {
+            cursor: default;
+        }
+    }
+}
+
+.pre-order {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    flex-direction: column;
+    background-color: variables.$white;
+    border-radius: 12px;
+
+    input[type='radio'] {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 1px solid variables.$orange;
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s;
+
+        &:checked {
+            border-width: 6px;
+        }
+    }
+
+    &__time {
+        padding: 8px;
+    }
+
+    &__toggle {
+        cursor: pointer;
+        position: absolute;
+        top: 16px;
+        right: 8px;
+        width: 24px;
+        background-size: cover;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        rotate: 90deg;
+
+        &_hide {
+            rotate: -90deg;
+        }
+    }
+}
+
+.address {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px;
+    background-color: variables.$white;
+    border-radius: 12px;
+
+    &__title {
+        font-size: 17px;
+    }
+
+    &__info {
+        font-size: 13px;
+        font-weight: 400;
+    }
+
+    &__inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &_house {
+            display: flex;
+            gap: 16px;
+        }
+    }
+}
