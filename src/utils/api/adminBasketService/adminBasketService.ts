@@ -52,8 +52,8 @@ export interface AdminBasketService {
     getAdminBasket: () => Promise<{ data: AdminBasket }>;
     emptyAdminBasket: (basketId: number) => Promise<void>;
     addAdminMeal: (mealId: number, restaurantId: number, features: { featureId: number; choiceId: number }[]) => Promise<{ data: MealForBasket }>;
-    incrementAdminMeal: (mealId: number) => Promise<void>;
-    decrementAdminMeal: (mealId: number) => Promise<void>;
+    incrementAdminMeal: (basketMealId: number) => Promise<{ data: MealForBasket }>;
+    decrementAdminMeal: (basketMealId: number) => Promise<{ data: MealForBasket | null }>;
 }
 
 export const adminBasketService = new AdminBasketServiceReal();

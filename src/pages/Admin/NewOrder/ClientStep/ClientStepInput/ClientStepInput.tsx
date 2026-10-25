@@ -13,18 +13,19 @@ interface ClientStepInput {
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
     pattern?: RegExp;
-    validate?: (value: FieldValues) => string | boolean;
+    validate?: (value: string) => string | boolean;
     masked?: boolean;
+    required?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ClientStepInput: FC<ClientStepInput> = (props) => {
+const ClientStepInput: FC<ClientStepInput> = ({ required = true, ...props }) => {
     const { t } = useTranslation();
     const id = useId();
     const errorMessage = (props.errors[props.name]?.message as string) || undefined;
 
     const registration = props.register(props.name, {
-        required: t('components.input.required'),
+        required: required ? t('components.input.required') : false,
         pattern: props.pattern ? { value: props.pattern, message: t('components.input.errorMessage') } : undefined,
         validate: props.validate,
         onChange: props.onChange,

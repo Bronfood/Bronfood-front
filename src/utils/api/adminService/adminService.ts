@@ -13,6 +13,12 @@ export type MealInOrder = Omit<MealInBasket, 'meal' | 'choices'> & {
     meal: MealInAdminOrder;
     choices: ChoiceInAdminOrder[];
 };
+export type NewOrderTimeData = {
+    inTime: string;
+    inTimeUnit: DurationUnit;
+    certainTime: string;
+    deliveryDurationUnit: DurationUnit;
+};
 export type AdminOrderStatus = 'paid' | 'accepted' | 'ready' | 'cancel' | 'completed' | 'archive' | '';
 export type AdminOrder = {
     /**
@@ -126,25 +132,6 @@ export type AdminNewOrderClientData = Omit<AdminNewOrderPayload, 'is_paid'> & {
      */
     user_phone?: string;
 };
-
-/* export type AdminNewOrder = Omit<AdminOrder, 'is_paid' | 'meals' | 'waitingTime' | 'acceptedAt' | 'readyAt' | 'issuedAt' | 'cancelledAt'> & {
-    user_phone?: string;
-    meals: MealInBasket[];
-    currency: string;
-    waiting_time: string;
-    cancellation_reason: string | null;
-    closed_at: Date | '';
-    paid_at: Date | '';
-    accepted_at: Date | '';
-    ready_at: Date | '';
-    issued_at: Date | '';
-    cancelled_at: Date | '';
-    scheduled_for?: string;
-    fulfillment: Fulfillment;
-    delivery_duration: string | null;
-    source: string;
-    created_by: string;
-} */
 
 export type AdminNewOrder = {
     /**

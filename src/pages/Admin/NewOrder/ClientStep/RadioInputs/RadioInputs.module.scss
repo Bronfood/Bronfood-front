@@ -50,4 +50,8 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
+
+    &__time {
+        width: 100%;
+    }
 }

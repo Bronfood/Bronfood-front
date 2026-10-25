@@ -1,3 +1,4 @@
+import { Category } from '../categoryService/categoryService';
 import { Choice, Meal } from '../restaurantsService/restaurantsService';
 import { AdminStockServiceReal } from './adminStockServiceReal';
 
@@ -27,7 +28,11 @@ export type MealFeature = {
     choices: MealChoice[];
 };
 
-export type AdminMealStock = Omit<Meal, 'waitingTime'> & {
+export type AdminMealStock = Omit<Meal, 'waitingTime' | 'category'> & {
+    /**
+     * Meal category
+     */
+    category: Category | null;
     /**
      * Meal waiting time
      */

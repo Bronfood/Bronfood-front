@@ -13,6 +13,7 @@ interface DurationInputProps {
     onUnitChange: (unit: DurationUnit) => void;
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
+    required?: boolean;
 }
 
 export const DurationInput: FC<DurationInputProps> = (props) => {
@@ -20,6 +21,14 @@ export const DurationInput: FC<DurationInputProps> = (props) => {
     const id = useId();
     const [isOpen, setIsOpen] = useState(false);
     const errorMessage = (props.errors[props.name]?.message as string) || undefined;
+
+    const registration = props.register(props.name, {
+        required: props.required ? t('components.input.required') : false,
+        pattern: {
+            value: regexNumber,
+            message: t('components.input.errorMessage'),
+        },
+    });
 
     const handleToggle = () => setIsOpen((prev) => !prev);
 
@@ -29,40 +38,44 @@ export const DurationInput: FC<DurationInputProps> = (props) => {
     };
 
     return (
-        <div className={styles.input}>
-            <p className={styles.input__text}>{props.text}</p>
-            <div className={styles.input__time}>
-                <label htmlFor={id} className={`${styles.input__label} ${errorMessage ? styles.input__label__error : ''}`} />
-                <input
-                    className={styles.input__place}
-                    type="text"
-                    {...props.register(props.name, {
-                        required: t('components.input.required'),
-                        pattern: {
-                            value: regexNumber,
-                            message: t('components.input.errorMessage'),
-                        },
-                    })}
-                    placeholder={t('pages.admin.placeholderDuration')}
-                />
-                {errorMessage && <p className={styles.input__error}>{errorMessage}</p>}
-                <div className={styles.input__type}>
-                    <p>{t(`pages.admin.${props.unit}`)}</p>
-                    <button type="button" className={`${styles.input__toggle} ${isOpen ? '' : styles.input__toggle_hide}`} onClick={handleToggle} />
+        <>
+            <div className={styles.input}>
+                <p className={styles.input__text}>{props.text}</p>
+                <div className={styles.input__time}>
+                    <label htmlFor={id} className={`${styles.input__label} ${errorMessage ? styles.input__label__error : ''}`} />
+                    <input
+                        id={id}
+                        className={styles.input__place}
+                        type="text"
+                        maxLength={4}
+                        inputMode="numeric"
+                        {...registration}
+                        onChange={(e) => {
+                            e.target.value = e.target.value.replace(/\D/g, '');
+                            registration.onChange(e);
+                        }}
+                        placeholder={t('pages.admin.placeholderDuration')}
+                    />
 
-                    {isOpen && (
-                        <ul className={styles.input__options}>
-                            <li className={`${styles.input__options_item} ${props.unit === 'min' ? styles.input__options_item_active : ''}`} onClick={() => handleClickType('min')}>
-                                {t('pages.admin.min')}
-                            </li>
-                            <li className={`${styles.input__options_item} ${props.unit === 'hour' ? styles.input__options_item_active : ''}`} onClick={() => handleClickType('hour')}>
-                                {t('pages.admin.hour')}
-                            </li>
-                        </ul>
-                    )}
+                    <div className={styles.input__type}>
+                        <p>{t(`pages.admin.${props.unit}`)}</p>
+                        <button type="button" className={`${styles.input__toggle} ${isOpen ? '' : styles.input__toggle_hide}`} onClick={handleToggle} />
+
+                        {isOpen && (
+                            <ul className={styles.input__options}>
+                                <li className={`${styles.input__options_item} ${props.unit === 'min' ? styles.input__options_item_active : ''}`} onClick={() => handleClickType('min')}>
+                                    {t('pages.admin.min')}
+                                </li>
+                                <li className={`${styles.input__options_item} ${props.unit === 'hour' ? styles.input__options_item_active : ''}`} onClick={() => handleClickType('hour')}>
+                                    {t('pages.admin.hour')}
+                                </li>
+                            </ul>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+            {errorMessage && <p className={styles.input__error}>{errorMessage}</p>}
+        </>
     );
 };
 
@@ -71,18 +84,21 @@ interface CertainTimeInputProps {
     name: string;
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
+    required?: boolean;
 }
 
 export const CertainTimeInput: FC<CertainTimeInputProps> = (props) => {
     const { t } = useTranslation();
+    const errorMessage = (props.errors[props.name]?.message as string) || undefined;
     return (
         <>
             <p className={styles.input__text}>{props.text}</p>
             <InputMask
                 className={styles.input__place}
                 type="text"
+                inputMode="numeric"
                 {...props.register(props.name, {
-                    required: t('components.input.required'),
+                    required: props.required ? t('components.input.required') : false,
                     pattern: {
                         value: regex24HourTime,
                         message: t('components.input.errorMessage'),
@@ -92,6 +108,7 @@ export const CertainTimeInput: FC<CertainTimeInputProps> = (props) => {
                 replacement={REPLACEMENT}
                 placeholder={t('pages.admin.placeholderCertainTime')}
             />
+            {errorMessage && <p className={styles.input__error}>{errorMessage}</p>}
         </>
     );
 };

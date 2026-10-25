@@ -1,30 +1,32 @@
 import { useTranslation } from 'react-i18next';
 import styles from './ClientStep.module.scss';
 import { FieldValues, useForm } from 'react-hook-form';
-import { MASKPHONE, regexAddress, regexClientName, regexPhoneNumberKazakhstan, regexTextBasic, REPLACEMENT } from '../../../../utils/consts';
+import { regexAddress, regexClientName, regexPhoneNumberKazakhstan, regexTextBasic } from '../../../../utils/consts';
 import { useEffect, useRef, useState } from 'react';
 import Textarea from '../../../../components/Textarea/Textarea';
 import Preloader from '../../../../components/Preloader/Preloader';
-import { format } from '@react-input/mask';
 import ClientStepInput from './ClientStepInput/ClientStepInput';
 import Fulfillments from './Fulfillments/Fulfillments';
 import ClientsList from './ClientsList/ClientsList';
 import { CookMethodRadio, PreOrderTypeRadioLayout } from './RadioInputs/RadioInputs';
 import { CertainTimeInput, DurationInput } from './TimeInputs/TimeInputs';
-import { CookMethod, DurationUnit, PreOrderType } from '../../../../utils/api/adminService/adminService';
+import { CookMethod, PreOrderType } from '../../../../utils/api/adminService/adminService';
 import { RegularClient } from '../../../../utils/api/adminClientService/adminClientService';
 import { useAdminOrderContext } from '../../../../utils/hooks/useAdminOrders/useAdminOrderContext';
 import { useGetClientsByPhone } from '../../../../utils/hooks/useAdminClient/useAdminClient';
+import { formatPhoneForDisplay } from '../../../../utils/serviceFuncs/formatPhoneNumber';
 
 function ClientStep() {
     const { t } = useTranslation();
-    const { clientData, setClientData, cookMethod, setCookMethod, preOrderType, setPreOrderType, isPreOrderOpen, setIsPreOrderOpen } = useAdminOrderContext();
+    const { clientData, setClientData, cookMethod, timeData, setTimeData, setCookMethod, preOrderType, setPreOrderType, isPreOrderOpen, setIsPreOrderOpen } = useAdminOrderContext();
     const {
         register,
         formState: { errors },
         watch,
         setValue,
+        clearErrors,
     } = useForm<FieldValues>({
+        mode: 'onTouched',
         defaultValues: {
             fulfillment: clientData.fulfillment,
             phone: clientData.user_phone,
@@ -34,42 +36,41 @@ function ClientStep() {
             apartment: clientData.delivery?.apartment,
             note: clientData.delivery?.note,
             deliveryDuration: clientData.delivery_duration,
+            inTime: timeData.inTime,
+            certainTime: timeData.certainTime,
         },
     });
 
     const [isClientPicked, setIsClientPicked] = useState(false);
     const [searchPhone, setSearchPhone] = useState('');
-    const [durationUnit, setDurationUnit] = useState<DurationUnit>('min');
-    const [deliveryDurationUnit, setDeliveryDurationUnit] = useState<DurationUnit>('min');
 
     const { data: clients, isLoading: isLoadingClient } = useGetClientsByPhone(searchPhone);
 
-    const formatPhone = (value: string) => (value ? format(value, { mask: MASKPHONE, replacement: REPLACEMENT }) : '');
     const getMethod = clientData.fulfillment ?? 'pickup';
     const effectiveCookMethod: CookMethod = getMethod === 'dine_in' ? 'now' : cookMethod;
     const phoneBlockRef = useRef<HTMLDivElement>(null);
+    const isClientRequired = getMethod !== 'dine_in';
 
     const handlePreOrderClick = () => {
-        setIsPreOrderOpen((prev) => {
-            const nextValue = !prev;
-            setCookMethod(nextValue ? 'preOrder' : 'now');
-            return nextValue;
-        });
+        const nextValue = !isPreOrderOpen;
+        setIsPreOrderOpen(nextValue);
+        setCookMethod(nextValue ? 'preOrder' : 'now');
+        clearErrors(['inTime', 'certainTime']);
     };
 
     const handleCookMethodClick = (method: CookMethod) => {
         setCookMethod(method);
-        if (method === 'now') {
-            setIsPreOrderOpen(false);
-        } else {
-            setIsPreOrderOpen(true);
-        }
+        setIsPreOrderOpen(method === 'preOrder');
+        if (method === 'now') clearErrors(['inTime', 'certainTime']);
     };
 
-    const handlePreOrderTypeClick = (method: PreOrderType) => setPreOrderType(method);
+    const handlePreOrderTypeClick = (type: PreOrderType) => {
+        setPreOrderType(type);
+        clearErrors(type === 'inTime' ? 'certainTime' : 'inTime');
+    };
 
     const handleClickClient = (client: RegularClient) => {
-        setValue('phone', formatPhone(client.phone));
+        setValue('phone', formatPhoneForDisplay(client.phone), { shouldValidate: true });
         setValue('name', client.name, { shouldValidate: true });
         setClientData((prev) => ({ ...prev, client_id: client.id }));
         setIsClientPicked(true);
@@ -77,13 +78,19 @@ function ClientStep() {
     };
 
     const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setSearchPhone(value);
+        setSearchPhone(e.target.value);
         setIsClientPicked(false);
+        setClientData((prev) => ({ ...prev, client_id: undefined }));
     };
 
     useEffect(() => {
-        const sub = watch((values) => {
+        const sub = watch((values, { name }) => {
+            if (name === 'fulfillment' && values.fulfillment !== 'delivery') {
+                clearErrors(['deliveryDuration', 'street', 'house', 'apartment', 'note']);
+            }
+            if (name === 'fulfillment' && values.fulfillment === 'dine_in') {
+                clearErrors(['phone', 'name']);
+            }
             setClientData((prev) => ({
                 ...prev,
                 fulfillment: values.fulfillment,
@@ -98,9 +105,10 @@ function ClientStep() {
                 },
                 delivery_duration: values.deliveryDuration,
             }));
+            setTimeData((prev) => ({ ...prev, inTime: values.inTime ?? '', certainTime: values.certainTime ?? '' }));
         });
         return () => sub.unsubscribe();
-    }, [watch, setClientData]);
+    }, [watch, setClientData, setTimeData, clearErrors]);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -112,26 +120,22 @@ function ClientStep() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    useEffect(() => {
-        console.log('clientData:', clientData);
-    }, [clientData]);
-
     return (
         <>
             {isLoadingClient && <Preloader />}
             <div className={styles['client-step']}>
                 <div className={styles['client-step__container']}>
                     <p className={styles['client-step__title']}>{t('pages.admin.methodOfGetting')}</p>
-                    <Fulfillments value={getMethod} name="fulfillment" register={register} errors={errors} />
+                    <Fulfillments value={getMethod} name="fulfillment" register={register} />
                 </div>
                 <div className={styles['client-step__container']}>
                     <p className={styles['client-step__title']}>{t('pages.admin.aboutClient')}</p>
                     <div className={styles['client-step__clients-info']}>
                         <div ref={phoneBlockRef}>
-                            <ClientStepInput masked type="tel" name="phone" placeholder="+7 (***)" nameLabel={t('components.inputPhone.phoneNumber')} register={register} errors={errors} pattern={regexPhoneNumberKazakhstan} onChange={onChangePhone} />
+                            <ClientStepInput masked type="tel" name="phone" placeholder="+7 (***)" nameLabel={t('components.inputPhone.phoneNumber')} register={register} errors={errors} pattern={regexPhoneNumberKazakhstan} required={isClientRequired} onChange={onChangePhone} />
                             {!isClientPicked && <ClientsList clients={clients?.data ?? []} onClick={handleClickClient} />}
                         </div>
-                        <ClientStepInput type="text" name="name" placeholder={t('pages.admin.placeholderName')} nameLabel={t('pages.admin.nameLabelName')} register={register} errors={errors} pattern={regexClientName} />
+                        <ClientStepInput type="text" name="name" placeholder={t('pages.admin.placeholderName')} nameLabel={t('pages.admin.nameLabelName')} register={register} errors={errors} pattern={regexClientName} required={isClientRequired} />
                     </div>
                 </div>
                 <div className={styles['client-step__container']}>
@@ -144,9 +148,9 @@ function ClientStep() {
                                 <CookMethodRadio method="preOrder" checked={effectiveCookMethod === 'preOrder'} onClick={() => handleCookMethodClick('preOrder')} radioNameText={t('pages.admin.preOrder')} radioAboutText={t('pages.admin.chooseConvenientTimeToReceive')} />
                                 {isPreOrderOpen && cookMethod === 'preOrder' && (
                                     <div className={styles['pre-order__time']}>
-                                        <PreOrderTypeRadioLayout type="inTime" checked={preOrderType === 'inTime'} onClick={() => handlePreOrderTypeClick('inTime')} input={<DurationInput text={t('pages.admin.through')} name="inTime" unit={durationUnit} onUnitChange={setDurationUnit} register={register} errors={errors} />} />
+                                        <PreOrderTypeRadioLayout type="inTime" checked={preOrderType === 'inTime'} onClick={() => handlePreOrderTypeClick('inTime')} input={<DurationInput text={t('pages.admin.through')} name="inTime" unit={timeData.inTimeUnit} onUnitChange={(unit) => setTimeData((prev) => ({ ...prev, inTimeUnit: unit }))} register={register} errors={errors} required={preOrderType === 'inTime'} />} />
                                         <div className={styles['client-step__line']} />
-                                        <PreOrderTypeRadioLayout type="certainTime" checked={preOrderType === 'certainTime'} onClick={() => handlePreOrderTypeClick('certainTime')} input={<CertainTimeInput name="certainTime" text={t('pages.admin.forCertainTime')} register={register} errors={errors} />} />
+                                        <PreOrderTypeRadioLayout type="certainTime" checked={preOrderType === 'certainTime'} onClick={() => handlePreOrderTypeClick('certainTime')} input={<CertainTimeInput name="certainTime" text={t('pages.admin.forCertainTime')} register={register} errors={errors} required={preOrderType === 'certainTime'} />} />
                                     </div>
                                 )}
                             </div>
@@ -154,7 +158,7 @@ function ClientStep() {
                     </div>
                     {getMethod === 'delivery' && (
                         <div className={styles['client-step__duration']}>
-                            <DurationInput unit={deliveryDurationUnit} onUnitChange={setDeliveryDurationUnit} text={t('pages.admin.timeForDelivery')} name="deliveryDuration" register={register} errors={errors} />
+                            <DurationInput unit={timeData.deliveryDurationUnit} onUnitChange={(unit) => setTimeData((prev) => ({ ...prev, deliveryDurationUnit: unit }))} text={t('pages.admin.timeForDelivery')} name="deliveryDuration" register={register} errors={errors} required={getMethod === 'delivery'} />
                         </div>
                     )}
                 </div>
@@ -171,7 +175,7 @@ function ClientStep() {
                                 <ClientStepInput type="text" name="apartment" placeholder={t('pages.admin.placeholderApartment')} nameLabel={t('pages.admin.apartment')} register={register} errors={errors} pattern={regexAddress} />
                             </div>
                         </div>
-                        <Textarea name="note" placeholder={t('pages.admin.placeholderAddress')} nameLabel={t('pages.admin.nameLabelAddress')} details={t('pages.admin.nameLabelDetails')} register={register} errors={errors} pattern={regexTextBasic} value={clientData.delivery?.note ?? ''} />
+                        <Textarea name="note" placeholder={t('pages.admin.placeholderAddress')} nameLabel={t('pages.admin.nameLabelAddress')} details={t('pages.admin.nameLabelDetails')} register={register} errors={errors} pattern={regexTextBasic} />
                     </div>
                 )}
             </div>

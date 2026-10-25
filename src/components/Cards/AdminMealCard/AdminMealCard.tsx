@@ -1,11 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { Feature, Meal } from '../../../utils/api/restaurantsService/restaurantsService';
 import styles from './AdminMealCard.module.scss';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import Button from '../../Button/Button';
 import Counter from '../../Counter/Counter';
 import Preloader from '../../Preloader/Preloader';
 import { useFeatures } from '../../../utils/hooks/useFeatures/useFeatures';
+import { MealInBasket } from '../../../utils/api/basketService/basketService';
+import { groupBy, sumBy } from 'lodash';
+
+const isSizeFeature = (name?: string) => {
+    const normalized = (name ?? '').trim().toLowerCase().replace(/ё/g, 'е');
+    return normalized.includes('размер') || normalized.includes('объем');
+};
+
+const getChoiceId = (feature: Feature, selected: Record<number, number>) => selected[feature.id] ?? feature.choices.find((c) => c.default)?.id ?? feature.choices[0]?.id;
 
 function Features({ features, selected, onSelectChoice }: { features: Feature[]; selected: Record<number, number>; onSelectChoice: (featureId: number, choiceId: number) => void }) {
     if (features.length === 0) return null;
@@ -13,9 +22,8 @@ function Features({ features, selected, onSelectChoice }: { features: Feature[];
     return (
         <ul className={styles.features}>
             {features.map((feature) => {
-                const normalizedName = feature?.name?.trim().toLowerCase().replace(/ё/g, 'е') || '';
-                const isSize = normalizedName.includes('размер') || normalizedName.includes('объем');
-                const currentChoiceId = selected[feature.id] ?? feature.choices[0]?.id;
+                const isSize = isSizeFeature(feature.name);
+                const currentChoiceId = getChoiceId(feature, selected);
 
                 return (
                     <li key={feature.id} className={styles.features__item}>
@@ -38,10 +46,41 @@ function Features({ features, selected, onSelectChoice }: { features: Feature[];
     );
 }
 
-function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: Meal; restaurantId: number; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; isBascket?: boolean }) {
+function FeaturesBasket({ basketItem }: { basketItem: MealInBasket }) {
+    if (!basketItem.choices || basketItem.choices.length === 0) return null;
+
+    const grouped = groupBy(basketItem.choices, 'feature_name');
+
+    return (
+        <ul className={styles.features}>
+            {Object.entries(grouped).map(([featureName, featureChoices]) => {
+                const isSize = isSizeFeature(featureName);
+
+                return (
+                    <li key={featureName} className={styles.features__item}>
+                        <p className={styles.features__item_name}>{featureName}</p>
+                        <ul className={`${isSize ? styles['choices-size'] : styles.choices}`}>
+                            {featureChoices.map((choice) => (
+                                <li key={choice.id} className={`${isSize ? styles['choices__item-size'] : styles.choices__item} ${isSize ? styles['choices__item-size_default'] : ''}`}>
+                                    <label className={`${isSize ? styles['choices__item_label-size'] : styles.choices__item_label}`}>
+                                        <p className={`${isSize ? styles['choices__item_name-size'] : styles.choices__item_name}`}>{choice.name}</p>
+                                        <p className={`${isSize ? styles['choices__item_price-size'] : styles.choices__item_price}`}>{`${choice.price} ₸`}</p>
+                                        <input type="radio" name={`feature-${basketItem.id}-${featureName}`} value={choice.id} checked readOnly tabIndex={-1} />
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+}
+
+function Details({ meal, restaurantId, onAddCount }: { meal: Meal; restaurantId: number; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void }) {
     const { t } = useTranslation();
     const { data: featuresData, isLoading } = useFeatures(restaurantId, meal.id);
-    const features = featuresData?.data ?? [];
+    const features = useMemo(() => featuresData?.data ?? [], [featuresData]);
 
     const [selected, setSelected] = useState<Record<number, number>>({});
     const [count, setCount] = useState<number>(1);
@@ -50,16 +89,24 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: Meal; re
         setSelected((prev) => ({ ...prev, [featureId]: choiceId }));
     };
 
+    const price = useMemo(() => {
+        const additions = sumBy(features, (feature) => {
+            const choiceId = getChoiceId(feature, selected);
+            return feature.choices.find((c) => c.id === choiceId)?.price ?? 0;
+        });
+        return (meal.price + additions) * count;
+    }, [features, selected, meal.price, count]);
+
     const buildFeatures = (): { featureId: number; choiceId: number }[] =>
         features
             .map((f) => {
-                const choiceId = selected[f.id] ?? f.choices[0]?.id;
+                const choiceId = selected[f.id] ?? f.choices.find((c) => c.default)?.id ?? f.choices[0]?.id;
                 return choiceId != null ? { featureId: f.id, choiceId } : null;
             })
             .filter((f): f is { featureId: number; choiceId: number } => f !== null);
 
     const handleClickIncrement = () => setCount((prev) => prev + 1);
-    const handleClickDecrement = () => setCount((prev) => Math.max(0, prev - 1));
+    const handleClickDecrement = () => setCount((prev) => Math.max(1, prev - 1));
     const handleClickAddCount = () => onAddCount?.(meal.id, count, buildFeatures());
 
     if (isLoading) return <Preloader />;
@@ -68,19 +115,26 @@ function Details({ meal, restaurantId, onAddCount, isBascket }: { meal: Meal; re
         <>
             <p className={styles.description}>{meal.description}</p>
             <Features features={features} selected={selected} onSelectChoice={handleSelectChoice} />
-            {!isBascket && (
-                <div className={styles.buttons}>
-                    <Counter count={count} increment={handleClickIncrement} decrement={handleClickDecrement} />
-                    <Button onClick={handleClickAddCount}>
-                        <span>{`${meal.price} ₸`}</span> <span>{t('pages.admin.inBasket')}</span>
-                    </Button>
-                </div>
-            )}
+            <div className={styles.buttons}>
+                <Counter count={count} increment={handleClickIncrement} decrement={handleClickDecrement} />
+                <Button type="button" onClick={handleClickAddCount}>
+                    <span>{`${price} ₸`}</span> <span>{t('pages.admin.inBasket')}</span>
+                </Button>
+            </div>
         </>
     );
 }
 
-function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: Meal; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
+function DetailsBasket({ basketItem }: { basketItem: MealInBasket }) {
+    return (
+        <>
+            <p className={styles.description}>{basketItem.meal.description}</p>
+            <FeaturesBasket basketItem={basketItem} />
+        </>
+    );
+}
+
+function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: Meal; basketItem?: MealInBasket; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const handleClickAdd = () => {
         if (meal.hasFeatures) {
@@ -104,14 +158,14 @@ function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBasc
                     <div className={styles.meal__info}>
                         <div className={styles['meal__bascket-photo']} style={{ backgroundImage: `url(${meal.photo})` }} />
                         <div className={styles.meal__management}>
-                            <div className={styles['meal__conteiner-name']}>
+                            <div className={`${styles['meal__conteiner-name']} ${meal.hasFeatures === false ? styles['meal__conteiner-name_not-features'] : ''}`}>
                                 <h3>{meal.name}</h3>
                                 <p className={`${styles.meal__description} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                             </div>
                             {counter && (
                                 <div className={styles.meal__counter}>
                                     {counter}
-                                    <p className={styles.meal__price}>{`${meal.price} ₸`}</p>
+                                    <p className={styles.meal__price}>{`${basketItem?.price ?? meal.price} ₸`}</p>
                                     {onDelete && <button className={styles.meal__delete} onClick={() => onDelete(meal.id)} />}
                                 </div>
                             )}
@@ -131,7 +185,7 @@ function AdminMealCard({ meal, restaurantId, onAdd, onAddCount, onDelete, isBasc
                     </div>
                 </div>
             )}
-            {isOpen && <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} isBascket={isBascket} />}
+            {isOpen && (isBascket ? basketItem && <DetailsBasket basketItem={basketItem!} /> : <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} />)}
         </div>
     );
 }

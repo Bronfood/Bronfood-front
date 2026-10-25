@@ -5,5 +5,6 @@ export const useGetAdminCategories = (restaurantId: number) => {
     return useQuery({
         queryKey: ['adminCategories', restaurantId],
         queryFn: () => adminService.getAdminCategories(restaurantId),
+        enabled: !!restaurantId,
     });
 };

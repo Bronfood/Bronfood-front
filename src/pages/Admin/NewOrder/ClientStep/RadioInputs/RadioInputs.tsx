@@ -33,7 +33,7 @@ export const PreOrderTypeRadioLayout: FC<PreOrderTypeRadio> = (props) => {
     return (
         <div className={styles.layout} onClick={() => props.onClick(props.type)}>
             <input type="radio" name="preOrderType" checked={props.checked} readOnly />
-            {props.input}
+            {props.type === 'inTime' ? <div className={styles.layout__time}>{props.input}</div> : props.input}
         </div>
     );
 };

@@ -4,12 +4,10 @@ import { AdminNewOrderProvider } from '../../contexts/AdminNewOrderContext';
 
 function Admin() {
     return (
-        <>
-            <AdminNewOrderProvider>
-                <Outlet />
-                <AdminFooter />
-            </AdminNewOrderProvider>
-        </>
+        <AdminNewOrderProvider>
+            <Outlet />
+            <AdminFooter />
+        </AdminNewOrderProvider>
     );
 }
 

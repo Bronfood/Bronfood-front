@@ -56,10 +56,6 @@ const Textarea: FC<Textarea> = (props) => {
         setTextareaValue(e.target.value);
     };
 
-    useEffect(() => {
-        if (props.value) setTextareaValue(props.value);
-    }, [props.value]);
-
     const validationRules: RegisterOptions = {
         pattern: {
             value: props.pattern,
@@ -71,6 +67,10 @@ const Textarea: FC<Textarea> = (props) => {
     if (props.required) {
         validationRules.required = typeof props.required === 'string' ? props.required : t('components.input.required');
     }
+
+    useEffect(() => {
+        if (props.value) setTextareaValue(props.value);
+    }, [props.value]);
 
     return (
         <div className={styles.textarea}>

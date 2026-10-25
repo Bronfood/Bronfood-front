@@ -30,7 +30,9 @@ export const useAdminOrdersMutations = () => {
 };
 
 export const useCreateAdminOrder = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ payload }: { payload: AdminNewOrderPayload }) => adminService.createAdminOrder(payload),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adminOrders'] }),
     });
 };

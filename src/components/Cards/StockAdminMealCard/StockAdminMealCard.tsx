@@ -4,12 +4,10 @@ import styles from './StockAdminMealCard.module.scss';
 
 function Choice({ choice, checked, onChange }: { choice: MealChoice; checked: boolean; onChange: () => void }) {
     return (
-        <>
-            <label className={styles.choice__label}>
-                <p className={styles.choice__name}>{choice.name}</p>
-                <input type="checkbox" name={`choice-${choice.id}`} checked={checked} onChange={onChange} className={styles.choice__checkbox}></input>
-            </label>
-        </>
+        <label className={styles.choice__label}>
+            <p className={styles.choice__name}>{choice.name}</p>
+            <input type="checkbox" checked={checked} onChange={onChange} className={styles.choice__checkbox}></input>
+        </label>
     );
 }
 
@@ -51,7 +49,7 @@ function StockAdminMealCard({ meal, isMealVisible, onVisibleToggle, onChoiceTogg
                     <p className={`${styles.meal__description} ${styles.meal__text} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                 </div>
                 <div className={`${styles.meal__visible} ${isMealVisible ? styles.meal__visible_active : ''}`}>
-                    <button type="button" className={`${styles.meal__slider} ${isMealVisible ? styles.meal__slider_active : ''}`} onClick={onVisibleToggle}>
+                    <button type="button" role="switch" aria-checked={isMealVisible} className={`${styles.meal__slider} ${isMealVisible ? styles.meal__slider_active : ''}`} onClick={onVisibleToggle}>
                         <span className={`${styles.meal__handle} ${isMealVisible ? styles.meal__handle_active : ''}`} />
                     </button>
                     <button type="button" className={`${styles.meal__toggle} ${isOpen ? '' : styles.meal__toggle_hide}`} onClick={handleClickOpen} />

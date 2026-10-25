@@ -59,4 +59,18 @@
         bottom: 111px;
         max-width: calc(100% - 12px);
     }
+
+    &__preloader {
+        > div:first-child {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 15px;
+            top: 40px;
+            width: calc(100% - 30px);
+            height: calc(100vh - 55px);
+            background-color: variables.$button-grey;
+            border-radius: 15px;
+        }
+    }
 }

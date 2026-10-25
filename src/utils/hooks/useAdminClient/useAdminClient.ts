@@ -1,19 +1,22 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
-import { adminClientService, RegularClient } from '../../api/adminClientService/adminClientService';
+import { adminClientService } from '../../api/adminClientService/adminClientService';
+import { toPhoneSearchQuery } from '../../serviceFuncs/formatPhoneNumber';
 
 export const useGetClientsByPhone = (phone: string) => {
-    const digits = (phone ?? '').replace(/\D/g, '');
-    const [debouncedSearch] = useDebounce(digits, 500);
+    const query = toPhoneSearchQuery(phone);
+    const [debouncedSearch] = useDebounce(query, 500);
+    const digitsCount = debouncedSearch.replace(/\D/g, '').length;
+
     return useQuery({
         queryKey: ['regularClient', debouncedSearch],
         queryFn: () => adminClientService.getClientsByPhone(debouncedSearch),
-        enabled: debouncedSearch.length >= 8,
+        enabled: digitsCount >= 8,
     });
 };
 
 export const useCreateRegularClient = () => {
     return useMutation({
-        mutationFn: ({ data }: { data: Omit<RegularClient, 'id'> }) => adminClientService.createRegularClient(data),
+        mutationFn: ({ data }: { data: { phone: string; name?: string } }) => adminClientService.createRegularClient(data),
     });
 };

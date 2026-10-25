@@ -109,10 +109,13 @@ i18n
                             areYouSureYouWantToRemoveTheMeal: 'Вы уверены, что хотите удалить блюдо?',
                             areYouSureYouWantToRemoveTheMealFeature: 'Вы уверены, что хотите удалить дополнения к блюду?',
                             areYouSureYouWantToRemoveTheCategory: 'Вы уверены, что хотите удалить категорию?',
+                            areYouSureYouWantToClearBasket: 'Вы уверены, что хотите очистить корзину?',
+                            areYouSureYouWantToCloseOrderCreationPage: 'Вы уверены, что хотите закрыть страницу создания заказа? Все данные будут утеряны.',
                             areYouSureYouWantCopyMenu: 'Вы уверены, что хотите скопировать меню?',
                             yes: 'Да',
                             delete: 'Удалить',
                             copy: 'Копировать',
+                            clear: 'Очистить',
                         },
 
                         orderTimeCounter: {

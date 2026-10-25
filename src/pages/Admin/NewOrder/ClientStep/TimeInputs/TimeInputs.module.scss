@@ -104,6 +104,7 @@
     }
 
     &__error {
+        text-align: right;
         color: variables.$red;
         font-family: 'SF Pro Display', sans-serif;
         font-size: 12px;

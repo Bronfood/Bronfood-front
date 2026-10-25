@@ -24,11 +24,15 @@ export class AdminBasketServiceReal implements AdminBasketService {
         });
     }
 
-    async incrementAdminMeal(mealId: number): Promise<void> {
-        return handleFetch('api/restaurants/admin/basket/meals/increment/', { method: 'POST', data: { meal_id: mealId } });
+    async incrementAdminMeal(basketMealId: number): Promise<{ data: MealForBasket }> {
+        return handleFetch('api/restaurants/admin/basket/meals/increment/', { method: 'POST', data: { meal_id: basketMealId } });
     }
 
-    async decrementAdminMeal(mealId: number): Promise<void> {
-        return handleFetch('api/restaurants/admin/basket/meals/decrement/', { method: 'POST', data: { meal_id: mealId } });
+    async decrementAdminMeal(basketMealId: number): Promise<{ data: MealForBasket | null }> {
+        const result = await handleFetch('api/restaurants/admin/basket/meals/decrement/', { method: 'POST', data: { meal_id: basketMealId } });
+        if (result instanceof Response) {
+            return { data: null };
+        }
+        return result;
     }
 }

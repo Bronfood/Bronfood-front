@@ -17,7 +17,7 @@ export type RegularClient = {
 
 export interface AdminClientService {
     getClientsByPhone: (phone: string) => Promise<{ data: RegularClient[] }>;
-    createRegularClient: (data: Omit<RegularClient, 'id'>) => Promise<{ data: RegularClient }>;
+    createRegularClient: (data: { phone: string; name?: string }) => Promise<{ data: RegularClient }>;
 }
 
 export const adminClientService = new AdminClientServiceReal();

@@ -2,78 +2,64 @@ import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage'
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import Preloader from '../../../../components/Preloader/Preloader';
 import styles from './BasketStep.module.scss';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Counter from '../../../../components/Counter/Counter';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import AdminMealCard from '../../../../components/Cards/AdminMealCard/AdminMealCard';
-import { useDecrementAdminMeal, useGetAdminBasket, useIncrementAdminMeal } from '../../../../utils/hooks/useAdminBasket/useAdminBasket';
+import { useDecrementAdminMeal, useDeleteAdminBasketPosition, useGetAdminBasket, useIncrementAdminMeal } from '../../../../utils/hooks/useAdminBasket/useAdminBasket';
 import { useAdminOrderContext } from '../../../../utils/hooks/useAdminOrders/useAdminOrderContext';
 
 function BasketStep() {
+    const navigate = useNavigate();
+
     const { restaurantId, isClientDataValid } = useAdminOrderContext();
     const { data: basket, isLoading: isLoadingBasket, error: basketError } = useGetAdminBasket();
-    const { mutateAsync: increment, isPending: isPendingIncrement, error: incrementError } = useIncrementAdminMeal();
-    const { mutateAsync: decrement, isPending: isPendingDecrement, error: decrementError } = useDecrementAdminMeal();
-    const navigate = useNavigate();
-    const error = basketError || decrementError || incrementError;
+    const { mutate: increment, isPending: isPendingIncrement, error: incrementError } = useIncrementAdminMeal();
+    const { mutate: decrement, isPending: isPendingDecrement, error: decrementError } = useDecrementAdminMeal();
+    const { mutate: deletePosition, isPending: isPendingDelete, error: deleteError } = useDeleteAdminBasketPosition();
+
+    const error = deleteError || decrementError || incrementError || basketError;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
     const is404 = errorMessage === 'pages.admin.basketNotFound';
 
-    const [errorCatch, setErrorCatch] = useState<string | null>(null);
-
-    const handleIncrementMeal = async (mealId: number) => {
-        await increment({ mealId });
-    };
-
-    const handleDecrementMeal = async (basketMealId: number, count: number = 1) => {
-        try {
-            await decrement({ mealId: basketMealId });
-            if (count > 1) {
-                for (let i = 1; i < count; i++) {
-                    await decrement({ mealId: basketMealId });
-                }
-            }
-        } catch (error) {
-            setErrorCatch(getErrorMessage(error as Error, 'pages.admin.'));
-        }
-    };
-
-    const renderErrorMessage = (error: string) => {
-        return (
-            <div style={{ padding: '0 20px' }}>
-                <ErrorMessage message={error} />
-            </div>
-        );
-    };
+    const meals = basket?.data?.meals ?? [];
+    const isBasketEmpty = !isLoadingBasket && basket?.data != null && meals.length === 0;
 
     useEffect(() => {
-        if (is404 || !isClientDataValid) {
+        if (!isClientDataValid) {
+            navigate('/manager/new-order/client-step', { replace: true });
+            return;
+        }
+        if (is404 || isBasketEmpty) {
             navigate('/manager/new-order/meal-step', { replace: true });
         }
-    }, [is404, isClientDataValid, navigate]);
+    }, [is404, isBasketEmpty, isClientDataValid, navigate]);
 
     if (is404) return null;
-    if (basket?.data?.meals?.length === 0) return <Navigate to="/manager/new-order/meal-step" replace />;
-    if (!basket?.data) return null;
 
     return (
         <>
-            {(isLoadingBasket || isPendingIncrement || isPendingDecrement) && (
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
+
+            {(isLoadingBasket || isPendingIncrement || isPendingDecrement || isPendingDelete) && (
                 <div className={styles['basket__preloader']}>
                     <Preloader />
                 </div>
             )}
-            {basket?.data.meals.length > 0 && restaurantId && (
+
+            {meals.length > 0 && restaurantId != null && (
                 <ul className={styles['basket__list']}>
-                    {basket.data.meals.map((item) => (
-                        <li key={item.meal.id}>
-                            <AdminMealCard meal={item.meal} restaurantId={restaurantId} onDelete={() => handleDecrementMeal(item.id, item.count)} isBascket={true} counter={<Counter count={item.count} increment={() => handleIncrementMeal(item.id)} decrement={() => handleDecrementMeal(item.id)} />} />
+                    {meals.map((item) => (
+                        <li key={item.id}>
+                            <AdminMealCard meal={item.meal} basketItem={item} restaurantId={restaurantId} onDelete={() => deletePosition({ basketMealId: item.id, count: item.count })} isBascket={true} counter={<Counter count={item.count} increment={() => increment({ basketMealId: item.id })} decrement={() => decrement({ basketMealId: item.id })} />} />
                         </li>
                     ))}
                 </ul>
             )}
-            {error && renderErrorMessage(errorMessage)}
-            {errorCatch && renderErrorMessage(errorCatch)}
         </>
     );
 }
