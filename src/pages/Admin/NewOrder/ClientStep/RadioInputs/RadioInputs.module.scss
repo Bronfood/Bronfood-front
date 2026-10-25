@@ -1,0 +1,57 @@
+@use '../../../../../styles/variables';
+
+.radio {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    background-color: variables.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    input[type='radio'] {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 1px solid variables.$orange;
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s;
+
+        &:checked {
+            border-width: 6px;
+        }
+    }
+
+    &__now {
+        align-items: center;
+        cursor: pointer;
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+
+        &_name {
+            font-size: 17px;
+        }
+
+        &_about {
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+}
+
+.layout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    &__time {
+        width: 100%;
+    }
+}

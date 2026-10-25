@@ -15,6 +15,12 @@ const ManagerNavigation: FC<ManagerNavigation> = (props) => {
     return (
         <ul className={`${styles.nav__menu}`}>
             <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_calendar}`}></div>
+                <Link to="/manager/work-status" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.managerNavigation.workStatus')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_exit}`}></div>
                 <Link to="/logout" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.managerNavigation.signOut')}

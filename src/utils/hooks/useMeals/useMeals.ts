@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { restaurantsService } from '../../api/restaurantsService/restaurantsService';
+import { MealFilters, restaurantsService } from '../../api/restaurantsService/restaurantsService';
 
-export const useMeals = (restaurantId: number) => {
+export const useMeals = (restaurantId: number, filters: MealFilters = {}) => {
     return useQuery({
-        queryKey: ['meals', restaurantId],
-        queryFn: () => restaurantsService.getMeals(restaurantId),
+        queryKey: ['meals', restaurantId, filters],
+        queryFn: () => restaurantsService.getMeals(restaurantId, filters),
     });
 };

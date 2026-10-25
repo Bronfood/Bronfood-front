@@ -1,0 +1,76 @@
+@use '../../../styles/variables';
+@use 'sass:map';
+
+.stock {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: variables.$button-grey;
+    padding: 44px 15px 156px;
+    margin: 0 auto;
+    z-index: map.get(variables.$z-indexes, 'drawer');
+    overflow-y: auto;
+    min-height: 100vh;
+
+    &__close {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+
+        &_button {
+            top: 39px;
+            right: 15px;
+
+            button {
+                background-color: variables.$button-grey;
+            }
+        }
+    }
+
+    &__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 0 28px 60px;
+    }
+
+    &__meals {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__empty {
+        display: block;
+        width: 100%;
+        margin: 100px auto;
+        text-align: center;
+        font-size: 14px;
+        color: variables.$orange;
+    }
+
+    &__category-filter {
+        position: fixed;
+        z-index: 7;
+        left: 12px;
+        bottom: 111px;
+        max-width: calc(100% - 12px);
+    }
+
+    &__preloader {
+        > div:first-child {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 15px;
+            top: 40px;
+            width: calc(100% - 30px);
+            height: calc(100vh - 55px);
+            background-color: variables.$button-grey;
+            border-radius: 15px;
+        }
+    }
+}
