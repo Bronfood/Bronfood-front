@@ -6,3 +6,13 @@
     flex-direction: column;
     gap: 30px;
 }
+
+input[name='base_price']::-webkit-outer-spin-button,
+input[name='base_price']::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+input[name='base_price'] {
+    appearance: textfield;
+}

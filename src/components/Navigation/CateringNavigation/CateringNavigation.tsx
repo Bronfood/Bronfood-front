@@ -48,7 +48,7 @@ const CateringNavigation: FC<CateringNavigation> = (props) => {
             </li>
             <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_list}`}></div>
-                <Link to="/catering/feedback" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                <Link to="/feedback" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.cateringNavigation.aboutService')}
                 </Link>
             </li>

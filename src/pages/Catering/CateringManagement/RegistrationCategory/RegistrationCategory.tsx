@@ -10,6 +10,8 @@ import styles from './RegistrationCategory.module.scss';
 import { useEffect, useState } from 'react';
 import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { useParams } from 'react-router-dom';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 
 type RegistrationCategoryProps = {
     onSubmit: SubmitHandler<FieldValues>;
@@ -24,8 +26,11 @@ type RegistrationCategoryProps = {
 const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: RegistrationCategoryProps) => {
     const { cateringId } = useParams();
     const { t } = useTranslation();
-    const { data: meals, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
+    const { data: meals, isSuccess, isPending, error } = useGetCateringMeals(Number(cateringId));
+
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
     const allMeals = isSuccess ? meals.data : [];
+
     const [showAvailableMeals, setShowAvailableMeals] = useState(false);
     const [selectedMeals, setSelectedMeals] = useState<number[]>(defaultValues?.mealIds.map((id) => id) || []);
     const [tempSelected, setTempSelected] = useState<number[]>([]);
@@ -83,6 +88,13 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
     return (
         <form name="form-add-category" onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>
             {isPending && <Preloader />}
+
+            {error && (
+                <div style={{ padding: '0 20px' }}>
+                    <ErrorMessage message={errorMessage} />
+                </div>
+            )}
+
             <div className={styles.form__conteiner}>
                 <Input name="name" type="string" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderCategory')} register={register} errors={errors} pattern={regexClientName} value={values.name}></Input>
                 <input
@@ -103,6 +115,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                     </div>
                 )}
             </div>
+
             {!defaultValues && availableMeals.length > 0 && (
                 <ul className={styles.form__list}>
                     {availableMeals.map((meal) => (
@@ -110,6 +123,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                     ))}
                 </ul>
             )}
+
             {defaultValues && (
                 <>
                     {showAvailableMeals && availableMeals.length > 0 && (
@@ -131,6 +145,7 @@ const RegistrationCategory = ({ onSubmit, defaultValues, renderDeleteButton }: R
                     )}
                 </>
             )}
+
             {errors.mealIds && <p className={styles.form__error}>{errors.mealIds.message as string}</p>}
             {renderDeleteButton}
             {!showAvailableMeals && <Button type="submit">{defaultValues ? t('pages.cateringManagement.save') : t('pages.cateringManagement.add')}</Button>}

@@ -1,0 +1,40 @@
+@use '../../styles/variables';
+
+.container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+
+    &__button {
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        background-size: cover;
+        background-position: center;
+        background-image: url('/src/vendor/images/icons/info-icon.svg');
+    }
+
+    &__content {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        border-radius: 20px;
+        background-color: variables.$black;
+        padding: 12px;
+        width: max-content;
+        max-width: 332px;
+        line-height: 140%;
+        z-index: 10;
+
+        &_text {
+            color: variables.$white;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 140%;
+            white-space: normal;
+        }
+    }
+}

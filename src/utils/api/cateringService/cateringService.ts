@@ -42,7 +42,7 @@ export type Catering = {
     /**
      * Deadline for order cancellation
      */
-    cancellation_time_limit?: string;
+    cancellation_time_limit: string;
     /**
      * Catering's map coordinates
      */
@@ -91,6 +91,9 @@ export const DAYS: Day[] = Array.from({ length: 7 }, (_, weekday) => ({
 }));
 
 export const TYPES = ['fastFood', 'cafe', 'cafeBar', 'businessCenter'];
+
+export type AddCateringFormValues = Omit<Catering, 'id' | 'photo' | 'rating'>;
+export type EditCateringFormValues = Omit<Catering, 'photo' | 'rating'>;
 
 export interface CateringService {
     getCaterings: () => Promise<{ data: Catering[] }>;

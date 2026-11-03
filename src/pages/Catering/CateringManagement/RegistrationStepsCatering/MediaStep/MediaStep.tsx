@@ -1,13 +1,12 @@
 import styles from './MediaStep.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import InputWorkingHours from './InputWorkingHours/InputWorkingHours';
 import { useFormContext } from 'react-hook-form';
 import { Day, DAYS, weekdayNames } from '../../../../../utils/api/cateringService/cateringService';
 import { CropState, regexTime } from '../../../../../utils/consts';
 import InputImage from '../../../../../components/InputImage/InputImage';
-import { formatCancellationTime } from '../../../../../utils/serviceFuncs/formatCancellationTime';
-
+import InfoTooltip from '../../../../../components/InfoTooltip/InfoTooltip';
 interface MediaStepProps {
     cropState: CropState;
     onCropStateChange: (state: CropState) => void;
@@ -22,13 +21,10 @@ const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
         setValue,
     } = useFormContext();
     const values = watch();
-    const infoRef = useRef<HTMLDivElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
     const is24h = values.schedule?.every((day: Day) => day.open_time === '00:00' && day.close_time === '23:59') || false;
     const photoValue = watch('photo');
     const previewImage = typeof photoValue === 'string' ? photoValue : null;
-    const [isActive, setIsActive] = useState(false);
-    const [isInfo, setIsInfo] = useState(false);
+    const [isActive, setIsActive] = useState(Boolean(values.cancellation_time_limit));
 
     const formatTimeInput = (value: string): string => {
         const digitsOnly = value.replace(/\D/g, '');
@@ -67,12 +63,12 @@ const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
     };
 
     const handleCancellationToggle = () => {
-        setIsActive(!isActive);
-    };
+        const newState = !isActive;
+        setIsActive(newState);
 
-    const handleCancellationTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setValue('cancellation_time_limit', formatCancellationTime(value), { shouldValidate: true });
+        if (!newState) {
+            setValue('cancellation_time_limit', '', { shouldValidate: true });
+        }
     };
 
     const getWorkingTimeError = (open: string, close: string): string | '' => {
@@ -84,23 +80,9 @@ const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
         return '';
     };
 
-    const handleInfoToggle = () => {
-        setIsInfo(!isInfo);
-    };
-
-    useEffect(() => {
-        const handleMouseDown = (e: MouseEvent) => {
-            if (isInfo && !e.composedPath().some((e) => e === buttonRef.current || e === infoRef.current)) {
-                setIsInfo(false);
-            }
-        };
-        document.addEventListener('click', handleMouseDown);
-        return () => document.removeEventListener('click', handleMouseDown);
-    }, [isInfo]);
-
     return (
         <fieldset className={styles.fieldset}>
-            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing crop={{ targetWidth: 375, targetHeight: 180 }} cropState={cropState} onCropStateChange={onCropStateChange} />
+            <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhoto')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing crop={{ targetWidth: 375, targetHeight: 180 }} cropState={cropState} onCropStateChange={onCropStateChange} required={true} />
             <div className={styles.schedule}>
                 <p>{t('pages.cateringManagement.nameLabelWorkingTime')}</p>
 
@@ -157,23 +139,18 @@ const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
                                 <input
                                     id="cancellation_time_limit"
                                     type="text"
+                                    inputMode="numeric"
                                     className={styles.cancel__input_place}
                                     placeholder={t('pages.cateringManagement.placeholderTimeToCancel')}
                                     {...register('cancellation_time_limit', {
                                         required: t('components.input.required'),
                                     })}
-                                    onChange={handleCancellationTimeChange}
-                                    value={values.cancellation_time_limit}
                                 />
                             </div>
-                            <button className={styles.cancel__button} onClick={handleInfoToggle} ref={buttonRef}></button>
-                            {isInfo && (
-                                <div className={styles.cancel__info} ref={infoRef}>
-                                    <p className={styles.cancel__text}>{t('pages.cateringManagement.infoTextTimeToCancel')}</p>
-                                </div>
-                            )}
+
+                            <InfoTooltip text={t('pages.cateringManagement.infoTextTimeToCancel')} />
                         </div>
-                        {isActive && errors.cancellation_time_limit && <p className={styles.cancel__error}>{errors.cancellation_time_limit.message as string}</p>}
+                        {errors.cancellation_time_limit && <p className={styles.cancel__error}>{errors.cancellation_time_limit.message as string}</p>}
                     </>
                 )}
             </div>

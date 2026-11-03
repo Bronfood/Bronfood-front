@@ -17,7 +17,18 @@ const RegistrationStepsCatering = ({ title, onSubmit, defaultValues }: Registrat
     const [cropState, setCropState] = useState<CropState>({ originalImages: {}, cropParams: {} });
 
     return (
-        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} nameForm="registration-form-catering">
+        <RegistrationForm
+            title={title}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            nameForm="registration-form-catering"
+            stepFields={[
+                ['type', 'tags'],
+                ['name', 'coordinates', 'address', 'description'],
+                ['photo', 'schedule', 'cancellation_time_limit'],
+                ['legal_name', 'legal_address', 'legal_bin', 'legal_director_fullname'],
+            ]}
+        >
             <TypeStep />
             <LocationStep />
             <MediaStep cropState={cropState} onCropStateChange={setCropState} />

@@ -11,6 +11,7 @@ import { useDeleteManager, useGetManagerById, useUpdateManager } from '../../../
 import ManagersForm from '../ManagersForm/ManagersForm';
 import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import { useGetCateringById } from '../../../../utils/hooks/useCatering/useCatering';
 
 const EditManager = () => {
     const { t } = useTranslation();
@@ -18,11 +19,18 @@ const EditManager = () => {
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
 
     const { cateringId, managerId } = useParams();
-    const { data: manager, isLoading: isFetching } = useGetManagerById(Number(cateringId), Number(managerId));
-    const { mutateAsync: updateManager, error: updateManagerError, isPending: isUpdating } = useUpdateManager();
-    const { mutateAsync: deleteManager, error: deleteManagerError, isPending: isDeleting } = useDeleteManager();
-    const error = updateManagerError || deleteManagerError;
+    const { data: catering, isLoading: isLoadingCatering, error: cateringError } = useGetCateringById(Number(cateringId));
+    const { data: manager, isLoading: isFetching, error: managerError } = useGetManagerById(Number(cateringId), Number(managerId));
+    const { mutateAsync: updateManager, isPending: isUpdating, error: updateManagerError } = useUpdateManager();
+    const { mutateAsync: deleteManager, isPending: isDeleting, error: deleteManagerError } = useDeleteManager();
+
+    const error = cateringError || managerError || updateManagerError || deleteManagerError;
     const errorMessage = error ? getErrorMessage(error, 'pages.administrators.') : '';
+
+    const restaurantData = {
+        restaurantName: catering?.data.name || '',
+        restaurantAddress: catering?.data.address || '',
+    };
 
     const handleDelete = () => {
         setShowConfirmationPopup(true);
@@ -63,12 +71,14 @@ const EditManager = () => {
     return (
         <>
             <Popup title={t('pages.administrators.editData')} arrowBack onClose={onClose}>
-                {isFetching && <Preloader />}
+                {(isFetching || isLoadingCatering) && <Preloader />}
+
                 {error && (
                     <div style={{ padding: '0 20px' }}>
                         <ErrorMessage message={errorMessage} />
                     </div>
                 )}
+
                 {manager && (
                     <ManagersForm
                         onSubmit={onSubmit}
@@ -84,9 +94,11 @@ const EditManager = () => {
                             </ButtonGrey>
                         }
                         edit={true}
+                        restaurantData={restaurantData}
                     />
                 )}
             </Popup>
+
             {showConfirmationPopup && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
                     <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheAdministrator')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(false)} onSubmit={handleConfirmDelete} />

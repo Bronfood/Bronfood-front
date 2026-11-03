@@ -66,11 +66,27 @@
         }
     }
 
-    &__edit {
-        background-image: url('../../../../../vendor/images/icons/buttonIconRound/edit.svg');
+    &__buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__button {
         border: none;
         background-color: transparent;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
         width: 24px;
         height: 24px;
+        cursor: pointer;
+    }
+
+    &__edit {
+        background-image: url('/src/vendor/images/icons/buttonIconRound/edit.svg');
+    }
+
+    &__delete {
+        background-image: url('/src/vendor/images/icons/buttonIconSquare/delete_default.svg');
     }
 }

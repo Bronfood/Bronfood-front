@@ -191,36 +191,14 @@
         align-items: center;
         gap: 16px;
         width: 60%;
-    }
 
-    &__info {
-        position: absolute;
-        left: 0;
-        bottom: 100px;
-        border-radius: 20px;
-        background-color: variables.$black;
-        padding: 12px;
-        width: 100%;
-        line-height: 140%;
-    }
-
-    &__text {
-        color: variables.$white;
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 140%;
-    }
-
-    &__button {
-        padding: 0;
-        border: none;
-        background-color: transparent;
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-        background-size: cover;
-        background-position: center;
-        background-image: url('../../../../../vendor/images/icons/info-icon.svg');
+        div {
+            div {
+                bottom: 100px;
+                left: unset;
+                right: -132px;
+            }
+        }
     }
 
     &__input {

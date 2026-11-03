@@ -14,27 +14,31 @@ import AddAdditivePopup from '../RegistrationStepsMeal/AdditivesStep/AddAdditive
 import CategoriesList from '../../../../components/CategoriesList/CategoriesList';
 import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import { buildMealFormData } from '../../../../utils/serviceFuncs/mealFormData';
 
 const Menu = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
-    const { data: meal, isSuccess, isPending } = useGetCateringMeals(Number(cateringId));
-    const { data: categories, isLoading } = useGetCategories(Number(cateringId));
-    const { mutateAsync: deleteMeal, error: deleteMealError, isPending: isDeleting } = useDeleteCateringMeal();
-    const { mutateAsync: updateMeal, error: updateMealError, isPending: isUpdating } = useUpdateCateringMeal();
+
+    const { data: mealsData, isSuccess, isPending, error: mealsError } = useGetCateringMeals(Number(cateringId));
+    const { data: categories, isLoading, error: categoriesError } = useGetCategories(Number(cateringId));
+    const { mutateAsync: deleteMeal, isPending: isDeleting, error: deleteMealError } = useDeleteCateringMeal();
+    const { mutateAsync: updateMeal, isPending: isUpdating, error: updateMealError } = useUpdateCateringMeal();
+
     const [showConfirmationPopupDeleteMeal, setShowConfirmationPopupDeleteMeal] = useState(false);
     const [showConfirmationPopupDeleteFeature, setShowConfirmationPopupDeleteFeature] = useState(false);
     const [mealToDelete, setMealToDelete] = useState<number | null>(null);
     const [featureToDelete, setFeatureToDelete] = useState<{ cateringMealId: number; featureId: number } | null>(null);
     const [featureToEdit, setFeatureToEdit] = useState<{ cateringMealId: number; feature: Feature } | null>(null);
     const [isOpen, setIsOpen] = useState<number | null>(null);
-    const error = deleteMealError || updateMealError;
+
+    const error = categoriesError || mealsError || deleteMealError || updateMealError;
     const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const meals = useMemo(() => {
-        return isSuccess ? meal.data : [];
-    }, [isSuccess, meal?.data]);
+        return isSuccess ? mealsData.data : [];
+    }, [isSuccess, mealsData?.data]);
 
     const categoriesWithPhoto = useMemo(() => {
         if (!categories?.data || !meals.length) return [];
@@ -84,30 +88,11 @@ const Menu = () => {
         if (!featureToDelete) return;
         const currentMeal = meals.find((m) => m.id === featureToDelete.cateringMealId);
         if (!currentMeal) return;
-        const formData = new FormData();
-
-        formData.append('name', currentMeal.name);
-        formData.append('description', currentMeal.description || '');
-
-        if (currentMeal.tags?.length) {
-            currentMeal.tags.forEach((tag: { name: string }, index: number) => {
-                formData.append(`tags[${index}]name`, tag.name);
-            });
-        }
-        formData.append('base_price', String(currentMeal.base_price));
-        formData.append('waiting_time', currentMeal.waiting_time);
-        formData.append('is_visible', String(currentMeal.is_visible));
 
         const remainingFeatures = currentMeal.features?.filter((f) => f.id !== featureToDelete.featureId) ?? [];
 
-        remainingFeatures.forEach((feature, fIndex) => {
-            formData.append(`features[${fIndex}]id`, String(feature.id));
-            formData.append(`features[${fIndex}]name`, feature.name);
-            feature.choices.forEach((choice, cIndex) => {
-                formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
-                formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
-                formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
-            });
+        const formData = buildMealFormData(currentMeal, {
+            featuresOverride: remainingFeatures,
         });
 
         await updateMeal({
@@ -127,30 +112,11 @@ const Menu = () => {
         if (!featureToEdit) return;
         const currentMeal = meals.find((m) => m.id === featureToEdit.cateringMealId);
         if (!currentMeal) return;
-        const formData = new FormData();
-
-        formData.append('name', currentMeal.name);
-        formData.append('description', currentMeal.description || '');
-
-        if (currentMeal.tags?.length) {
-            currentMeal.tags.forEach((tag: { name: string }, index: number) => {
-                formData.append(`tags[${index}]name`, tag.name);
-            });
-        }
-        formData.append('base_price', String(currentMeal.base_price));
-        formData.append('waiting_time', currentMeal.waiting_time);
-        formData.append('is_visible', String(currentMeal.is_visible));
 
         const updatedFeatures = currentMeal.features?.map((f) => (f.id === updatedFeature.id ? updatedFeature : f)) ?? [];
 
-        updatedFeatures.forEach((feature, fIndex) => {
-            formData.append(`features[${fIndex}]id`, String(feature.id));
-            formData.append(`features[${fIndex}]name`, feature.name);
-            feature.choices.forEach((choice, cIndex) => {
-                formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
-                formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
-                formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
-            });
+        const formData = buildMealFormData(currentMeal, {
+            featuresOverride: updatedFeatures,
         });
 
         await updateMeal({
@@ -177,32 +143,10 @@ const Menu = () => {
     const toggleVisibleClick = async (cateringMealId: number) => {
         const currentMeal = meals.find((m) => m.id === cateringMealId);
         if (!currentMeal) return;
-        const formData = new FormData();
 
-        formData.append('name', currentMeal.name);
-        formData.append('description', currentMeal.description || '');
-
-        if (currentMeal.tags?.length) {
-            currentMeal.tags.forEach((tag: { name: string }, index: number) => {
-                formData.append(`tags[${index}]name`, tag.name);
-            });
-        }
-        formData.append('base_price', String(currentMeal.base_price));
-        formData.append('waiting_time', currentMeal.waiting_time);
-        formData.append('is_visible', String(!currentMeal.is_visible));
-
-        if (currentMeal.features && currentMeal.features.length > 0) {
-            currentMeal.features.forEach((feature, fIndex) => {
-                formData.append(`features[${fIndex}]id`, String(feature.id));
-                formData.append(`features[${fIndex}]name`, feature.name);
-
-                feature.choices.forEach((choice, cIndex) => {
-                    formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
-                    formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
-                    formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
-                });
-            });
-        }
+        const formData = buildMealFormData(currentMeal, {
+            visibleOverride: !currentMeal.is_visible,
+        });
 
         await updateMeal({
             cateringId: Number(cateringId),
@@ -219,11 +163,13 @@ const Menu = () => {
         <>
             <Popup title={t('pages.cateringManagement.menu')} arrowBack={true} onClose={onCloseClick}>
                 {(isPending || isDeleting || isLoading || isUpdating) && <Preloader />}
+
                 {error && (
                     <div style={{ padding: '0 20px' }}>
                         <ErrorMessage message={errorMessage} />
                     </div>
                 )}
+
                 <div className={styles.buttons}>
                     <ButtonIconAdd onClick={addCategoryClick}>{t('pages.cateringManagement.addCategoriesMenu')}</ButtonIconAdd>
                     {categories && categories.data.length > 0 && <CategoriesList onClick={categoryClick} categories={categoriesWithPhoto} />}
@@ -238,6 +184,7 @@ const Menu = () => {
                     </ul>
                 )}
             </Popup>
+
             {showConfirmationPopupDeleteMeal && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
                     <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheMeal')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopupDeleteMeal(false)} onSubmit={handleConfirmDeleteMeal} />
@@ -248,6 +195,7 @@ const Menu = () => {
                     )}
                 </div>
             )}
+
             {showConfirmationPopupDeleteFeature && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
                     <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheMealFeature')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopupDeleteFeature(false)} onSubmit={handleConfirmDeleteFeature} />

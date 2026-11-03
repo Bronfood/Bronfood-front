@@ -5,3 +5,12 @@ export const formatTime = (timeInSeconds: number) => {
     const seconds = absTimeInSeconds % 60;
     return `${sign}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+export const formatWaitingTime = (value: string) => {
+    if (!value) return '';
+    if (value.includes(':')) {
+        const [hours, minutes] = value.split(':');
+        return String(Number(hours) * 60 + Number(minutes));
+    }
+    return value;
+};

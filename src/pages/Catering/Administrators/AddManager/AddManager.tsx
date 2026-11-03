@@ -7,13 +7,22 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import ManagersForm from '../ManagersForm/ManagersForm';
 import { useCreateManager } from '../../../../utils/hooks/useManagers/useManagers';
 import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import { useGetCateringById } from '../../../../utils/hooks/useCatering/useCatering';
 
 const AddManager = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cateringId } = useParams();
-    const { mutateAsync, isPending, error } = useCreateManager();
+    const { data: catering, isLoading, error: cateringError } = useGetCateringById(Number(cateringId));
+    const { mutateAsync, isPending, error: createManagerError } = useCreateManager();
+
+    const error = cateringError || createManagerError;
     const errorMessage = error ? getErrorMessage(error, 'pages.administrators.') : '';
+
+    const restaurantData = {
+        restaurantName: catering?.data.name || '',
+        restaurantAddress: catering?.data.address || '',
+    };
 
     const onClose = () => {
         navigate('/');
@@ -42,8 +51,19 @@ const AddManager = () => {
                     <ErrorMessage message={errorMessage} />
                 </div>
             )}
-            {isPending && <Preloader />}
-            <ManagersForm onSubmit={onSubmit} isLoading={isPending} />
+
+            {(isPending || isLoading) && <Preloader />}
+
+            <ManagersForm
+                onSubmit={onSubmit}
+                isLoading={isPending}
+                defaultValues={{
+                    name: '',
+                    username: '',
+                    password: '',
+                }}
+                restaurantData={restaurantData}
+            />
         </Popup>
     );
 };

@@ -5,7 +5,7 @@ import Input from '../../../../components/Input/Input';
 import Button from '../../../../components/Button/Button';
 import InputPassword from '../../../../components/InputPassword/InputPassword';
 import FormInputs from '../../../../components/FormInputs/FormInputs';
-import { regexClientName } from '../../../../utils/consts';
+import { regexClientName, regexLogin } from '../../../../utils/consts';
 import styles from './ManagersForm.module.scss';
 
 type ManagersFormProps = {
@@ -19,9 +19,13 @@ type ManagersFormProps = {
     onCopied?: () => void;
     renderDeleteButton?: React.ReactNode;
     edit?: boolean;
+    restaurantData: {
+        restaurantName?: string;
+        restaurantAddress?: string;
+    };
 };
 
-const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', name: '', password: '' }, onCopied, renderDeleteButton, edit = false }: ManagersFormProps) => {
+const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', name: '', password: '' }, onCopied, renderDeleteButton, edit = false, restaurantData = { restaurantName: '', restaurantAddress: '' } }: ManagersFormProps) => {
     const { t } = useTranslation();
     const {
         register,
@@ -31,7 +35,7 @@ const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', nam
 
     const processSubmit = (data: FieldValues) => {
         onSubmit(data);
-        const text = `Логин: ${data.username}\nФИО: ${data.name} \nПароль: ${data.password}`;
+        const text = `Заведение:\n Название: ${restaurantData.restaurantName}\n Адрес: ${restaurantData.restaurantAddress}\n Логин: ${data.username}\n ФИО: ${data.name}\n Пароль: ${data.password}`;
 
         navigator.clipboard.writeText(text).then(() => {
             onCopied?.();
@@ -41,9 +45,9 @@ const ManagersForm = ({ onSubmit, isLoading, defaultValues = { username: '', nam
     return (
         <Form name="form-managers" onSubmit={handleSubmit(processSubmit)}>
             <FormInputs>
-                {!edit ? <Input type="text" name="username" placeholder={t('pages.administrators.placeholderLogin')} nameLabel={t('pages.administrators.nameLabelLogin')} register={register} errors={errors} pattern={regexClientName}></Input> : null}
-                <Input type="text" name="name" placeholder={t('pages.administrators.placeholderFCs')} nameLabel={t('pages.administrators.nameLabelFCs')} register={register} errors={errors} pattern={regexClientName}></Input>
-                <InputPassword name="password" nameLabel={t('pages.administrators.nameLabelPassword')} register={register} errors={errors} required></InputPassword>
+                {!edit ? <Input type="text" name="username" placeholder={t('pages.administrators.placeholderLogin')} nameLabel={t('pages.administrators.nameLabelLogin')} register={register} errors={errors} pattern={regexLogin} /> : null}
+                <Input type="text" name="name" placeholder={t('pages.administrators.placeholderFCs')} nameLabel={t('pages.administrators.nameLabelFCs')} register={register} errors={errors} pattern={regexClientName} />
+                <InputPassword name="password" nameLabel={t('pages.administrators.nameLabelPassword')} register={register} errors={errors} required />
             </FormInputs>
             <p className={styles['form__info_title']}>{t('pages.administrators.copyInvitationText')}</p>
             <Button type="submit" disabled={isLoading}>

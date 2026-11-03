@@ -13,6 +13,8 @@ import ButtonIconAdd from '../../../../components/ButtonIconAdd/ButtonIconAdd';
 import { Catering } from '../../../../utils/api/cateringService/cateringService';
 import CateringCard from '../../../../components/Cards/CateringCard/CateringCard';
 import CategoriesList from '../../../../components/CategoriesList/CategoriesList';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
 
 const CateringWithMealsCheck = ({ catering, onCopy }: { catering: Catering; onCopy: () => void }) => {
     const { data: meals, isLoading } = useGetCateringMeals(catering.id);
@@ -29,12 +31,15 @@ const CateringDetails = () => {
     const [showConfirmationPopupCopy, setShowConfirmationPopupCopy] = useState(false);
     const [cateringCopyId, setCateringCopyId] = useState<number | null>(null);
 
-    const { data: cateringsData, isLoading: isLoadingCaterings } = useGetCaterings();
-    const { data: catering, isLoading: isLoadingCatering } = useGetCateringById(Number(cateringId));
-    const { data: categories, isLoading: isLoadingCategories } = useGetCategories(Number(cateringId));
-    const { data: meals, isLoading: isLoadingMeals } = useGetCateringMeals(Number(cateringId));
-    const { mutateAsync: deleteCatering, isPending: isDeleting } = useDeleteCatering();
-    const { mutateAsync: copyMenu, isPending: isCopying } = useCopyMenu();
+    const { data: cateringsData, isLoading: isLoadingCaterings, error: cateringsError } = useGetCaterings();
+    const { data: catering, isLoading: isLoadingCatering, error: cateringError } = useGetCateringById(Number(cateringId));
+    const { data: categories, isLoading: isLoadingCategories, error: categoriesError } = useGetCategories(Number(cateringId));
+    const { data: meals, isLoading: isLoadingMeals, error: mealsError } = useGetCateringMeals(Number(cateringId));
+    const { mutateAsync: deleteCatering, isPending: isDeleting, error: deleteCateringError } = useDeleteCatering();
+    const { mutateAsync: copyMenu, isPending: isCopying, error: copyMenuError } = useCopyMenu();
+
+    const error = cateringsError || cateringError || categoriesError || mealsError || deleteCateringError || copyMenuError;
+    const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const caterings = cateringId ? cateringsData?.data.filter((c) => Number(cateringId) !== c.id) : [];
 
@@ -99,16 +104,25 @@ const CateringDetails = () => {
     return (
         <>
             <Popup arrowBack onClose={onClose}>
+                {error && (
+                    <div style={{ padding: '0 20px' }}>
+                        <ErrorMessage message={errorMessage} />
+                    </div>
+                )}
+
                 {(isLoadingCatering || isLoadingCategories || isLoadingMeals || isLoadingCaterings) && <Preloader />}
+
                 <div className={`${styles['container']} ${styles['container__catering']}`}>
                     <ButtonUnderline onClick={onEditСatering}>{t('pages.cateringManagement.editCatering')}</ButtonUnderline>
                     {catering && <CateringCard key={catering.data.id} card={catering.data} onDelete={handleDeleteClick} />}
                 </div>
+
                 {catering?.data.type === 'businessCenter' && (
                     <div className={`${styles['container']} ${styles['container__collect']}`}>
                         <ButtonUnderline onClick={onCollectWeeklyMenu}>{t('pages.cateringManagement.collectWeeklyMenu')}</ButtonUnderline>
                     </div>
                 )}
+
                 {meals && meals.data.length === 0 ? (
                     <div className={`${styles['container']} ${styles['container__caterings']}`}>
                         <ButtonIconAdd onClick={onEditMenu}>{t('pages.cateringManagement.createNewMenu')}</ButtonIconAdd>

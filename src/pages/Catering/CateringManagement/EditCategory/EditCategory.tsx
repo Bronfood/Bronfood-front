@@ -17,10 +17,10 @@ const EditCategory = () => {
     const navigate = useNavigate();
     const { cateringId, categoryId } = useParams();
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
-    const { data: category, isLoading } = useGetCategoryById(Number(cateringId), Number(categoryId));
+    const { data: category, isLoading, error: categoryError } = useGetCategoryById(Number(cateringId), Number(categoryId));
     const { mutateAsync: deleteCategory, error: deleteCategoryError, isPending: isDeleting } = useDeleteCategory();
     const { mutateAsync: updateCategory, error: updateCategoryError, isPending: isUpdating } = useUpdateCategory();
-    const error = deleteCategoryError || updateCategoryError;
+    const error = categoryError || deleteCategoryError || updateCategoryError;
     const errorMessage = error ? getErrorMessage(error, 'pages.cateringManagement.') : '';
 
     const onClose = () => {
@@ -63,11 +63,13 @@ const EditCategory = () => {
         <>
             <Popup title={t('pages.cateringManagement.editingCategory')} onClose={onClose}>
                 {(isLoading || isUpdating) && <Preloader />}
+
                 {error && (
                     <div style={{ padding: '0 20px' }}>
                         <ErrorMessage message={errorMessage} />
                     </div>
                 )}
+
                 {category && (
                     <RegistrationCategory
                         onSubmit={onSubmit}
@@ -83,6 +85,7 @@ const EditCategory = () => {
                     />
                 )}
             </Popup>
+
             {showConfirmationPopup && (
                 <div className={styles['confirmation-popup-wrapper']} onClick={handleOverlayClick}>
                     <ConfirmationPopup title={t('components.confirmationPopup.areYouSureYouWantToRemoveTheCategory')} confirmButtonText={t('components.confirmationPopup.delete')} onCancel={() => setShowConfirmationPopup(false)} onSubmit={handleConfirmDelete} />
