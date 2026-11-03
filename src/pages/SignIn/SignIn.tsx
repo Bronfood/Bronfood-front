@@ -8,12 +8,12 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import InputPassword from '../../components/InputPassword/InputPassword';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import InputPhone from '../../components/InputPhone/InputPhone';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
 import { useEffect } from 'react';
 import Preloader from '../../components/Preloader/Preloader';
 import { useQueryClient } from '@tanstack/react-query';
 import { getErrorMessage } from '../../utils/serviceFuncs/getErrorMessage';
+import InputPhoneOrLogin from '../../components/InputPhoneOrLogin/InputPhoneOrLogin';
 
 const SignIn = () => {
     const queryClient = useQueryClient();
@@ -34,8 +34,11 @@ const SignIn = () => {
     }, [isLogin, navigate]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const { password, phoneNumber } = data;
-        await signIn.mutateAsync({ phone: phoneNumber.replace(/\D/g, ''), password });
+        const { password, loginOrPhone } = data;
+        const isPhone = loginOrPhone.startsWith('+7');
+        const username = isPhone ? loginOrPhone.replace(/\D/g, '') : loginOrPhone;
+
+        await signIn.mutateAsync({ username, password });
         queryClient.invalidateQueries({ queryKey: ['basket'], exact: true });
     };
 
@@ -52,7 +55,7 @@ const SignIn = () => {
                 {signIn.isError && <ErrorMessage message={signInErrorMessage} />}
                 <fieldset className={styles.form__field} disabled={signIn.isPending}>
                     <FormInputs>
-                        <InputPhone register={register} errors={errors}></InputPhone>
+                        <InputPhoneOrLogin register={register} errors={errors} name="loginOrPhone" />
                         <InputPassword register={register} errors={errors} name="password" nameLabel={t('pages.signIn.password')} required={true} />
                     </FormInputs>
                 </fieldset>

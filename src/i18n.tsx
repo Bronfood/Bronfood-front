@@ -23,8 +23,6 @@ i18n
                         guestNavigation: {
                             signUpAsABuyer: 'Зарегистрироваться как покупатель',
                             signIn: 'Войти',
-                            signInAsAdmin: 'Войти как админ заведения',
-                            signInAsCatering: 'Войти как заведение общественного питания',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
                             support: 'Помощь',
@@ -165,6 +163,10 @@ i18n
                     pages: {
                         signIn: {
                             signInHeading: 'Вход',
+                            phone: 'Телефон',
+                            login: 'Логин',
+                            loginPlaceholder: 'Введите логин',
+                            phonePlaceholder: '+7 (777) 777-77-77',
                             invalidCredentials: 'Телефон или пароль введен неверно, повторите попытку еще раз.',
                             password: 'Пароль',
                             name: 'Имя',

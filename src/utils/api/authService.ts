@@ -1,7 +1,8 @@
 import { AuthServiceReal } from './authServiceReal';
 
 export interface LoginData {
-    phone: string;
+    phone?: string;
+    username?: string;
     password: string;
 }
 export interface RegisterPayload {
@@ -63,7 +64,7 @@ export interface CaptchaResponse {
 }
 
 export interface AuthService {
-    login: ({ phone, password }: LoginData) => Promise<void>;
+    login: ({ phone, username, password }: LoginData) => Promise<void>;
 
     register: ({ name, phone, password }: RegisterPayload) => Promise<{ data: RegisterPromise }>;
 
