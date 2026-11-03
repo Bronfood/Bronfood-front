@@ -7,6 +7,10 @@
 
     &__label {
         color: variables.$grey;
+
+        &_error {
+            color: variables.$red;
+        }
     }
 
     &__list {
@@ -95,6 +99,10 @@
             background-repeat: no-repeat;
             background-position: center;
             background-image: url('../../vendor/images/icons/add-icon-white.svg');
+        }
+
+        &_error {
+            border-color: variables.$red;
         }
     }
 

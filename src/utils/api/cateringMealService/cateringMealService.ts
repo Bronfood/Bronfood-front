@@ -98,6 +98,9 @@ export type CateringMeal = {
     features?: Feature[];
 };
 
+export type AddMealFormValues = Omit<CateringMeal, 'id' | 'category'>;
+export type EditMealFormValues = Omit<CateringMeal, 'category'>;
+
 export interface CateringMealService {
     getCateringMeals: (cateringId: number) => Promise<{ data: CateringMeal[] }>;
     getCateringMealById: (cateringId: number, cateringMealId: number) => Promise<{ data: CateringMeal }>;

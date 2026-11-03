@@ -62,6 +62,10 @@ interface InputImage {
      * Preview image value
      */
     previewImages: string | string[] | null;
+    /**
+     * Is input required
+     */
+    required?: boolean;
 }
 
 const InputImage: FC<InputImage> = (props) => {
@@ -226,10 +230,21 @@ const InputImage: FC<InputImage> = (props) => {
     return (
         <>
             <div className={styles.photo}>
-                <label className={styles.photo__label} htmlFor={id}>
+                <label className={`${styles.photo__label} ${errorMessage ? styles.photo__label_error : ''}`} htmlFor={id}>
                     {props.nameLabel}
                 </label>
-                <input id={id} multiple={props.multiple} ref={fileInputRef} className={styles.photo__input} type="file" accept="image/*" onChange={handleChange} />
+                <input
+                    id={id}
+                    multiple={props.multiple}
+                    {...props.register(props.name, {
+                        required: props.required ? t('components.input.required') : false,
+                    })}
+                    className={styles.photo__input}
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleChange}
+                />
 
                 <div className={`${styles.photo__content} ${props.multiple ? styles.photo__list : ''}`}>
                     {currentImages.map((image, index) => (

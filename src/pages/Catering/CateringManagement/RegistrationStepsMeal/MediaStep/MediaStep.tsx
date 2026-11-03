@@ -31,7 +31,7 @@ const MediaStep = ({ cropState, onCropStateChange }: MediaStepProps) => {
     return (
         <fieldset className={styles.fieldset}>
             <FormInputs>
-                <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhotoMeal')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing crop={{ targetWidth: 375, targetHeight: 180 }} cropState={cropState} onCropStateChange={onCropStateChange} />
+                <InputImage nameLabel={t('pages.cateringManagement.nameLabelPhotoMeal')} name="photo" register={register} errors={errors} onChange={handleImageUpload} previewImages={previewImage} editing crop={{ targetWidth: 375, targetHeight: 180 }} cropState={cropState} onCropStateChange={onCropStateChange} required={true} />
                 <Input type="text" nameLabel={t('pages.cateringManagement.nameLabelName')} placeholder={t('pages.cateringManagement.placeholderNameMeal')} name="name" register={register} errors={errors} pattern={regexClientName} value={values.name} />
                 <Input type="number" nameLabel={t('pages.cateringManagement.nameLabelPrice')} placeholder={t('pages.cateringManagement.placeholderPrice')} name="base_price" register={register} errors={errors} pattern={regexNumber} value={values.base_price} />
             </FormInputs>

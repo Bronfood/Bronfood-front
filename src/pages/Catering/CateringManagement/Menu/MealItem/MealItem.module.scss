@@ -104,6 +104,7 @@
             align-items: center;
             gap: 10px;
             justify-content: flex-end;
+            cursor: pointer;
         }
 
         &_image {
@@ -160,6 +161,7 @@
         background-color: transparent;
         padding: 0;
         background-size: cover;
+        cursor: pointer;
     }
 
     &__edit {

@@ -15,6 +15,10 @@
         gap: 16px;
     }
 
+    &__label {
+        font-size: 14px;
+    }
+
     &__content {
         padding: 0 21.5px;
     }
@@ -45,6 +49,16 @@
         background-color: rgb(135 133 133 / 75%);
         backdrop-filter: blur(2.5px);
         z-index: 10;
+    }
+
+    &__error {
+        color: variables.$red;
+        font-family: 'SF Pro Display', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 24px;
+        margin-top: 3px;
+        margin-left: 18px;
     }
 }
 
@@ -111,7 +125,7 @@
     &__item {
         display: flex;
         align-items: center;
-        gap: 39px;
+        gap: 10px;
         justify-content: space-between;
     }
 
@@ -131,6 +145,14 @@
         flex: 1;
         font-size: 14px;
         line-height: 140%;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            appearance: none;
+            margin: 0;
+        }
+
+        appearance: textfield;
     }
 
     &__button {
@@ -150,12 +172,54 @@
     &__default {
         border-bottom: 1px solid variables.$orange;
     }
+
+    &__checkbox_label {
+        display: flex;
+        cursor: pointer;
+    }
+
+    &__checkbox {
+        background-color: variables.$button-grey;
+        appearance: none;
+        border: 1px solid variables.$light-gray;
+        border-radius: 8px;
+        width: 25px;
+        height: 25px;
+
+        &:checked {
+            background-color: variables.$orange;
+            background-image: url('/src/vendor/images/icons/radioButton/check.svg');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+
+    &__tooltip {
+        div {
+            div {
+                bottom: 30px;
+                left: unset;
+                right: -35px;
+            }
+        }
+    }
+
+    &__radio_empty {
+        width: 15px;
+        height: 15px;
+        margin: 0 4.5px;
+        border-radius: 50%;
+        border: 2px solid variables.$line;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
 }
 
 .input {
     position: relative;
     width: 100%;
     margin-top: 8px;
+    font-size: 14px;
 
     &__label {
         color: variables.$grey;
@@ -172,7 +236,6 @@
         height: 50px;
         border-radius: 20px;
         border: 1px solid variables.$line;
-        background-color: transparent;
         padding-left: 16px;
 
         &::placeholder {
@@ -180,6 +243,42 @@
             font-size: 14px;
             font-weight: 400;
             line-height: 21px;
+        }
+    }
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &__label {
+        color: variables.$grey;
+    }
+
+    &__pills {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__pill {
+        background-color: variables.$white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 1px solid variables.$orange;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 100%;
+        cursor: pointer;
+        outline: none;
+
+        &:hover {
+            border-color: variables.$grey-chevron;
+        }
+
+        &_active {
+            background-color: variables.$orange;
+            color: variables.$white;
         }
     }
 }

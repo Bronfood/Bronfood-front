@@ -16,7 +16,7 @@ const RegistrationStepsMeal = ({ title, onSubmit, defaultValues }: RegistrationS
     const [cropState, setCropState] = useState<CropState>({ originalImages: {}, cropParams: {} });
 
     return (
-        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} nameForm="registration-form-meal">
+        <RegistrationForm title={title} onSubmit={onSubmit} defaultValues={defaultValues} nameForm="registration-form-meal" stepFields={[['photo', 'name', 'base_price'], ['description', 'tags', 'waiting_time', 'disposableTableware'], ['features']]}>
             <MediaStep cropState={cropState} onCropStateChange={setCropState} />
             <DetailsStep />
             <AdditivesStep />

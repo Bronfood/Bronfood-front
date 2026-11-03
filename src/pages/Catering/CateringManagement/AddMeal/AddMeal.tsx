@@ -7,10 +7,11 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { useCreateCateringMeal } from '../../../../utils/hooks/useCateringMeal/useCateringMeal';
 import { useState } from 'react';
 import PopupAddMealThanks from '../PopupAddMealThanks/PopupAddMealThanks';
-import { dataURLtoFile } from '../../../../utils/serviceFuncs/dataURLtoFile';
-import { formatCancellationTime } from '../../../../utils/serviceFuncs/formatCancellationTime';
-import { Feature } from '../../../../utils/api/cateringMealService/cateringMealService';
 import { getErrorMessage } from '../../../../utils/serviceFuncs/getErrorMessage';
+import { PRESET_SIZE_FEATURE_ID } from '../../../../utils/consts';
+import { formatMinutesToTime } from '../../../../utils/serviceFuncs/formatMinutesToTime';
+import { buildMealFormData } from '../../../../utils/serviceFuncs/mealFormData';
+import { AddMealFormValues } from '../../../../utils/api/cateringMealService/cateringMealService';
 
 const AddMeal = () => {
     const { t } = useTranslation();
@@ -25,40 +26,12 @@ const AddMeal = () => {
     };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('description', data.description || '');
+        const mealData = data as AddMealFormValues;
 
-        const photoFile = dataURLtoFile(data.photo, 'photo.jpg');
-        formData.append('photo', photoFile);
-
-        formData.append('waiting_time', formatCancellationTime(data.waiting_time));
-        if (data.tags.length) {
-            data.tags.forEach((tag: { name: string }, index: number) => {
-                formData.append(`tags[${index}]name`, tag.name);
-            });
-        }
-        formData.append('base_price', data.base_price);
-        formData.append('is_visible', String(data.is_visible));
-
-        if (data.features && data.features.length > 0) {
-            data.features.forEach((feature: Feature, fIndex: number) => {
-                formData.append(`features[${fIndex}]name`, feature.name);
-
-                if (feature.id > 0) {
-                    formData.append(`features[${fIndex}]id`, String(feature.id));
-                }
-
-                feature.choices.forEach((choice, cIndex: number) => {
-                    formData.append(`features[${fIndex}]choices[${cIndex}]name`, choice.name);
-                    formData.append(`features[${fIndex}]choices[${cIndex}]price`, String(choice.price));
-
-                    if (choice.id > 0) {
-                        formData.append(`features[${fIndex}]choices[${cIndex}]id`, String(choice.id));
-                    }
-                });
-            });
-        }
+        const formData = buildMealFormData({
+            ...mealData,
+            waiting_time: formatMinutesToTime(mealData.waiting_time),
+        });
 
         await mutateAsync({
             cateringId: Number(cateringId),
@@ -91,7 +64,23 @@ const AddMeal = () => {
                     tags: [],
                     base_price: '',
                     is_visible: true,
-                    features: [],
+                    features: [
+                        {
+                            id: PRESET_SIZE_FEATURE_ID,
+                            name: 'Размер',
+                            selection_type: 'single',
+                            pricing_strategy: 'override',
+                            choices: [
+                                {
+                                    id: -Date.now(),
+                                    name: 'Стандартный',
+                                    price: 20,
+                                    is_visible: true,
+                                    is_default: true,
+                                },
+                            ],
+                        },
+                    ],
                 }}
             />
         </>

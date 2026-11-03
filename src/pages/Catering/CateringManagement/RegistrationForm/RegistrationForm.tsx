@@ -14,14 +14,15 @@ type RegistrationFormProps = {
     isLoading?: boolean;
     children: ReactNode;
     nameForm: string;
+    stepFields: string[][];
 };
 
-const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, nameForm }: RegistrationFormProps) => {
+const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, nameForm, stepFields }: RegistrationFormProps) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const methods = useForm<FieldValues>({
         defaultValues,
-        mode: 'onChange',
+        mode: 'onTouched',
     });
     const { trigger, handleSubmit } = methods;
     const [currentStep, setCurrentStep] = useState(1);
@@ -33,7 +34,7 @@ const RegistrationForm = ({ title, onSubmit, defaultValues = {}, children, nameF
     };
 
     const handleNextClick = async () => {
-        const isStepValid = await trigger(undefined, { shouldFocus: true });
+        const isStepValid = await trigger(stepFields[currentStep - 1], { shouldFocus: true });
         if (isStepValid) {
             setCurrentStep((prev) => prev + 1);
         }

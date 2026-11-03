@@ -18,6 +18,12 @@ const AdditivesStep = () => {
 
     const handleClosePopup = () => setPopupState(null);
 
+    const handleDeleteFeature = (featureId: number) => {
+        const current = (getValues('features') as Feature[]) ?? [];
+        const updated = current.filter((f) => f.id !== featureId);
+        setValue('features', updated, { shouldValidate: true });
+    };
+
     const handleSaveFeature = (savedFeature: Feature) => {
         const current = (getValues('features') as Feature[]) ?? [];
         const exists = current.some((f) => f.id === savedFeature.id);
@@ -37,7 +43,10 @@ const AdditivesStep = () => {
                             <li className={styles.list__item} key={feature.id}>
                                 <div className={styles.list__item_title}>
                                     <p className={styles.list__item_name}>{feature.name}</p>
-                                    <button className={styles.list__edit} onClick={() => handleOpenEdit(feature)}></button>
+                                    <div className={styles.list__buttons}>
+                                        <button className={`${styles.list__button} ${styles.list__edit}`} onClick={() => handleOpenEdit(feature)}></button>
+                                        <button className={`${styles.list__button} ${styles.list__delete}`} onClick={() => handleDeleteFeature(feature.id)}></button>
+                                    </div>
                                 </div>
                                 <ul className={styles.list__additives}>
                                     {feature.choices.map((choice) => (
@@ -52,6 +61,7 @@ const AdditivesStep = () => {
                     </ul>
                 </div>
             ) : null}
+
             {popupState && <AddAdditivePopup data={popupState.feature} onClose={handleClosePopup} onSave={handleSaveFeature} />}
             <ButtonIconAdd onClick={handleOpenCreate}>{t('pages.cateringManagement.addAdditionsToMeal')}</ButtonIconAdd>
         </fieldset>
