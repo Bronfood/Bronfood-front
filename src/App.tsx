@@ -40,6 +40,9 @@ import EditManager from './pages/Catering/Administrators/EditManager/EditManager
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
+import Finance from './pages/Catering/Finance/Finance';
+import Wallet from './pages/Catering/Finance/Wallet/Wallet';
+import Marketplace from './pages/Catering/Finance/Marketplace/Marketplace';
 
 function App() {
     return (
@@ -74,6 +77,11 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
 
                 <Route path="/catering" element={<Catering />}>
+                    <Route path="finance" element={<Finance />}>
+                        <Route path="wallet" element={<Wallet />} />
+                        <Route path="marketplace" element={<Marketplace />} />
+                    </Route>
+
                     <Route path="add-catering" element={<AddCatering />} />
                     <Route path=":cateringId" element={<CateringDetails />} />
                     <Route path=":cateringId/edit-catering" element={<EditCatering />} />

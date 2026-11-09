@@ -1,0 +1,43 @@
+.wallet {
+    padding: 0 20px;
+
+    form {
+        padding: 0;
+    }
+
+    &__fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+
+        input[name='amount']::-webkit-outer-spin-button,
+        input[name='amount']::-webkit-inner-spin-button {
+            appearance: none;
+            margin: 0;
+        }
+
+        input[name='amount'] {
+            appearance: textfield;
+        }
+    }
+}
+
+.popup-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 122px;
+    position: fixed;
+    z-index: 2;
+    background: rgb(135 133 133 / 75%);
+    backdrop-filter: blur(2.5px);
+}
+
+.preloader-wrapper {
+    position: absolute;
+}

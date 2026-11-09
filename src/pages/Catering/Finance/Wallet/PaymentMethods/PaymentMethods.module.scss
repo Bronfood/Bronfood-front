@@ -1,0 +1,88 @@
+@use '../../../../../styles/variables';
+
+.bank-card {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: variables.$button-grey;
+    border-radius: 12px;
+    gap: 12px;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        &_title {
+            display: flex;
+            font-size: 16px;
+            gap: 4px;
+        }
+
+        &_subtitle {
+            color: variables.$grey;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 140%;
+        }
+    }
+
+    &__label {
+        font-size: 16px;
+    }
+
+    &__icon {
+        width: 44px;
+        aspect-ratio: 4 / 3;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+
+        &_visa {
+            background-image: url('/src/vendor/images/icons/visa.svg');
+        }
+
+        &_mastercard {
+            background-image: url('/src/vendor/images/icons/mastercard.svg');
+        }
+    }
+
+    &__button {
+        cursor: pointer;
+        margin-left: auto;
+        border: none;
+        background-color: transparent;
+        width: 25px;
+        height: 25px;
+        aspect-ratio: 1/1;
+        background-image: url('/src/vendor/images/icons/close-icon.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        &_add {
+            rotate: 45deg;
+        }
+    }
+
+    &__dots {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        &::before,
+        &::after {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: variables.$grey-dark;
+            border-radius: 50%;
+        }
+    }
+}
+
+.payment-methods {
+    margin-top: 20px;
+}
