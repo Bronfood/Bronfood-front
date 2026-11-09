@@ -41,6 +41,12 @@ const CateringNavigation: FC<CateringNavigation> = (props) => {
                 </div>
             </li>
             <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_finance}`}></div>
+                <Link to="/catering/finance" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.cateringNavigation.finance')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_add}`}></div>
                 <Link to="/catering/administrators" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.cateringNavigation.administrators')}

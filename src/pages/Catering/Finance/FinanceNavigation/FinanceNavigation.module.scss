@@ -1,0 +1,60 @@
+@use '../../../../styles/variables';
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background-color: variables.$button-grey;
+    border-radius: 16px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+
+    &__icon {
+        width: 35px;
+        height: 35px;
+        flex-shrink: 0;
+
+        &_marketplace {
+            background-image: url('/src/vendor/images/icons/marketplace.svg');
+        }
+
+        &_wallet {
+            background-image: url('/src/vendor/images/icons/wallet.svg');
+        }
+    }
+
+    &__arrow {
+        width: 24px;
+        height: 24px;
+        background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        background-size: cover;
+        rotate: 180deg;
+        margin-left: auto;
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+
+        &_title {
+            font-size: 17px;
+        }
+
+        &_subtitle {
+            color: variables.$grey;
+            font-size: 14px;
+            font-weight: 400;
+        }
+    }
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 25px 20px 0;
+}
