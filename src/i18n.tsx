@@ -40,6 +40,16 @@ i18n
                             invalidPhoneNumberFormat: 'Неверный ввод',
                             phoneNumber: 'Телефон',
                         },
+                        authMethodToggle: {
+                            phone: 'Телефон',
+                            login: 'Логин',
+                        },
+
+                        inputLogin: {
+                            login: 'Логин',
+                            loginPlaceholder: 'Введите логин',
+                        },
+
                         inputPassword: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод. Только латинские буквы, цифры и символы - !@#$%^&*()-_+=<>?',
@@ -163,10 +173,6 @@ i18n
                     pages: {
                         signIn: {
                             signInHeading: 'Вход',
-                            phone: 'Телефон',
-                            login: 'Логин',
-                            loginPlaceholder: 'Введите логин',
-                            phonePlaceholder: '+7 (777) 777-77-77',
                             invalidCredentials: 'Телефон или пароль введен неверно, повторите попытку еще раз.',
                             password: 'Пароль',
                             name: 'Имя',
