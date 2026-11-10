@@ -40,6 +40,7 @@ import EditManager from './pages/Catering/Administrators/EditManager/EditManager
 import MyOrders from './pages/MyOrders/MyOrders';
 import Partnership from './pages/Partnership/Partnership';
 import Support from './pages/Support/Support';
+import ManagerOrders from './pages/ManagerOrders/ManagerOrders';
 
 function App() {
     return (
@@ -49,6 +50,7 @@ function App() {
             <Routes>
                 <Route path="/waiting-order" element={<ProtectedRoute component={<WaitingOrder />} />} />
                 <Route path="/leave-order-feedback" element={<ProtectedRoute component={<LeaveOrderFeedback />} />} />
+                <Route path="/manager-orders" element={<ManagerOrders />} />
                 <Route path="/partnership" element={<Partnership />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/signin" element={<SignIn />} />

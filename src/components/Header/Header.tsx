@@ -55,6 +55,11 @@ const Header = () => {
         }
     }, [isMenuActive]);
 
+    // The manager orders screen renders its own header, so the global header is hidden there.
+    if (location.pathname === '/manager-orders') {
+        return null;
+    }
+
     return (
         <header className={styles.header}>
             <div className={`${styles.header__container} ${!isContentVisible ? styles.header__container_hidden : ''}`}>
