@@ -2,8 +2,14 @@ import { AuthService, ConfirmUpdateUser, LoginData, RegisterPayload, ConfirmRegi
 import { handleFetch } from '../serviceFuncs/handleFetch';
 
 export class AuthServiceReal implements AuthService {
-    async login({ phone, password }: LoginData): Promise<void> {
-        const result = await handleFetch('api/auth/jwt/create/', { method: 'POST', data: { username: phone, password } });
+    async login({ phone, username, password }: LoginData): Promise<void> {
+        const loginValue = username || phone || '';
+
+        const result = await handleFetch('api/auth/jwt/create/', {
+            method: 'POST',
+            data: { username: loginValue, password },
+        });
+
         const { access } = result.data;
         localStorage.setItem('token', access);
         delete result.data.access;

@@ -13,12 +13,6 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
     return (
         <ul className={`${styles.nav__menu}`}>
             <li className={styles.nav__item}>
-                <div className={`${styles.nav__icon} ${styles.nav__icon_list}`}></div>
-                <Link to="/feedback" className={styles.nav__link} onClick={props.handleItemMenuClick}>
-                    {t('components.guestNavigation.aboutService')}
-                </Link>
-            </li>
-            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_customer}`}></div>
                 <Link to="/signup" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.guestNavigation.signUpAsABuyer')}
@@ -31,6 +25,12 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
                 </Link>
             </li>
             <li className={styles.nav__item}>
+                <div className={`${styles.nav__icon} ${styles.nav__icon_list}`}></div>
+                <Link to="/feedback" className={styles.nav__link} onClick={props.handleItemMenuClick}>
+                    {t('components.guestNavigation.aboutService')}
+                </Link>
+            </li>
+            <li className={styles.nav__item}>
                 <div className={`${styles.nav__icon} ${styles.nav__icon_support}`}></div>
                 <Link to="/support" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.guestNavigation.support')}
@@ -40,18 +40,6 @@ const GuestNavigation: FC<GuestNavigation> = (props) => {
                 <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
                 <Link to="/signin" className={styles.nav__link} onClick={props.handleItemMenuClick}>
                     {t('components.guestNavigation.signIn')}
-                </Link>
-            </li>
-            <li className={styles.nav__item}>
-                <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
-                <Link to="/manager" className={styles.nav__link} onClick={props.handleItemMenuClick}>
-                    {t('components.guestNavigation.signInAsAdmin')}
-                </Link>
-            </li>
-            <li className={styles.nav__item}>
-                <div className={`${styles.nav__icon} ${styles.nav__icon_enter}`}></div>
-                <Link to="/catering/administrators" className={styles.nav__link} onClick={props.handleItemMenuClick}>
-                    {t('components.guestNavigation.signInAsCatering')}
                 </Link>
             </li>
         </ul>
