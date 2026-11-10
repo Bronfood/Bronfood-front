@@ -70,7 +70,7 @@ const SignIn = () => {
                 <fieldset className={styles.form__field} disabled={signIn.isPending}>
                     <AuthMethodToggle activeMethod={authMethod} onChange={handleMethodChange} />
                     <FormInputs>
-                        {authMethod === 'phone' ? <InputPhone register={register} errors={errors} /> : <InputLogin register={register} errors={errors} name="login" />}
+                        {authMethod === 'phone' ? <InputPhone register={register} errors={errors} /> : <InputLogin register={register} errors={errors} />}
                         <InputPassword register={register} errors={errors} name="password" nameLabel={t('pages.signIn.password')} required={true} />
                     </FormInputs>
                 </fieldset>

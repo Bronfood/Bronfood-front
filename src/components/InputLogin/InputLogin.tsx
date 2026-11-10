@@ -13,17 +13,13 @@ interface InputLoginProps {
      * React Hook Forms error object
      */
     errors: FieldErrors;
-    /**
-     * Input name
-     */
-    name: string;
 }
 
-const InputLogin = ({ register, errors, name }: InputLoginProps) => {
+const InputLogin = ({ register, errors }: InputLoginProps) => {
     const { t } = useTranslation();
     const id = useId();
 
-    const errorMessage = (errors[name]?.message as string) || undefined;
+    const errorMessage = (errors['login']?.message as string) || undefined;
 
     return (
         <div className={styles.input}>
@@ -35,7 +31,7 @@ const InputLogin = ({ register, errors, name }: InputLoginProps) => {
                 className={styles.input__place}
                 type="text"
                 placeholder={t('components.inputLogin.loginPlaceholder')}
-                {...register(name, {
+                {...register('login', {
                     required: t('components.input.required'),
                     pattern: {
                         value: regexLogin,
