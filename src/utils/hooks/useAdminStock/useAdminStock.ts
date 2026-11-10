@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AdminMealStock, AdminStockFilters, adminStockService, MealChoice } from '../../api/adminStockService/adminStockService';
+import { AdminMealStock, AdminStockFilters, adminStockService, UpdateChoiceVisibilityPayload } from '../../api/adminStockService/adminStockService';
 
 export const useGetAdminStockMeals = (restaurantId: number, filters: AdminStockFilters = {}) => {
     return useQuery({
@@ -15,7 +15,7 @@ export const useSetAdminStockMealVisibility = () => {
         mutationFn: ({ restaurantId, mealId, payload }: { restaurantId: number; mealId: number; payload: Pick<AdminMealStock, 'is_visible'> }) => adminStockService.setAdminStockMealVisibility(restaurantId, mealId, payload),
         onSuccess: ({ data: updatedMeal }, { restaurantId }) => {
             queryClient.setQueriesData<{ data: AdminMealStock[] }>({ queryKey: ['adminStockMeals', restaurantId] }, (old) => old && { ...old, data: old.data.map((meal) => (meal.id === updatedMeal.id ? updatedMeal : meal)) });
-            queryClient.invalidateQueries({ queryKey: ['adminStockMeals', restaurantId] });
+            return queryClient.invalidateQueries({ queryKey: ['adminStockMeals', restaurantId] });
         },
     });
 };
@@ -23,7 +23,7 @@ export const useSetAdminStockMealVisibility = () => {
 export const useSetAdminStockMealChoiceVisibility = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ restaurantId, mealId, choiceId, payload }: { restaurantId: number; mealId: number; choiceId: number; payload: Pick<MealChoice, 'is_visible'> }) => adminStockService.setAdminStockMealChoiceVisibility(restaurantId, mealId, choiceId, payload),
+        mutationFn: ({ restaurantId, mealId, choiceId, payload }: { restaurantId: number; mealId: number; choiceId: number; payload: UpdateChoiceVisibilityPayload }) => adminStockService.setAdminStockMealChoiceVisibility(restaurantId, mealId, choiceId, payload),
         onSuccess: ({ data: updatedChoice }, { restaurantId, mealId }) => {
             queryClient.setQueriesData<{ data: AdminMealStock[] }>(
                 { queryKey: ['adminStockMeals', restaurantId] },
@@ -43,7 +43,7 @@ export const useSetAdminStockMealChoiceVisibility = () => {
                         ),
                     }
             );
-            queryClient.invalidateQueries({ queryKey: ['adminStockMeals', restaurantId] });
+            return queryClient.invalidateQueries({ queryKey: ['adminStockMeals', restaurantId] });
         },
     });
 };

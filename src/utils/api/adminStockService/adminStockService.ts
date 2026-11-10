@@ -56,14 +56,27 @@ export type AdminStockFilters = {
      * true / false
      */
     isVisible?: boolean;
+    /**
+     * true / false
+     */
     uncategorized?: boolean;
+    /**
+     * Id category
+     */
     categoryIds?: number[];
+};
+
+export type UpdateChoiceVisibilityPayload = Pick<MealChoice, 'is_visible'> & {
+    /**
+     * New choice id
+     */
+    new_default_choice_id?: number;
 };
 
 export interface AdminStockService {
     getAdminStockMeals: (restaurantId: number, filters?: AdminStockFilters) => Promise<{ data: AdminMealStock[] }>;
     setAdminStockMealVisibility: (restaurantId: number, mealId: number, payload: Pick<AdminMealStock, 'is_visible'>) => Promise<{ data: AdminMealStock }>;
-    setAdminStockMealChoiceVisibility: (restaurantId: number, mealId: number, choiceId: number, payload: Pick<MealChoice, 'is_visible'>) => Promise<{ data: MealChoice }>;
+    setAdminStockMealChoiceVisibility: (restaurantId: number, mealId: number, choiceId: number, payload: UpdateChoiceVisibilityPayload) => Promise<{ data: MealChoice }>;
 }
 
 export const adminStockService = new AdminStockServiceReal();

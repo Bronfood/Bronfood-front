@@ -466,6 +466,8 @@ i18n
                             timeForDelivery: 'Время на доставку',
                             placeholderDuration: '45',
                             placeholderCertainTime: '14:30',
+                            selectNewDefaultOption: 'Выберите новый вариант по умолчанию',
+                            chooseWhichTheRemainingOptionsWillBeMain: 'Выберите, какой из оставшихся вариантов станет основным.',
                         },
 
                         administrators: {

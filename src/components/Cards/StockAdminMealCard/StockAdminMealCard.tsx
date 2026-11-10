@@ -2,16 +2,27 @@ import { useState } from 'react';
 import { AdminMealStock, MealChoice, MealFeature } from '../../../utils/api/adminStockService/adminStockService';
 import styles from './StockAdminMealCard.module.scss';
 
-function Choice({ choice, checked, onChange }: { choice: MealChoice; checked: boolean; onChange: () => void }) {
+function Choice({ choice, checked, onChange, disabled }: { choice: MealChoice; checked: boolean; onChange: () => void; disabled?: boolean }) {
     return (
         <label className={styles.choice__label}>
             <p className={styles.choice__name}>{choice.name}</p>
-            <input type="checkbox" checked={checked} onChange={onChange} className={styles.choice__checkbox}></input>
+            <input type="checkbox" checked={checked} onChange={onChange} className={styles.choice__checkbox} disabled={disabled}></input>
         </label>
     );
 }
 
-function Feature({ feature, onChoiceToggle }: { feature: MealFeature; onChoiceToggle: (choiceId: number, current: boolean) => void }) {
+function Feature({ feature, onChoiceToggle }: { feature: MealFeature; onChoiceToggle: (choiceId: number, current: boolean, featureChoices?: MealChoice[]) => void }) {
+    const visibleChoices = feature.choices.filter((c) => c.is_visible);
+
+    const handleToggleChoice = (choice: MealChoice) => {
+        const isHidingDefault = choice.is_visible && choice.default;
+        if (isHidingDefault) {
+            onChoiceToggle(choice.id, choice.is_visible, feature.choices);
+        } else {
+            onChoiceToggle(choice.id, choice.is_visible);
+        }
+    };
+
     return (
         <>
             <p className={styles.feature__name}>{feature.name}</p>
@@ -19,7 +30,7 @@ function Feature({ feature, onChoiceToggle }: { feature: MealFeature; onChoiceTo
                 <ul className={styles.feature__choices}>
                     {feature.choices.map((choice) => (
                         <li key={choice.id} className={styles.feature__choices_item}>
-                            <Choice choice={choice} checked={choice.is_visible} onChange={() => onChoiceToggle(choice.id, choice.is_visible)} />
+                            <Choice choice={choice} checked={choice.is_visible} onChange={() => handleToggleChoice(choice)} disabled={choice.is_visible && visibleChoices.length === 1} />
                         </li>
                     ))}
                 </ul>
@@ -32,7 +43,7 @@ type StockAdminMealCardProps = {
     meal: AdminMealStock;
     isMealVisible: boolean;
     onVisibleToggle: () => void;
-    onChoiceToggle: (choiceId: number, current: boolean) => void;
+    onChoiceToggle: (choiceId: number, current: boolean, featureChoices?: MealChoice[]) => void;
 };
 
 function StockAdminMealCard({ meal, isMealVisible, onVisibleToggle, onChoiceToggle }: StockAdminMealCardProps) {

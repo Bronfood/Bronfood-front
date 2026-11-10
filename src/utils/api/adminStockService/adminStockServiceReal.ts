@@ -1,5 +1,5 @@
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { AdminMealStock, AdminStockFilters, AdminStockService, MealChoice } from './adminStockService';
+import { AdminMealStock, AdminStockFilters, AdminStockService, MealChoice, UpdateChoiceVisibilityPayload } from './adminStockService';
 
 export class AdminStockServiceReal implements AdminStockService {
     async getAdminStockMeals(restaurantId: number, filters: AdminStockFilters = {}): Promise<{ data: AdminMealStock[] }> {
@@ -19,7 +19,7 @@ export class AdminStockServiceReal implements AdminStockService {
         });
     }
 
-    async setAdminStockMealChoiceVisibility(restaurantId: number, mealId: number, choiceId: number, payload: Pick<MealChoice, 'is_visible'>): Promise<{ data: MealChoice }> {
+    async setAdminStockMealChoiceVisibility(restaurantId: number, mealId: number, choiceId: number, payload: UpdateChoiceVisibilityPayload): Promise<{ data: MealChoice }> {
         return handleFetch(`api/restaurants/${restaurantId}/admin/meals/${mealId}/choices/${choiceId}/`, {
             method: 'PATCH',
             data: payload,

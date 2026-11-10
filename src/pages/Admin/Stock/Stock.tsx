@@ -1,7 +1,7 @@
 import Preloader from '../../../components/Preloader/Preloader';
 import { useTranslation } from 'react-i18next';
 import styles from './Stock.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import { useNavigate } from 'react-router-dom';
 import CategoryFilter from '../../../components/CategoryFilter/CategoryFilter';
@@ -10,9 +10,10 @@ import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUse
 import { useGetAdminCategories } from '../../../utils/hooks/useAdminCategory/useAdminCategory';
 import { Category } from '../../../utils/api/categoryService/categoryService';
 import StockAdminMealCard from '../../../components/Cards/StockAdminMealCard/StockAdminMealCard';
-import { AdminStockFilters } from '../../../utils/api/adminStockService/adminStockService';
+import { AdminStockFilters, MealChoice } from '../../../utils/api/adminStockService/adminStockService';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
+import NewDefaultChoicePopup from './NewDefaultChoicePopup/NewDefaultChoicePopup';
 
 function Stock() {
     const { t } = useTranslation();
@@ -21,6 +22,11 @@ function Stock() {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showUncategorized, setShowUncategorized] = useState(false);
     const [showHidden, setShowHidden] = useState(false);
+    const [popupData, setPopupData] = useState<{
+        mealId: number;
+        choiceIdToHide: number;
+        availableChoices: MealChoice[];
+    } | null>(null);
 
     const { restaurantId } = useCurrentUser();
     const numericRestaurantId = Number(restaurantId);
@@ -38,6 +44,7 @@ function Stock() {
     const categories: Category[] = categoriesData?.data ?? [];
     const error = mealVisibilityError || mealChoiceVisibilityError || mealsError || categoriesError;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
+    const loading = isLoadingMeals || isLoadingCategories || isPendingMealVisibility || isPendingMealChoiceVisibility;
 
     const customFilters = [
         { name: 'hidden', text: t('pages.admin.hidden'), selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) },
@@ -60,58 +67,100 @@ function Stock() {
         });
     };
 
-    const handleVisibleToggleMealChoice = (mealId: number, choiceId: number, current: boolean) => {
+    const handleVisibleToggleMealChoice = (mealId: number, choiceId: number, current: boolean, featureChoices?: MealChoice[]) => {
+        if (featureChoices) {
+            const available = featureChoices.filter((c) => c.is_visible && c.id !== choiceId);
+
+            setPopupData({
+                mealId,
+                choiceIdToHide: choiceId,
+                availableChoices: available,
+            });
+            return;
+        }
+
         setMealChoiceVisibility({
             restaurantId: numericRestaurantId,
             mealId,
             choiceId,
-            payload: { is_visible: !current },
+            payload: {
+                is_visible: !current,
+            },
         });
     };
 
-    const close = () => {
-        navigate('/manager');
+    const handleConfirmNewDefault = (newDefaultId: number) => {
+        if (!popupData) return;
+
+        setMealChoiceVisibility(
+            {
+                restaurantId: numericRestaurantId,
+                mealId: popupData.mealId,
+                choiceId: popupData.choiceIdToHide,
+                payload: {
+                    is_visible: false,
+                    new_default_choice_id: newDefaultId,
+                },
+            },
+            {
+                onSuccess: () => setPopupData(null),
+            }
+        );
     };
 
     const hasFilters = selectedIds.length > 0 || showHidden || showUncategorized;
     const mealsList = meals?.data ?? [];
     const isEmpty = !isLoadingMeals && !mealsError && mealsList.length === 0;
 
+    useEffect(() => {
+        if (popupData || loading) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [popupData, loading]);
+
     return (
-        <div className={styles['stock']}>
-            {(isLoadingMeals || isLoadingCategories || isPendingMealVisibility || isPendingMealChoiceVisibility) && (
+        <>
+            {loading && (
                 <div className={styles['stock__preloader']}>
                     <Preloader />
                 </div>
             )}
-
-            <div className={`${styles['stock__close']} ${styles['stock__close_button']}`}>
-                <Button type="button" onClick={close} icon="close" />
-            </div>
-
-            <h2 className={styles['stock__title']}>{t(`pages.admin.stock`)}</h2>
-
-            {error && (
-                <div style={{ padding: '0 20px' }}>
-                    <ErrorMessage message={errorMessage} />
+            <div className={`${styles['stock']} ${popupData ? styles['stock_overlay'] : ''}`}>
+                <div className={`${styles['stock__close']} ${styles['stock__close_button']}`}>
+                    <Button type="button" onClick={() => navigate('/manager')} icon="close" />
                 </div>
-            )}
 
-            {isEmpty && !hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noAvailableMeal')}</p>}
-            {isEmpty && hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>}
+                <h2 className={styles['stock__title']}>{t(`pages.admin.stock`)}</h2>
 
-            {mealsList.length > 0 && (
-                <ul className={styles['stock__meals']}>
-                    {mealsList.map((meal) => (
-                        <StockAdminMealCard key={meal.id} meal={meal} isMealVisible={meal.is_visible} onVisibleToggle={() => handleVisibleToggleMeal(meal.id, meal.is_visible)} onChoiceToggle={(choiceId, current) => handleVisibleToggleMealChoice(meal.id, choiceId, current)} />
-                    ))}
-                </ul>
-            )}
+                {error && (
+                    <div style={{ padding: '0 20px' }}>
+                        <ErrorMessage message={errorMessage} />
+                    </div>
+                )}
 
-            <div className={styles['stock__category-filter']}>
-                <CategoryFilter categories={categories} selectedIds={selectedIds} select={handleSelect} deselect={handleDeselect} customFilters={customFilters} />
+                {isEmpty && !hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noAvailableMeal')}</p>}
+                {isEmpty && hasFilters && <p className={styles['stock__empty']}>{t('pages.admin.noMealsInTheSelectedCategories')}</p>}
+
+                {mealsList.length > 0 && (
+                    <ul className={styles['stock__meals']}>
+                        {mealsList.map((meal) => (
+                            <StockAdminMealCard key={meal.id} meal={meal} isMealVisible={meal.is_visible} onVisibleToggle={() => handleVisibleToggleMeal(meal.id, meal.is_visible)} onChoiceToggle={(choiceId, current, featureChoices) => handleVisibleToggleMealChoice(meal.id, choiceId, current, featureChoices)} />
+                        ))}
+                    </ul>
+                )}
+
+                <div className={styles['stock__category-filter']}>
+                    <CategoryFilter categories={categories} selectedIds={selectedIds} select={handleSelect} deselect={handleDeselect} customFilters={customFilters} />
+                </div>
             </div>
-        </div>
+
+            {popupData && <NewDefaultChoicePopup availableChoices={popupData.availableChoices} onClose={() => setPopupData(null)} onConfirm={handleConfirmNewDefault} isLoading={isPendingMealChoiceVisibility} />}
+        </>
     );
 }
 

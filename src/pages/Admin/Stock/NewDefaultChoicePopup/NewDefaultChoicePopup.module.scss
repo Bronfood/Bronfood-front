@@ -1,0 +1,92 @@
+@use '../../../../styles/variables';
+
+.popup {
+    &__content {
+        display: flex;
+        flex-direction: column;
+        padding: 15px 5px 0;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        margin-top: 25px;
+        gap: 10px;
+    }
+
+    &__item {
+        &_label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 10px;
+        }
+
+        &_name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        &_input {
+            position: relative;
+            display: flex;
+            appearance: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            background-color: variables.$button-grey;
+            border: 1px solid variables.$line;
+            cursor: pointer;
+
+            &:checked {
+                background-color: variables.$orange;
+                background-image: url('/src/vendor/images/icons/radioButton/check.svg');
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+        }
+    }
+
+    &__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        padding: 0 14px;
+        text-align: center;
+    }
+
+    &__close {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        top: 20px;
+        right: 15px;
+        border: none;
+        background-color: transparent;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url('/src/vendor/images/icons/close-icon.svg');
+    }
+
+    &__info {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+
+        &_icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url('/src/vendor/images/icons/info-icon.svg');
+        }
+
+        &_text {
+            font-size: 12px;
+            font-weight: 400;
+        }
+    }
+}

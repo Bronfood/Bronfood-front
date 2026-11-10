@@ -12,8 +12,24 @@
     padding: 44px 15px 156px;
     margin: 0 auto;
     z-index: map.get(variables.$z-indexes, 'drawer');
-    overflow-y: auto;
     min-height: 100vh;
+
+    &_overlay {
+        pointer-events: none;
+
+        &::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(135 133 133 / 75%);
+            backdrop-filter: blur(2.5px);
+            z-index: 10;
+            pointer-events: auto;
+        }
+    }
 
     &__close {
         position: absolute;
@@ -62,13 +78,14 @@
 
     &__preloader {
         > div:first-child {
+            position: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
-            left: 15px;
-            top: 40px;
-            width: calc(100% - 30px);
-            height: calc(100vh - 55px);
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: calc(100% - 111px);
             background-color: variables.$button-grey;
             border-radius: 15px;
         }
