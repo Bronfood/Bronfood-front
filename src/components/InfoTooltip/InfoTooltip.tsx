@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, FC } from 'react';
 import styles from './InfoTooltip.module.scss';
 
-interface InfoTooltipProps {
+interface InfoTooltip {
+    /**
+     * Text tooltip
+     */
     text: string;
 }
 
-const InfoTooltip = ({ text }: InfoTooltipProps) => {
+const InfoTooltip: FC<InfoTooltip> = (props) => {
     const [isOpen, setIsOpen] = useState(false);
-    const triggerRef = useRef<HTMLButtonElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleToggle = () => {
         setIsOpen((prev) => !prev);
@@ -16,10 +18,7 @@ const InfoTooltip = ({ text }: InfoTooltipProps) => {
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            const isClickInsideTrigger = triggerRef.current?.contains(e.target as Node);
-            const isClickInsideContent = contentRef.current?.contains(e.target as Node);
-
-            if (isOpen && !isClickInsideTrigger && !isClickInsideContent) {
+            if (isOpen && containerRef.current && !containerRef.current.contains(e.target as Node)) {
                 setIsOpen(false);
             }
         };
@@ -29,11 +28,11 @@ const InfoTooltip = ({ text }: InfoTooltipProps) => {
     }, [isOpen]);
 
     return (
-        <div className={styles.container}>
-            <button type="button" className={styles.container__button} onClick={handleToggle} ref={triggerRef} />
+        <div className={styles.container} ref={containerRef}>
+            <button type="button" className={styles.container__button} onClick={handleToggle} />
             {isOpen && (
-                <div className={styles.container__content} ref={contentRef}>
-                    <p className={styles.container__content_text}>{text}</p>
+                <div className={styles.container__content}>
+                    <p className={styles.container__content_text}>{props.text}</p>
                 </div>
             )}
         </div>

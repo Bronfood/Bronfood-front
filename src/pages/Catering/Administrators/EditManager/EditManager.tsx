@@ -61,7 +61,7 @@ const EditManager = () => {
                 password: data.password,
             },
         });
-        navigate(`/catering/${cateringId}managers`, {
+        navigate(`/catering/${cateringId}/managers`, {
             state: {
                 fromSubmit: true,
             },

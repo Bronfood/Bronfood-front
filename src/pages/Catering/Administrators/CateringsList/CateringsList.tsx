@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 export const CateringsList = ({ caterings, onClick }: { caterings: Catering[]; onClick: (id: number) => void }) => {
     const { t } = useTranslation();
     return (
-        <div className={styles['restaurant__container']}>
-            <p className={styles['restaurant__title']}>{t('pages.administrators.chooseAnCatering')}</p>
-            <ul className={styles['restaurant__list']}>
+        <div className={styles['caterings__container']}>
+            <p className={styles['caterings__title']}>{t('pages.administrators.chooseAnCatering')}</p>
+            <ul className={styles['caterings__list']}>
                 {caterings.map((catering) => (
                     <li key={catering.id} onClick={() => onClick(catering.id)}>
                         <RestaurantCardCompact card={catering} />
@@ -22,8 +22,8 @@ export const CateringsList = ({ caterings, onClick }: { caterings: Catering[]; o
 export const EmptyCateringsList = () => {
     const { t } = useTranslation();
     return (
-        <div className={styles['restaurant__container']}>
-            <p className={styles['restaurant__title']}>{t('pages.administrators.createCateringToAddAnAdministrator')}</p>
+        <div className={styles['caterings__container']}>
+            <p className={styles['caterings__title']}>{t('pages.administrators.createCateringToAddAnAdministrator')}</p>
         </div>
     );
 };
