@@ -1,0 +1,24 @@
+@use '../../styles/variables';
+
+.toggle {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    &__button {
+        flex: 1;
+        padding: 10px 0;
+        border: none;
+        background: transparent;
+        border-bottom: 1px solid transparent;
+        color: variables.$grey;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &_active {
+            border-bottom: 1px solid variables.$orange;
+        }
+    }
+}

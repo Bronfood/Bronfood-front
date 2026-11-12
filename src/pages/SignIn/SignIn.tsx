@@ -7,13 +7,16 @@ import styles from './SignIn.module.scss';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import InputPassword from '../../components/InputPassword/InputPassword';
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import InputPhone from '../../components/InputPhone/InputPhone';
+
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { useCurrentUser } from '../../utils/hooks/useCurrentUser/useCurretUser';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Preloader from '../../components/Preloader/Preloader';
 import { useQueryClient } from '@tanstack/react-query';
 import { getErrorMessage } from '../../utils/serviceFuncs/getErrorMessage';
+import AuthMethodToggle from '../../components/AuthMethodToggle/AuthMethodToggle';
+import InputLogin from '../../components/InputLogin/InputLogin';
 
 const SignIn = () => {
     const queryClient = useQueryClient();
@@ -25,7 +28,10 @@ const SignIn = () => {
         register,
         handleSubmit,
         formState: { errors },
+        resetField,
     } = useForm();
+
+    const [authMethod, setAuthMethod] = useState<'phone' | 'login'>('phone');
 
     useEffect(() => {
         if (isLogin) {
@@ -33,9 +39,20 @@ const SignIn = () => {
         }
     }, [isLogin, navigate]);
 
+    const handleMethodChange = (method: 'phone' | 'login') => {
+        setAuthMethod(method);
+        if (method === 'phone') {
+            resetField('login');
+        } else {
+            resetField('phoneNumber');
+        }
+    };
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const { password, phoneNumber } = data;
-        await signIn.mutateAsync({ phone: phoneNumber.replace(/\D/g, ''), password });
+        const { password, phoneNumber, login } = data;
+        const username = authMethod === 'phone' ? (phoneNumber || '').replace(/\D/g, '') : login;
+
+        await signIn.mutateAsync({ username, password });
         queryClient.invalidateQueries({ queryKey: ['basket'], exact: true });
     };
 
@@ -51,8 +68,9 @@ const SignIn = () => {
             <Form name="form-auth" onSubmit={handleSubmit(onSubmit)}>
                 {signIn.isError && <ErrorMessage message={signInErrorMessage} />}
                 <fieldset className={styles.form__field} disabled={signIn.isPending}>
+                    <AuthMethodToggle activeMethod={authMethod} onChange={handleMethodChange} />
                     <FormInputs>
-                        <InputPhone register={register} errors={errors}></InputPhone>
+                        {authMethod === 'phone' ? <InputPhone register={register} errors={errors} /> : <InputLogin register={register} errors={errors} />}
                         <InputPassword register={register} errors={errors} name="password" nameLabel={t('pages.signIn.password')} required={true} />
                     </FormInputs>
                 </fieldset>

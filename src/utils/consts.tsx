@@ -15,6 +15,7 @@ export const regexTextBasic: RegExp = /^[a-zA-Zа-яА-ЯёЁ\s\d.,!?;:«»"“�
 export const regexCaptcha: RegExp = /^[A-Za-z0-9]+$/;
 export const regexEmail: RegExp = /.+@.+\..+/;
 export const regexMessage: RegExp = /^[\s\S]{10,5000}$/;
+export const regexLogin: RegExp = /^[a-zA-Z0-9@./+_-]{1,150}$/;
 export const regex24HourTime: RegExp = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 export const MASKPHONE = '+_ (___) ___-__-__';

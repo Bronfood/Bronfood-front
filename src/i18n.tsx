@@ -23,8 +23,6 @@ i18n
                         guestNavigation: {
                             signUpAsABuyer: 'Зарегистрироваться как покупатель',
                             signIn: 'Войти',
-                            signInAsAdmin: 'Войти как админ заведения',
-                            signInAsCatering: 'Войти как заведение общественного питания',
                             aboutService: 'О сервисе',
                             partnership: 'Стать партнёром',
                             support: 'Помощь',
@@ -42,6 +40,16 @@ i18n
                             invalidPhoneNumberFormat: 'Неверный ввод',
                             phoneNumber: 'Телефон',
                         },
+                        authMethodToggle: {
+                            phone: 'Телефон',
+                            login: 'Логин',
+                        },
+
+                        inputLogin: {
+                            login: 'Логин',
+                            loginPlaceholder: 'Введите логин',
+                        },
+
                         inputPassword: {
                             required: 'Обязательное поле',
                             errorMessage: 'Неверный ввод. Только латинские буквы, цифры и символы - !@#$%^&*()-_+=<>?',
