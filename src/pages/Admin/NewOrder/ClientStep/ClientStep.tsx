@@ -1,13 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import styles from './ClientStep.module.scss';
 import { FieldValues, useForm } from 'react-hook-form';
 import { regexAddress, regexClientName, regexPhoneNumberKazakhstan, regexTextBasic } from '../../../../utils/consts';
 import { useEffect, useRef, useState } from 'react';
-import Textarea from '../../../../components/Textarea/Textarea';
-import Preloader from '../../../../components/Preloader/Preloader';
-import ClientStepInput from './ClientStepInput/ClientStepInput';
-import Fulfillments from './Fulfillments/Fulfillments';
-import ClientsList from './ClientsList/ClientsList';
 import { CookMethodRadio, PreOrderTypeRadioLayout } from './RadioInputs/RadioInputs';
 import { CertainTimeInput, DurationInput } from './TimeInputs/TimeInputs';
 import { CookMethod, PreOrderType } from '../../../../utils/api/adminService/adminService';
@@ -15,6 +9,12 @@ import { RegularClient } from '../../../../utils/api/adminClientService/adminCli
 import { useAdminOrderContext } from '../../../../utils/hooks/useAdminOrders/useAdminOrderContext';
 import { useGetClientsByPhone } from '../../../../utils/hooks/useAdminClient/useAdminClient';
 import { formatPhoneForDisplay } from '../../../../utils/serviceFuncs/formatPhoneNumber';
+import Textarea from '../../../../components/Textarea/Textarea';
+import Preloader from '../../../../components/Preloader/Preloader';
+import ClientStepInput from './ClientStepInput/ClientStepInput';
+import Fulfillments from './Fulfillments/Fulfillments';
+import ClientsList from './ClientsList/ClientsList';
+import styles from './ClientStep.module.scss';
 
 function ClientStep() {
     const { t } = useTranslation();
@@ -123,11 +123,13 @@ function ClientStep() {
     return (
         <>
             {isLoadingClient && <Preloader />}
+
             <div className={styles['client-step']}>
                 <div className={styles['client-step__container']}>
                     <p className={styles['client-step__title']}>{t('pages.admin.methodOfGetting')}</p>
                     <Fulfillments value={getMethod} name="fulfillment" register={register} />
                 </div>
+
                 <div className={styles['client-step__container']}>
                     <p className={styles['client-step__title']}>{t('pages.admin.aboutClient')}</p>
                     <div className={styles['client-step__clients-info']}>
@@ -138,6 +140,7 @@ function ClientStep() {
                         <ClientStepInput type="text" name="name" placeholder={t('pages.admin.placeholderName')} nameLabel={t('pages.admin.nameLabelName')} register={register} errors={errors} pattern={regexClientName} required={isClientRequired} />
                     </div>
                 </div>
+
                 <div className={styles['client-step__container']}>
                     <p className={styles['client-step__title']}>{t('pages.admin.whenToCook')}</p>
                     <div className={styles['client-step__cook-method']}>
@@ -162,6 +165,7 @@ function ClientStep() {
                         </div>
                     )}
                 </div>
+
                 {getMethod === 'delivery' && (
                     <div className={styles['address']}>
                         <div>

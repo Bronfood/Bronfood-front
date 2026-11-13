@@ -1,7 +1,8 @@
 import { Category } from '../../utils/api/categoryService/categoryService';
+import { FC } from 'react';
 import styles from './CategoryFilter.module.scss';
 
-type CategoryFilterProps = {
+type CategoryFilter = {
     categories: Category[];
     selectedIds: number[];
     select: (id: number) => void;
@@ -15,7 +16,7 @@ type CategoryFilterProps = {
     }[];
 };
 
-const CategoryFilter = ({ categories, selectedIds, select, deselect, customFilters }: CategoryFilterProps) => {
+const CategoryFilter: FC<CategoryFilter> = ({ categories, selectedIds, select, deselect, customFilters }: CategoryFilter) => {
     return (
         <ul className={styles.categories}>
             {customFilters?.map((filter) => (

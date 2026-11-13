@@ -82,15 +82,15 @@ export type DeliveryData = {
      */
     street: string;
     /**
-     * delivery street
+     * delivery house
      */
     house: string;
     /**
-     * delivery street
+     * delivery apartment
      */
     apartment: string;
     /**
-     * delivery street
+     * delivery note
      */
     note?: string;
 };
@@ -173,27 +173,27 @@ export type AdminNewOrder = {
     /**
      * new order accepted at
      */
-    accepted_at: Date | '';
+    accepted_at: string;
     /**
      * new order ready at
      */
-    ready_at: Date | '';
+    ready_at: string;
     /**
      * new order closed at
      */
-    closed_at: Date | '';
+    closed_at: string;
     /**
      * new order issued at
      */
-    issued_at: Date | '';
+    issued_at: string;
     /**
      * new order cancelled at
      */
-    cancelled_at: Date | '';
+    cancelled_at: string;
     /**
      * new order paid at
      */
-    paid_at: Date | '';
+    paid_at: string;
     /**
      * new order scheduled for
      */

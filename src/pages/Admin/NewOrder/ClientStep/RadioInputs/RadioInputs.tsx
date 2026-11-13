@@ -10,6 +10,13 @@ interface CookMethodRadio {
     radioAboutText: string;
 }
 
+interface PreOrderTypeRadio {
+    type: PreOrderType;
+    input?: ReactNode;
+    checked: boolean;
+    onClick: (type: PreOrderType) => void;
+}
+
 export const CookMethodRadio: FC<CookMethodRadio> = (props) => {
     return (
         <div className={`${styles.radio} ${props.method === 'now' ? styles.radio__now : ''}`} onClick={() => props.onClick(props.method)}>
@@ -21,13 +28,6 @@ export const CookMethodRadio: FC<CookMethodRadio> = (props) => {
         </div>
     );
 };
-
-interface PreOrderTypeRadio {
-    type: PreOrderType;
-    input?: ReactNode;
-    checked: boolean;
-    onClick: (type: PreOrderType) => void;
-}
 
 export const PreOrderTypeRadioLayout: FC<PreOrderTypeRadio> = (props) => {
     return (

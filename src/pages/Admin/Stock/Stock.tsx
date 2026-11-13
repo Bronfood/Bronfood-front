@@ -1,19 +1,19 @@
-import Preloader from '../../../components/Preloader/Preloader';
 import { useTranslation } from 'react-i18next';
-import styles from './Stock.module.scss';
 import { useEffect, useState } from 'react';
-import Button from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import { useNavigate } from 'react-router-dom';
-import CategoryFilter from '../../../components/CategoryFilter/CategoryFilter';
 import { useGetAdminStockMeals, useSetAdminStockMealChoiceVisibility, useSetAdminStockMealVisibility } from '../../../utils/hooks/useAdminStock/useAdminStock';
 import { useCurrentUser } from '../../../utils/hooks/useCurrentUser/useCurretUser';
 import { useGetAdminCategories } from '../../../utils/hooks/useAdminCategory/useAdminCategory';
 import { Category } from '../../../utils/api/categoryService/categoryService';
-import StockAdminMealCard from '../../../components/Cards/StockAdminMealCard/StockAdminMealCard';
 import { AdminStockFilters, MealChoice } from '../../../utils/api/adminStockService/adminStockService';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
+import Button from '../../../components/ButtonIconSquare/ButtonIconSquare';
+import Preloader from '../../../components/Preloader/Preloader';
+import CategoryFilter from '../../../components/CategoryFilter/CategoryFilter';
+import StockAdminMealCard from '../../../components/Cards/StockAdminMealCard/StockAdminMealCard';
+import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import NewDefaultChoicePopup from './NewDefaultChoicePopup/NewDefaultChoicePopup';
+import styles from './Stock.module.scss';
 
 function Stock() {
     const { t } = useTranslation();
@@ -28,23 +28,25 @@ function Stock() {
         availableChoices: MealChoice[];
     } | null>(null);
 
-    const { restaurantId } = useCurrentUser();
-    const numericRestaurantId = Number(restaurantId);
     const filters: AdminStockFilters = {
         isVisible: showHidden ? false : undefined,
         uncategorized: showUncategorized || undefined,
         categoryIds: selectedIds.length > 0 ? selectedIds : undefined,
     };
 
-    const { data: meals, isLoading: isLoadingMeals, error: mealsError } = useGetAdminStockMeals(numericRestaurantId, filters);
-    const { data: categoriesData, isLoading: isLoadingCategories, error: categoriesError } = useGetAdminCategories(numericRestaurantId);
+    const { restaurantId } = useCurrentUser();
+    const { data: meals, isLoading: isLoadingMeals, error: mealsError } = useGetAdminStockMeals(restaurantId, filters);
+    const { data: categoriesData, isLoading: isLoadingCategories, error: categoriesError } = useGetAdminCategories(restaurantId);
     const { mutate: setMealVisibility, isPending: isPendingMealVisibility, error: mealVisibilityError } = useSetAdminStockMealVisibility();
     const { mutate: setMealChoiceVisibility, isPending: isPendingMealChoiceVisibility, error: mealChoiceVisibilityError } = useSetAdminStockMealChoiceVisibility();
 
     const categories: Category[] = categoriesData?.data ?? [];
-    const error = mealVisibilityError || mealChoiceVisibilityError || mealsError || categoriesError;
+    const error = mealVisibilityError || (!popupData && mealChoiceVisibilityError) || mealsError || categoriesError;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
     const loading = isLoadingMeals || isLoadingCategories || isPendingMealVisibility || isPendingMealChoiceVisibility;
+    const hasFilters = selectedIds.length > 0 || showHidden || showUncategorized;
+    const mealsList = meals?.data ?? [];
+    const isEmpty = !isLoadingMeals && !mealsError && mealsList.length === 0;
 
     const customFilters = [
         { name: 'hidden', text: t('pages.admin.hidden'), selected: showHidden, onSelect: () => setShowHidden(true), onDeselect: () => setShowHidden(false) },
@@ -60,14 +62,16 @@ function Stock() {
     };
 
     const handleVisibleToggleMeal = (mealId: number, current: boolean) => {
+        if (!restaurantId) return;
         setMealVisibility({
-            restaurantId: numericRestaurantId,
+            restaurantId: restaurantId,
             mealId,
             payload: { is_visible: !current },
         });
     };
 
     const handleVisibleToggleMealChoice = (mealId: number, choiceId: number, current: boolean, featureChoices?: MealChoice[]) => {
+        if (!restaurantId) return;
         if (featureChoices) {
             const available = featureChoices.filter((c) => c.is_visible && c.id !== choiceId);
 
@@ -80,7 +84,7 @@ function Stock() {
         }
 
         setMealChoiceVisibility({
-            restaurantId: numericRestaurantId,
+            restaurantId: restaurantId,
             mealId,
             choiceId,
             payload: {
@@ -91,10 +95,11 @@ function Stock() {
 
     const handleConfirmNewDefault = (newDefaultId: number) => {
         if (!popupData) return;
+        if (!restaurantId) return;
 
         setMealChoiceVisibility(
             {
-                restaurantId: numericRestaurantId,
+                restaurantId: restaurantId,
                 mealId: popupData.mealId,
                 choiceId: popupData.choiceIdToHide,
                 payload: {
@@ -107,10 +112,6 @@ function Stock() {
             }
         );
     };
-
-    const hasFilters = selectedIds.length > 0 || showHidden || showUncategorized;
-    const mealsList = meals?.data ?? [];
-    const isEmpty = !isLoadingMeals && !mealsError && mealsList.length === 0;
 
     useEffect(() => {
         if (popupData || loading) {
@@ -159,7 +160,7 @@ function Stock() {
                 </div>
             </div>
 
-            {popupData && <NewDefaultChoicePopup availableChoices={popupData.availableChoices} onClose={() => setPopupData(null)} onConfirm={handleConfirmNewDefault} isLoading={isPendingMealChoiceVisibility} />}
+            {popupData && <NewDefaultChoicePopup availableChoices={popupData.availableChoices} onClose={() => setPopupData(null)} onConfirm={handleConfirmNewDefault} isLoading={isPendingMealChoiceVisibility} errorMessage={mealChoiceVisibilityError ? getErrorMessage(mealChoiceVisibilityError, 'pages.admin.') : ''} />}
         </>
     );
 }

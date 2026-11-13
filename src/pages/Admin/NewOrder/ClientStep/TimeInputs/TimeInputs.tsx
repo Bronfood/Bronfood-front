@@ -6,14 +6,17 @@ import { MASKTIME, regex24HourTime, regexNumber, REPLACEMENT } from '../../../..
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 import { DurationUnit } from '../../../../../utils/api/adminService/adminService';
 
-interface DurationInputProps {
+interface InputProps {
     text: string;
     name: string;
-    unit: DurationUnit;
-    onUnitChange: (unit: DurationUnit) => void;
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
     required?: boolean;
+}
+
+interface DurationInputProps extends InputProps {
+    unit: DurationUnit;
+    onUnitChange: (unit: DurationUnit) => void;
 }
 
 export const DurationInput: FC<DurationInputProps> = (props) => {
@@ -79,15 +82,7 @@ export const DurationInput: FC<DurationInputProps> = (props) => {
     );
 };
 
-interface CertainTimeInputProps {
-    text: string;
-    name: string;
-    register: UseFormRegister<FieldValues>;
-    errors: FieldErrors;
-    required?: boolean;
-}
-
-export const CertainTimeInput: FC<CertainTimeInputProps> = (props) => {
+export const CertainTimeInput: FC<InputProps> = (props) => {
     const { t } = useTranslation();
     const errorMessage = (props.errors[props.name]?.message as string) || undefined;
     return (

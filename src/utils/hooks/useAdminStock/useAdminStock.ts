@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminMealStock, AdminStockFilters, adminStockService, UpdateChoiceVisibilityPayload } from '../../api/adminStockService/adminStockService';
 
-export const useGetAdminStockMeals = (restaurantId: number, filters: AdminStockFilters = {}) => {
+export const useGetAdminStockMeals = (restaurantId: number | null, filters: AdminStockFilters = {}) => {
     return useQuery({
         queryKey: ['adminStockMeals', restaurantId, filters],
-        queryFn: () => adminStockService.getAdminStockMeals(restaurantId, filters),
+        queryFn: () => adminStockService.getAdminStockMeals(restaurantId!, filters),
         enabled: !!restaurantId,
     });
 };

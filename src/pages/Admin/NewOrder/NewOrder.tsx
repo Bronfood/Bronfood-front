@@ -1,46 +1,46 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import styles from './NewOrder.module.scss';
-import ButtonIconSquare from '../../../components/ButtonIconSquare/ButtonIconSquare';
-import Button from '../../../components/Button/Button';
 import { useEmptyAdminBasket, useGetAdminBasket } from '../../../utils/hooks/useAdminBasket/useAdminBasket';
 import { useCreateAdminOrder } from '../../../utils/hooks/useAdminOrders/useAdminOrders';
 import { AdminNewOrderPayload } from '../../../utils/api/adminService/adminService';
 import { useAdminOrderContext } from '../../../utils/hooks/useAdminOrders/useAdminOrderContext';
 import { useCreateRegularClient } from '../../../utils/hooks/useAdminClient/useAdminClient';
 import { useEffect, useRef, useState } from 'react';
-import ConfirmationPopup from '../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
-import Preloader from '../../../components/Preloader/Preloader';
 import { getErrorMessage } from '../../../utils/serviceFuncs/getErrorMessage';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import { normalizePhone } from '../../../utils/serviceFuncs/formatPhoneNumber';
 import { formatDuration } from '../../../utils/serviceFuncs/formatDuration';
 import { formatScheduledFor } from '../../../utils/serviceFuncs/formatScheduledFor';
+import ConfirmationPopup from '../../../components/Popups/ConfirmationPopup/ConfirmationPopup';
+import Preloader from '../../../components/Preloader/Preloader';
+import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
+import ButtonIconSquare from '../../../components/ButtonIconSquare/ButtonIconSquare';
+import Button from '../../../components/Button/Button';
+import styles from './NewOrder.module.scss';
 
 function NewOrder() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+    const { clientData, timeData, cookMethod, preOrderType, clearNewOrderData } = useAdminOrderContext();
+
+    const [showConfirmationPopupDeleteBasket, setShowConfirmationPopupDeleteBasket] = useState(false);
+    const [showConfirmationPopupCloseCreateNewOrder, setShowConfirmationPopupCloseCreateNewOrder] = useState(false);
+    const shouldResetOnLeaveRef = useRef(false);
 
     const { data: basket, isLoading: isLoadingBasket, error: basketError } = useGetAdminBasket();
     const { mutateAsync: emptyBasket, isPending: isPendingEmptyBasket, error: emptyBasketError } = useEmptyAdminBasket();
     const { mutateAsync: createNewOrder, isPending: isPendingCreateNewOrder, error: createNewOrderError } = useCreateAdminOrder();
     const { mutateAsync: createRegularClient, isPending: isPendingCreateRegularClient, error: createRegularClientError } = useCreateRegularClient();
-    const { clientData, timeData, cookMethod, preOrderType, clearNewOrderData } = useAdminOrderContext();
-
-    const [showConfirmationPopupDeleteBasket, setShowConfirmationPopupDeleteBasket] = useState(false);
-    const [showConfirmationPopupCloseCreateNewOrder, setShowConfirmationPopupCloseCreateNewOrder] = useState(false);
 
     const basketPrice = basket?.data?.basket_price;
     const hasMeals = (basket?.data?.meals.length ?? 0) > 0;
     const isBasketStep = location.pathname.endsWith('/basket-step');
     const isSubmitting = isPendingCreateNewOrder || isPendingCreateRegularClient;
-    const shouldResetOnLeaveRef = useRef(false);
-    const isBasketNotFound = (e: unknown) => getErrorMessage(e as Error, 'pages.admin.') === 'pages.admin.basketNotFound';
-
     const error = createNewOrderError || createRegularClientError || basketError || emptyBasketError;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
     const is404 = errorMessage === 'pages.admin.basketNotFound';
+
+    const isBasketNotFound = (e: unknown) => getErrorMessage(e as Error, 'pages.admin.') === 'pages.admin.basketNotFound';
 
     const emptyBasketAsync = async (): Promise<boolean> => {
         if (basketError && isBasketNotFound(basketError)) return true;

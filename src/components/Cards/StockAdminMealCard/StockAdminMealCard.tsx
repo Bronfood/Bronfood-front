@@ -2,6 +2,13 @@ import { useState } from 'react';
 import { AdminMealStock, MealChoice, MealFeature } from '../../../utils/api/adminStockService/adminStockService';
 import styles from './StockAdminMealCard.module.scss';
 
+type StockAdminMealCard = {
+    meal: AdminMealStock;
+    isMealVisible: boolean;
+    onVisibleToggle: () => void;
+    onChoiceToggle: (choiceId: number, current: boolean, featureChoices?: MealChoice[]) => void;
+};
+
 function Choice({ choice, checked, onChange, disabled }: { choice: MealChoice; checked: boolean; onChange: () => void; disabled?: boolean }) {
     return (
         <label className={styles.choice__label}>
@@ -39,14 +46,7 @@ function Feature({ feature, onChoiceToggle }: { feature: MealFeature; onChoiceTo
     );
 }
 
-type StockAdminMealCardProps = {
-    meal: AdminMealStock;
-    isMealVisible: boolean;
-    onVisibleToggle: () => void;
-    onChoiceToggle: (choiceId: number, current: boolean, featureChoices?: MealChoice[]) => void;
-};
-
-function StockAdminMealCard({ meal, isMealVisible, onVisibleToggle, onChoiceToggle }: StockAdminMealCardProps) {
+function StockAdminMealCard({ meal, isMealVisible, onVisibleToggle, onChoiceToggle }: StockAdminMealCard) {
     const [isOpen, setIsOpen] = useState(false);
     const handleClickOpen = () => setIsOpen((prev) => !prev);
 

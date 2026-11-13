@@ -9,6 +9,17 @@ import { useFeatures } from '../../../utils/hooks/useFeatures/useFeatures';
 import { MealInBasket } from '../../../utils/api/basketService/basketService';
 import { groupBy, sumBy } from 'lodash';
 
+type AdminMealCard = {
+    meal: Meal;
+    basketItem?: MealInBasket;
+    restaurantId: number;
+    onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void;
+    onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void;
+    onDelete?: (mealId: number) => void;
+    isBascket?: boolean;
+    counter?: ReactNode;
+};
+
 const isSizeFeature = (name?: string) => {
     const normalized = (name ?? '').trim().toLowerCase().replace(/ё/g, 'е');
     return normalized.includes('размер') || normalized.includes('объем');
@@ -134,7 +145,7 @@ function DetailsBasket({ basketItem }: { basketItem: MealInBasket }) {
     );
 }
 
-function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: { meal: Meal; basketItem?: MealInBasket; restaurantId: number; onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void; onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void; onDelete?: (mealId: number) => void; isBascket?: boolean; counter?: ReactNode }) {
+function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter }: AdminMealCard) {
     const [isOpen, setIsOpen] = useState(false);
     const handleClickAdd = () => {
         if (meal.hasFeatures) {

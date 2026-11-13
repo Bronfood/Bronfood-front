@@ -34,6 +34,11 @@ export const FULFILLMENTS: { name: 'delivery' | 'pickup' | 'dine_in'; label: str
     { name: 'dine_in', label: 'pages.admin.inHall' },
 ];
 
+export const NEW_ORDER_PATH = '/manager/new-order';
+export const CLIENT_STEP_PATH = `${NEW_ORDER_PATH}/client-step`;
+export const MEAL_STEP_PATH = `${NEW_ORDER_PATH}/meal-step`;
+export const BASKET_STEP_PATH = `${NEW_ORDER_PATH}/basket-step`;
+
 export const INITIAL_TIME_DATA: NewOrderTimeData = { inTime: '', inTimeUnit: 'min', certainTime: '', deliveryDurationUnit: 'min' };
 export const INITIAL_CLIENT_DATA: Partial<AdminNewOrderClientData> = { fulfillment: 'pickup' };
 

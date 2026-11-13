@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { adminService } from '../../api/adminService/adminService';
 
-export const useGetAdminCategories = (restaurantId: number) => {
+export const useGetAdminCategories = (restaurantId: number | null) => {
     return useQuery({
         queryKey: ['adminCategories', restaurantId],
-        queryFn: () => adminService.getAdminCategories(restaurantId),
+        queryFn: () => adminService.getAdminCategories(restaurantId!),
         enabled: !!restaurantId,
     });
 };

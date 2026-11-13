@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './AdminFooter.module.scss';
 import { useGetAdminBasket } from '../../../utils/hooks/useAdminBasket/useAdminBasket';
 import { useAdminOrderContext } from '../../../utils/hooks/useAdminOrders/useAdminOrderContext';
-const NEW_ORDER_PATH = '/manager/new-order';
-const CLIENT_STEP_PATH = `${NEW_ORDER_PATH}/client-step`;
-const MEAL_STEP_PATH = `${NEW_ORDER_PATH}/meal-step`;
-const BASKET_STEP_PATH = `${NEW_ORDER_PATH}/basket-step`;
+import { BASKET_STEP_PATH, CLIENT_STEP_PATH, MEAL_STEP_PATH, NEW_ORDER_PATH } from '../../../utils/consts';
 
 function NewOrderLinks({ isBasketActive, isClientActive, isFoodActive }: { isBasketActive: boolean; isClientActive: boolean; isFoodActive: boolean }) {
     const { t } = useTranslation();
