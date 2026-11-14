@@ -16,7 +16,7 @@ type AdminMealCard = {
     onAdd?: (mealId: number, features: { featureId: number; choiceId: number }[]) => void;
     onAddCount?: (mealId: number, count: number, features: { featureId: number; choiceId: number }[]) => void;
     onDelete?: (mealId: number) => void;
-    isBascket?: boolean;
+    isBasket?: boolean;
     counter?: ReactNode;
     errorMessage?: string;
 };
@@ -179,13 +179,13 @@ function DetailsBasket({ basketItem }: { basketItem: MealForBasket }) {
     );
 }
 
-function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDelete, isBascket, counter, errorMessage }: AdminMealCard) {
+function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDelete, isBasket, counter, errorMessage }: AdminMealCard) {
     const { t } = useTranslation();
 
     const [isOpen, setIsOpen] = useState(false);
 
     const isBasketItemUnavailable = (item: MealForBasket) => Boolean(item.is_deleted || item.is_visible === false || item.choices?.some((c) => c.is_deleted || c.is_visible === false));
-    const isUnavailable = isBascket && !!basketItem && isBasketItemUnavailable(basketItem);
+    const isUnavailable = isBasket && !!basketItem && isBasketItemUnavailable(basketItem);
     const message = errorMessage || (isUnavailable ? t('pages.admin.mealUnavailable') : '');
 
     const handleClickAdd = () => {
@@ -205,7 +205,7 @@ function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDe
     const renderErrorComponent = () => {
         if (!message) return null;
         return (
-            <div className={styles.meal__error}>
+            <div className={styles.meal__error} style={!isOpen ? { marginTop: 12 } : undefined}>
                 <div />
                 <span>{message}</span>
             </div>
@@ -213,14 +213,14 @@ function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDe
     };
 
     return (
-        <div className={`${styles.meal} ${isOpen ? styles.meal__open : ''} ${isUnavailable ? styles.meal__unavailable : ''}`}>
-            {isBascket ? (
+        <div className={`${styles.meal} ${isOpen ? styles.meal__open : ''}`}>
+            {isBasket ? (
                 <>
                     {toggleButton()}
                     <div className={styles.meal__info}>
-                        <div className={styles['meal__bascket-photo']} style={meal.photo ? { backgroundImage: `url(${meal.photo})` } : undefined} />
+                        <div className={`${styles['meal__basket-photo']} ${isUnavailable ? styles.meal__unavailable : ''}`} style={meal.photo ? { backgroundImage: `url(${meal.photo})` } : undefined} />
                         <div className={styles.meal__management}>
-                            <div className={`${styles['meal__conteiner-name']} ${meal.hasFeatures === false ? styles['meal__conteiner-name_not-features'] : ''}`}>
+                            <div className={`${styles['meal__container-name']} ${meal.hasFeatures === false ? styles['meal__container-name_not-features'] : ''} ${isUnavailable ? styles.meal__unavailable : ''}`}>
                                 <h3>{meal.name}</h3>
                                 <p className={`${styles.meal__description} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                             </div>
@@ -236,13 +236,13 @@ function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDe
                     {!isOpen && renderErrorComponent()}
                 </>
             ) : (
-                <div className={styles['meal__conteiner-short']}>
+                <div className={styles['meal__container-short']}>
                     {toggleButton()}
                     <button className={styles.meal__add_wrapper} onClick={handleClickAdd}>
                         <div className={styles.meal__add}></div>
                     </button>
                     <div className={styles.meal__photo} style={{ backgroundImage: `url(${meal.photo})` }} />
-                    <div className={styles['meal__conteiner-name']}>
+                    <div className={styles['meal__container-name']}>
                         <h3>{meal.name}</h3>
                         <p className={`${styles.meal__description} ${isOpen ? styles.meal__description_hide : ''}`}>{meal.description}</p>
                     </div>
@@ -250,7 +250,7 @@ function AdminMealCard({ meal, basketItem, restaurantId, onAdd, onAddCount, onDe
                 </div>
             )}
             {isOpen && renderErrorComponent()}
-            {isOpen && (isBascket ? basketItem && <DetailsBasket basketItem={basketItem} /> : <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} />)}
+            {isOpen && (isBasket ? basketItem && <DetailsBasket basketItem={basketItem} /> : <Details meal={meal} restaurantId={restaurantId} onAddCount={onAddCount} />)}
         </div>
     );
 }

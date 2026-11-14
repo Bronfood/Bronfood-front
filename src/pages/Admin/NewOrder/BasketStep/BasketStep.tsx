@@ -59,7 +59,7 @@ function BasketStep() {
 
                         return (
                             <li key={item.id}>
-                                <AdminMealCard meal={item.meal} basketItem={item} restaurantId={restaurantId} onDelete={() => deletePosition({ basketMealId: item.id, count: item.count })} isBascket={true} counter={<Counter count={item.count} increment={() => increment({ basketMealId: item.id })} decrement={() => decrement({ basketMealId: item.id })} />} errorMessage={itemErrorMessage} />
+                                <AdminMealCard meal={item.meal} basketItem={item} restaurantId={restaurantId} onDelete={() => deletePosition({ basketMealId: item.id, count: item.count })} isBasket={true} counter={<Counter count={item.count} increment={() => increment({ basketMealId: item.id })} decrement={() => decrement({ basketMealId: item.id })} />} errorMessage={itemErrorMessage} />
                             </li>
                         );
                     })}

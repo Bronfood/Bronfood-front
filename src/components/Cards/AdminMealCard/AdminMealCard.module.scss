@@ -167,20 +167,14 @@
     background-color: variables.$white;
     position: relative;
 
-    &__unavailable {
-        &__bascket-photo {
-            filter: grayscale(1);
-            opacity: 0.5;
-        }
-
-        &__conteiner-name {
-            opacity: 0.5;
-        }
-    }
-
     &__open {
         flex-direction: column;
         gap: 12px;
+    }
+
+    &__unavailable {
+        filter: grayscale(1);
+        opacity: 0.5;
     }
 
     &__info {
@@ -214,12 +208,12 @@
         }
     }
 
-    &__conteiner-short {
+    &__container-short {
         display: flex;
         gap: 8px;
     }
 
-    &__conteiner-name {
+    &__container-name {
         display: flex;
         flex-direction: column;
         margin-right: 29px;
@@ -281,7 +275,7 @@
         border-radius: 8px;
     }
 
-    &__bascket-photo {
+    &__basket-photo {
         border-radius: 8px;
         width: 85px;
         height: 85px;
@@ -325,7 +319,6 @@
         font-size: 12px;
         font-weight: 500;
         line-height: 24px;
-        margin-top: 3px;
         margin-left: 18px;
 
         div {
