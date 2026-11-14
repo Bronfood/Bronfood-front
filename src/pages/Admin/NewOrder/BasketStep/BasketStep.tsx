@@ -14,11 +14,11 @@ function BasketStep() {
 
     const { restaurantId, isClientDataValid } = useAdminOrderContext();
     const { data: basket, isLoading: isLoadingBasket, error: basketError } = useGetAdminBasket();
-    const { mutate: increment, isPending: isPendingIncrement, error: incrementError } = useIncrementAdminMeal();
-    const { mutate: decrement, isPending: isPendingDecrement, error: decrementError } = useDecrementAdminMeal();
+    const { mutate: increment, isPending: isPendingIncrement, error: incrementError, variables: incrementVariables } = useIncrementAdminMeal();
+    const { mutate: decrement, isPending: isPendingDecrement, error: decrementError, variables: decrementVariables } = useDecrementAdminMeal();
     const { mutate: deletePosition, isPending: isPendingDelete, error: deleteError } = useDeleteAdminBasketPosition();
 
-    const error = deleteError || decrementError || incrementError || basketError;
+    const error = deleteError || basketError;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
     const is404 = errorMessage === 'pages.admin.basketNotFound';
 
@@ -53,11 +53,16 @@ function BasketStep() {
 
             {meals.length > 0 && restaurantId != null && (
                 <ul className={styles['basket__list']}>
-                    {meals.map((item) => (
-                        <li key={item.id}>
-                            <AdminMealCard meal={item.meal} basketItem={item} restaurantId={restaurantId} onDelete={() => deletePosition({ basketMealId: item.id, count: item.count })} isBascket={true} counter={<Counter count={item.count} increment={() => increment({ basketMealId: item.id })} decrement={() => decrement({ basketMealId: item.id })} />} />
-                        </li>
-                    ))}
+                    {meals.map((item) => {
+                        const itemError = (incrementVariables?.basketMealId === item.id && incrementError) || (decrementVariables?.basketMealId === item.id && decrementError);
+                        const itemErrorMessage = itemError ? getErrorMessage(itemError, 'pages.admin.') : '';
+
+                        return (
+                            <li key={item.id}>
+                                <AdminMealCard meal={item.meal} basketItem={item} restaurantId={restaurantId} onDelete={() => deletePosition({ basketMealId: item.id, count: item.count })} isBascket={true} counter={<Counter count={item.count} increment={() => increment({ basketMealId: item.id })} decrement={() => decrement({ basketMealId: item.id })} />} errorMessage={itemErrorMessage} />
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </>

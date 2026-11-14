@@ -476,6 +476,7 @@ i18n
                             placeholderCertainTime: '14:30',
                             selectNewDefaultOption: 'Выберите новый вариант по умолчанию',
                             chooseWhichTheRemainingOptionsWillBeMain: 'Выберите, какой из оставшихся вариантов станет основным.',
+                            mealUnavailable: 'Блюдо недоступно',
                         },
 
                         administrators: {

@@ -35,11 +35,11 @@ function MealStep() {
 
     const { data: meals, isLoading: isLoadingMeals, error: errorMeals } = useMeals(restaurantId, filters);
     const { data: categoriesData, isLoading: isLoadingCategories, error: errorCategories } = useGetAdminCategories(restaurantId);
-    const { mutate: addMeal, isPending: isPendingAddMeal, error: addMealError } = useAddAdminMeal();
+    const { mutate: addMeal, isPending: isPendingAddMeal, error: addMealError, variables: addMealVariables } = useAddAdminMeal();
 
     const categories: Category[] = categoriesData?.data ?? [];
     const mealsList = meals?.data ?? [];
-    const error = errorMeals || errorCategories || addMealError;
+    const error = errorMeals || errorCategories;
     const errorMessage = error ? getErrorMessage(error, 'pages.admin.') : '';
     const hasFilters = selectedIds.length > 0 || showPopular || isFavoriteActive;
     const isEmpty = !isLoadingMeals && !errorMeals && mealsList.length === 0;
@@ -77,11 +77,15 @@ function MealStep() {
 
             {mealsList.length > 0 && restaurantId != null && (
                 <ul className={styles['meal__list']}>
-                    {mealsList.map((meal) => (
-                        <li key={meal.id}>
-                            <AdminMealCard meal={meal} restaurantId={restaurantId} onAdd={(id, features) => handleAddMeal(id, 1, features)} onAddCount={handleAddMeal} />
-                        </li>
-                    ))}
+                    {mealsList.map((meal) => {
+                        const itemErrorMessage = addMealError && addMealVariables?.mealId === meal.id ? getErrorMessage(addMealError, 'pages.admin.') : '';
+
+                        return (
+                            <li key={meal.id}>
+                                <AdminMealCard meal={meal} restaurantId={restaurantId} onAdd={(id, features) => handleAddMeal(id, 1, features)} onAddCount={handleAddMeal} errorMessage={itemErrorMessage} />
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
 

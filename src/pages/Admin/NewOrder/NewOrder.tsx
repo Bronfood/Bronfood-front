@@ -16,6 +16,7 @@ import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import ButtonIconSquare from '../../../components/ButtonIconSquare/ButtonIconSquare';
 import Button from '../../../components/Button/Button';
 import styles from './NewOrder.module.scss';
+import { MealForBasket } from '../../../utils/api/adminBasketService/adminBasketService';
 
 function NewOrder() {
     const { t } = useTranslation();
@@ -41,6 +42,8 @@ function NewOrder() {
     const is404 = errorMessage === 'pages.admin.basketNotFound';
 
     const isBasketNotFound = (e: unknown) => getErrorMessage(e as Error, 'pages.admin.') === 'pages.admin.basketNotFound';
+    const isBasketItemUnavailable = (item: MealForBasket) => Boolean(item.is_deleted || item.is_visible === false || item.choices?.some((c) => c.is_deleted || c.is_visible === false));
+    const hasUnavailableMeals = basket?.data?.meals.some(isBasketItemUnavailable) ?? false;
 
     const emptyBasketAsync = async (): Promise<boolean> => {
         if (basketError && isBasketNotFound(basketError)) return true;
@@ -77,7 +80,7 @@ function NewOrder() {
     };
 
     const handleSubmit = async () => {
-        if (isSubmitting || !hasMeals) return;
+        if (isSubmitting || !hasMeals || hasUnavailableMeals) return;
 
         const fulfillment = clientData.fulfillment ?? 'pickup';
         const isDelivery = fulfillment === 'delivery';
@@ -153,7 +156,7 @@ function NewOrder() {
                         <p>{t('pages.admin.total')}</p>
                         <p className={styles['new-order__total_price']}>{`${basketPrice} ₸`}</p>
                     </div>
-                    <Button type="button" onClick={handleSubmit}>
+                    <Button type="button" disabled={isSubmitting || hasUnavailableMeals} onClick={handleSubmit}>
                         {t('pages.admin.createOrderForPayment')} {basketPrice} ₸
                     </Button>
                 </div>

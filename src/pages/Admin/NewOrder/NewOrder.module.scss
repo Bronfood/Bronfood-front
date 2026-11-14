@@ -55,6 +55,10 @@
 
     &__footer {
         margin-top: auto;
+
+        button {
+            background-color: variables.$dark-grey-overlay;
+        }
     }
 }
 

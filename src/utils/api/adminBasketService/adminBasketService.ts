@@ -6,11 +6,11 @@ export type MealForBasket = MealInBasket & {
     /**
      * meal's is_deleted
      */
-    is_deleted?: boolean;
+    is_deleted: boolean;
     /**
      * meal's is_visible
      */
-    is_visible?: boolean;
+    is_visible: boolean;
 };
 
 export type AdminBasket = {
@@ -41,7 +41,7 @@ export type AdminBasket = {
     /**
      * basket meals
      */
-    meals: MealInBasket[];
+    meals: MealForBasket[];
     /**
      * basket waiting time
      */
