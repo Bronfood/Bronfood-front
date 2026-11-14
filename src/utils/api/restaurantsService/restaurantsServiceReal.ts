@@ -1,6 +1,6 @@
 import { LngLat, LngLatBounds } from '@yandex/ymaps3-types';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { Feature, Meal, Restaurant, RestaurantsService, ReviewResponse, SearchSuggestion } from './restaurantsService';
+import { Feature, Meal, MealFilters, Restaurant, RestaurantsService, ReviewResponse, SearchSuggestion } from './restaurantsService';
 
 type WorkingTime = {
     close_time: string;
@@ -54,8 +54,17 @@ export class RestaurantsServiceReal implements RestaurantsService {
         const restaurant = this.addWorkingTime([responseData.data])[0];
         return { data: restaurant };
     }
-    async getMeals(restaurantId: number): Promise<{ data: Meal[] }> {
-        return handleFetch(`api/restaurants/${restaurantId}/meals/`);
+    async getMeals(restaurantId: number, filters: MealFilters = {}): Promise<{ data: Meal[] }> {
+        const params = new URLSearchParams();
+        if (filters.categoryIds?.length) params.set('category', filters.categoryIds.join(','));
+        if (filters.popular) params.set('popular', 'true');
+        if (filters.favorite) {
+            params.set('favorite', 'true');
+            params.set('client_id', String(filters.favorite.clientId));
+        }
+        const query = params.toString();
+
+        return handleFetch(`api/restaurants/${restaurantId}/meals/${query ? `?${query}` : ''}`);
     }
     async getFeatures(restaurantId: number, mealId: number): Promise<{ data: Feature[] }> {
         return handleFetch(`api/restaurants/${restaurantId}/meals/${mealId}/features/`);

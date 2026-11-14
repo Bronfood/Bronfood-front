@@ -1,6 +1,7 @@
 import { formatDateToString } from '../../serviceFuncs/formatDateToString';
 import { handleFetch } from '../../serviceFuncs/handleFetch';
-import { AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService, Schedule } from './adminService';
+import { Category } from '../categoryService/categoryService';
+import { AdminNewOrder, AdminNewOrderPayload, AdminOrder, AdminOrderFromApi, AdminOrderStatus, AdminService, Schedule } from './adminService';
 
 export class AdminServiceReal implements AdminService {
     async getAdminOrders(status: AdminOrderStatus): Promise<{ data: AdminOrder[] }> {
@@ -37,6 +38,10 @@ export class AdminServiceReal implements AdminService {
         return handleFetch(`api/restaurants/admin/orders/${id}/${status}/`, { method: 'PATCH' });
     }
 
+    async createAdminOrder(payload: AdminNewOrderPayload): Promise<{ data: AdminNewOrder }> {
+        return handleFetch('api/restaurants/admin/orders/', { method: 'POST', data: payload });
+    }
+
     async getAdminSchedules(start: Date, end: Date): Promise<{ data: Schedule[] }> {
         const startDate = formatDateToString(start);
         const endDate = formatDateToString(end);
@@ -50,5 +55,9 @@ export class AdminServiceReal implements AdminService {
 
     async deleteSchedule(id: number): Promise<{ data: Schedule }> {
         return handleFetch(`api/restaurants/admin/schedules/${id}/`, { method: 'DELETE' });
+    }
+
+    async getAdminCategories(restaurantId: number): Promise<{ data: Category[] }> {
+        return handleFetch(`api/restaurants/${restaurantId}/admin/categories/`);
     }
 }

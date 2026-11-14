@@ -1,0 +1,93 @@
+@use '../../../styles/variables';
+@use 'sass:map';
+
+.stock {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: variables.$button-grey;
+    padding: 44px 15px 156px;
+    margin: 0 auto;
+    z-index: map.get(variables.$z-indexes, 'drawer');
+    min-height: 100vh;
+
+    &_overlay {
+        pointer-events: none;
+
+        &::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(135 133 133 / 75%);
+            backdrop-filter: blur(2.5px);
+            z-index: 10;
+            pointer-events: auto;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+
+        &_button {
+            top: 39px;
+            right: 15px;
+
+            button {
+                background-color: variables.$button-grey;
+            }
+        }
+    }
+
+    &__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 0 28px 60px;
+    }
+
+    &__meals {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__empty {
+        display: block;
+        width: 100%;
+        margin: 100px auto;
+        text-align: center;
+        font-size: 14px;
+        color: variables.$orange;
+    }
+
+    &__category-filter {
+        position: fixed;
+        z-index: 7;
+        left: 12px;
+        bottom: 111px;
+        max-width: calc(100% - 12px);
+    }
+
+    &__preloader {
+        > div:first-child {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: calc(100% - 111px);
+            background-color: variables.$button-grey;
+            border-radius: 15px;
+        }
+    }
+}

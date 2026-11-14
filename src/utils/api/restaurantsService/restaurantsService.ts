@@ -26,6 +26,14 @@ export type Choice = {
      * Is choice chosen by user
      */
     chosen?: boolean;
+    /**
+     * choice is_deleted
+     */
+    is_deleted: boolean;
+    /**
+     * choice is_visible
+     */
+    is_visible: boolean;
 };
 
 export type Feature = {
@@ -49,6 +57,14 @@ export type Feature = {
      * true if feature is size
      */
     is_size: boolean;
+    /**
+     * Feature's selection_type
+     */
+    selection_type: 'single' | 'multiple' | 'optional';
+    /**
+     * Feature's pricing_strategy
+     */
+    pricing_strategy: 'add' | 'override';
 };
 
 export type MealType = string;
@@ -197,10 +213,16 @@ export type SearchSuggestion = {
     source: string;
 };
 
+export type MealFilters = {
+    popular?: boolean;
+    favorite?: { clientId: number } | false;
+    categoryIds?: number[];
+};
+
 export interface RestaurantsService {
     getRestaurants: (bounds: LngLatBounds, userLocation: LngLat, ids: number[], types: string[]) => Promise<{ data: Restaurant[] }>;
     getRestaurantById: (id: number) => Promise<{ data: Restaurant }>;
-    getMeals: (restaurantId: number) => Promise<{ data: Meal[] }>;
+    getMeals: (restaurantId: number, filters?: MealFilters) => Promise<{ data: Meal[] }>;
     getFeatures: (restaurantId: number, mealId: number) => Promise<{ data: Feature[] }>;
     getReviews: (restaurantId: number) => Promise<{ data: ReviewResponse }>;
     getSearchSuggestions: (searchQuery: string) => Promise<{ data: SearchSuggestion[] }>;

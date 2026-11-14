@@ -1,0 +1,116 @@
+@use '../../../../../styles/variables';
+
+.input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 100%;
+    gap: 8px;
+
+    &__time {
+        margin-left: auto;
+        display: flex;
+        gap: 4px;
+    }
+
+    &__text {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    &__place {
+        border: 1px solid variables.$light-gray;
+        border-radius: 12px;
+        font-size: 13px;
+        width: 75px;
+        color: variables.$black;
+        padding: 10px;
+        text-align: center;
+        background-color: variables.$white;
+        cursor: pointer;
+        margin-left: auto;
+    }
+
+    &__type {
+        width: 76px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2px;
+        border: 1px solid variables.$light-gray;
+        background-color: variables.$white;
+        border-radius: 12px;
+        padding: 6px 10px;
+        font-size: 13px;
+        color: variables.$black;
+    }
+
+    &__toggle {
+        cursor: pointer;
+        width: 24px;
+        background-size: cover;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        background-image: url('/src/vendor/images/icons/arrow-back.svg');
+        rotate: 90deg;
+
+        &_hide {
+            rotate: -90deg;
+        }
+    }
+
+    &__options {
+        position: absolute;
+        top: 38px;
+        left: 0;
+        border-radius: 12px;
+        border: 1px solid variables.$light-gray;
+        background-color: variables.$white;
+        width: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &_item {
+            display: flex;
+            position: relative;
+            padding: 5px 10px;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            border-radius: 12px;
+
+            input {
+                display: none;
+            }
+
+            &_active::after {
+                content: '';
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background-color: variables.$orange;
+            }
+        }
+
+        &_item:hover {
+            background-color: variables.$grey-light-line;
+        }
+    }
+
+    &__error {
+        text-align: right;
+        color: variables.$red;
+        font-family: 'SF Pro Display', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 24px;
+        margin-top: 3px;
+        margin-left: 18px;
+    }
+}

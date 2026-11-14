@@ -1,0 +1,33 @@
+@use '../../../../../styles/variables';
+
+.clients {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    background-color: variables.$white;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &__scroll {
+        overflow-y: auto;
+        max-height: 132px;
+        overscroll-behavior: contain;
+    }
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+
+        &_phone,
+        &_name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        &_name {
+            color: variables.$grey;
+        }
+    }
+}
